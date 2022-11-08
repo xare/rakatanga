@@ -1,0 +1,26 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Media{% endblock %}
+
+{% block body %}
+ 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <h1>Create new Media</h1>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        {{ include('admin/media/_form.html.twig') }}
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                    </div>
+                </div>
+                <a href="{{ path('media_index') }}" class="btn btn-primary">
+                    <i class="fa fa-list"></i>
+                    Back to list
+                </a>
+            </div>
+        </div>
+    </div>
+  
+{% endblock %}

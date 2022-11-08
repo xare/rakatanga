@@ -1,0 +1,24 @@
+<h4>Documentos</h4>
+
+<div class="row js-infodocs-wrapper">
+  <div class="col-9">
+    <div id="js-infodocs-modal-container">
+    <ul class="js-list-infodocs list-group">
+    {{ include('admin/travel/_list_infodocs.html.twig',{'travel':travel} )}}
+    </ul>
+    </div>
+  </div>
+  <div class="col-3">
+    <div 
+        action="{{ path('upload_documentation_to_travel',{'travel':travel.id}) }}" 
+        method="POST" 
+        enctype="multipart/form-data" 
+        class="dropzone js-infodoc-dropzone">
+    </div>
+  </div>
+</div>
+		{# {% for document in documents %}
+		
+		{% else %}
+		
+		{% endfor %} #}

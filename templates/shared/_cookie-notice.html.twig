@@ -1,0 +1,8 @@
+{% set currentPath = path(app.request.attributes.get('_route'),
+                       app.request.attributes.get('_route_params')) %}
+  <div id="cookies">
+    <div data-container="cookies">
+      <p>{{ 'Este sitio web utiliza cookies para asegurar que realizas la mejor experiencia en tu sitio web'|trans }}. <a href="#">{{ 'Más información'|trans }}</a>.</p>
+      <button class="btn btn-primary" data-action="js-cookies-button">Ok</button>
+    </div>
+  </div>

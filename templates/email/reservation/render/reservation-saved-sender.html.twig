@@ -1,0 +1,143 @@
+{% set subtotal = 0 %}
+<h1>
+    <center>
+        {{ 'Buenos dias'|trans }}, 
+        {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}], 
+        {{ 'hemos recibido tu reserva. Le agradecemos el haber hecho la reserva para el viaje'|trans }} 
+        "{{reservation.date.travel.mainTitle}}"
+    </center>
+</h1>
+    <h3>{{ 'El viaje'|trans }}</h3>
+
+  <table>
+    <tr>
+        <td>
+            <ul>
+                <li> <strong>{{ 'País'|trans }}</strong>: {{ reservation.date.travel.category.name }}</li>
+                <li> <strong>{{ 'Viaje'|trans }}</strong>:  {{reservation.date.travel.mainTitle}}</li>
+                <li> <strong>{{ 'Fecha'|trans }}</strong>: {{reservation.date.debut|date('Y-m-d')}}</li>
+                <li> <strong>{{ 'Ref. reserva'|trans }}</strong>: {{ reference }}
+            </ul>
+        </td>
+        <td>
+            <table>
+                <tr>
+                <td>
+                    <strong>{{reservation.nbpilotes}} x {{ 'piloto'|trans }}:</strong>
+                </td>
+                <td>
+                    <p>{{(reservation.nbpilotes * reservation.date.prixPilote)|format_currency('EUR', {fraction_digit: 0})}} </p>
+                </td>
+                </tr>
+                <style>.columns {border: 1px solid #999;}</style>
+                    {% set subtotal = subtotal + reservation.nbpilotes * reservation.date.prixPilote %}
+                    <tr>
+                        <td>
+                            <p><strong>{{reservation.nbaccomp}} x {{ 'acompañante'|trans }}:</strong></p>
+                        </td>
+                        <td>
+                            <p>{{(reservation.nbaccomp * reservation.date.prixAccomp)|format_currency('EUR', {fraction_digit: 0})}} €</p>
+                        </td>
+                    </tr>
+                    {% set subtotal = subtotal + reservation.nbaccomp * reservation.date.prixAccomp %}
+
+                    {% for option in reservation.reservationOptions %}
+                    <tr>
+                        <td>
+                            <p>
+                                {{ option.ammount }} x {{ renderLocalizedOption(option.options.id,app.request.locale) }}
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                {{ (option.ammount * option.options.price)|format_currency('EUR', {fraction_digit: 0}) }}
+                            </p>
+                        </td>
+                    </tr>
+                    {% set subtotal = subtotal + (option.ammount * option.options.price) %}
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <strong>{{ 'Subtotal'|trans }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{ subtotal }}</strong>
+                        </td>
+                    </tr>
+                    {% for codepromo in reservation.codespromos%}
+                        <tr>
+                            <td>
+                                {{ 'Descuento'|trans }}
+                                    {{codepromo.code}} ({codepromo.libelle})                
+                            </td>
+                            <td>
+                                    {{codepromo.montant}}
+                            </td>
+                        </tr>
+                        {% set subtotal = subtotal - codepromo.montant %}
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <strong>{{ 'Total'|trans }}</strong>
+                        </td>
+                        <td>
+                            {{ subtotal }}
+                        </td>
+                    </tr>
+                    </table>
+                <!-- END TABLE --> 
+            </td>
+        </tr>
+    </table>
+
+<h3>{{ 'Tus datos'|trans }}</h3>
+
+    <ul>
+        <li>{{'Apellidos'|trans }}: {{ reservation.user.nom }}</li>
+        <li>{{'Nombre'|trans }}: {{ reservation.user.prenom }}</li> 
+        <li>{{'Teléfono'|trans }}: {{ reservation.user.telephone }}</li>
+        <li>{{'E-mail'|trans }}: {{ reservation.user.email }}</li> 
+    </ul>
+    <h3>{{ 'Comentarios'|trans }}</h3>
+     <p>{{reservation.comment}}</p>
+    <h3>{{ 'Pago'|trans }}</h3></columns>
+    <p><strong>{{'Datos cuenta bancaria para efectuar el pago'|trans}}:</strong></p>
+    <p>
+        {{'Titular'|trans}}: Rakatanga Tour Europe S.L<br />
+        {{'Banco'|trans}}: Caixabank<br />
+        IBAN: ES42 2100 1263 2702 0036 8970<br />
+        SWIFT: CAIXESBBXXX
+    </p>
+    <p>{{'Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pago total de su viaje. El resto del pago deberá hacerse como muy tarde 30 días antes de la fecha de salida'|trans}}.</p>
+
+    <p>
+      {{'Por favor envíenos via email el justificante de la transferencia para validación de su reserva'|trans}}.
+    </p>
+    <p>
+      {{ 'Nota'|trans }}: {{ 'Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje'|trans }}.
+    </p>
+    <p>
+      {{ 'La reserva implica la aceptación total de nuestras'|trans }} 
+      <a href="#">{{ 'condiciones generales de venta'|trans }}</a>.
+    </p>
+    <p>
+      <strong>{{ 'Importante: Comisiones utilizando la pasarela de pago Paypal'|trans }}</strong>
+    </p>
+    <p>{{ 'Todo pago que no sea por trasferencia bancaria tendrá una comisión según se detalla más abajo'|trans }}:</p>
+    <ul>
+        <li>{{ 'Tarjetas de crédito dentro de la comunidad Europea: Comisión del 2,9% del pago'|trans }}</li>.
+        <li>{{ 'Tarjetas de crédito fuera de la comunidad Europea: Comisión del 4,9% del pago'|trans }}</li>.
+        <li>{{ 'Cuenta Paypal directamente: Comisión del 2,9% del pago'|trans }}</li>.
+    </ul>
+    <p>{{ 'En el caso de utilizar Paypal o tarjeta de crédito se podrá pagar la comisión directamente a nuestro guía el día del inicio del viaje'|trans }}.</p>
+
+    <p>{{ 'Para evitar la comisión de gestión a través de la pasarela de pagos de Paypal, recomendamos el pago por transferencia bancaria'|trans }}</p>
+
+    <p>{{ 'PayPalPuede elegir pagar la reserva o la totalidad del viaje a través de nuestra página de pago'|trans }} :</p>
+    <button href="#">{{'Pagar'|trans}}</button>
+
+    <p> {{'Para acceder a los datos de la reserva es posible utilizando su cuenta de usuario donde puede acceder a su espacio personalizado y así añadir, corregir y actualizar datos de su reserva'|trans}}.</p>
+    <p>{{'Nos comunicaremos con usted en breve para la organización del viaje'|trans}}.</p>
+
+    <p>{{'¡El equipo de Rakatanga Tour te desea un buen día!'|trans}}</p>
+

@@ -1,0 +1,20 @@
+    <h3>Añadir los archivos aquí.</h3>
+    <div 
+        action="{{ path('upload_multiple_files') }}" 
+        method="POST" 
+        enctype="multipart/form-data" 
+        class="dropzone js-media-dropzone">
+        {% if travel is defined %}
+            <input type="hidden" name="travel[type]" id="js-media-type" value="travel">
+            <input type="hidden" name="travel[travel_id]" id="js-media-id" value="{{entity.id}}">
+        {% elseif page is defined %}
+            <input type="hidden" name="page[type]" id="js-media-type" value="pages">
+            <input type="hidden" name="page[page_id]" id="js-media-id" value="{{entity.id}}">
+        {% elseif popup is defined %}
+            <input type="hidden" name="popups[type]" id="js-media-type" value="popups">
+            <input type="hidden" name="popups[popup_id]" id="js-media-id" value="{{entity.id}}">
+        {% elseif article is defined %}
+            <input type="hidden" name="article[type]" id="js-media-type" value="articles">
+            <input type="hidden" name="article[article_id]" id="js-media-id" value="{{entity.id}}">
+        {% endif %}
+    </div>

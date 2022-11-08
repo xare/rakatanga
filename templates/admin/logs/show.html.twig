@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Logs{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Logs</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ log.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Action</th>
+                        <td>{{ log.action }}</td>
+                    </tr>
+                    <tr>
+                        <th>Content</th>
+                        <td>{{ log.content|raw }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+    <a href="{{ path('logs_index') }}" class="btn btn-primary">
+        <i class="fa fa-list"></i>Volver a la lista
+    </a>
+
+    <a href="{{ path('logs_edit', {'id': log.id}) }}" class="btn btn-info">
+        <i class="fa fa-edit"></i>Editar
+    </a>
+
+    {{ include('admin/logs/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,236 @@
+{% extends 'email/emailBase.html.twig' %}
+{% block content %}
+    <row class="welcome">
+        <columns>
+            <spacer size="35"></spacer>
+            <h1>
+                <center>Datos guardados por {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}]</center>
+            </h1>
+            <spacer size="10"></spacer>
+        </columns>
+    </row>
+    <spacer size="30"></spacer>
+    <row>
+      <columns>
+        El usuario {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}] acaba de realizar la gestión de guardar documentos y datos en su espacio de cliente referiendose a la reserva siguiente.
+      </columns>
+    </row>
+    <spacer size="30"></spacer>
+    <row>
+      <columns>
+        Viaje: {{renderLocalizedTravel( reservation.date.travel.id, app.request.locale )}}
+      </columns>
+    </row>
+    <row>
+      <columns>
+        Código de la Reserva: {{reservation.code}}
+      </columns>
+    </row>
+    <row>
+      <columns>
+        Num Reserva: {{reservation.id}}
+      </columns>
+    </row>
+    <row>
+      <columns>
+        Fecha: {{reservation.date.debut|date('d-m-Y')}} - {{reservation.date.fin|date('d-m-Y')}}
+      </columns>
+    </row>
+
+
+    {% for key, reservationDatum in reservation.reservationData %}
+    <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+              <p><strong>Número del Pasaporte</strong></p>
+          </columns>
+           <columns class="small-8 large-12">
+              <p>{{reservationDatum.passportNo}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha de emisión del Pasaporte:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.passportIssueDate|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha de caducidad del Pasaporte:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.passportExpirationDate|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Número del visado:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.visaNumber}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha expedición visado:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.visaIssueDate|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha caducidad visado:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.visaExpirationDate|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Carnet de conducir:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.driversNumber}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha del carnet de conducir:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.driversIssueDate|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha caducidad del carnet de conducir:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.driversExpirationDate|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Compañía de seguros:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.insuranceCompany}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Nº póliza de seguros:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.insuranceContractNumber}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Teléfono de contacto:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.abroadPhoneNumber}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Nombre de persona a contactar:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.contactPersonName}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Nº de persona a contactar:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.contactPersonPhone}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Nº de vuelo de ida:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.flightNumber}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+         <row>
+          <columns class="small-4 large-12">
+            <p><strong>Fecha del vuelo de ida:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.flightArrival|date('d-m-Y')}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+         <row>
+          <columns class="small-4 large-12">
+            <p><strong>Aeropuerto de llegada:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.flightArrivalAirport}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Hotel de llegada:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.ArrivalHotel}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Nº de vuelo de vuelta:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.flightDepartureNumber}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+         <row>
+          <columns class="small-4 large-12">
+            <p><strong>Aeropuerto de vuelta:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.flightDepartureAirport}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+          <columns class="small-4 large-12">
+            <p><strong>Hotel de vuelta:</strong>:</p> 
+          </columns>
+          <columns class="small-8 large-12">
+            <p>{{reservationDatum.departureHotel}}</p>
+          </columns>
+        </row>
+        <spacer size="10"></spacer>
+    {% endfor %}
+    
+    
+    
+{% endblock %}

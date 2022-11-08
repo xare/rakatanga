@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Payments{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{ include ('admin/shared/_controlband.html.twig',{'entity':'payments'})}}
+        <div class="row">
+            <div class="col-12">
+                <h1>Edit Payments</h1>
+                {{ include('admin/payments/_form.html.twig', {'button_label': 'Update'}) }}
+                <br /><br />
+                {{ include('admin/payments/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

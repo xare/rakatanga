@@ -1,0 +1,26 @@
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      Filtrar resultados
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li>	
+      <a class="dropdown-item" href="{{ path('mailings_by_category',{'categoryName':'contacto'}) }}">
+        Contacto
+      </a>
+    </li>
+    <li>
+      <a 
+        class="dropdown-item" 
+        href="{{ path('mailings_by_category',{'categoryName':'reservation'}) }}">
+            Reservation
+      </a>
+    </li>
+    <li>
+        <a 
+          class="dropdown-item" 
+          href="{{ path('travel_by_category',{'categoryName':'contact'}) }}">
+            Contact
+        </a>
+    </li>
+  </ul>
+</div>

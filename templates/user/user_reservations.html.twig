@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	-
+	{{ 'Tus Reservas'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('reservations')  }}
+{% endblock %}
+
+{% block body %}
+
+	{{ parent() }}
+	<div class="container">
+		<div class="row">
+      <div class="col-md-12 col-12">
+          {{ wo_render_breadcrumbs() }}
+      </div>
+  	</div>
+		<div class="row">
+			<div class="col-12 col-xs-12" id="js-user-reservations_wrapper">
+				<h1>{{'Tus Reservas'|trans}}</h1>
+				<p>{{'Aquí podrás gestionar tus reservas. En esta tabla hay dos opciones, cambiar los datos de la reserva o añadir datos y documentos faltantes'|trans}}</p>
+					{% for reservation in reservations %}
+						{{ include ('user/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
+					{% else %}
+						<p>{{ 'No hay reservas' | trans }}</p>
+					{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('reservations-user')}}
+	{{ encore_entry_script_tags('readmore')}}
+	
+{% endblock %}
+{% block footer %}
+	{{ parent() }}
+{% endblock %}

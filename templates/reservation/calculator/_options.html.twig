@@ -1,0 +1,22 @@
+{% set totalOptionsValue = 0 %}
+{% for option in options %}
+  {% if option.ammount > 0 %}
+    {% set totalOptionsValue = totalOptionsValue + (option.ammount * option.price) %}
+    <tr
+      class="calculator-row"
+      data-container="option-calculator"
+      data-id="{{option.id}}" 
+      data-ammount="{{option.ammount}}" 
+      data-price"{{option.price}}"  
+      data-title="{{ renderLocalizedOption(option.id,app.request.locale) }}"
+    >
+      <td>
+          <span class="badge bg-secondary bg-opacity-75 rounded-1">{{ option.ammount}} &#10005;</span> 
+          {{ option.title }} {# [{{ option.price|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}] #}
+      </td>
+      <td align="right">
+          {{ (option.ammount * option.price)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale()) }}
+      </td>
+    </tr>
+  {% endif %}
+{% endfor %}

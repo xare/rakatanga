@@ -1,0 +1,11 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    form_themes:
+      - '@PhoneNumber/Form/bootstrap_4_layout.html.twig'
+      - '@PhoneNumber/Form/phone_number_widget.html.twig'
+      - 'bootstrap_5_layout.html.twig'
+    globals:
+      locales: '%app.locales%'
+    paths:
+      'assets/images': images
+      'assets/styles': styles

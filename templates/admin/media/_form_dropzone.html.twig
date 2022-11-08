@@ -1,0 +1,37 @@
+{# {% extends 'admin/base.html.twig' %}
+
+{% block title %} {{parent()}} | Carga CSV {% endblock %}
+{% block header %}
+   {{ parent() }}
+{% endblock %}
+{% block body %} #}
+    <h1>Añadir los archivos aquí.</h1>
+    <br />
+    <form 
+        action="{{ path('upload_multiple_files') }}" 
+        method="POST" 
+        enctype="multipart/form-data" 
+        class="dropzone js-media-dropzone">
+        <input type="radio" id="country" name="dropzonetype" value="country">
+            <label for="country">Country</label><br>
+        <input type="radio" id="travel" name="dropzonetype" value="travel">
+            <label for="travel">Travel</label><br>
+        <select name="travel">
+            <option value="">Seleccionar el viaje</option>
+            {% for travel in travels %}
+                <option value="{{travel.id}}">{{travel.mainTitle}}</option>
+            {% endfor %}
+        </select>
+        <select name="category">
+            <option value="">Seleccionar un país: </option>
+            {% for country in countries %}
+                <option value="{{country.id}}">{{country.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+{# <br /><br />
+    <a href="{{ path('user_index') }}" class="btn btn-primary">
+        <i class="fa fa-list"></i>
+        Ver Lista
+    </a>
+{% endblock %} #}

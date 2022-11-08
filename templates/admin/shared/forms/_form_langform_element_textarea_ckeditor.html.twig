@@ -1,0 +1,24 @@
+<textarea 
+    id="{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}" 
+    name="{{mainCategory}}[{{subCategory}}][{{loop_index}}][{{entity_property}}]" 
+    required="required"
+    class="form-control">{% if entity_id is defined and entity_id != null %}{{entityTranslation_data_property}}{% endif %}</textarea>
+    {% if ckEditor == true %}
+        <script type="text/javascript">
+            var CKEDITOR_BASEPATH = "/build/ckeditor/";
+        </script>
+        <script type="text/javascript" 
+            src="/build/ckeditor/ckeditor.js">
+        </script>
+        <script type="text/javascript">        
+            if (CKEDITOR.instances["{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}"]) { 
+                CKEDITOR.instances["{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}"].destroy(true); 
+                delete CKEDITOR.instances["{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}"]; 
+            }
+            CKEDITOR.replace("{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}", {
+                                            language:"es",
+                                            filebrowserUploadUrl: "/admin/media/new",
+                                            filebrowserBrowseUrl: "/admin/media",
+                                            });
+        </script>
+    {% endif %}

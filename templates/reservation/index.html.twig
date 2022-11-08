@@ -1,0 +1,157 @@
+{% if reservation is defined and reservation != null %}
+	{% set reservation = reservation %}
+	{% set reservationId = reservation.id %}
+	{% set nbpilotes = reservation.nbpilotes %}
+	{% set nbaccomp = reservation.nbaccomp %}
+	{% set prixPilote = reservation.date.prixPilote %}
+	{% set prixAccomp = reservation.date.prixAccomp %}
+	{% set discount = 0 %}
+	{% if reservation.payments|length > 0 %}
+		{% set payment = reservation.payments.first.ammount %}
+	{% else %}
+		{% set payment = 0 %}
+	{% endif %}
+	{% set discountType = "ammount" %}
+	{% set discount = 0 %}
+	{% for codepromo in reservation.codespromos %}
+		{% if codepromo.statut == 'act' %}
+			{% if codepromo.montant > 0 %}
+				{% set discountType = "ammount" %}
+				{% set discount = codepromo.montant %}
+			{% elseif codepromo.pourcentage > 0 %}
+				{% set discountType = "pourcentage" %}
+				{% set discount = codepromo.pourcentage %}
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+{% else %}
+	{% set reservation = null %}
+	{% set reservationId = 0 %}
+	{% if nbpilotes is not defined %}
+		{% set nbpilotes = 0 %}
+	{% endif %}
+	{% if nbaccomp is not defined %}
+		{% set nbaccomp = 0 %}
+	{% endif %}
+	{% if prixPilote is not defined %}
+		{% set prixPilote = 0 %}
+	{% endif %}
+	{% if prixAccomp is not defined %}
+		{% set prixAccomp = 0 %}
+	{% endif %}
+	{% set payment = 0 %}
+	{% if optionsJson is not defined %}
+		{% set optionsJson = "" %}
+	{% endif %}
+	{% set discount = 0 %}
+	{% set discountType = '' %}
+	{% if options is not defined %}
+			{% set options = "[]" %}
+		{% else %}
+			{% set options = options %}
+	{% endif %}
+{% endif %}
+{% if app.user is defined and app.user != null %}
+	{% set userId = app.user.id %}
+{% else %}
+	{% set userId = "" %}
+{% endif %}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - {{'Iniciación de una reserva'|trans}}{% endblock %}
+
+{% block body %} 
+    <div class="container">
+        <!-- BREADCRUMB -->
+        <div class="row">
+            <div class="col-12">
+                {{ wo_render_breadcrumbs() }}
+            </div>
+        </div>
+        <!-- END BREADCRUMB -->
+        
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message|raw }}
+            </div>
+        {% else %}
+        <!-- MAIN TITLE -->
+        <div class="row">
+            <div class="col-12">
+                <h1>{{ 'Reservar un viaje'|trans }}</h1>
+                        
+            </div>
+        </div>
+        <!-- END MAIN TITLE -->
+
+        <!-- TWO COLUMN LAYOUT -->
+        <div class="row" 
+                id="js-reservation-wrapper" 
+                data-container="reservation" 
+                data-date-id="{{date.id}}"
+                data-nbpilotes="{{nbpilotes}}"
+                data-nbaccomp="{{nbaccomp}}"
+		        data-options="{{optionsJson}}"
+                data-user="{{ userId }}" 
+		        data-payment="{{ payment }}"
+		        data-discount="{{ discount }}"
+		        data-discount-type="{{ discountType }}"
+                {% if userEdit is defined and userEdit == true %}
+                    data-user-edit = "true"
+                {% endif %}
+                {% if reservation != null %} 
+                    data-is-initialized="true" 
+                    data-reservation="{{reservation.id}}"
+                {% else %} 
+                    data-is-initialized="false"{% endif %}>
+            <div class="col-md-8 col-xs-12">
+                {{ include( 'reservation/_card_welcome.html.twig' ) }}
+                {{ include( 'reservation/_card_travel.html.twig' )}}   
+                {{ include( 'reservation/_card_travellers.html.twig' )}}
+                {{ include( 'reservation/_card_options.html.twig' )}}
+                
+                <div class="row">
+                    <div class="col-6 col-xs-12">
+                        {{ include( 'reservation/_card_codespromo.html.twig' ) }}
+                    </div>
+                    <div class="col-6 col-xs-12">
+                        {{ include( 'reservation/_card_comment.html.twig' ) }}
+                    </div>
+                </div>
+                <div class="row  d-none" id="js-card-user" data-container="js-card-user">
+                    <div class="col-12">
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        {% else %}
+                            {{ include( 'reservation/_card_user.html.twig' ) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <div class="position-sticky"
+                        data-spy="affix" 
+                        data-offset-top="135" 
+                        data-offset-bottom="100"
+                        data-container="calculator-wrapper">
+                        {{ include( 'reservation/_wrapper_calculator_logged_user.html.twig' )}}
+                        
+                        {# {% else %} #}
+                            {# {{ include( 'reservation/_card_user.html.twig' ) }} #}
+                        {# {% endif %} #}
+                    
+                </div>
+            </div>
+        </div>
+        <!-- END TWO COLUMN LAYOUT -->
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    {{ encore_entry_script_tags('reservation') }}
+    {% if isInitialized == false %}
+        
+    {% endif %}
+{% endblock %}

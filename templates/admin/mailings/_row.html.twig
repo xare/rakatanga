@@ -1,0 +1,35 @@
+ <tr>
+    <td>{{ mailing.id }}</td>
+    <td>
+        {{ mailing.dateSent|date('d/m/Y')}}
+    </td>
+    <td>
+        <a href="{{ path('mailings_edit', {'id': mailing.id}) }}">
+            {{ mailing.subject }}
+        </a>
+    </td>
+    <td>
+        {{ mailing.content|u.truncate(200,'...')|raw }}
+         <br />
+        <a 
+            href="#" 
+            data-action="read-more" 
+            data-title="{{ mailing.subject }}"
+            data-content="{{ mailing.content|raw|escape }}"
+            class="btn btn-primary btn-sm">
+            Read more
+        <a>
+    </td>
+    <td>{{ mailing.ToAddresses }}</td>
+    <td>{{ mailing.attachment }}</td>
+    <td>{{ mailing.category }}</td>
+    {# <td>
+        <a href="{{ path('mailings_show', {'id': mailing.id}) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+    </td> #}
+    {# <td>
+        <a href="{{ path('mailings_edit', {'id': mailing.id}) }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+    </td> #}
+    <td>
+        {{ include('admin/mailings/_delete_form.html.twig') }}
+    </td>
+</tr>

@@ -1,0 +1,22 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{parent()}} | Crear una opción nueva{% endblock %}
+{% block header %}
+   {{ parent() }}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Create new Options</h1>
+
+            {{ include('admin/options/_form.html.twig') }}
+            <br />
+            <a href="{{ path('options_index') }}" class="btn btn-primary">
+                <i class="fa fa-list"></i>
+                Back to list
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

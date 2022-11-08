@@ -1,0 +1,35 @@
+{{ form_start(form) }}
+    {# {{ form_widget(form) }} #}
+    <div class="row">
+        <div class="col-md-6 col-sm-12">    
+            {{ form_row(form.section) }}
+        </div>
+        <div class="col-md-6 col-sm-12">
+            {{ form_row(form.acronym) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            {{ form_row(form.title) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            {{ form_row(form.text) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-12">
+            {{ form_row(form.lang) }}
+        </div>
+        <div class="col-md-9 col-sm-12">
+            
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,40 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Blog index{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'blog'}) }}
+    <div class="row mb-4">
+        <div class="col-md-12 col-12">
+        <h1>Blog index</h1>
+
+        <table class="table table-striped table-hover small">
+            <thead class="main-red">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Lang</th>
+                    <th>Slug</th>
+                    <th><i class="fa fa-trash"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for blog in blogs %}
+                {{ include('admin/blog/_row.html.twig') }}    
+            {% else %}
+                <tr>
+                    <td colspan="6">No hay elementos guardados.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    
+        <a class="btn btn-primary" href="{{ path('blog_new') }}">
+            <i class="fa fa-plus-circle"></i> 
+            Create new</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

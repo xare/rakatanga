@@ -1,0 +1,25 @@
+<tr>
+  <td>{{ document.id }}</td>
+  <td><a href="/user/settings/{{ document.id }}/document/download">{{ document.filename }}</a></td>
+  <td><a href="{{ path('document_edit', {'id': document.id}) }}">{{ document.originalFilename }}</a></td>
+  <td>{{ document.mimeType }}</td>
+  <td>
+      {{ document.user.prenom }} {{ document.user.nom }}<br />
+      {{ document.user.email }}
+  </td>
+  {# <td>
+      <a href="{{ path('document_show', {'id': document.id}) }}"
+      class="btn btn-primary">
+          <i class="fa fa-eye"></i>
+      </a>
+  </td>
+  <td>
+      <a href="{{ path('document_edit', {'id': document.id}) }}"
+      class="btn btn-info">
+          <i class="fa fa-edit"></i>
+      </a>
+  </td> #}
+  <td>
+      {{ include('admin/document/_delete_form.html.twig') }}
+  </td>
+</tr>

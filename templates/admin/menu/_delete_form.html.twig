@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('menu_delete', {'id': menu.id}) }}" onsubmit="return confirm('¿Estás seguro de querer borrar este elemento?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ menu.id) }}">
+    <button class="btn btn-danger">
+        <i class="fa fa-trash"></i>
+    </button>
+</form>

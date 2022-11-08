@@ -1,0 +1,129 @@
+{% for travelTranslation in form.travelTranslation %}
+	<div class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" id="{{travelTranslation.lang.vars.data.name}}" role="tabpanel" aria-labelledby="{{travelTranslation.lang.vars.data.name}}-tab">
+		<h3>{{travelTranslation.lang.vars.data.name}}</h3>
+		<div class="row mb-3">
+			<div class="col-12">
+			<div class="input-group mb-3">
+					<span class="input-group-text"><i class="fas fa-link"></i> </span>
+					<input type="text" class="form-control" id="js-copy-from-input" size="200" value="{{ absolute_url(path('destination',{ _locale: travelTranslation.lang.vars.data.isoCode, category: renderLocalizedCategory(travel.category.id,travelTranslation.lang.vars.data.isoCode)|slugify, travel: renderLocalizedTravelUrl(travel.id,travelTranslation.lang.vars.data.isoCode) })) }}">
+					<span 
+						class="input-group-text"
+						data-bs-toggle="tooltip" 
+						title="Abre este vínculo en una nueva ventana">
+						<a target="_blank" href="{{ path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') }) }}">
+						<i class="fas fa-eye"></i>
+						</a>
+					</span>
+					<span 
+						class="input-group-text"
+						data-bs-toggle="tooltip" 
+						title="Envía este url a alguien [INACTIVO]">
+						<i class="fas fa-envelope"></i>
+					</span>
+					<span 
+						class="input-group-text js-copy-content" 
+						data-bs-toggle="tooltip" 
+						title="Copia el url en el clipboard">
+							<i class="fas fa-copy"></i>
+					</span>
+				</div>
+				<div class="form-group">
+					<label for="travel_travelTranslation_{{loop.index0}}_title" class="required">Título -
+						{{travelTranslation.lang.vars.data.name}}</label>
+					<input type="text" id="travel_travelTranslation_{{loop.index0}}_title" name="travel[travelTranslation][{{loop.index0}}][title]" {% if travel.id != null %} value="{{travelTranslation.vars.data.title}}" {% endif %} required="required" class="form-control"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="form-group mb-3">
+					<label for="travel_travelTranslation_{{loop.index0}}_summary" class="required h4">Sumario -
+						{{travelTranslation.lang.vars.data.name}}</label>
+
+					{{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'summary',
+                                    ckEditor : true,
+                                    entity_id: travel.id,
+                                    entityTranslation_data_property: travelTranslation.vars.data.summary}) }}
+				</div>
+				<div class="form-group mb-3">
+					<label for="travel_travelTranslation_{{loop.index0}}_intro" class="required h4">Introducción -
+						{{travelTranslation.lang.vars.data.name}}</label>
+					{{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'intro',
+                                    ckEditor : true,
+                                    entity_id: travel.id,
+                                    entityTranslation_data_property: travelTranslation.vars.data.intro}) }}
+				</div>
+				<div class="form-group mb-3">
+					<label for="travel_travelTranslation_{{loop.index0}}_description" class="required h4">Detalle de las etapas -
+						{{travelTranslation.lang.vars.data.name}}</label>
+
+					<br/>
+					{{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'description',
+                                    ckEditor : true,
+                                    entity_id: travel.id,
+                                    entityTranslation_data_property: travelTranslation.vars.data.description}) }}
+				</div>
+				<div class="form-group mb-3">
+					<label for="travel_travelTranslation_{{loop.index0}}_itinerary" class="required h4">Mapa del recorrido -
+						{{travelTranslation.lang.vars.data.name}}
+					</label>
+					{{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'itinerary',
+                                    ckEditor : true,
+                                    entity_id: travel.id,
+                                    entityTranslation_data_property: travelTranslation.vars.data.itinerary}) }}
+				</div>
+
+				<div class="form-group mb-3">
+					<label for="travel_travelTranslation_{{loop.index0}}_practical_info" class="required h4">Información Práctica -
+						{{travelTranslation.lang.vars.data.name}}</label>
+					{{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'practical_info',
+                                    ckEditor : true,
+                                    entity_id: travel.id,
+                                    entityTranslation_data_property: travelTranslation.vars.data.practicalInfo}) }}
+				</div>
+
+			</div>
+		</div>
+		<input type="hidden" name="travel[travelTranslation][{{loop.index0}}][lang]" {% if travel.id != null %} value="{{travelTranslation.vars.data.lang.id}}" {% endif %}/>
+	</div>
+{% endfor %}
+<div
+	class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="media-tab">
+	<div id="media-selector">
+		{{ include('admin/shared/forms/_add_media_modal.html.twig',{
+                 'entity':travel
+             }) }}
+	</div>
+</div>
+
+<div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
+	{{ include('admin/travel/_options_tab_content.html.twig', { 'options': form.vars.data.options }) }}
+</div>
+<div class="tab-pane fade" id="dates" role="tabpanel" aria-labelledby="dates-tab">
+	{{ include('admin/travel/_dates_tab_content.html.twig', { 'dates': form.vars.data.dates }) }}
+
+</div>
+<div class="tab-pane fade" id="documentation" role="tabpanel" aria-labelledby="documentation-tab">
+	{{ include('admin/travel/_documentation_tab_content.html.twig', { 'travel': travel }) }}
+
+</div>

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{'Reinicia tu contraseña'|trans}}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4 col-12 card p-4">
+                {% for flashError in app.flashes('reset_password_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                {% endfor %}
+                <h1>{{'Reinicia tu contraseña'|trans}}</h1>
+
+                {{ form_start(requestForm) }}
+                    {{ form_row(requestForm.email, {
+                        'label':'Correo electrónico'|trans
+                        }) }}
+                    <p>
+                        <small>
+                            {{'Introduce tu cuenta de correo electrónico y te enviaremos un vínculo via email para que puedas resetear tu contraseña'|trans}}.
+                        </small>
+                    </p>
+
+                    <button class="btn btn-primary"> {{'Enviar un correo con un vínculo de renovación de contraseña'|trans}} </button>
+                {{ form_end(requestForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

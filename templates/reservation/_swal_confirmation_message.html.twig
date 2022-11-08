@@ -1,0 +1,53 @@
+{% block stylesheets %}
+  {{ encore_entry_link_tags('app') }}
+{% endblock %}
+<div style="text-align:left;">
+  <p>
+    {{ 'La reserva se ha inicializado correctamente'|trans }}
+  </p>
+   <p>
+    {{ 'Recuerda que esta reserva no se formalizará hasta realizar al menos el primer pago que podás realizar en la ventana siguiente'|trans }}.
+  </p>
+    {% if codepromo != null %}
+      <p>{{ 'Hemos asignado un cupón descuento para tu viaje este se aplicará sobre el precio total de tu viaje'|trans }}.</p>
+      <table class="table">
+        <tr>
+          <td><strong>{{ 'Código promocional'|trans }} : </strong></td>
+          <td> {{ codepromo.code }}</td>
+        </tr>
+        <tr>
+          <td><strong>{{ 'Etiqueta'|trans }} : </strong></td> 
+          <td>{{ codepromo.libelle }}</td>
+        </tr>
+        <tr>
+          <td><strong>{{ 'Comentario'|trans }} : </strong></td>
+          <td> {{ codepromo.code }}</td>
+        </tr>
+        {% if codepromo.montant != null %}
+          <tr>
+            <td><strong> {{ 'Cantidad'|trans }} : </strong></td> 
+            <td>{{ codepromo.montant }} </td>
+          </tr>
+        {% endif %}
+        {% if codepromo.pourcentage != null %}
+          <tr>
+            <td><strong> {{ '%'|trans }} : </strong></td>  
+            <td>{{ codepromo.pourcentage }}</td> 
+          </tr>
+        {% endif %}
+        {% if codepromo.debut != null %}
+          <tr>
+            <td><strong> {{ 'Comienzo'|trans }} : </strong></td>  
+            <td>{{ codepromo.debut|date('d/m/Y') }} </td>
+          </tr>
+        {% endif %}
+        {% if codepromo.fin != null %}
+          <tr>
+            <td><strong> {{ 'Final'|trans }} : </strong></td>  
+            <td>{{ codepromo.fin|date('d/m/Y') }} </td>
+          </tr>
+        {% endif %}
+      </table>
+    {% endif %}
+  </p>
+</div>

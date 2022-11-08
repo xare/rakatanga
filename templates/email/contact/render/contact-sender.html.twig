@@ -1,0 +1,22 @@
+{% trans_default_domain 'email' %}
+{# {% extends 'email/emailBase.html.twig' %} #}
+{% block content %}
+<p>{{'Este mensaje es un mensaje automático. No necesita respuesta'|trans}}.</p>
+<p>{{'Desde Rakatanga agradecemos tu interés en nuestro proyecto y por haberte puesto en contacto con nosotros, en breve, nos pondremos en contacto contigo'|trans}}.</p>
+    {# <row class="welcome">
+        <columns>
+            <spacer size="35"></spacer>
+            <h1>
+                <center>{{ 'Muchas gracias'|trans }} {{email.toName}}</center>
+            </h1>
+            <spacer size="10"></spacer>
+        </columns>
+    </row>
+    <spacer size="30"></spacer>
+    <row>
+        <columns>
+            <p>{{'Este mensaje es un mensaje automático. No necesita respuesta'|trans}}.</p>
+            <p>{{'Desde Rakatanga agradecemos tu interés en nuestro proyecto y por haberte puesto en contacto con nosotros, en breve, nos pondremos en contacto contigo'|trans}}.</p>
+        </columns>
+    </row> #}
+{% endblock %}

@@ -1,0 +1,79 @@
+{% macro displayBadge(title,icon) %}
+    <div 
+          class="badge bg-success col-3 me-1 mb-1"
+          data-bs-toggle="tooltip" 
+          data-bs-placement="top"  
+          title="{{title}}"
+      >
+          <i class="fas fa-{{icon}} fa-2x"></i>
+      </div>
+{% endmacro %}
+{% macro displayEmptyBadge(icon) %}
+  <div 
+        class="badge bg-light text-dark col-3 me-1 mb-1"
+        data-bs-toggle="tooltip" 
+        data-bs-placement="top"  
+        title="Todavía no se han aportado datos"
+    >
+        <i class="fas fa-{{icon}} fa-2x"></i>
+  </div>
+{% endmacro %}
+
+
+<div class="row">
+  {% for reservationDatum in reservationData %}
+    {% if reservationDatum.passportNo != null %}
+      {{ _self.displayBadge(
+                    "PASAPORTE: "~reservationDatum.passportNo,
+                    'passport') }}
+    {% else %}
+      {{ _self.displayEmptyBadge('passport')}}
+    {% endif %}
+    {% if reservationDatum.visaNumber != null %}
+      {{ _self.displayBadge(
+                  "VISA: "~reservationDatum.visaNumber,
+                  'book')}}
+    {% else %}
+      {{ _self.displayEmptyBadge('book')}}
+    {% endif %}
+
+    {% if reservationDatum.driversNumber != null %}
+      {{ _self.displayBadge(
+                  "PERMISO DE CONDUCIR: "~reservationDatum.driversNumber,
+                  'id-card') }}
+    {% else %}
+      {{ _self.displayEmptyBadge('id-card')}}
+    {% endif %}  
+        </div>
+        <div class="row">
+    {% if reservationDatum.insuranceContractNumber != null %}
+      {{ _self.displayBadge(
+                  "SEGURO: "~reservationDatum.insuranceContractNumber
+            ~" ["~ reservationDatum.insuranceCompany ~"]",
+                  'car-crash') }}
+    {% else %}
+      {{ _self.displayEmptyBadge('car-crash')}}
+    {% endif %} 
+
+    {% if reservationDatum.flightNumber != null %}
+      {{ _self.displayBadge(
+                    "SALIDA: "~reservationDatum.flightNumber
+              ~" ["~ reservationDatum.flightArrivalAirport ~"] ("~reservationDatum.flightArrival|date('d/m/Y')~")",
+                    'plane-arrival') }}
+    {% else %}
+      {{ _self.displayEmptyBadge('plane-arrival')}}
+    {% endif %}
+
+    {% if reservationDatum.flightDepartureNumber != null %}
+      {{ _self.displayBadge(
+                    "SALIDA: "~reservationDatum.flightDepartureNumber
+              ~" ["~ reservationDatum.flightDepartureAirport ~"] ()",
+                    'plane-departure') }}
+    {% else %}
+      {{ _self.displayEmptyBadge('plane-arrival')}}
+    {% endif %}
+
+
+ 
+  {% endfor %}
+</div>

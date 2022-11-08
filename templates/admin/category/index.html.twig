@@ -1,0 +1,78 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Category index{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'category'}) }}
+    <div class="row mb-4">
+        <div class="col-md-12 col-12">
+            <h1>Indice Categorías</h1>
+        </div>
+    </div>     
+    <div class="row mb-4">
+        <div class="count col-md-3 col-xs-12">
+            <strong>Categorias en total:</strong> {{ categories.getTotalItemCount }}
+        </div>
+        <div class="col-md-1 offset-md-7 col-xs-12">
+            {{ include('admin/category/_filtrar_resultados.html.twig') }}
+        </div>
+    </div>
+
+    {# display navigation #}
+    <div class="row">
+        <div class="navigation col-md-2 col-xs-12">
+            {{ knp_pagination_render(categories) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="main-red">
+                    <tr>
+                        <th>{{ knp_pagination_sortable(categories, 'Id', 'c.id',{'class':'text-decoration-none link-light'}) }}</th>
+                        <th{% if categories.isSorted('c.name') %} class="sorted"{% endif %}>
+                            {{ knp_pagination_sortable(categories, 'Nombre', 'c.name',{'class':'text-decoration-none link-light'}) }}
+                        </th>
+                        <th{% if categories.isSorted('c.continent') %} class="sorted"{% endif %}>
+                            {{ knp_pagination_sortable(categories, 'Continente', 'c.continent',{'class':'text-decoration-none link-light'}) }}
+                        </th>
+                        <th{% if categories.isSorted('c.type') %} class="sorted"{% endif %}>
+                            {{ knp_pagination_sortable(categories, 'Tipo', 'c.type',{'class':'text-decoration-none link-light'}) }}
+                        </th>
+                        
+                        <th{% if categories.isSorted('c.status') %} class="sorted"{% endif %}>
+                            {{ knp_pagination_sortable(categories, 'Estatus', 'c.status',{'class':'text-decoration-none link-light'}) }}
+                        </th>
+                        <th>Traducciones</th>
+                        {# <th><i class="fa fa-eye"></i></th> #}
+                        {# <th><i class="fa fa-edit"></i></th> #}
+                        <th><i class="fa fa-trash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                {% for category in categories %}
+                {{include('admin/category/_row.html.twig')}}
+                    
+                {% else %}
+                    <tr>
+                        <td colspan="3">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+            {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(categories) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {# {{ encore_entry_script_tags('admin') }}
+    {{ encore_entry_script_tags('admin_media') }} #}
+{% endblock %}

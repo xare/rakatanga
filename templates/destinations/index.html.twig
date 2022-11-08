@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{'Nuestras rutas en moto'|trans }}{% endblock %}
+{% block header %}
+{{ parent() }}
+        {{ include('shared/_navbar.html.twig') }}
+  {% endblock %}
+{% block body %}
+ 
+{# {{ message }} #}
+{{ parent() }}
+<div class="container">
+  <div class="row">
+      <div class="col-md-12 col-12">
+          {{ wo_render_breadcrumbs() }}
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-12">
+    <h1>{{'Nuestras rutas en moto en Asia'|trans }}</h1>
+    <p>{{'Rakatanga Tour os propone multiple tours en moto en'|trans}} {{categories|length}} {{'destinos diferentes de Asia'|trans}}.</p>
+    <div class="row">
+      {% for category in categories %}
+        {{ include ('destinations/_destination.html.twig', {'category': category}) }}
+      {% endfor %}
+    </div>
+    <h1>{{'Otros destinos'|trans}}...</h1>
+    <div class="row">
+      {% for otherDestination in otherDestinations %}
+        {{ include ('destinations/_destination.html.twig', {'category': otherDestination}) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{ parent() }}
+{% endblock %}

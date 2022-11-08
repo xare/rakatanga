@@ -1,0 +1,109 @@
+<div class="card">
+    <div class="card-body form-group">
+        <div class="container" id="js-travellers-form">
+        <h2>{{ 'Datos de los/las viajeros/as'|trans }}</h2>
+        <p>{{ 'Por favor, añade los datos de los '|trans }} <strong>{{ reservation.nbPilotes }} {{'pilotos'|trans }}</strong> {{ 'y de los'|trans }} <strong>{{ reservation.nbaccomp }} {{ 'acompañantes'|trans }}</strong>.</p>
+            {% for i in 1..((nbpilotes+nbaccomp)) %}
+                {% if reservation.travellers|length > 0 %}
+                    {% set value = attribute(reservation.travellers,i-1) %}
+                {% endif %}
+                <div 
+                    class="js-travellers-form-container{% if i == 1 or i == (nbpilotes+1) %}
+                         js-contains-button
+                    {% endif %}"
+                    >
+                    <div class="row{% if i > 1 %} mt-4{% endif %}">
+                        <div class="col-12">
+                            <h5>
+                            {% if i < (nbpilotes+1) %}
+                                {{'Piloto'|trans}} {{(i)}}
+                            {% else %}
+                                {{'Acompañante'|trans}} {{(i-nbpilotes)}}
+                            {% endif %}    
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {% if i == 1 or i == (nbpilotes+1) %}
+                            <button
+                                class="btn btn-secondary small js-assign-to-user">
+                                    {{'Asignarme este puesto' | trans}}
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label 
+                                for="traveller_{{i-1}}_prenom">{{ 'Nombre'|trans }}
+                            </label>
+                            <input 
+                                name="traveller[{{i-1}}][prenom]" 
+                                id="traveller_{{i-1}}_prenom" 
+                                type="text" 
+                                class="form-control"
+                                {% if value is defined %}
+                                    value="{{ value.prenom }}"
+                                {% endif %} />
+                        </div>
+                        <div class="col-6">
+                            <label 
+                                for="traveller_{{i-1}}_nom">
+                                {{ 'Apellidos'|trans }}
+                            </label>
+                            <input 
+                                name="traveller[{{i-1}}][nom]" 
+                                id="traveller_{{i-1}}_nom" 
+                                type="text" 
+                                class="form-control"
+                                {% if value is defined %}
+                                    value="{{ value.nom }}"
+                                {% endif %} />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="traveller_{{i-1}}_email">
+                                {{ 'Email'|trans }}
+                            </label>
+                            <input 
+                                name="traveller[{{i-1}}][email]" 
+                                id="traveller_{{i-1}}_email" 
+                                type="email" 
+                                class="form-control" 
+                                placeholder="{{'usuario'|trans}}@{{'dominio.com'|trans}}"
+                                {% if value is defined %}
+                                    value="{{ value.email }}"
+                                {% endif %} />
+                        </div>
+                        <div class="col-6">
+                            <label for="traveller_{{i-1}}_telephone">
+                                {{ 'Teléfono'|trans }}
+                            </label>
+                            <input 
+                                name="traveller[{{i-1}}][telephone]" 
+                                id="traveller_{{i-1}}_telephone" 
+                                type="tel" 
+                                class="form-control" 
+                                placeholder="+00 000000000" 
+                                {# pattern="+[0-9]{2} [0-9]{9}" #}
+                                {% if value is defined %}
+                                    value="{{ value.telephone }}"
+                                {% endif %} />
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="traveller[{{i-1}}][position]" 
+                            value="{% if i < nbpilotes %}pilote{% else %}passager{% endif %}" />
+                    </div>
+                </div>
+            {% endfor %}
+            <br />
+            <button id="js-add-travellers" class="btn btn-primary">
+                <i class="fa fa-bookmark"></i>
+                {{'Guardar los datos los/as de viajeros/as'|trans }}
+            </button>
+        </div>
+    </div>
+</div>

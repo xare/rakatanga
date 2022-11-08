@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{app.request.locale}}">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="katakrak.net">
+        <title>{% block title %}Rakatanga Tours Admin!{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('admin') }}
+        {% endblock %}
+    </head>
+    <body>
+    
+        {% block header %}
+            {{ include('admin/shared/_header.html.twig') }}
+        {% endblock %}
+    
+        {% block body %}
+        {% endblock %}
+    
+        
+        {% block footer %}
+            {{ include('admin/shared/_footer.html.twig') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('readmore') }}
+        {% endblock %}
+    </body>
+</html>

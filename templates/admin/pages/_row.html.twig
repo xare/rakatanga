@@ -1,0 +1,23 @@
+<tr>
+  <td>{{ page.id }}</td>
+  <td>
+      <a href="{{ path('pages_edit', {'id': page.id}) }}">
+          {{ page.defaultSlug }}
+      </a>
+  </td>
+  <td>{{ page.dateCreated ? page.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+  <td>{{ page.dateModified ? page.dateModified|date('Y-m-d H:i:s') : '' }}</td>
+  <td>{% for pageTranslation in page.pageTranslations %}
+          <span class="badge bg-secondary">
+          {{ pageTranslation.lang.isoCode|upper }}
+          </span> {{ pageTranslation.title }}
+          <br />
+      {% endfor %}
+  </td>
+  {#  <td>    
+      <a href="{{ path('pages_edit', {'id': page.id}) }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
+  </td> #}
+  <td>
+      {{ include('admin/pages/_delete_form.html.twig') }}
+  </td>
+</tr>

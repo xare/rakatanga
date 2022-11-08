@@ -1,0 +1,243 @@
+{% macro hasCompletedData(parameterName1 = null, parameterName2 = null, parameterName3 = null) %}
+	{% set isComplete = false %}
+	{% if (parameterName1 != null and parameterName2 != null and parameterName3 != null) %}
+		{% if (child.vars.name == parameterName1 or
+									 			 child.vars.name == parameterName2 or 
+												 child.vars.name == parameterName3) and
+												 child.vars.value != null %}
+			{% set isComplete = true %}
+			<li data-type="{{ child.vars.name }}" data-checked="false" class="list-group-item list-success mb-1">
+				<i class="fa fa-check-circle" style="color:#155724"></i>
+				{{ child.vars.label }}:
+				{{ child.vars.value }}
+			{% else %}
+				<li data-type="{{ child.vars.name }}" data-checked="true" class="list-group-item bg-warning mb-1">
+					<i class="fa fa-exclamation-triangle" style="color:red"></i>
+					{{ child.vars.label }}{{ child.vars.value }}
+				</li>
+			{% endif %}
+		{% endif %}
+
+	{% endmacro %}
+  {% set inputIsFull = '' %}
+	{% set hasPassport = false %}
+	{% set hasVisa = false %}
+	{% set hasDrivers = false %}
+	{% set passportDocument = false %}
+	{% set visaDocument = false %}
+	{% set driversDocument = false %}
+	{% if reservationData is defined and reservationData != null %}
+		{% set reservation = reservationData.reservation %}
+		{% if reservationData.documents != null %}
+			{% set documents = reservationData.documents %}
+		{% endif %}
+		{% if reservationData.documents != null %}
+			{% set travellerId = reservationData.traveller.id %}
+		{% endif %}
+	{% endif %}
+
+
+
+{% for document in documents %}
+
+		{% if document.doctype == "passport" %}
+			{% set hasPassport = true %}
+			{% set passportDocument = document %}
+		{% endif %}
+
+		{% if document.doctype == "visa" %}
+			{% set hasVisa = true %}
+			{% set visaDocument = document %}
+		{% endif %}
+
+		{% if document.doctype == "drivers" %}
+			{% set hasDrivers = true %}
+			{% set driversDocument = document %}
+		{% endif %}
+
+	{% endfor %}
+	
+	{% extends 'base.html.twig' %}
+
+	{% block title %}
+		{{ parent() }}
+		-
+		{{'Configuración de cuenta'|trans}}
+	{% endblock %}
+
+	{% block body %}
+	
+
+		{{ parent() }}
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-12">
+						{{ wo_render_breadcrumbs() }}
+				</div>
+			</div>
+	
+			{{form_start(form,{'attr':{'class':'form-group'}})}}
+			<div 
+				class="row" 
+				id="js-reservation-wrapper" 
+				{# data-reservation-id="{{reservation.id}}"  #}
+				{% if reservationData is defined and reservationData.traveller != null %}
+					data-traveller-id="{{ reservationData.traveller.id }}"
+				{% else %}
+					data-user-id="{{app.user.id}}"
+				{% endif %}
+				data-locale="{{ app.request.getLocale() }}">
+				<div class="col-md-8 col-12">
+					<h1>
+						{{ 'Tu reserva'|trans }}:
+						{% if reservationData is defined and reservationData.traveller != null %}
+							{{ reservationData.traveller.prenom }}
+							{{ reservationData.traveller.nom }}
+						{% else %}
+							{{ user.prenom }}
+							{{ user.nom }}
+						{% endif %}
+					</h1>
+
+					<p>{{ 'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.</p>
+
+					{% for message in app.flashes('success') %}
+						<div class="alert alert-success">
+								{{ message }}.
+						</div>
+					{% endfor %}
+
+					<div class="alert alert-primary" role="alert">
+						<strong>{{ 'Nota'|trans }}</strong>:
+						<p>{{'Por favor rellena con tus datos este formulario, SI NO DISPONES DE TODOS LOS DATOS en este momento, puedes dar a GUARDAR en cualquier momento y seguir en otro momento'|trans }}.</p>
+						<p>{{'La columna de la derecha te indica los pasos que ya tienes completados'|trans }}</p>
+					</div>
+					{# {{ include('reservation/_card_travel.html.twig',{'date':reservation.date}) }} #}
+					<div class="nav-container">
+						<ul class="nav nav-tabs" role="tablist" id="myTabs">
+							<li class="nav-item" role="presentation">
+								<button data-bs-target="#doc" aria-controls="doc" class="nav-link active" type="button" role="tab" data-bs-toggle="tab">
+									{{'Documentos'|trans}}
+								</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button data-bs-target="#seg" aria-controls="seg" class="nav-link" type="button" role="tab" data-bs-toggle="tab">
+									{{'Seguro de asistencia en viaje'|trans}}
+								</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button data-bs-target="#tra" aria-controls="tra" class="nav-link" type="button" role="tab" data-bs-toggle="tab">
+									{{'Transfer aeropuerto'|trans}}
+								</button>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<div role="tabpanel" class="tab-pane active" id="doc">
+								{{ include('user/partials/_tab_content_doc.html.twig') }}
+							</div>
+							<div role="tabpanel" class="tab-pane" id="seg">
+								{{ include('user/partials/_tab_content_sec.html.twig') }}
+							</div>
+							<div role="tabpanel" class="tab-pane" id="tra">
+								{{ include('user/partials/_tab_content_tra.html.twig') }}
+							</div>
+						</div>
+						<button id="previous" data-action="previous" class="btn btn-rounded btn-primary previous">< {{ 'Anterior'|trans }}</button>
+						<button id="next" data-action="next" class="btn btn-rounded btn-primary next">{{ 'Siguiente'|trans }} ></button>
+						
+					</div>
+				</div>
+				<div class="col-4 col-xs-12">
+					<div class="position-sticky">
+						<div class="card card-tarif mb-3">
+							<div class="card-header">
+								<h4>{{ 'Documentos'|trans }}</h4>
+							</div>
+							<div class="card-body">
+								<ul 
+									class="list-group small mb-3 js-documents-list" 
+									data-reservation-id="{{reservation.id}}"
+									data-url="{{ path('frontend_reservation_list_documents', {'reservation': reservation.id}) }}"
+									>
+									{{ include('user/_documents_list.html.twig',{
+                               'reservation':reservation
+                           }) }}
+								</ul>
+							
+							</div>
+						</div>
+						<div class="card card-tarif">
+							<div class="card-header">
+								<h4>{{ 'DATOS'|trans }}</h4>
+							</div>
+							<div class='card-body'>
+								{% set counter = 0 %}
+								{% for child in form.children %}
+									{% if child.vars.value != null %}
+										{% set counter = counter + 1 %}
+									{% endif %}
+								{% endfor %}
+								{% set width = counter/( (form.children|length -1) )*100 %}
+								<div id="js-progress" class="mb-3" data-counter="{{counter}}">
+									<div class="progress">
+										<div class="progress-bar {% if width >= 0 and width < 25 %}
+																						bg-danger{% elseif width >= 25 and width < 50 %} bg-warning
+																						{% elseif width >= 50 and width < 75 %} bg-info{% elseif width >= 75 and width <= 100 %} bg-success{% endif %}" role="progressbar" style="width: {{ width }}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+								<ul class="list-group mb-3" id="js-verification-list">
+									{% for child in form.children %}
+										{% if child.vars.name != "_token" and
+									child.vars.name != "passportIssueDate" and
+									child.vars.name != "passportExpirationDate" and
+									child.vars.name != "visaIssueDate" and
+									child.vars.name != "visaExpirationDate" and
+									child.vars.name != "driversIssueDate" and
+									child.vars.name != "driversExpirationDate" and
+									child.vars.name != "insuranceContractNumber" and 
+									child.vars.name != "flightArrivalAirport" and 
+									child.vars.name != "ArrivalHotel" and 
+									child.vars.name != "flightDeparture" and 
+									child.vars.name != "flightDepartureAirport" and 
+									child.vars.name != "flightDepartureHotel"
+									 %}
+											{% if child.vars.value != null %}
+												<li data-type="{{ child.vars.name }}" data-checked="false" class="list-group-item list-success mb-1">
+													<i class="fa fa-check-circle" style="color:#155724"></i>
+													{{ child.vars.label }}:
+													{{ child.vars.value }}
+												{% else %}
+													<li data-type="{{ child.vars.name }}" data-checked="true" class="list-group-item bg-warning mb-1">
+														<i class="fa fa-exclamation-triangle" style="color:red"></i>
+														{{ child.vars.label }}{{ child.vars.value }}
+													</li>
+												{% endif %}
+											{% endif %}
+										{% endfor %}
+									</ul>
+								</div>
+								<div class="card-footer">
+									<button name="submit" class="btn btn-info">
+										{{'Guardar'|trans}}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{# {{ form_row( form._token ) }} #}
+				{# {{ form_end( form, {'render_rest': false} ) }}  #}
+				{{ form_end( form) }}
+			</div>
+
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ parent() }}
+			{{ encore_entry_script_tags('reservation-data-manager') }}
+		{% endblock %}
+
+		{% block footer %}
+			{{ parent() }}
+		{% endblock %}

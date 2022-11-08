@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{'Pago anulado'|trans}}{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>{{'Pago anulado'|trans}}</h1>
+                <p>
+                    {{'Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias' |trans}}.
+                    <a href="mailto:info@rakatanga-tour.com">info@rakatanga-tour.com</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+<div>
+
+</div>
+{% endblock %}

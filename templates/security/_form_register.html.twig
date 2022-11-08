@@ -1,0 +1,84 @@
+{% if (static is defined) %}
+	{{form_start(formRegister, {
+                    'attr': { 
+                        'id':'js-registration-user-form',
+                        'novalidate': 'novalidate' }
+                        })
+                    }}
+{% else %}
+	{{form_start(formRegister, {
+                    'attr': { 
+                        'id':'js-registration-user-form',
+                        'action': path('register'),
+                        'novalidate': 'novalidate' }
+                        })
+                    }}
+{% endif %}
+<div class="row form-row">
+	<div class="col-12">
+		{{ form_errors(formRegister) }}
+	</div>
+</div>
+<div class="row form-row">
+	<div class="col-12 form-goup">
+		{{ form_row(formRegister.email,{
+                'label' : 'Correo electrónico'|trans,
+                'placeholder' : 'usuario@dominio.com'
+            }) }}
+	</div>
+</div>
+<div class="row form-row">
+	<div class="col-12 form-goup">
+		{{ form_row(formRegister.langue, {
+                    'label' : 'Lengua'|trans,
+                    'attr' : {'class' : 'form-control form-select'}
+                }) }}
+	</div>
+</div>
+<div class="row form-row">
+	<div class="col-12">
+		{{ form_row(formRegister.nationality, {
+                    'label' : 'Nacionalidad'|trans,
+                    'attr': {'class' : 'form-control form-select'}
+                }) }}
+	</div>
+</div>
+<div class="row form-row">
+	<div class="col-12 form-goup">
+		{{ form_row(formRegister.nom, {
+                    'label' : 'Apellidos'|trans
+                }) }}
+	</div>
+</div>
+<div class="row form-row">
+	<div class="col-12 form-goup">
+		{{ form_row(formRegister.prenom, {
+                    'label' : 'Nombre'|trans
+                }) }}
+	</div>
+</div>
+<div class="row form-row">
+	<div class="col-12">
+		{{ form_row(formRegister.password, {
+                    'label' : 'Contraseña'|trans
+                }) }}
+		{% if (formRegister.password is same as(NULL)) %}
+			{{ form_row(formRegister.password,{
+                        'label' : 'Contraseña'|trans
+                    }) }}
+		{% endif %}
+	</div>
+</div>
+<div class="row form-row form-switch ps-3">
+	{{ form_row(formRegister.agreeTerms,{
+					'label' : 'Acepto los términos'|trans
+	})}}
+</div>
+
+<input id="_target_path" type="hidden" name="_target_path" value="{{ path( 'ajax_registered' ) }}">
+<input type="hidden" name="user[_token]" id="user__token" value="{{ csrf_token('user') }}">
+
+<button class="btn btn-lg btn-primary" id="js-process-registration" type="submit">
+	{{'Registrar usuario'|trans}}
+</button>
+{{ form_end(formRegister,{'render_rest': false}) }}

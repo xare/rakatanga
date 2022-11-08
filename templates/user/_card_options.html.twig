@@ -1,0 +1,63 @@
+<div class="card p-3 shadow mb-3 travel-options{% if display %}{{display}}{% endif %}">
+<h2>{{'Las opciones'|trans}}</h2>
+  <div class="table-responsive">
+    <table class="table">
+      <tr>
+        <td colspan="3">
+            <table class="table">
+                {% for option in options %}
+                    <tr 
+                        class="js-options-row-select"
+                        data-option-id="{{ option.id }}" 
+                        data-option-ammount="{{ option.ammount }}"
+                        data-option-price="{{ option.price }}"
+                        data-option-title="{{ renderLocalizedOption(option.id,locale) }}">
+                        {# <td>
+                            <strong class="js-option-ammount-holder">{{ option.ammount }}</strong>
+                        </td> #}
+                         <td>
+                        
+                         </td>
+                        <td>
+                        {% if renderLocalizedOptionIntro(option.id,locale) != null %}
+                        
+                            <span 
+                                data-bs-toggle="tooltip" 
+                                title="{{ renderLocalizedOptionIntro(option.id,locale)|striptags|raw}}">
+                                {% endif %}
+                            {{ renderLocalizedOption(option.id,locale) }}
+                            
+                            {% if renderLocalizedOptionIntro(option.id,locale) != null %}
+                                 <i class="fas fa-question"></i>
+                            </span>
+					   
+                        {% endif %}
+                        </td>
+                       
+                        <td>
+                            {{ option.price|format_currency('EUR', {fraction_digit: 2}) }}
+                        </td>
+                        <td>
+                            <select 
+                                class="form-control form-select js-reservation-nbOption" 
+                                name="reservation_user[option][{{ option.id }}]" 
+                                required>
+                                    {% set maxOptionsAmmount = reservation.nbpilotes + reservation.nbaccomp %}
+                                    {% for i in 0..maxOptionsAmmount %}
+                                        <option value="{{i}}" {% if option.ammount > 0 and i == option.ammount %}selected="selected"{% endif %}>{{i}}</option>
+                                    {% endfor %}         
+                            </select>
+                        </td>
+                        
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ 'No has elegido ninguna opción'|trans }}.</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

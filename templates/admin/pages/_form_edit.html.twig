@@ -1,0 +1,82 @@
+{% for pageTranslation in form.pageTranslations %}
+    <div 
+        class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" 
+        id="{{pageTranslation.lang.vars.data.name}}" 
+        role="tabpanel" 
+        aria-labelledby="{{pageTranslation.lang.vars.data.name}}-tab">
+            <h3>{{pageTranslation.lang.vars.data.name}}</h3>
+        
+            <div class="form-group mb-4">
+                <label 
+                    for="pages_pageTranslations_{{loop.index0}}_title"
+                    class="required">Title [{{pageTranslation.lang.vars.data.name}}]</label>
+                <input
+                    type="text"
+                    id="pages_pageTranslations_{{loop.index0}}_title"
+                    name="pages[pageTranslations][{{loop.index0}}][title]"
+                    {% if page.id != null %}value="{{pageTranslation.vars.data.title}}"{% endif %}
+                    required="required" 
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-4">
+                <label 
+                    for="pages_pageTranslations_{{loop.index0}}_slug"
+                    class="required"
+                    >Slug [{{pageTranslation.lang.vars.data.name}}]</label>
+                <input
+                    type="text"
+                    id="pages_pageTranslations_{{loop.index0}}_slug"
+                    name="pages[pageTranslations][{{loop.index0}}][slug]"
+                    {% if page.id != null %}value="{{pageTranslation.vars.data.slug}}"{% endif %}
+                    required="required" 
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-4">
+                <label 
+                    for="pages_pageTranslations_{{loop.index0}}_intro"
+                    class="required"
+                    >Introducción [{{pageTranslation.lang.vars.data.name}}]</label>
+                    {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'pages',
+                                    subCategory: 'pageTranslations',
+                                    entity_property : 'intro',
+                                    ckEditor : true,
+                                    entity_id: page.id,
+                                    entityTranslation_data_property: pageTranslation.vars.data.intro}) }}
+            </div>
+            <div class="form-group mb-4">
+                <label 
+                    for="pages_pageTranslations_{{loop.index0}}_body"
+                    class="required"
+                    >Texto Principal [{{pageTranslation.lang.vars.data.name}}]</label>
+                    {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'pages',
+                                    subCategory: 'pageTranslations',
+                                    entity_property : 'body',
+                                    ckEditor : true,
+                                    entity_id: page.id,
+                                    entityTranslation_data_property: pageTranslation.vars.data.body}) }}
+               
+            </div>
+
+            <input type="hidden" 
+                name="pages[pageTranslations][{{loop.index0}}][lang]" 
+                {% if page.id != null %}value="{{pageTranslation.vars.data.lang.id}}"{% endif %}/>
+            
+        </div>   
+    {% endfor %}
+    <div 
+    class="tab-pane fade" 
+    id="media" 
+    role="tabpanel" 
+    aria-labelledby="media-tab">
+    <div {{ stimulus_controller('media-selector',{ 
+        url: path('assign_main_photo_travel', {'id': form.vars.value.id}), 
+        }) }} id="media-selector">
+             {{ include('admin/shared/forms/_add_media_modal.html.twig',{
+                 'entity':page
+             }) }}
+        </div>
+    </div>

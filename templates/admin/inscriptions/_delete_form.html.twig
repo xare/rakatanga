@@ -1,0 +1,10 @@
+<form method="post" action="{{ path('inscriptions_delete', {'id': inscription.id}) }}" onsubmit="return confirm('¿Estás seguro de querer borrar este item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ inscription.id) }}">
+    <button 
+        class="btn btn-danger"
+        data-bs-toggle="tooltip" 
+        data-bs-placement="top"
+        title="Borrar Inscripción">
+        <i class="fa fa-trash"></i>
+    </button>
+</form>

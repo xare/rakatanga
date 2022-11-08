@@ -1,0 +1,32 @@
+<textarea
+        id="{{mainCategory}}_{{subCategory}}_{{loop.index0}}_{{entity_property}}"
+        name="{{mainCategory}}[{{subCategory}}][{{loop.index0}}][{{entity_property}}]"
+        class="form-control"
+        required="required"
+        >{% if entity_id is defined and entity_id != null %}{{entityTranslation_data_property}}{% endif %}</textarea>
+    
+    {% if ckEditor == true %}
+        <script type="text/javascript">
+            var CKEDITOR_BASEPATH = "{{absolute_url("/build/ckeditor/")}}";
+        </script>
+        <script type="text/javascript" 
+            src="{{absolute_url("/build/ckeditor/")}}ckeditor.js">
+        </script>
+        <script type="text/javascript">        
+            if (CKEDITOR.instances["{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}"]) { 
+                CKEDITOR.instances["{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}"].destroy(true); 
+                delete CKEDITOR.instances["{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}"]; 
+            }
+            {% if entity_id != '' %}
+            CKEDITOR.replace("{{mainCategory}}_{{subCategory}}_{{loop_index}}_{{entity_property}}", {
+                                            language:"es",
+                                            filebrowserUploadUrl: "{{absolute_url(path('file-browser-upload',{'entity': mainCategory, 'id' :entity_id}))}}",
+                                            filebrowserUploadMethod: "form",
+                                            filebrowserBrowseUrl: "{{absolute_url(path('file-browser',{'entity' :mainCategory, 'id': entity_id}))}}",
+                                            });
+            {% endif %}
+            CKEDITOR.config.extraAllowedContent = 'div img hr(clearfix) p(clearfix)';
+            CKEDITOR.config.extraPlugins = 'btgrid';
+            CKEDITOR.config.allowedContent = true;
+        </script>
+    {% endif %}

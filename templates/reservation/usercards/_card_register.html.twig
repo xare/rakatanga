@@ -1,0 +1,64 @@
+{{form_start(form, {
+    'attr': {
+        'class':'js-register-form',
+        'novalidate': 'novalidate'},
+    'action': 'initialize_reservation_register'
+    })
+}}
+<div class="row">
+    <div class="col-6">
+        <div class="row">
+            <div class="col-12">
+                {{form_row(form.email, {
+                    'label': 'Correo electrónico'|trans
+                })}}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.password, {
+                    'label': 'Contraseña'|trans
+                }) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ form_row(form.agreeTerms,{
+					'label' : 'Acepto los términos'|trans
+	            })}}
+                <a href="{{path('main-content',{'slug':'aviso-legal'})}}">{{ 'Aviso legal'|trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-12">
+                {{ form_row( form.prenom,{ 'label':'Nombre'|trans })}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ form_row( form.nom,{ 'label':'Apellidos'|trans })}}
+            </div>
+            <div class="col-12">
+                {{ form_row( form.telephone,{ 
+                                'label':'Teléfono'|trans,
+                                'attr': {'class':'row' }}) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 justify-content-end">
+        {{ form_row(form.Register, {
+            'label':'Entrar'|trans~' | '~'Crear una cuenta'|trans,
+            'id':'js-initialize-reservation-register',
+            'attr': { 'class' :'float-end btn btn-primary mt-3' }
+        }) }}
+    </div>
+</div>
+ <input type="hidden" 
+                        name="user[_token]"
+                        id="user__token"
+                        value="{{ csrf_token('user') }}"
+                >
+{{form_end( form, { render_rest: false } ) }}

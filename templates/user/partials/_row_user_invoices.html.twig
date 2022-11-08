@@ -1,0 +1,25 @@
+  <td>{{invoice.name}}</td>
+  <td>{{invoice.nif}}</td>
+  <td>{{invoice.address}}</td>
+  <td>{{invoice.invoiceNumber}}</td>
+  <td>
+    {{renderLocalizedCategory(invoice.reservation.date.travel.category.id,app.request.getLocale())}} - 
+    {{renderLocalizedTravel(invoice.reservation.date.travel.id,app.request.getLocale())}}
+  </td>
+  <td>
+    {{invoice.reservation.date.debut|date('Y-m-d')}}
+  </td>
+  <td style="color:{% if invoice.dueAmmount < 0 %}red{% else %}green{% endif %}">
+    {{invoice.dueAmmount|format_currency('EUR', {fraction_digit: 0})}}
+  </td>
+  <td>
+    <a href="{{path('user-download-invoice',{'invoice':invoice.id})}}">
+        <i class="fa fa-download"></i>
+    </a>
+  </td>
+  <td>
+    <button class="btn btn-rakatanga-secondary" data-action="js-update-invoice" data-invoiceid="{{invoice.id}}">
+    <i class="fas fa-recycle"></i>
+        {{'Actualizar los datos de la factura'|trans }}
+    </button>
+  </td>

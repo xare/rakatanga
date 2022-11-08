@@ -1,0 +1,45 @@
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top"
+{{ is_granted('ROLE_PREVIOUS_ADMIN') ? 'style="background-color: #f4d38b !important"' }}>
+  <div class="container">
+      <a class="navbar-brand" href="{{path('index',{'_locale':app.request.getLocale()})}}">
+        <img src="{{asset('images/rakatanga-tour.png')}}" width="230" height="" alt="Rakatanga Tour">
+      </a>
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    <div id="navbar" class="navbar-collapse collapse"> 
+          <ul class="nav navbar-nav">
+
+            {% for menuItem in menu %}
+              
+              <li class="nav-item{% if menuItem.routeName == app.request.attributes.get('_route') %} active{% endif %}">
+                <a class="nav-link" href="{{app.request.baseUrl ~ '/' ~ app.request.getLocale() ~ '/' ~ menuItem.slug ~ ''}}">
+                  {{ menuItem.title }}
+                </a>
+              </li>
+              
+            {% endfor %}
+            <li class="nav-item">
+              <a href="https://www.facebook.com/rakatangatour" target="_blank" class="nav-link">
+                <i class="fab fa-facebook"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.instagram.com/rakatangatour/" target="_blank" class="nav-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="https://youtube.com/channel/UCikmM8fbS0LLqztCF38spqQ" target="_blank" class="nav-link">
+                <i class="fab fa-youtube"></i>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav" id="user-switch">
+            {{ include('shared/_user_switch.html.twig') }}
+          </ul>
+          {{ include('shared/_locale_switcher.html.twig') }}
+        </div>
+  </div>
+</nav> 

@@ -1,0 +1,199 @@
+{% if reservation is defined and reservation != null %}
+	{% if nbpilotes is not defined %}
+		{% set nbpilotes = reservation.nbpilotes %}
+	{% endif %}
+	{% if nbaccomp is not defined %}
+		{% set nbaccomp = reservation.nbaccomp %}
+	{% endif %}
+	{% set prixPilote = reservation.date.prixPilote %}
+	{% set prixAccomp = reservation.date.prixAccomp %}
+	{% set discount = 0 %}
+	{% if reservation.payments|length > 0 %}
+		{% set payment = reservation.payments.first.ammount %}
+	{% else %}
+		{% set payment = 0 %}
+	{% endif %}
+	{% set discountType = "ammount" %}
+	{% set discount = 0 %}
+	{% for codepromo in reservation.codespromos %}
+		{% if codepromo.statut == 'act' %}
+			{% if codepromo.montant > 0 %}
+				{% set discountType = "ammount" %}
+				{% set discount = codepromo.montant %}
+			{% elseif codepromo.pourcentage > 0 %}
+				{% set discountType = "pourcentage" %}
+				{% set discount = codepromo.pourcentage %}
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+{% else %}
+	{% set reservation = null %}
+	{% set reservationId = 0 %}
+	{% if nbpilotes is not defined %}
+		{% set nbpilotes = 0 %}
+	{% endif %}
+	{% if nbaccomp is not defined %}
+		{% set nbaccomp = 0 %}
+	{% endif %}
+	{% if prixPilote is not defined %}
+		{% set prixPilote = 0 %}
+	{% endif %}
+	{% if prixAccomp is not defined %}
+		{% set prixAccomp = 0 %}
+	{% endif %}
+	{% set payment = 0 %}
+	{% if optionsJson is not defined %}
+		{% set optionsJson = "" %}
+	{% endif %}
+	{% set discount = 0 %}
+	{% set discountType = '' %}
+	{% if options is not defined %}
+			{% set options = "[]" %}
+		{% else %}
+			{% set options = options %}
+	{% endif %}
+{% endif %}
+{% set totalPrice = 0 %}
+
+<div 
+		class="card card-tarif shadow mt-4 mb-2" 
+    data-container="calculator"
+		data-waiting="{{'Cargando'|trans}}..."
+		data-date-id="{{date.id}}"
+		{% if reservation != null %}
+			data-reservation="{{reservation.id}}"
+		{% endif %}
+    data-nbpilotes="{{nbpilotes}}"
+    data-nbaccomp="{{nbaccomp}}"
+		data-options="{{optionsJson}}">
+    <div class="card-header">
+			{{'Datos del tour seleccionado'|trans}}</div>
+			<div class="card-body">
+				<div>
+					<table class="table calculator-table">
+						<tbody data-container="travellers-calculator">
+							<tr>
+								<td>
+									<span class="badge bg-secondary bg-opacity-75 rounded-1">
+                    {{ nbpilotes }} &#10005;
+									 </span> 
+									{{ 'piloto/a'|trans }}
+                </td>
+                <td align="right">
+									<span class="text-right">{{ (nbpilotes * date.prixPilote)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+									</span>
+								</td>
+              </tr>
+							{% if date.prixAccomp > 0%}
+								<tr>
+									<td>
+										<span class="badge bg-secondary bg-opacity-75 rounded-1">{{ nbaccomp }} &#10005;</span>
+										{{ 'acompañante'|trans }}
+									</td>
+									<td align="right">
+										<span class="text-right">{{ (nbaccomp * date.prixAccomp)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+										</span>
+									</td>
+								</tr>
+							{% endif %}
+							</tbody>
+							<tbody data-container="options-calculator">
+							{% set totalOptionsValue = 0 %}
+								{% if options is defined and options != "" %}
+									{% for option in options %}
+										{% set totalOptionsValue = totalOptionsValue + (option.ammount * option.price) %}
+									{% endfor %}
+									{{ include( 'reservation/calculator/_options.html.twig' , { 'options' : options } ) }}
+								{% endif %}
+							</tbody>
+							{% set totalPrice = ((nbpilotes * date.prixPilote) + (nbaccomp * date.prixAccomp) + totalOptionsValue ) %}
+							{% if reservation is defined and reservation != null %}
+							{# {{dump(reservation.codespromos)}} #}
+							{% endif %}
+							{% if reservation.codespromos is defined %}
+							
+								<tbody>
+									{% for codepromo in reservation.codespromos %}
+										<tr style="color:green; background:#dedede;">
+											<th>{{ 'Descuento'|trans }} : {{ codepromo.code }}</th>
+											<td align="right">
+												{% if codepromo.montant != 0 %}
+													- {{ codepromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+												{% elseif codepromo.pourcentage != 0 %}
+													- {{ codepromo.pourcentage }} %
+													{% set discount = totalPrice * discount / 100 %}
+												{% endif %}		
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							{% endif %}
+								<tbody data-container="total-calculator">
+									<tr>
+										<th>
+											{{ 'Precio total'|trans|upper }}
+										</th>
+										<td align="right">
+											{% if discount is defined %}
+												{% set totalPrice = totalPrice - discount %}
+											{% endif %}
+											{{ totalPrice|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+										</td>
+										
+									</tr>
+								</tbody>
+							{% if reservation != null %}
+								{% if payment > 0 %}
+									<tbody class="js-payment-footer">
+										<tr>
+											<th>
+												{{ 'Total pagado'|trans|upper }}
+											</th>
+											<td align="right">
+												{{ payment|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+											</td>
+										</tr>
+									</tbody>
+									{% set toBePaid = totalPrice - payment %}
+										<tbody class="js-left-payment">
+											<tr>
+												<th>
+													{{ 'Resto por pagar'|trans|upper }}
+												</th>
+												<td align="right">
+													{{ toBePaid|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+												</td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td>
+													<button 
+														class="btn btn-primary d-none"
+														id="js-update-changes"
+														data-container="js-update-changes"
+													>{{ 'Actualizar Cambios' |trans }}
+												</td>
+											</tr>
+										</tfoot>
+								{% endif %}
+								{% else %}
+									{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+										<tfoot>
+											<tr>
+												<td>
+													<button 
+																class="btn btn-primary d-none"
+																data-action="js-initialize-reservation-logged"
+																data-swal-waiting-title="{{ 'Espere un momento, por favor' |trans }}"
+																data-swal-waiting-text="{{ 'Estamos esperando una respuesta por parte del servidor' |trans }}"
+															>{{ 'Iniciar reserva' |trans }}
+												</td>
+											</tr>
+										</tfoot>
+									{% endif %}
+							{% endif %}
+          </table>
+        </div>
+      </div>
+    </div>

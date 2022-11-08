@@ -1,0 +1,25 @@
+<p>
+{{'Este email ya está en nuestro sistema, por favor, rellena la contraseña'|trans}}.
+</p>
+
+<div class="form-group center">
+    {# <label for="swal-input-email">{{ 'Correo Electrónico'|trans }} </label><br /> #}
+    <input 
+        id="swal-input-email" 
+        class="form-control" 
+        name="email"
+        value="{{email}}"
+        placeholder="{{ 'Introduce tu correo eletrónico'|trans }}"
+        readonly><br /><br />
+</div>
+<div class="form-group center">
+    {# <label for="swal-input-password">{{ 'Contraseña'|trans }} </label><br /> #}
+    <input 
+        type="password" 
+        id="swal-input-password" 
+        class="form-control" 
+        name="password"
+        placeholder="{{ 'Introduce tu contraseña.'|trans}}">
+</div>
+<input type="hidden" name="_csrf_token" id="login_csrf_token" value="{{ csrf_token('authenticate') }}">
+<p>{{'¿Has olvidado tu contraseña?' |trans}} <a target="_blank" href="{{path('app_forgot_password_request')}}">{{'Haz click aquí'|trans}}</a></p>

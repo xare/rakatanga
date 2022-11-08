@@ -1,0 +1,29 @@
+<tr>
+  <td>{{ codespromo.id }}</td>
+  <td><a href="{{ path('codespromo_edit', {'id': codespromo.id}) }}" class="btn btn-info">{{ codespromo.code }}</a></td>
+  <td>{{ codespromo.libelle }}</td>
+  <td>{{ codespromo.commentaire }}</td>
+  <td>{{ codespromo.montant }}</td>
+  <td>{{ codespromo.pourcentage }}</td>
+  <td>{{ codespromo.type }}</td>
+  <td>{{ codespromo.nombre }}</td>
+  <td>{{ codespromo.debut ? codespromo.debut|date('Y-m-d') : '' }}</td>
+  <td>{{ codespromo.fin ? codespromo.fin|date('Y-m-d') : '' }}</td>
+  <td>{{ codespromo.email }}</td>
+  <td>{{ codespromo.statut }}</td>
+  <td>{{ codespromo.dateAjout ? codespromo.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+  <td>{{ codespromo.user }}</td>
+  {# <td>
+      <a href="{{ path('codespromo_show', {'id': codespromo.id}) }}" class="btn btn-primary">
+          <i class="fa fa-eye"></i>
+      </a>
+  </td>
+  <td>
+      <a href="{{ path('codespromo_edit', {'id': codespromo.id}) }}" class="btn btn-info">
+          <i class="fa fa-edit"></i>
+      </a>
+  </td> #}
+  <td>
+      {{ include('admin/codespromo/_delete_form.html.twig') }}
+  </td>
+</tr>

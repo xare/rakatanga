@@ -1,0 +1,15 @@
+
+{% if (static is defined) %}
+    {{form_start(form, {'action': path('user-verify',{'user': user.id})})}}
+{% else %}
+    {{form_start(form)}}
+{% endif %}
+    {# {{form_row(form.verification,{
+        'label':'Verificación'|trans
+    })}} #}<br /><br />
+    {{form_row(form.userId)}}
+    {{form_row(form.send,{
+        id: 'js-button-verify',
+        label: 'Enviar'|trans
+    })}}
+{{form_end(form)}}

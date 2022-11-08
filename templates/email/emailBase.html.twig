@@ -1,0 +1,33 @@
+{#{% apply inky_to_html|inline_css(source('@styles/foundation-emails.css'), source('@styles/email.css')) %}#}
+{% apply inky_to_html|inline_css(encore_entry_css_source('email')) %}
+<container>
+	{% if email != null %}
+	<row class="header">
+		<columns>
+			<a href="{{url('index')}}">
+				<img src="{{ email.image('@images/rakatanga-tour-email.png') }}" class="logo" alt="SpaceBar Logo"/>
+			</a>
+		</columns>
+	</row>
+	{% endif %}
+	{% block content %}{% endblock %}
+	<row class="footer">
+		<columns>
+			<p>Gracias,</p>
+			<p>
+				<em>Rakatanga Tours &copy;</em>
+			</p>
+		</columns>
+	</row>
+	<row class="bottom">
+		<columns>
+			<center>
+				<spacer size="20"></spacer>
+				<div>
+					&copy; Rakatanga Tours
+				</div>
+			</center>
+		</columns>
+	</row>
+</container>
+{% endapply %}

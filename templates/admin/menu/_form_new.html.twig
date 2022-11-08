@@ -1,0 +1,49 @@
+
+{% if form.vars.errors|length > 0 %}
+    <div id="_errors" class="mb-2">
+        <ul>
+            {% for error in form.vars.errors|length %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{# {% if form.vars.errors|length ==0  %}No Errors{% endif %} #}
+    {% for lang in langs %}
+    
+    <div 
+        class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" 
+        id="{{lang.name}}" 
+        role="tabpanel" 
+        aria-labelledby="{{lang.name}}-tab">
+        
+            <h3>{{lang.name}}</h3>
+                <div class="form-group">
+                    <label 
+                        for="menu_menuTranslations_{{loop.index0}}_title"
+                        class="required">Título</label>
+                         
+                    <input
+                        type="text"
+                        id="menu_menuTranslations_{{loop.index0}}_title"
+                        name="menu[menuTranslations][{{loop.index0}}][title]"
+                        required="required" 
+                        class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label 
+                        for="menu_menuTranslations_{{loop.index0}}_slug"
+                        class="required"
+                        >Término clave para la URL</label>
+                    <input
+                        type="text"
+                        id="menu_menuTranslations_{{loop.index0}}_slug"
+                        name="menu[menuTranslations][{{loop.index0}}][slug]"
+                        required="required" 
+                        class="form-control" />
+                </div>
+                <input type="hidden" 
+                    name="menu[menuTranslations][{{loop.index0}}][lang]" 
+                    value="{{lang.id}}" />
+    </div>
+    {% endfor %}

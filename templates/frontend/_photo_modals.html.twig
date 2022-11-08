@@ -1,0 +1,6 @@
+<!-- Section: Modals -->
+  <section class="modals_gallery">
+    {% for medium in travel.media %}
+        {{include('frontend/_photo_modals_item.html.twig',{'medium':medium,'index':loop.index})}}
+    {% endfor %}
+  </section>

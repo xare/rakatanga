@@ -1,0 +1,67 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{'Configuración de cuenta'|trans}}{% endblock %}
+
+{% block body %}
+    {% if reservation.status == "cancelled" %}
+        {% set display = " d-none" %}
+    {% else %}
+        {% set display = "" %}
+    {% endif %}
+{{ parent() }}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-12">
+            {{ wo_render_breadcrumbs() }}
+        </div>
+    </div>
+    <div class="row"
+        id="js-reservation-wrapper"
+        data-reservation-id="{{reservation.id}}"
+        data-reservation-status="{{reservation.status}}">
+            <div class="col-8 col-xs-12">
+            <form autocomplete="off">
+                <h1>{{'Tu reserva'|trans}}</h1>
+                <p>{{'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.
+                {{ include( 'reservation/_card_travel.html.twig',{'date':reservation.date } )}} 
+                {{ include( 'reservation/_card_travellers.html.twig',{'date':reservation.date } )}}
+                {{ include( 'user/_card_options.html.twig',{'options':options } )}}
+                <div class="row">
+                    <div class="col-6 col-xs-12">
+                        {{ include( 'reservation/_card_codespromo.html.twig',{'user':reservation.user} ) }}
+                    </div>
+                    <div class="col-6 col-xs-12">
+                        {{ include( 'reservation/_card_comment.html.twig' ) }}
+                    </div>
+                </div>
+                </form>
+                <div class="row{% if display %}{{display}}{% endif %}">
+                    <div class="col-12">
+                        {{ include( 'reservation/usercards/_card_logged_user.html.twig' ) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 col-xs-12">
+                {{ include('reservation/_reservation_calculator_table.html.twig',{
+                    'reservation':reservation, 
+                    'date':reservation.date
+                    })
+                }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('reservation') }}
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

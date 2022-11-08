@@ -1,0 +1,20 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Texts{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Edit Texts</h1>
+
+            {{ include('admin/texts/_form.html.twig', {'button_label': 'Update'}) }}
+
+            <a href="{{ path('texts_index') }}">back to list</a>
+
+            {{ include('admin/texts/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+ 

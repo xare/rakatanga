@@ -1,0 +1,224 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Menu index
+{% endblock %}
+
+{% block header %}
+	{{ include('admin/shared/_header.html.twig') }}
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h1>Espacio de administración</h1>
+			</div>
+		</div>
+		<div class="row mb-4">
+			<div class="col-4">
+				<h3>Últimos usuarios registrados</h3>
+				<table class="table table-striped small">
+					{% for user in users %}
+						<tr>
+							<td>{{ user.prenom }}</td>
+							<td>{{ user.nom }}</td>
+							<td class="fit">
+								<a href="{{ path('user_edit',{'id':user.id}) }}">
+									[{{ user.email }}]
+								</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="3">
+								Todavía no hay usuarios guardados en el sistema.
+							</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td colspan="2">
+									<strong>Ver todos:</strong>
+							</td>
+							<td class="fit">
+									<a href="{{path('user_index')}}"><i class="fa fa-eye"></i></a>
+							</td>
+						</tr>
+				</table>
+			</div>
+			<div class="col-4">
+				<h3>Últimas Reservas</h3>
+				<table class="table table-striped small">
+					{% for reservation in reservations %}
+						<tr>
+							<td>
+								<a href="{{ path('reservation_edit',{'id':reservation.id}) }}">
+									<i class="fas fa-eye"></i>
+									{{ renderLocalizedTravel(reservation.date.travel.id,'es') }}
+								</a>
+							</td>
+							<td><a href="{{ path('reservation_edit',{'id':reservation.id}) }}">{{ reservation.date.debut|date('d/m/Y') }}</a></td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="3">
+								Todavía no hay reservas guardadas en el sistema.
+							</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td colspan="2">
+									<strong>Total de reservas: {{reservations|length}}</strong>
+							</td>
+							<td class="fit">
+									<a href="{{path('reservation_index')}}"><i class="fa fa-eye"></i></a>
+							</td>
+						</tr>
+				</table>
+			</div>
+			<div class="col-4">
+				<h3>Últimos Pagos</h3>
+				<table class="table table-striped small">
+					{% for payment in payments %}
+						<tr>
+							<td width="30%">
+								<a href="{{ path('payments_edit',{'id':payment.id}) }}">
+										<i class="fas fa-eye"></i>
+										{{ payment.ammount|format_currency('EUR') }}
+								</a>
+							</td>
+							<td>
+								<a href="{{ path('payments_edit',{'id':payment.id}) }}">
+									{{ payment.dateAjout | date('d/m/Y') }}
+								</a>
+							</td>
+							<td>
+								<a href="{{ path('payments_edit',{'id':payment.id}) }}">
+									{{ renderLocalizedTravel(payment.reservation.date.travel.id,'es') }}
+								</a>	
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4">
+								Todavía no hay pagos guardados en el sistema.
+							</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td colspan="3">
+									<strong>Total de pagos: {{ payments|length }}</strong>
+							</td>
+							<td class="fit"> 
+									<a href="{{path('payments_index')}}"><i class="fa fa-eye"></i></a>
+							</td>
+						</tr>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4">
+				<h3>Últimos Viajeros añadidos</h3>
+				<table class="table table-striped small">
+					{% for traveller in travellers %}
+						<tr>
+							<td><a href="{{path('travellers_edit',{'id':traveller.id})}}">{{ traveller.prenom }}</a></td>
+							<td><a href="{{path('travellers_edit',{'id':traveller.id})}}">{{ traveller.nom }}</a></td>
+							<td>
+								<a href="{{path('travellers_edit',{'id':traveller.id})}}">[{{ traveller.email|u.truncate(20,'...') }}]</a></td>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="3">
+								Todavía no hay viajeros guardados en el sistema.
+							</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td colspan="2">
+									<strong>Ir a lista de viajeros:</strong>
+							</td>
+							<td class="fit">
+									<a href="{{path('travellers_index')}}"><i class="fa fa-eye"></i></a>
+							</td>
+						</tr>
+				</table>
+			</div>
+			<div class="col-4">
+				<h3>Últimos Documentos Añadidos</h3>
+				<table class="table table-striped small">
+					{% for document in documents %}
+						<tr>
+							<td>
+								{% if document.doctype == "passport" %}
+									<i class="fas fa-passport"></i>
+								{% elseif document.doctype == "visa" %}
+									<i class="fas fa-globe"></i>
+								{% elseif document.doctype == "drivers" %}
+									<i class="fas fa-id-card"></i>
+								{% endif %}
+								{# <td>{{ document.traveller.email}}</td> #}
+							</td>
+							<td><a href="{{path('document_edit',{'id':document.id})}}">{{ document.originalFilename}}</a></td>
+							<td><span data-bs-toggle="tooltip" title="{{ document.doctype }}">{{ document.doctype }}</span></td>
+							{#<td> {{ renderLocalizedTravel(document.date.travel.id,'es') }} </td>#}
+							
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="3">
+								Todavía no hay documentos guardados en el sistema.
+							</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td colspan="2">
+									<strong>Total de documentos: {{ documents|length }}</strong> 
+							</td>
+							<td class="fit">
+									<a href="{{path('document_index')}}"><i class="fa fa-eye"></i></a>
+							</td>
+						</tr>
+				</table>
+			</div>
+			<div class="col-4">
+				<h3>Últimas Facturas</h3>
+				<table class="table table-striped small">
+					{% for invoice in invoices %}
+						<tr>
+							<td>{{ invoice.invoiceNumber }}</td>
+							<td>{{ invoice.name }}</td>
+							<td class="fit">
+								<a href="{{ path( 'invoices_show', { 'id' : invoice.id }) }}">
+									<i class="fas fa-eye"></i>
+								</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="3">
+								Todavía no hay facturas guardadas en el sistema.
+							</td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<td colspan="2">
+								<strong>Total de facturas: {{ invoices|length }}</strong>
+							</td>
+							<td>
+								<a href="{{path('invoices_index')}}"><i class="fa fa-eye"></i></a>
+							</td>
+						</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block footer %}
+	{{ parent() }}
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+{# {{ encore_entry_script_tags('admin') }} #}
+	{# {{ encore_entry_script_tags('admin_media') }} #}
+{% endblock %}

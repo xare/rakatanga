@@ -1,0 +1,3 @@
+{% for reservation in date.reservations %}
+{{ include ('admin/dates/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
+{% endfor %}

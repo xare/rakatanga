@@ -1,0 +1,51 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{'Calendario'|trans}}{% endblock %}
+{% block header %}
+{{ parent() }}
+        {{ include('shared/_navbar.html.twig') }}
+  {% endblock %}
+{% block body %}
+ 
+{# {{ message }} #}
+{{ parent() }}
+<div class="container">
+<div class="row">
+        <div class="col-md-12 col-sm-12">
+            {{ wo_render_breadcrumbs() }}
+        </div>
+    </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+    <h1>{{'Calendario de nuestras rutas en moto'|trans}}</h1>
+    <p>{{'¿Ya sabes cuándo ir, pero no sabes dónde? Encuentra en un vistazo todos nuestros futuros viajes ordenados por fecha'|trans}}.</p>
+    {% for year in dates %}
+      {% for month in year.year.months %}
+      <div class="card card-default mb-3 shadow">
+        <div class="card-body">
+        <h2>{{month.monthname|format_datetime(pattern="MMMM",locale=locale)}} {{year.year.year}}</h2>
+        {% for date in month.dates %}
+          <p>{{ date.debut|date('d M')|format_datetime(pattern="d MMMM",locale=locale) }} - 
+            <a href="{{path('destination',{
+                                            'category':renderLocalizedCategory(date.travel.category.id, app.request.locale)|slugify,
+                                            'travel':renderLocalizedTravel(date.travel.id,app.request.locale)|slugify})}}">
+              {{renderLocalizedCategory(date.travel.category.id, app.request.locale)}} - 
+              {{renderLocalizedTravel(date.id,app.request.locale)}}
+            </a>{% set difference = date(date.fin).diff(date(date.debut)) %}
+             ({{ difference.days }} {{'días'|trans}})
+          </p>
+        {% endfor %}
+        </div>
+        </div>
+        {% endfor %}
+        
+      <br />
+    {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{ parent() }}
+{% endblock %}

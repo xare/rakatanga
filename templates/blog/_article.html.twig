@@ -1,0 +1,16 @@
+{% if article.mainPhoto %}
+      <div class="col-4">
+          <img class="img-fluid" src="{{article.mainPhoto.mediaPath|imagine_filter('blog_thumbnail_medium')}}">
+      </div>
+  {% endif %}
+  <div class="col-8">
+    <p class="mb-3 h6">
+      <a href="{{ path('blog-article',{'_locale':app.request.getLocale(), 'article':article.title|slugify}) }}">{{ article.title }}</a>
+    </p>
+    <p class="mb-3">
+      {{ article.publishedAt | date('d M Y')|format_datetime(pattern="d MMMM YYYY",locale=app.request.getLocale()) }}
+    </p>
+    <p>
+      {{ article.intro|raw }}
+    </p>
+  </div>

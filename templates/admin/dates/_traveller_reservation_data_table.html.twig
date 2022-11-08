@@ -1,0 +1,86 @@
+{% macro  reservationDataRow(title,data) %}
+   <tr>    
+      <td>{{title}} </td>
+      <td>{{data}}</td>
+   </tr>
+{% endmacro %}
+
+{% macro  reservationDataDateRow(title,data) %}
+  {% if data != null %}
+   <tr>    
+      <td>{{title}} </td>
+      <td>{{data|date('d/m/Y')}}</td>
+   </tr>
+   {% endif %}
+{% endmacro %}
+
+<h3>{{traveller.prenom}} {{traveller.nom}}</h3>
+
+{% for reservationDatum in traveller.reservationData %}
+  
+  <table class="table table-stripped">
+    {% if reservationDatum.passportNo != null %}
+      {{ _self.reservationDataRow('Nº Pasaporte: ',reservationDatum.passportNo) }}
+    {% endif %}
+    {% if reservationDatum.passportIssueDate != null %}
+      {{ _self.reservationDataDateRow('Emisión del Pasaporte: ',reservationDatum.passportIssueDate) }}
+    {% endif %}
+    {% if reservationDatum.passportExpirationDate != null %}
+      {{ _self.reservationDataDateRow('Caducidad del Pasaporte: ',reservationDatum.passportExpirationDate) }}
+    {% endif %}
+    {% if reservationDatum.visaNumber != null %}
+      {{ _self.reservationDataRow('Visado: ',reservationDatum.visaNumber) }}
+    {% endif %}
+    {% if reservationDatum.visaIssueDate != null %}
+      {{ _self.reservationDataDateRow('Emisión: ',reservationDatum.visaIssueDate) }}
+    {% endif %}
+    {% if reservationDatum.visaExpirationDate != null %}
+      {{ _self.reservationDataDateRow('Caducidad: ',reservationDatum.visaExpirationDate) }}
+    {% endif %}
+    {% if reservationDatum.driversNumber != null %}
+      {{ _self.reservationDataRow('Carnet de conducir: ',reservationDatum.driversNumber) }}
+    {% endif %}
+    {% if reservationDatum.driversIssueDate != null %}
+      {{ _self.reservationDataDateRow('Emisión: ',reservationDatum.driversIssueDate) }}
+    {% endif %}
+    {% if reservationDatum.driversExpirationDate != null %}
+      {{ _self.reservationDataDateRow('Caducidad: ',reservationDatum.driversExpirationDate) }}
+    {% endif %}
+    {% if reservationDatum.insuranceCompany != null %}
+      {{ _self.reservationDataRow('Compañía de seguros: ',reservationDatum.insuranceCompany) }}
+    {% endif %}
+    {% if reservationDatum.insuranceContractNumber != null %}
+      {{ _self.reservationDataRow('Nº de póliza: ',reservationDatum.insuranceContractNumber) }}
+    {% endif %}
+    {% if reservationDatum.abroadPhoneNumber != null %}
+      {{ _self.reservationDataRow('Nº en el extranjero: ',reservationDatum.abroadPhoneNumber) }}
+    {% endif %}
+    {% if reservationDatum.contactPersonPhone != null %}
+      {{ _self.reservationDataRow('Persona de contacto: ',reservationDatum.contactPersonName) }}
+    {% endif %}
+    {% if reservationDatum.flightNumber != null %}
+      {{ _self.reservationDataRow('Nº vuelo ida: ',reservationDatum.flightNumber) }}
+    {% endif %}
+    {% if reservationDatum.flightArrival != null %}
+      {{ _self.reservationDataDateRow('Llegada ida: ',reservationDatum.flightArrival) }}
+    {% endif %}
+    {% if reservationDatum.flightArrivalAirport != null %}
+      {{ _self.reservationDataRow('Aeropuerto llegada: ',reservationDatum.flightArrivalAirport) }}
+    {% endif %}
+    {% if reservationDatum.ArrivalHotel != null %}
+      {{ _self.reservationDataRow('Hotel a la llegada: ',reservationDatum.ArrivalHotel) }}
+    {% endif %}
+    {% if reservationDatum.flightDepartureNumber != null %}
+      {{ _self.reservationDataRow('Número de vuelo de vuelta: ',reservationDatum.flightDepartureNumber) }}
+    {% endif %}
+    {% if reservationDatum.flightDepartureNumber != null %}
+      {{ _self.reservationDataDateRow('Fecha de vuelo de vuelta: ',reservationDatum.flightDeparture) }}
+    {% endif %}
+    {% if reservationDatum.flightDepartureAirport != null %}
+      {{ _self.reservationDataRow('Aeropuerto de vuelta: ',reservationDatum.flightDepartureAirport) }}
+    {% endif %}
+    {% if reservationDatum.DepartureHotel != null %}
+      {{ _self.reservationDataRow('Hotel antes de la vuelta: ',reservationDatum.DepartureHotel) }}
+    {% endif %}
+  </table>
+{% endfor %}

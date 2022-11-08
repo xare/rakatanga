@@ -1,0 +1,39 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Hotels index{% endblock %}
+
+{% block body %}
+    <div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'hotels'}) }}
+        <div class="row">
+            <div class="col-12">
+                <h1>Hotels index</h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Website</th>
+                            <th>Category</th>
+                            <th>Travel</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for hotel in hotels %}
+                    {{include('admin/hotels/_row.html.twig')}}
+                        
+                    {% else %}
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

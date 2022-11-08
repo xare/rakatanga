@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register!{% endblock %}
+{% block body %}
+{{ parent() }}
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-4 offset-4 col-xs-12">
+            <h1 class="h2 mb-3 font-weight-normal">{{'Verificación'|trans}}</h1>
+            <p>{{'Hemos enviado un mensaje a tu dirección de email'|trans}}. {{'Allí encontrarás tu código de verificación'|trans}}.</p>
+                <p>{{'Por favor entra a tu email y verifica tu cuenta para luego poder acceder, gracias'|trans}}.</p>
+                {# {{ include('security/_form_verification.html.twig') }} #}
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

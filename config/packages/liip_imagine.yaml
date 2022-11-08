@@ -1,0 +1,115 @@
+# See dos how to configure the bundle: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
+liip_imagine:
+    # valid drivers options include "gd" or "gmagick" or "imagick"
+    driver: "gd"
+    
+    loaders:
+        flysystem_loader:
+            flysystem:
+                filesystem_service: oneup_flysystem.public_uploads_filesystem_filesystem
+    
+    # default loader to use for all filter sets
+    data_loader: flysystem_loader
+
+    resolvers:
+        flysystem_resolver:
+            flysystem:
+                filesystem_service: oneup_flysystem.public_uploads_filesystem_filesystem
+                cache_prefix: media/cache
+                root_url: '%uploads_base_url%'
+    
+    cache: flysystem_resolver
+
+    # define your filter sets under this option
+    filter_sets:
+        squared_thumbnail_small:
+            filters:
+                thumbnail:
+                    size:           [100,100]
+                    mode:           outbound
+                    allow_upscale:  true
+        squared_thumbnail_medium:
+            filters:
+                thumbnail:
+                    size:           [200,200]
+                    mode:           outbound
+                    allow_upscale:  true
+        rectangular_thumbnail_medium:
+            filters:
+                thumbnail:
+                    size:           [260,200]
+                    mode:           outbound
+                    allow_upscale:  true
+        index_thumbnail_medium:
+            filters:
+                thumbnail:
+                    size:           [366,204]
+                    mode:           outbound
+                    allow_upscale:  true
+        index_thumbnail_destinations:
+            filters:
+                thumbnail:
+                    size:           [415,231]
+                    mode:           outbound
+                    allow_upscale:  true
+        blog_thumbnail_medium:
+            filters:
+                thumbnail:
+                    size:           [340,196]
+                    mode:           outbound
+                    allow_upscale:  true
+        index_thumbnail_small:
+            filters:
+                thumbnail:
+                    size:           [216,120]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_thumbnail_summary:
+            filters:
+                thumbnail:
+                    size:           [720,288]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_thumbnail_intro:
+            filters:
+                thumbnail:
+                    size:           [720,288]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_thumbnail_description:
+            filters:
+                thumbnail:
+                    size:           [360,200]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_thumbnail_content:
+            filters:
+                thumbnail:
+                    size:           [360,200]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_thumbnail_itinerary:
+            filters:
+                thumbnail:
+                    size:           [710,600]
+                    mode:           inset
+                    allow_upscale:  true
+        travel_thumbnail_info:
+            filters:
+                thumbnail:
+                    size:           [710,378]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_thumbnail_body:
+            filters:
+                thumbnail:
+                    size:           [710,378]
+                    mode:           outbound
+                    allow_upscale:  true
+        travel_full_gallery:
+            filters:
+                thumbnail:
+                    size:           [1200,900]
+                    mode:           outbound
+                    allow_upscale:  true
+

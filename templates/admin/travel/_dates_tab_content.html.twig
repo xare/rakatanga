@@ -1,0 +1,37 @@
+<h4>Fechas</h4>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Salida</th>
+			<th>Llegada</th>
+			<th>Status</th>
+			<th>Editar</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for date in dates %}
+			<tr>
+				<td>
+					{{ date.debut|date('d/m/Y') }}
+				</td>
+				<td>
+					{{date.fin|date('d/m/Y') }}
+				</td>
+				<td>
+					{{ date.statut }}
+				</td>
+				<td>
+					<a href="{{ path('dates_edit', {'id': date.id}) }}" class="btn btn-info" target="_blank">
+						<i class="fa fa-edit"></i>
+					</a>
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td>
+					No hay fechas asignadas para este viaje
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

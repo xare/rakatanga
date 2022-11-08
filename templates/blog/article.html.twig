@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rakatanga Tour - Blog{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+ <div class="row">
+        <div class="col-12 col-xs-12">
+            {{ wo_render_breadcrumbs() }}
+        </div>
+    </div>
+  <div class="row">
+    <div class="col">
+
+      <h1>{{ article.title }}</h1>
+
+      {% if article.mainPhoto %}
+        <img src="{{article.mainPhoto.mediaPath|imagine_filter('rectangular_thumbnail_medium')}}">
+      {% endif %}
+
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="content-tab" data-bs-toggle="tab" data-bs-target="#content" type="button" role="tab" aria-controls="content" aria-selected="true">{{ 'Artículo' |trans}}</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="media-tab" data-bs-toggle="tab" data-bs-target="#media" type="button" role="tab" aria-controls="media" aria-selected="false">{{'Galería de fotos' |trans}}</button>
+  </li>
+  
+</ul>
+  <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
+        {{ article.body|raw }}
+      </div>
+      <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="media-tab">
+        {% for medium in article.media %}
+	        {# {% if medium.isGallery == true %} #}
+          {% if loop.index0 == 0 or loop.index0 % 4 == 0 %}
+			      <div class="row">
+		      {% endif %}
+		        {{ include('shared/photogallery/_photo_gallery_item.html.twig',{'medium':medium,'index':loop.index}) }}
+          {% if loop.index0 != 0 and ((loop.index0 -1) % 4 == 0 or loop.index0 == (article.media|length -1)) %}
+			      </div>
+		      {% endif %}
+	        
+        {% endfor %}
+      </div>
+  </div>
+    </div>
+  </div>
+</div>
+
+    
+</div>
+{% endblock %}

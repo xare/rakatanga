@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - Register!{% endblock %}
+{% block body %}
+{{ parent() }}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-xs-12">
+                {{ wo_render_breadcrumbs() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 offset-3 col-xs-12 card p-3 mt-1">
+                <h1 class="mb-3 font-weight-normal mt-0">{{'Crear cuenta'|trans}}</h1>
+                {{ include('security/_form_register.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

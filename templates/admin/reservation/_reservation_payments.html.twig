@@ -1,0 +1,21 @@
+A continuación puedes ver los pagos realizados por el cliente.
+<table class="table small">
+{% for payment in reservation.payments %}
+  <tr>
+    <td>
+      <strong>{{ payment.dateAjout|date('d/m/Y H:m:s') }}</strong>
+    </td>
+    <td>
+      {{ payment.ammount|format_currency('EUR', {fraction_digit: 2}, 'es') }}
+    </td>
+    <td>
+      <a href="#">
+        <i class="fa fa-eye"></i>
+      </a>
+    </td>
+  </tr>
+
+{% else %}
+  Todavía no se han asociado pagos a esta reserva.
+{% endfor %}
+</table>

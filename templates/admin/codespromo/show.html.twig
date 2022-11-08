@@ -1,0 +1,76 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Codespromo{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+    <div class="col-12">
+    <h1>Codespromo</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ codespromo.id }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ codespromo.code }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ codespromo.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>{{ codespromo.commentaire }}</td>
+            </tr>
+            <tr>
+                <th>Montant</th>
+                <td>{{ codespromo.montant }}</td>
+            </tr>
+            <tr>
+                <th>Pourcentage</th>
+                <td>{{ codespromo.pourcentage }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ codespromo.type }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ codespromo.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Debut</th>
+                <td>{{ codespromo.debut ? codespromo.debut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fin</th>
+                <td>{{ codespromo.fin ? codespromo.fin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ codespromo.email }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ codespromo.statut }}</td>
+            </tr>
+            <tr>
+                <th>DateAjout</th>
+                <td>{{ codespromo.dateAjout ? codespromo.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('codespromo_index') }}">back to list</a>
+
+    <a href="{{ path('codespromo_edit', {'id': codespromo.id}) }}">edit</a>
+
+    {{ include('admin/codespromo/_delete_form.html.twig') }}
+    </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+<div 
+  class="reservation js-user-reservation-card
+  {% if reservation.status == 'cancelled' %} rakatanga-danger{% endif %}" 
+  data-reservation-id="{{reservation.id}}"
+  data-reservation-status="{{reservation.status}}">
+  <div class="reservation-grid mb-3 clearfix">
+    <div class="travelPhoto">
+    {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
+      <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
+    </div>
+    <div class="travelName">
+      <h4>{{renderLocalizedTravel(reservation.date.travel.id,'es')}}</h4>
+    </div>
+    <div class="travelDates">
+      <div class="tags has-addons me-1">
+        <span class="tag is-dark"><i class="fas fa-calendar-day"></i></span>
+        <span class="tag is-primary">{{reservation.date.debut|date('d/m/Y')}}</span>
+      </div>
+      <div class="tags has-addons">
+        <span class="tag is-dark"><i class="fas fa-calendar-day"></i></span>
+        <span class="tag is-warning">{{reservation.date.fin|date('d/m/Y')}}</span>
+      </div>
+    </div>
+    <div class="reservationStatus">
+        <div class="tags has-addons">
+          <span class="tag is-dark"><i class="fas fa-suitcase"></i></span>
+          <span class="tag is-info">{{ reservation.status }}</span>
+        </div>
+    </div>
+    <div class="reservationOptions">
+      {% for option in reservation.reservationOptions %}
+        <div class="tags has-addons">
+          <span class="tag is-dark"><i class="fas fa-puzzle-piece"></i></span>
+          <span class="tag is-info">{{option.ammount}}</span>
+          <span class="tag is-light">{{renderLocalizedOption(option.options.id,'es')|u.truncate(40,'...')}}</span>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="reservationPilotes">
+        <div class="tags has-addons">
+          <span class="tag is-dark"><i class="fas fa-motorcycle"></i></span>
+          <span class="tag is-info">{{reservation.nbpilotes}}</span>
+        </div>
+        <div class="tags has-addons">
+          <span class="tag is-dark"><i class="fas fa-user"></i></span>
+          <span class="tag is-info">{{reservation.nbaccomp}}</span>
+        </div>
+    </div>
+	</div>
+  <div class="clearfix"></div>
+        <div class="reservationTraveller-item clearfix">
+            <a href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
+            title="{{'Añadir Datos del usuario'|trans}}"
+            data-bs-toggle="tooltip">
+              <div class="tags has-addons">
+                <span class="tag is-link">
+                  <i class="fas fa-passport" style="margin:2px"></i>
+                </span>
+                <span class="tag is-info is-light">
+                  {{ reservation.user.prenom }} {{ reservation.user.nom }}
+                </span>
+              </div>
+            </a>
+         </div>
+    {% if reservation.travellers|length > 0 %}
+    <div class="reservationData mb-3 mt-3" style="border-bottom: 1px solid #cecece;">
+      <div class="reservationData-grid">
+        
+      {% for traveller in reservation.travellers %}
+        {% if traveller.email != reservation.user.email %}
+          <div class="reservationTraveller-item">
+            <a href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
+            title="{{'Añadir Datos del usuario'|trans}}"
+            data-bs-toggle="tooltip">
+              <div class="tags has-addons">
+                <span class="tag is-link">
+                  <i class="fas fa-passport" style="margin:2px"></i>
+                </span>
+                <span class="tag is-info is-light">
+                  {{ traveller.prenom }} {{ traveller.nom }}
+                </span>
+              </div>
+            </a>
+         </div>
+         {% endif %}
+		  {% endfor %}
+      </div>
+        <p class="reservationHelp mt-2"><i class="fa fa-question"></i> {{'Haz click sobre cada usuario para poder añadir los datos y la documentación de cada usuario'|trans}}.</p>
+        </div>
+    {% else %}
+      <p class="reservationHelp mt-1"><i class="fas fa-bell"></i> {{'TODAVIA NO HAS AÑADIDO LOS DATOS DE TODOS LOS VIAJEROS. Te pedimos que lo hgas a continuación para que queden guardados en nuestro sistema. Gracias'|trans}}.</p>
+    {% endif %}
+  <a class="btn btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+  href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}">
+    <i class="fa fa-edit "></i> 
+    {{'Editar los datos de la reserva'|trans}}.
+  </a>
+  &nbsp;&nbsp;
+  {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %}
+    <a class="btn btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+        href="{{ path( 'user_reservation_travellers', { 'reservation':reservation.id }) }}">
+      <i class="fa fa-plus-circle"></i>
+      {{'Añadir Viajeros'|trans}}
+      <i class="fa fa-motorcycle"></i> 
+    </a>
+  {% endif %}
+  &nbsp;&nbsp;
+  {% if reservation.invoices|length > 0 %}
+    <a class="btn btn-rakatanga-secondary{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+        href="{{path('frontend_user_invoices')}}">
+      <i class="fa fa-download"></i>
+        {{'Ver facturas'|trans}}
+    </a>
+      &nbsp;&nbsp;
+  {% endif %}
+  <a class="btn btn-danger btn-rakatanga-danger js-cancel-reservation{% if reservation.status == 'cancelled' %} d-none{% endif %}" 
+    data-sweetalert-title="{{'¿Cancelar Reserva?'|trans}}" 
+    data-sweetalert-content="{{'¿Estás seguro que quieres cancelar esta reserva?'|trans}}">
+    <i class"fa fa-trash"></i>
+      {{ 'Cancelar la reserva'|trans }}
+  </a>
+
+  <a class="btn btn-info js-reactivate-reservation{% if reservation.status != 'cancelled' %} d-none{% endif %}" 
+    data-sweetalert-title="{{'¿Reactivar la Reserva?'|trans}}" 
+    data-sweetalert-content="{{'¿Estás seguro que quieres reactivar esta reserva?'|trans}}">
+    {{ 'Reactivar la reserva'|trans }}
+  </a> 
+
+</div>

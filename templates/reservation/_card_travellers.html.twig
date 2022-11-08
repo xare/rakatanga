@@ -1,0 +1,97 @@
+{% if  reservation is defined and reservation != null %}
+	{% set reservation = reservation %}
+	{% set nbpilotes = reservation.nbpilotes %}
+	{% set nbaccomp = reservation.nbAccomp %}
+	{% set prixPilote = reservation.date.prixPilote %}
+	{% set prixAccomp = reservation.date.prixAccomp %}
+{% else %}
+	{% set reservation = null %}
+	{% set nbpilotes = 0 %}
+	{% set nbaccomp = 0 %}
+	{% set prixPilote = 0 %}
+	{% set prixAccomp = 0 %}
+{% endif %}
+<div class="card card-default mb-4{% if display is defined %}{{display}}{% endif %} shadow" id="js-card-travellers">
+	<div class="card-body">
+		<h2>{{'Los participantes'|trans}}</h2>
+		<p>{{'Al elegir el número de pilotos que vayais a venir podrás iniciar el proceso de reserva'|trans}}.
+		<div class="row">
+			<div class="col-12">
+				<div class="form-group grid-wrapper">
+					<div class="grid-cell">
+						<span class="badge bg-secondary fs-6 bg-opacity-75 mx-auto" data-container="nbpilotes">
+						{{nbpilotes}}
+						</span>
+					</div>
+					<div class="grid-cell">
+						<label for="nbpilotes">{{'Número de pilotos'|trans}}*</label>
+						<input 
+							name="reservation_user[nbPilotes]"
+							value="{{nbpilotes}}"  
+							type="range" min="0" max="10" step="1"
+							class="form-range js-add-pilotes" 
+							data-action="handle-change-nb-pilotes" 
+							data-bs-toggle="tooltip"
+							title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'pilotos'|trans}}"
+							required>
+					</div>
+					<div class="grid-cell">
+						<span class="badge bg-secondary fs-6 bg-opacity-75">
+							&#10005;  {{date.prixPilote|format_currency('EUR', {fraction_digit: 2})}}
+						</span>
+					</div>
+					{% if date.prixAccomp > 0%}
+						<div class="grid-cell">
+							<span class="badge bg-secondary fs-6 bg-opacity-75" data-container="nbaccomp">
+							{{nbaccomp}}
+							</span>
+						</div>
+						<div class="grid-cell">
+							<label for="nbaccomp">{{'Número de pasajeros'|trans}}*</label>
+								<input 
+									id="nbaccomp"
+									type="range" 
+									value="{{nbaccomp}}" 
+									class="form-range js-add-passagers" 
+									data-action="handle-change-nb-accomp" 
+									name="reservation_user[nbaccomp]"
+									min="0"
+									max="0"
+									step="1"
+									data-bs-toggle="tooltip"
+									title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'acompañantes'|trans}}" 
+									required>
+						</div>
+						<div class="grid-cell">
+							<span class="badge bg-secondary fs-6 bg-opacity-75">
+								&#10005;  {{ date.prixAccomp|format_currency('EUR', {fraction_digit: 2}) }}
+							</span>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+			{# <div class="col-md-6 col-6">
+				<div class="form-group">
+					<label for="nbaccomp">{{'Número de pasajeros'|trans}}
+						*</label>
+					<div class="row">
+						<div class="col-6 col-xs-12">
+							<select class="form-control form-control-sm form-select js-add-passagers" id="js-reservation-nbaccomp" name="reservation_user[nbaccomp]" required>
+								{% for i in 0..10 %}
+									<option value="{{i}}" {% if i == nbaccomp %} selected {% else %} {% endif %}>
+										{{i}}
+									</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-6 col-xs-12">
+							<p class="form-control-static">
+								&#10005;
+								{{ date.prixAccomp|format_currency('EUR', {fraction_digit: 2}) }}</p>
+						</div>
+					</div>
+				</div>
+			</div> #}
+		</div>
+	</div>
+</div>

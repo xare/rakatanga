@@ -1,0 +1,25 @@
+<div 
+	class="img-thumbnail media-wrapper{% if entity is defined %}{% if entity.id != null and entity.mainPhoto != null %}{% if medium.id == entity.mainPhoto.id %} selected{% endif %}{% endif %}{% endif %}{% if medium.isGallery == 1 %} selectedGallery{% endif %}">
+	<img 
+		title="{{ medium.filename }}" 
+		alt="{{ medium.filename }}" 
+		src="{{ medium.MediaPath|imagine_filter('rectangular_thumbnail_medium') }}"/>
+	<div
+		class="controls">
+		<div 
+			data-media-id="{{medium.id}}" 
+			class="js-main-media{% if entity is defined %}{% if entity.id != null and entity.mainPhoto != null %}{% if medium.id == entity.mainPhoto.id %} selectedMedia{% endif %}{% endif %}{% endif %}">
+			<i class="fa fa-star"></i>
+		</div>
+		<div 
+			class="js-remove-media" 
+			data-media-id="{{medium.id}}" 
+			{% if entity is defined %} data-entity-id="{{entity.id}}" {% endif %}>
+			<i class="fa fa-minus-circle"></i>
+		</div>
+		<div class="js-gallerify-media{% if medium.isGallery == 1 %} selectedGallery{% endif %}" data-media-id="{{medium.id}}">
+			<i class="fas fa-camera"></i>
+		</div>
+		<input type="hidden" name="{% if entity is defined %}entity[media][{{count}}]{% endif %}" value="{{medium.id}}"/>
+	</div>
+</div>

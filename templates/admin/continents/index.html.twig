@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Continents index{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'continents'}) }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Continents index</h1>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover small">
+                    <thead class="main-red">
+                        <tr>
+                            <th>Id</th>
+                            <th>Code</th>
+                            <th>Translation</th>
+                            {# <th><i class="fa fa-eye"></i></th>
+                            <th><i class="fa fa-edit"></i></th> #}
+                            <th><i class="fa fa-trash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for continent in continents %}
+                        {{include('admin/continents/_row.html.twig')}}    
+                    {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

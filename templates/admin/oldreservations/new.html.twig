@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Oldreservations{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'oldreservations'}) }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Create new Oldreservations</h1>
+
+            {{ include('oldreservations/_form.html.twig') }}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

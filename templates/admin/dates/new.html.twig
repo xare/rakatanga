@@ -1,0 +1,20 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Dates{% endblock %}
+
+{% block body %}
+<div class="container">
+{{ include ('admin/shared/_controlband.html.twig',{'entity':'dates'})}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Create new Dates</h1>
+
+            {{ include('admin/dates/_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('datepicker') }}
+{% endblock %}

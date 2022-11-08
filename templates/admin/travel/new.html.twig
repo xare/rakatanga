@@ -1,0 +1,26 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %} {{parent()}} | Nuevo Viaje {% endblock %}
+{% block header %}
+   {{ parent() }}
+{% endblock %}
+{% block body %}
+<div class="container">
+{{ include ('admin/shared/_controlband.html.twig',{'entity':'travel'})}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Crear un viaje nuevo</h1>
+            {{ include('admin/travel/_form.html.twig') }}
+            <br />
+            <a href="{{ path('travel_index') }}" class="btn btn-primary">
+                <i class="fa fa-list"></i>
+                Ver Lista
+            </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {# {{ encore_entry_script_tags('admin') }} #}
+{% endblock %}

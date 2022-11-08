@@ -1,0 +1,230 @@
+.reservation-container {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+    background: #fff;
+    align-items: top;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+    box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+}
+
+.box {
+    font-size: small;
+}
+
+.box>table>tbody>tr>td:nth-child(2) {
+    text-align: right;
+}
+
+
+/* .travelPhoto {
+    grid-row: 1 / span 2;
+    grid-column: 1 / span 2;
+} */
+
+.travelName {
+    grid-row: auto;
+    grid-column: auto / span 5;
+}
+
+.reservationOptions {
+    grid-row: auto;
+    grid-column: auto / span 2;
+}
+
+.reservationCalculator {
+    grid-row: auto;
+    grid-column: auto / span 2;
+}
+
+//END TAGS
+//TABLE BORDERLESS
+.table-borderless>tbody>tr>td,
+.table-borderless>tbody>tr>th,
+.table-borderless>tfoot>tr>td,
+.table-borderless>tfoot>tr>th,
+.table-borderless>thead>tr>td,
+.table-borderless>thead>tr>th {
+    border: none;
+}
+
+// END TABLE BORDERLESS
+
+/**
+ * Basic CSS Media Query Template
+ * TODO: I should probably use Sass...
+ * Author: Michael Vieth
+ * ------------------------------------------
+ *  Responsive Grid Media Queries - 1280, 1024, 768, 480
+ *   1280-1024   - desktop (default grid)
+ *   1024-768    - tablet landscape
+ *   768-480     - tablet 
+ *   480-less    - phone landscape & smaller
+ * --------------------------------------------
+ */
+
+@media all and (min-width: 1024px) and (max-width: 1280px) {
+    .reservationOptions {
+        grid-column: auto / span 5;
+    }
+    .reservationCalculator {
+        grid-column: auto / span 5;
+    }
+}
+
+@media all and (min-width: 768px) and (max-width: 1024px) {
+    .reservationOptions {
+        grid-column: auto / span 5;
+    }
+    .reservationCalculator {
+        grid-column: auto / span 5;
+    }
+}
+
+@media all and (min-width: 480px) and (max-width: 768px) {
+    .reservationOptions {
+        grid-column: auto / span 5;
+    }
+    .reservationCalculator {
+        grid-column: auto / span 5;
+    }
+}
+
+@media all and (max-width: 480px) {
+    .reservationOptions {
+        grid-column: auto / span 5;
+    }
+    .reservationCalculator {
+        grid-column: auto / span 5;
+    }
+}
+
+
+/* Portrait */
+
+@media screen and (orientation:portrait) {
+    /* Portrait styles here */
+}
+
+
+/* Landscape */
+
+@media screen and (orientation:landscape) {
+    /* Landscape styles here */
+}
+
+
+/* CSS for iPhone, iPad, and Retina Displays */
+
+
+/* Non-Retina */
+
+@media screen and (-webkit-max-device-pixel-ratio: 1) {}
+
+
+/* Retina */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min--moz-device-pixel-ratio: 1.5),
+only screen and (min-device-pixel-ratio: 1.5) {}
+
+
+/* iPhone Portrait */
+
+@media screen and (max-device-width: 480px) and (orientation:portrait) {}
+
+
+/* iPhone Landscape */
+
+@media screen and (max-device-width: 480px) and (orientation:landscape) {}
+
+
+/* iPad Portrait */
+
+@media screen and (min-device-width: 481px) and (orientation:portrait) {}
+
+
+/* iPad Landscape */
+
+@media screen and (min-device-width: 481px) and (orientation:landscape) {}
+
+//TAGS
+.tags {
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
+.tags.has-addons .tag {
+    margin-right: 0;
+}
+
+.tags .tag {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.tags.has-addons .tag:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.tags.has-addons .tag:not(:first-child) {
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.tag:not(body) {
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 4px;
+    color: #111111;
+    display: inline-flex;
+    font-size: 0.75rem;
+    height: 2em;
+    justify-content: center;
+    line-height: 1.5;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    white-space: nowrap;
+}
+
+.tag:not(body).is-dark {
+    background-color: #363636;
+    color: #fff;
+}
+
+.tag:not(body).is-info {
+    background-color: #3298dc;
+    color: #fff;
+}
+
+.tag:not(body).is-info.is-light {
+    background-color: #eff5fb;
+    color: #296fa8;
+}
+
+.tag:not(body).is-primary {
+    background-color: #00d1b2;
+    color: #fff;
+}
+
+.tag:not(body).is-warning {
+    background-color: #ffe08a;
+    color: rgba(0, 0, 0, .7);
+}
+
+.tag:not(body).is-link {
+    background-color: #485fc7;
+    color: #fff;
+}
+
+.tags:last-child {
+    margin-bottom: -0.5rem;
+}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Espacio de Usuario - Facturas {% endblock %}
+
+{% block body %}
+
+{{ parent() }}
+    <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-12">
+          {{ wo_render_breadcrumbs() }}
+      </div>
+  	</div>
+        <div class="row">
+            <div class="col-12">
+                <div class="navigation">
+				    {{ knp_pagination_render(invoices) }}
+			    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-xs-12" id="js-user-invoices_wrapper">
+                <h1>{{'Facturas'|trans}}</h1>
+                {% if invoices|length > 0 %}
+                    <p>{{'Accede a todas tus facturas'|trans}}</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <th>{{'Nombre'|trans}}</th>
+                                <th>{{'NIF'|trans}}</th>
+                                <th>{{'Dirección'|trans}}</th>
+                                <th>{{'Nº Factura'|trans}}</th>
+                                <th>{{'Viaje'|trans}}</th>
+                                <th>{{'Fecha'|trans}}</th>
+                                <th>{{'Cantidad'|trans}}</th>
+                                <th>{{'Descarga'|trans}}</th>
+                            </thead>
+                            <tbody>
+                                {% for invoice in invoices %}
+                                    <tr>
+                                        {{ include('user/partials/_row_user_invoices.html.twig',{'invoice':invoice}) }}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                        <p>{{'No hay facturas a tu nombre.'|trans}}</p>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('reservation-invoices') }}
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

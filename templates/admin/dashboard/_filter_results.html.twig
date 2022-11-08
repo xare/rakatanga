@@ -1,0 +1,32 @@
+<div class="dropdown">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+		Filtrar resultados
+	</button>
+	<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+		<li>
+			<a class="dropdown-item" href="{{ path('logs_by_entity',{'entity':'user'}) }}">
+				Usuario
+			</a>
+		</li>
+		<li>
+			<a class="dropdown-item" href="{{ path('logs_by_entity',{'entity':'reservation'}) }}">
+				Reservation
+			</a>
+		</li>
+		<li>
+			<a class="dropdown-item" href="{{ path('logs_by_entity',{'entity':'payment'}) }}">
+				Payment
+			</a>
+		</li>
+		<li>
+			<a class="dropdown-item" href="{{ path('logs_by_entity',{'entity':'invoice'}) }}">
+				Invoice
+			</a>
+		</li>
+		<li>
+			<a class="dropdown-item" href="{{path('logs_index')}}">
+				Volver a la lista
+			</a>
+		</li>
+	</ul>
+</div>

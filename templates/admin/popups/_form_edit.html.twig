@@ -1,0 +1,54 @@
+{% for popupsTranslation in form.popupsTranslations %}
+  <div class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" id="{{popupsTranslation.lang.vars.data.name}}" role="tabpanel" aria-labelledby="{{popupsTranslation.lang.vars.data.name}}-tab">
+    <h3>{{popupsTranslation.lang.vars.data.name}}</h3>
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="travel_travelTranslation_{{loop.index0}}_title" class="required">Título -
+            {{popupsTranslation.lang.vars.data.name}}</label>
+          <input 
+            type="text" 
+            id="popups_popupsTranslations_{{loop.index0}}_title" 
+            name="popups[popupsTranslations][{{loop.index0}}][title]" 
+            {% if popup.id != null %} 
+              value="{{popupsTranslation.vars.data.title}}" 
+            {% endif %} 
+            required="required" 
+            class="form-control" />
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="form-group mb-3">
+					<label for="popups_popupsTranslations_{{loop.index0}}_content" class="required h4">Contenido -
+						{{popupsTranslation.lang.vars.data.name}}</label>
+					{{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'popups',
+                                    subCategory: 'popupsTranslations',
+                                    entity_property : 'content',
+                                    ckEditor : true,
+                                    entity_id: popup.id,
+                                    entityTranslation_data_property: popupsTranslation.vars.data.content}) }}
+				</div>
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" name="popups[popupsTranslations][{{loop.index0}}][lang]" {% if popup.id != null %} value="{{popupsTranslation.vars.data.lang.id}}" {% endif %}/>
+{% endfor %}
+
+<div 
+    class="tab-pane fade" 
+    id="media" 
+    role="tabpanel" 
+    aria-labelledby="media-tab">
+    <div {{ stimulus_controller('media-selector',{ 
+        url: path('assign_main_photo_travel', {'id': form.vars.value.id}), 
+        }) }} id="media-selector">
+             {{ include('admin/shared/forms/_add_media_modal.html.twig',{
+                 'entity':popup
+             }) }}
+        </div>
+    </div>

@@ -1,0 +1,163 @@
+{% import _self as formMacros %}
+
+{% macro dateRow(row) %}
+    {{ form_row(row) }}
+{% endmacro %}
+    {% for lang in langs %}
+    <div 
+        class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" 
+        id="{{lang.name}}" 
+        role="tabpanel" 
+        aria-labelledby="{{lang.name}}-tab">
+        <h3>{{lang.name}}</h3>
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_title"
+                        class="required">Title</label>
+                    <input
+                        type="text"
+                        id="travel_travelTranslation_{{loop.index0}}_title"
+                        name="travel[travelTranslation][{{loop.index0}}][title]"
+                        required="required" 
+                        class="form-control" />
+                </div>
+            </div>    
+            {# <div class="col-md-6 col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_url"
+                        class="required">URL</label>
+                    <input
+                        type="text"
+                        id="travel_travelTranslation_{{loop.index0}}_url"
+                        name="travel[travelTranslation][{{loop.index0}}][url]"
+                        required="required" 
+                        class="form-control" />
+                </div>
+            </div> #}
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_summary"
+                        class="required"
+                    >Resumen</label>
+                    {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'summary',
+                                    entity_id: '',
+                                    ckEditor : true
+                                }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_intro"
+                        class="required"
+                        >Intro</label>
+                        {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'travel',
+                                    subCategory: 'travelTranslation',
+                                    entity_property : 'intro',
+                                    entity_id: '',
+                                    ckEditor : true
+                        }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_description"
+                        class="required"
+                        >Description</label>
+                        {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                loop_index: loop.index0, 
+                                mainCategory: 'travel',
+                                subCategory: 'travelTranslation',
+                                entity_property : 'description',
+                                entity_id: '',
+                                ckEditor : true
+                            }) }}   
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_itinerary"
+                        class="required"
+                        >Itinerario</label>
+                        {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                loop_index: loop.index0, 
+                                mainCategory: 'travel',
+                                subCategory: 'travelTranslation',
+                                entity_property : 'itinerary',
+                                entity_id: '',
+                                ckEditor : true
+                            }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label 
+                        for="travel_travelTranslation_{{loop.index0}}_practical_info"
+                        class="required"
+                        >Información Práctica</label>
+                        {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                loop_index: loop.index0, 
+                                mainCategory: 'travel',
+                                subCategory: 'travelTranslation',
+                                entity_property : 'practical_info',
+                                entity_id: '',
+                                ckEditor : true
+                            }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+        <input type="hidden" 
+            name="travel[travelTranslation][{{loop.index0}}][lang]" 
+            value="{{lang.id}}"/>
+    {% endfor %}
+    {# <div 
+        class="tab-pane fade" 
+        id="media" 
+        role="tabpanel" 
+        aria-labelledby="media-tab">
+        <div data-controller="media-selector" id="media-selector">
+                {{ form_row(form.media,{
+                    attr: { 'data-media-selector-target': 'select' }
+                }) }}
+                <br />
+                {{ include('admin/shared/forms/_add_media_modal.html.twig') }}
+            </div>
+    </div> #}
+    <div 
+        class="tab-pane fade" 
+        id="dates" 
+        role="tabpanel" 
+        aria-labelledby="dates-tab">
+
+        <div
+            id="collection_list"> 
+            {# data-prototype="{{ formMacros.dateRow(form.dates.vars.prototype)|e('html_attr') }}" #}
+            {# data-index="{{ form.dates|length }}" #}>
+            {# {% for row in form.dates %}
+                {{ formMacros.dateRow(row) }}
+            {% endfor %} #}
+        </div>
+    </div>

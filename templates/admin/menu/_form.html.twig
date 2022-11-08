@@ -1,0 +1,59 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row">
+        {# main menu table form inputs #}
+        <div class="col-4 col-sm-12">
+            {{ form_row(form.type, {'label':'Tipo'}) }}
+            {{ form_row(form.title, {'label':'Título'}) }}
+            {{ form_row(form.route_name, {'label':'Ruta'}) }}
+            {{ form_row(form.visibility, {'label':'Visibilidad'}) }}
+            {{ form_row(form.menuLocations, {'label':'Localización'}) }}
+            {{ form_row(form.position, {'label':'Posición'}) }}
+            {{ form_row(form.page, {'label':'Página'}) }}
+        </div>
+
+        <div class="col-8 col-sm-12">
+                <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="myTab">
+                {% for lang in langs %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link{% if loop.index0 == 0 %} active{% endif %}"
+                                id="{{lang.name}}-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#{{lang.name}}" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="#{{lang.name}}"
+                                aria-selected="{% if loop.index0 == 0 %}true{% else %}false{% endif %}"
+                        >{{lang.name}}</button>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                {% if form.vars.value.id == null %}
+                    {{ include('admin/menu/_form_new.html.twig') }}
+                {% else %}
+                    {{ include('admin/menu/_form_edit.html.twig') }}
+                {% endif %} 
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <button class="btn btn-success">
+                <i class="fa fa-save"></i>
+                {% if form.vars.value.id == null %}
+                    {{ button_label|default('Guardar') }}
+                {% else %}
+                    {{ button_label|default('Actualizar') }}
+                {% endif %}
+            </button>
+        </div>
+    {{ form_widget(form._token)}}
+    {{ form_end(form,{'render_rest': false}) }}
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">

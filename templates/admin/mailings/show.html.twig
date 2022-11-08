@@ -1,0 +1,43 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Mailings{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'mailings'})}}
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <h1>Mailings</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ mailing.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Subject</th>
+                        <td>{{ mailing.subject }}</td>
+                    </tr>
+                    <tr>
+                        <th>Content</th>
+                        <td>{{ mailing.content|raw }}</td>
+                    </tr>
+                    <tr>
+                        <th>ToAddresses</th>
+                        <td>{{ mailing.ToAddresses }}</td>
+                    </tr>
+                    <tr>
+                        <th>Attachment</th>
+                        <td>{{ mailing.attachment }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a href="{{ path('mailings_edit', {'id': mailing.id}) }}">edit</a>
+
+            {{ include('admin/mailings/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

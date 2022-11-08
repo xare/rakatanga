@@ -1,0 +1,55 @@
+<div class="card card-default mb-4 shadow{% if reservation is defined and reservation != null %} {% if reservation.status == "cancelled" %} alert-danger{% endif %}{% endif %}">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8 col-sm-7">
+                <h2>{{'Tu viaje'|trans}}</h2>
+                <p>
+                    <strong>{{'País'|trans}}: </strong>
+                    {{renderLocalizedCategory(date.travel.category.id, app.request.locale)}}
+                </p>
+                <p>
+                    <strong>{{'Viaje'|trans}}: </strong>
+                    {{renderLocalizedTravel(date.travel.id, app.request.locale)}}
+                </p>
+                <p>
+                    <strong>{{'Fechas'|trans}}:</strong> 
+                    {{'del'|trans}} {{ date.debut|date('j') }} 
+                    {{'al'|trans}} {{ date.fin|date('d') }}
+                    {{'de'|trans}}
+                    {{ date.debut|format_datetime(pattern="MMMM",locale=locale) }}
+                    {{'de'|trans}} 
+                    {{ date.debut|date('Y')}}
+                </p>
+                
+                {% if reservation is defined and reservation != null %}    
+                    <p><strong>{{'Estatus'|trans}}</strong>: 
+                    
+                    {% if reservation.status == "cancelled" %}
+                        <span id="js-reservation-status-statement">
+                            {{ 'Esta reserva está cancelada'|trans }}
+                        </span>
+                    {% else %}
+                    <span id="js-reservation-status-statement">
+                        {{ 'Esta reserva está activa'|trans }}
+                    </span>
+                    {% endif %}
+                        <div class="form-switch">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" id="js_reservation_status_initialized"
+                                role="switch">
+                            <label class="form-check-label" for="js_reservation_status_initialized">
+                                {{ 'Activar esta reserva'|trans }}.
+                            </label>
+                        </div>
+                    </span>
+                {% endif %}
+            </div>
+            <div class="col-md-4 col-sm-5">
+                {% set MediaPath = '/media/' ~ date.travel.mainPhoto.Path %}
+
+                <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
+            </div>
+        </div>
+    </div>
+</div>

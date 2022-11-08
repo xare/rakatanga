@@ -1,0 +1,10 @@
+<form method="post" action="{{ path('oldreservations_delete', {'id': oldreservation.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ oldreservation.id) }}">
+     <button 
+        class="btn btn-danger"
+        data-bs-toggle="tooltip" 
+        data-bs-placement="top"
+        title="Borrar 'Old reservation'">
+        <i class="fa fa-trash"></i>
+    </button>
+</form>

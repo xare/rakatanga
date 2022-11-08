@@ -1,0 +1,21 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Lang{% endblock %}
+
+{% block body %}
+<div class="container">
+{{ include ('admin/shared/_controlband.html.twig',{'entity':'lang'})}}
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h1>Edit Lang</h1>
+            {{ include('admin/lang/_form.html.twig', {'button_label': 'Actualizar'}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {{ include('admin/lang/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

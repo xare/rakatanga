@@ -1,0 +1,20 @@
+<div class="row" id="js-media-modal-container">
+	<div class="col-9" id="js-media-modal-blocks-container" data-entity-type="{{ class(entity) }}" data-entity-id="{{ entity.id }}" data-baseurl="{{ url('index')|slice(0,-4) }}">
+		{% for medium in entity.media %}
+			{{ include('admin/shared/forms/_add_media_item.html.twig',{
+																'medium': medium,
+                                'entity': entity,
+                                'count': loop.index0
+                                 }) }}
+		{% endfor %}
+	</div>
+	<div class="col-3">
+		{{include('admin/shared/forms/_upload_media_modal.html.twig')}}
+		<br /><br />
+		<button id="js-open-video-form" class="btn btn-primary">
+			<i class="fa fa-plus"></i> Añadir Video
+		</button>
+	</div>
+</div>
+
+<div class="clearfix"></div>

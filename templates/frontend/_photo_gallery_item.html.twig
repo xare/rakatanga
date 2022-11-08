@@ -1,0 +1,10 @@
+<a href="{{ medium.MediaPath|imagine_filter('travel_full_gallery') }}"
+  class="lightbox-item-link"{% if loop.index0 == 0 %} data-active{% endif %}
+  {% if medium.isYTVideo %} data-video data-yt={{medium.name}}{% endif %} data-bs-toggle="tooltip" title="{{'Haz click sobre la foto para verla a pantalla completa' |trans }}">
+    <img
+        src="{{ medium.MediaPath|imagine_filter('rectangular_thumbnail_medium') }}"
+        class="img-fluid lightbox-item"
+    />
+    {% if medium.isYTVideo %}<div class="video-overlay"></div>
+    <div class="video-icon"><i class="fab fa-youtube fa-3x"></i></div>{% endif %}
+</a>

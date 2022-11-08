@@ -1,0 +1,86 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{parent()}} | Índice de Viajes{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'travel'})}}
+    <div class="row mb-4">
+        <div class="col-12 col-md-12 ">
+            <h1>Lista de viajes</h1>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="count col-md-3 col-xs-12">
+            <strong>Viajes en total:</strong>
+            <span id="totalItemCount"> {{ count }}</span>
+        </div>
+        <div class="col-md-1 offset-md-7 col-xs-12">
+            {{ include('admin/travel/_filtrar_resultados.html.twig') }}
+        </div>
+    </div>
+            <br />
+            {# display navigation #}
+        <div class="row">
+            <div class="navigation col-md-2 col-xs-12">
+                {{ knp_pagination_render(travels) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 table-responsive index-table">
+                <table class="table table-striped table-hover small">
+                    <thead class="main-red">
+                        <tr>
+                            {# <th>{{ knp_pagination_sortable(travels, 'Id', 'c.id',{'class':'text-decoration-none link-light'}) }}</th> #}
+                            <th>País</th>
+                            <th{% if travels.isSorted('t.mainTitle') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(travels, 'Título', 't.mainTitle',{'class':'text-decoration-none link-light'}) }}
+                            </th>
+                            {# <th{% if travels.isSorted('t.DepartureDate') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(travels, 'Salida', 't.DepartureDate',{'class':'text-decoration-none link-light'}) }}
+                            </th>
+                            <th{% if travels.isSorted('t.ArrivalDate') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(travels, 'Llegada', 't.ArrivalDate',{'class':'text-decoration-none link-light'}) }}
+                            </th> #}
+                            {#  <th{% if travels.isSorted('t.PriceDriver') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(travels, 'Price Driver', 't.PriceDriver',{'class':'text-decoration-none link-light'}) }}
+                            </th>
+                            <th{% if travels.isSorted('t.PriceCodriver') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(travels, 'Price Codriver', 't.PriceCodriver',{'class':'text-decoration-none link-light'}) }}
+                            </th> #}
+                            {# <th{% if travels.isSorted('t.Km') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(travels, 'Km', 't.Km',{'class':'text-decoration-none link-light'}) }}
+                            </th> #}
+                            <th>Fechas</th>
+                            <th>Visible</th>
+                            <th>Media</th>
+                            <th>Traducciones</th>
+                            {# <th class="fit"><i class="fa fa-eye"></i></th> #}
+                            {# <th class="fit"><i class="fa fa-edit"></i></th> #}
+                            <th class="fit"><i class="fa fa-trash"></i></th> 
+                        </tr>
+                    </thead>
+                <tbody>
+                    {% for travel in travels %}
+                        {{ include('admin/travel/_row.html.twig',{'travel' : travel }) }}
+                    {% else %}
+                        <tr>
+                            <td colspan="12">No hay viajes guardados</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(travels) }}
+            </div>
+        {# <a href="{{ path('travel_new') }}" class="btn btn-primary">
+            <i class="fa fa-plus-circle"></i>
+            Crear nuevo
+        </a> #}
+    </div> 
+    </div>
+    </div>
+    </div>
+{% endblock %}

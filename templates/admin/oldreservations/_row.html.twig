@@ -1,0 +1,78 @@
+<tr{% if oldreservation.inscriptions == null %} class="bg-warning"{% endif %}>
+    <td>{{ oldreservation.id }}</td>
+    <td{% if oldreservation.inscriptions == null %} class="bg-danger"{% endif %}>
+        {% if oldreservation.inscriptions != null %}
+            <a href="{{ path('inscriptions_edit', {'id':oldreservation.inscriptions.id } ) }}">
+                {{ oldreservation.inscriptions.email }}
+            </a>
+        {% endif %}
+    </td>
+    <td{% if oldreservation.Travel == null %} class="bg-danger"{% endif %}>
+        {% if oldreservation.Travel != null %}
+            <a href="{{ path('travel_edit', {'id':oldreservation.Travel.id } ) }}">
+                {{ oldreservation.Travel }}
+            </a>
+        {% endif %}
+    </td>
+      <td{% if oldreservation.Dates == null %} class="bg-danger"{% endif %}>
+        {% if oldreservation.Dates != null %}
+            <a href="{{ path('travel_edit', {'id':oldreservation.Dates.id } ) }}">
+                {{ oldreservation.Dates.debut|date('d/m/Y') }} -
+                {{ oldreservation.Dates.fin|date('d/m/Y') }}
+            </a>
+        {% endif %}
+    </td>
+    <td style="font-size:0.8rem">
+        {{ oldreservation.log|u.truncate(200,'...')|raw }}
+        <br />
+        <a 
+            href="#" 
+            data-action="read-more" 
+            data-content="{{ oldreservation.log|raw|escape }}"
+            class="btn btn-primary btn-sm">
+            Read more
+        <a>
+    </td>
+    <td>{{ oldreservation.langue }}</td>
+    <td>{{ oldreservation.nbpilotes }}</td>
+    <td>{{ oldreservation.nbaccomp }}</td>
+    <td style="font-size:0.8rem">
+        {{ oldreservation.commentaire|u.truncate(200,'...')|raw }}
+        <br />
+        <a 
+            href="#" 
+            data-action="read-more" 
+            data-content="{{ oldreservation.commentaire|raw|escape }}"
+            class="btn btn-primary btn-sm small">
+            Read more
+        <a>
+        </td>
+    
+    <td>{{ oldreservation.codepromo }}</td>
+    <td>{{ oldreservation.montant }}</td>
+    <td>{{ oldreservation.reduction }}</td>
+    <td>{{ oldreservation.totalttc }}</td>
+    <td>{{ oldreservation.notes }}</td>
+    <td>{{ oldreservation.statut }}</td>
+    {# <td>{{ oldreservation.dateAjout ? oldreservation.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+    <td>{{ oldreservation.datePaiement1 ? oldreservation.datePaiement1|date('Y-m-d H:i:s') : '' }}</td>
+    <td>{{ oldreservation.datePaiement2 ? oldreservation.datePaiement2|date('Y-m-d H:i:s') : '' }}</td> #}
+    
+    <td>
+        <a 
+            href="{{ path('oldreservations_show', {'id': oldreservation.id}) }}" 
+            class="btn btn-primary">
+            <i class="fa fa-eye"></i>
+        </a>
+    </td>
+    <td>
+        <a 
+            href="{{ path('oldreservations_edit', {'id': oldreservation.id}) }}" 
+            class="btn btn-info">
+            <i class="fa fa-edit"></i>
+        </a>
+    </td>
+    <td>
+        {{ include('admin/oldreservations/_delete_form.html.twig') }}
+    </td>
+</tr>

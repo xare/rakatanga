@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block header %}
+    {{ include('register/_header.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('exito') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+        <h1>Register ✅</h1>
+        {{ form(form) }}
+{% endblock %}
+{% block footer %}
+    {{ include('register/_footer.html.twig') }}
+{% endblock %}

@@ -1,0 +1,108 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    app.locales: [es, en, fr]
+    csv_directory: "%kernel.project_dir%/public/uploads/csv"
+    stripe_public_key: pk_test_51JDQ5EEyvjlq0XPvPf4u1hOBlZ7V909HqutoxZew70QS2a6Ndd5LoM6GNUxrxPVDRQiB7bE68goeL1qTG8bvI9SE007WYAg50c
+    stripe_secrete_key: sk_test_51JDQ5EEyvjlq0XPvqaykXk3dOTj2hqyIGUCphTlGgOaC3lUPi7CAEIZqHIlWNiVJ6dGLNWPOGtJNUOJ2fdgmacQH00qGFPZaqs
+    uploads_dir_name: "uploads"
+    uploads_base_url: "/%uploads_dir_name%"
+    #uploads_base_url: '%env(SITE_BASE_URL)%/%uploads_dir_name%'
+    payment:
+        currency: EUR
+        decimal: true
+        premium_amount: 1
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+        bind:
+            $publicUploadsFilesystem: "@oneup_flysystem.public_uploads_filesystem_filesystem"
+            $privateUploadsFilesystem: "@oneup_flysystem.private_uploads_filesystem_filesystem"  
+            $stripeSK: "%env(STRIPE_SECRET_KEY_TEST)%"
+            $uploadedAssetsBaseUrl: "%uploads_base_url%"
+            $formLoginAuthenticator: "@security.authenticator.form_login.main"
+            $jsonLoginAuthenticator: "@security.authenticator.json_login.main"
+            string $publicDir: "%kernel.project_dir%/public"
+            # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: "../src/"
+        exclude:
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
+            - "../src/Tests/"
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: "../src/Controller/"
+        tags: ["controller.service_arguments"]
+    App\Controller\admin\:
+        resource: "../src/Controller/admin/"
+        tags: ["controller.service_arguments"]
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    Symfony\Component\Asset\Context\RequestStackContext: "@assets.context"
+
+    App\Service\UploadHelper:
+        arguments:
+            $targetDirectory: "%csv_directory%"
+
+
+    App\Client\StripeClient:
+        arguments:
+            [
+                "%stripe_secret_key%",
+                "%payment%",
+                "@doctrine.orm.entity_manager",
+                "@logger",
+            ]
+
+    Mpdf\Mpdf:
+        autowire: true
+
+    acme.security.authentication_handler:
+        class: App\Security\AuthenticationHandler
+        public: false
+        arguments: ["@router", "@session"]
+
+    app.rememberme.services:
+        class: Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface
+        public: true
+
+    app.contentHelper.custom:
+        class: App\Service\contentHelper
+        public: true
+
+    app.customSusbscriber.twigEventSubscriber:
+        class: App\EventSubscriber\TwigEventSubscriber
+        arguments: 
+            - '@twig' 
+            - '@app.contentHelper.custom'
+
+    # This section enables autowiring of the Remember Me Service
+
+knp_paginator:
+    page_range: 5 # number of links showed in the pagination menu (e.g: you have 10 pages, a page_range of 3, on the 5th page you'll see links to page 4, 5, 6)
+    default_options:
+        page_name: page # page query parameter name
+        sort_field_name: sort # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true # ensure distinct results, useful when ORM queries are using GROUP BY statements
+        filter_field_name: filterField # filter field query parameter name
+        filter_value_name: filterValue # filter value query parameter name
+    template:
+        pagination: "@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig" # sliding pagination controls template
+        sortable: "@KnpPaginator/Pagination/bootstrap_v5_fa_sortable_link.html.twig" # sort link template
+        filtration: "@KnpPaginator/Pagination/bootstrap_v5_filtration.html.twig" # filters template
+

@@ -1,0 +1,28 @@
+<tr>
+	<td>{{ log.id }}</td>
+	<td>{{ log.entity }}</td>
+	<td>{{ log.date|date('Y-m-d h:m:s') }}</td>
+	<td><a href="{{ path('logs_edit', {'id': log.id}) }}" class="btn btn-info">{{ log.action }}</a></td>
+	<td>{{ log.content|raw }}</td>
+	<td>
+		{% for key, data in log.data %}
+			<li>
+				<strong>{{key}}:</strong>
+				{{data}}
+				</li>
+		{% endfor %}
+	</td>
+	{# <td>
+		<a href="{{ path('logs_show', {'id': log.id}) }}" class="btn btn-primary">
+			<i class="fa fa-eye"></i>
+		</a>
+	</td> #}
+	{# <td>
+		<a href="{{ path('logs_edit', {'id': log.id}) }}" class="btn btn-info">
+			<i class="fa fa-edit"></i>
+		</a>
+	</td> #}
+	<td>
+		{{ include('admin/logs/_delete_form.html.twig') }}
+	</td>
+</tr>

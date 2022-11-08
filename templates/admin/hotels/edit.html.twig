@@ -1,0 +1,18 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Hotels{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'hotels'}) }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Edit Hotels</h1>
+
+            {{ include('admin/hotels/_form.html.twig', {'button_label': 'Update'}) }}
+
+            {{ include('admin/hotels/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

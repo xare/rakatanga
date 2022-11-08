@@ -1,0 +1,44 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Logs index{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12" 
+                data-url="{{ path('logs_index') }}">
+            <h1>Logs index</h1>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Action</th>
+                        <th>Content</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.id }}</td>
+                        <td>{{ log.action }}</td>
+                        <td>{{ log.content }}</td>
+                        <td>
+                            <a href="{{ path('logs_show', {'id': log.id}) }}">show</a>
+                            <a href="{{ path('logs_edit', {'id': log.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ path('logs_new') }}">Create new</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

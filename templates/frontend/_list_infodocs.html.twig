@@ -1,0 +1,13 @@
+<ul class="list-group">
+{% for infodoc in travel.infodocs %}
+  <li class="list-group-item">
+    <i class="fas fa-file-pdf"></i> 
+    <a 
+      href="{{absolute_url(infodoc.infodocsPath)}}" 
+      target="_blank">
+        {{infodoc.title}}
+    </a>
+  </li>
+{% else %}
+  {{'No hay documentación adjuntada para este viaje' | trans }}
+{% endfor %}

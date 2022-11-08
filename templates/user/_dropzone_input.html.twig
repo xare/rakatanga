@@ -1,0 +1,28 @@
+<div 
+      action="{{ path('frontend_user_upload_document',{
+          'reservation':reservation.id
+      }) }}" 
+      method="POST" 
+      enctype="multipart/form-data" 
+      class="dropzone"
+      id="js-{{type}}-dropzone">
+      <div class="dz-message" data-dz-message>
+          <span>
+              <i class="fa fa-file fa-3x"></i>
+              <br /><br />
+              {{'Arrastra el archivo hasta aquí o haz símplemente click, y se abrirá la ventana de selección de archivo'|trans}}.
+          </span>
+      </div>
+      <input 
+          type="hidden" 
+          name="document[type]" 
+          id="js-media-type" 
+          value="{{type}}">
+    {% if traveller is defined and traveller != null %}
+        <input
+            type="hidden"
+            name="traveller"
+            value="{{traveller.id}}">
+    {% endif %}
+        
+  </div>

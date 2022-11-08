@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Verify{% endblock %}
+
+
+{% block body %}
+{{ parent() }}
+    <div class="container">
+        <div class="row">
+            <div class="col-4 offset-4 col-xs-12">
+              <h1>{{'Email Verificado'|trans}}</h1>
+              <p>{{ 'Tu dirección de correo electrónico ha sido verificada'|trans }}.</p>
+              <p><a href="{{path('app_login')}}" class="btn btn-primary">{{'Entrar'|trans}}</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

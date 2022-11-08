@@ -1,0 +1,14 @@
+<h1>
+    <center>Mensaje de {{contact.firstname}} {{contact.lastname}} [{{contact.email}}]</center>
+</h1>
+<p>Un usuario ha rellenado el formulario de contacto.</p>
+ <p><strong>Remitente:</strong> {{contact.firstname}} {{contact.lastname}} [<a href="mailto:{{contact.email}}">{{contact.email}}</a>].</p>
+ <p><strong>Teléfono:</strong> {{contact.phone}}</p>
+ <p><strong>Mensaje:</strong> {{contact.message}}.</p>
+ <p><strong>Viajes por los que tengo interés:</strong> 
+            <ul>
+            {% for travel in travels %}
+                <li>{{ travel.title }}</li>
+            {% endfor %}
+            </ul>
+            .</p>

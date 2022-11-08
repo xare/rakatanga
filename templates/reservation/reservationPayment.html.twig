@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - {{'Resumen datos de la reserva y pago'|trans}} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <!-- BREADCRUMB -->
+        <div class="row">
+            <div class="col-12">
+                {{ wo_render_breadcrumbs() }}
+            </div>
+        </div>
+        <!-- END BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <h1>{{'Reserva tu viaje'|trans}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-xs-12" id="js-reservation-wrapper">
+            <h2>{{'Página de pago'|trans}}</h2>
+            <p>{{'A continuación puedes ver todos los datos que hemos guardado sobre tu reserva'|trans}}.</p>
+            <p>{{'Si por algún motivo deseas consultarlo con nosotros ponte en contacto con nosotros haciendo click aquí, y escribiendonos un mensaje rápido paa que podamos asistirte'|trans}}.</p>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <td><strong>{{'Usuario'|trans}}</strong></td>
+                        <td>{{reservation.user.prenom}} {{reservation.user.nom }} [{{reservation.user.email}}]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{'Viaje'|trans}}</strong></td>
+                        <td>
+                        {{renderLocalizedTravel(reservation.date.travel.id, app.request.locale)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{'Fecha del inicio'|trans}}</strong></td>
+                        <td>
+                            <time datetime="{{ reservation.date.debut|date('Y-m-d') }} 00:00">
+                                {{ reservation.date.debut|date('d/m/Y') }}
+                            </time>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{'Fecha del final'|trans}}</strong></td>
+                        <td>
+                            <time datetime="{{ reservation.date.fin|date('Y-m-d') }} 00:00">
+                                {{ reservation.date.fin|date('d/m/Y') }}
+                            </time>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ 'Facturas asociadas a esta reserva'|trans }}</strong></td>
+                        <td>
+                        <ul class="list-group">
+                            {% for invoice in reservation.invoices %}
+                                <li class="list-group-item">
+                                    <a href="{{path('user-download-invoice',{'invoice':invoice.id})}}"
+                                        target="_blank">
+                                            {{ invoice.invoiceNumber }}
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                </li>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+                </div>
+                
+            {# <a href="#" class="btn btn-primary">
+                {{ 'Pagar por transferencia bancaria' | trans }}
+            </a> #}
+            {% else %}
+                {# {{ include ( 'reservation/_login_form.html.twig',{redirect_path:'reservation_payment'} ) }} #}
+            {% endif %}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ include('reservation/_new_reservation_calculator_table.html.twig') }}
+            <div class="card mt-4">
+                <div class="card-body">
+                    {{ form_start(form, {attr: {id: form.vars.id}}) }}
+                        {{ 
+                            form_widget(form.paymentMethod,{'label':'Modalidad de pago'|trans})
+                        }}
+                        {{ form_widget(form.submit,{
+                            'label':'Pago'
+                        }) }}
+                        
+                    {{ form_end(form, {render_rest: false}) }}
+                </div>
+            </div>
+            {# <h3>¿Tienes usuario y contraseña?</h3>
+            <p>En primer lugar necesitamos conocer tus datos para poder seguir con tu reserva</p>
+            <a class="btn btn-primary">Sí tengo un usuario creado</a>
+            <a class="btn btn-primary">No, necesito crear mi cuenta de usuario</a> #}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://js.stripe.com/v3/"></script>
+ {{ encore_entry_script_tags('reservation-payment') }}
+   
+{% endblock %}

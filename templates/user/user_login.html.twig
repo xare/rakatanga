@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	- Login!!
+{% endblock %}
+
+{% block body %}
+
+	{{ parent() }}
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-xs-12">
+				{{ wo_render_breadcrumbs() }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6 offset-3 col-xs-12 card p-4">
+				<h1 class="mt-2">{{'Página de acceso'|trans}}</h1>
+				<form method="post" class="needs-validation mb-2" novalidate>
+					{% if error %}
+						<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+					{% endif %}
+
+					{% if app.user %}
+						<div class="mb-3">
+							{{'Estás conectado como'|trans}}
+							{{ app.user.username }},
+							<a href="{{ path('app_logout') }}">
+								{{'Salir'|trans}}
+							</a>
+						</div>
+					{% endif %}
+
+					<h3 class="h3 mb-3 font-weight-normal">{{'Por favor, entrar'|trans}}</h3>
+					<div class="mb-3">
+						<label for="inputEmail" class="form-label">{{'Email'|trans}}</label>
+						<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="example@domain.com" required autofocus>
+						<div class="valid-feedback">
+							{{'Tu email es válido'|trans}}
+						</div>
+						<div class="invalid-feedback">
+							{{'Esta no es una dirección de email válida'|trans}}
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="inputPassword" class="form-label">{{'Contraseña'|trans}}</label>
+						<input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{'Contraseña'|trans}}" required>
+					</div>
+					<div class="checkbox mb-3 form-check form-switch">
+						<input type="checkbox" role="switch" name="_remember_me" id="id_remember_me" class="form-check-input">
+						<label class="form-check-label" for="id_remember_me">
+							{{'Recuerdame'|trans}}
+						</label>
+					</div>
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+					<button class="btn btn-lg btn-primary" type="submit">
+						{{'Enviar'|trans}}
+					</button>
+					
+				</form>
+				<p>{{'¿Has olvidado tu contraseña?' |trans}}
+					<a target="_blank" href="{{path('app_forgot_password_request')}}">{{'Haz click aquí'|trans}}</a>
+				</p>
+				
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{{ parent() }}
+	<script>
+		(function () {
+'use strict'
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.prototype.slice.call(forms).forEach(function (form) {
+form.addEventListener('submit', function (event) {
+if (! form.checkValidity()) {
+event.preventDefault()
+event.stopPropagation()
+}
+
+form.classList.add('was-validated')
+}, false)
+})
+})()
+	</script>
+{% endblock %}

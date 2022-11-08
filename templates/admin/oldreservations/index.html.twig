@@ -1,0 +1,57 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Oldreservations index{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'oldreservations'}) }}
+        <div class="row">
+            <div class="col-12">
+                <h1>Oldreservations index</h1>
+                <div class="navigation">
+				    {{ knp_pagination_render(oldreservations) }}
+			    </div>
+                <table class="table table-sm" style="font-size: 0.8rem">
+                    <thead class="main-red">
+                        <tr>
+                            <th>Id</th>
+                            <th>Email</th>
+                            <th>Travel</th>
+                            <th>Date</th>
+                            <th>Log</th>
+                            <th>Langue</th>
+                            <th>Nº pil</th>
+                            <th>Nº acom</th>
+                            <th>Commentaire</th>
+                            <th>Codepromo</th>
+                            <th>Montant</th>
+                            <th>Reduction</th>
+                            <th>Totalttc</th>
+                            <th>Notes</th>
+                            <th>Statut</th>
+                            <th><i class="fa fa-eye"></i></th>
+							<th>
+								<i class="fa fa-edit"></i>
+							</th>
+                            <th>
+								<i class="fa fa-trash"></i>
+							</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for oldreservation in oldreservations %}
+                        {{ include('admin/oldreservations/_row.html.twig') }}    
+                    {% else %}
+                        <tr>
+                            <td colspan="17">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="navigation">
+				    {{ knp_pagination_render(oldreservations) }}
+			    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

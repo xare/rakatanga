@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ 'Pago de la reserva'|trans }} - {{ 'Transferencia bancaria'|trans }} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <h1>{{ 'Reserva tu viaje'|trans }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-xs-12" id="js-reservation-wrapper">
+            <p>{{ 'Datos cuenta bancaria para efectuar el pago'|trans }}:</p>
+            <table class="table">
+                <tr><th>{{'Titular'|trans}}</th><td>Rakatanga Tour Europe S.L</td></tr>
+                <tr><th>{{'Banco'|trans}}</th><td>Caixabank</td></tr>
+                <tr><th>IBAN</th><td>ES42 2100 1263 2702 0036 8970</td></tr>
+                <tr><th>SWIFT</th><td>CAIXESBBXXX</td></tr>
+            </table>
+            <p>{{'Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pago total de su viaje. El resto del pago deberá hacerse como muy tarde 30 días antes de la fecha de salida'|trans}}.</p>
+
+            <p>{{'Por favor envíenos via email el justificante de la transferencia para validación de su reserva'|trans}}.</p>
+
+            <p>{{'Nota: Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje'|trans}}.</p>
+
+            <p>{{'La reserva implica la aceptación total de nuestras condiciones generales de venta'|trans}}.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

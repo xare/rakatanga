@@ -1,0 +1,36 @@
+<tr>
+                        <td>{{ category.id }}</td>
+                        <td>
+                          <a href="{{ path('category_edit', {'id': category.id}) }}">
+                            {{ category.name }}
+                          </a>
+                        </td>
+                        <td>{% if category.continents %}{{ category.continents.code }}{% endif %}</td>
+                        <td>{{ category.type }}</td>
+                        <td>{{ category.status }}</td>
+                        <td>
+                            <div class="row">
+                                {% for categoryTranslation in category.categoryTranslations %}
+                                    <div class="col-4">
+                                        <span class="badge bg-secondary">{{ categoryTranslation.lang.isoCode }}</span>
+                                        {{ categoryTranslation.title }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        {# <td>
+                            <a href="{{ path('category_show', {'id': category.id}) }}" 
+                            class="btn btn-primary">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td> #}
+                        {# <td>
+                            <a href="{{ path('category_edit', {'id': category.id}) }}"
+                            class="btn btn-info">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </td> #}
+                        <td>
+                            {{ include('admin/category/_delete_form.html.twig') }}
+                        </td>
+                    </tr>

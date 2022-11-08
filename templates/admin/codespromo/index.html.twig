@@ -1,0 +1,53 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Codespromo index{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'codespromo'})}}
+    <div class="row">
+    <div class="col-12">
+        <h1>Codespromo index</h1>
+        <div class="navigation">
+			{{ knp_pagination_render(codespromos) }}
+		</div>
+        
+        <table class="table table-striped table-hover small">
+            <thead class="main-red">
+                <tr>
+                    <th>Id</th>
+                    <th>Code</th>
+                    <th>Libelle</th>
+                    <th>Commentaire</th>
+                    <th>€</th>
+                    <th>%</th>
+                    <th>Type</th>
+                    <th>Nombre</th>
+                    <th>Debut</th>
+                    <th>Fin</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <th>DateAjout</th>
+                    <th>User</th>
+                    {# <th><i class="fa fa-eye"></i></th> #}
+                    {# <th><i class="fa fa-edit"></i></th> #}
+                    <th><i class="fa fa-trash"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for codespromo in codespromos %}
+                    {{include('admin/codespromo/_row.html.twig')}}
+                {% else %}
+                    <tr>
+                        <td colspan="14">no records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation">
+			{{ knp_pagination_render(codespromos) }}
+		</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

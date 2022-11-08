@@ -1,0 +1,131 @@
+{% set total = 0 %}
+{% set discount = 0 %}
+{% set prixPilote = invoice.reservation.date.prixPilote %}
+{% set prixAccomp = invoice.reservation.date.prixAccomp %}
+{% if statusChange is defined and statusChange == 'cancelled' %}
+    {% set prixPilote = prixPilote|negativify %}
+    {% set prixAccomp = prixAccomp|negativify %}
+{% endif %}
+
+{% set totalPilote = invoice.reservation.nbpilotes * prixPilote %}
+{% set totalAccomp = invoice.reservation.nbaccomp * prixAccomp %}
+{% set total = totalPilote + totalAccomp %}
+
+<br />
+    <div id="details" class="clearfix">
+        <div id="client" class="clearfix">
+            <div class="to">{{ 'CLIENTE'|trans }}:</div>
+                <h2 class="name">{{ invoice.name }}</h2>
+                <div class="address">{{invoice.address}}, {{invoice.city}} {{invoice.postalcode}}, {{invoice.country}}</div>
+                <br />
+                <div class="idcard">{{invoice.nif}}</div>
+                {# <div class="email"><a href="mailto:john@example.com">{{invoice.country}}</a></div> #}
+            </div>
+            <div id="invoice">
+                <h1>{{'FACTURA'|trans}}</h1>
+                <div class="invoiceNumber">{{'Número de factura'|trans}}: {{ invoice.invoiceNumber }}</div>
+                <div class="date">{{'Fecha de factura'|trans}}: {{ invoice.dateCreated|date('Y/m/d') }}</div>
+                <div class="date">{{'Fecha de vencimiento'|trans}}: 30/06/2014</div>
+            </div>
+        </div>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th class="no">{{'CONCEPTO'|trans}}</th>
+                    <th class="desc">{{'DESCRIPCIÓN'|trans}}</th>
+                    <th class="unit">{{'PRECIO'|trans}}</th>
+                    <th class="qty">{{'CANTIDAD'|trans}}</th>
+                    <th class="total">{{'TOTAL'|trans}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>{{'Viaje'|trans}}</strong></td>
+                    <td>{{ renderLocalizedCategory(invoice.reservation.date.travel.category.id, locale)}}</td>
+                    <td colspan="3">
+                        {{ renderLocalizedTravel(invoice.reservation.date.travel.id, locale) }}
+                    </td>
+                    
+                    
+                </tr>
+                <tr>
+                    <td colspan="5">{{'Código de reserva'|trans}}: {{ invoice.reservation.code }}</td>
+                </tr>
+                {% if invoice.reservation.nbpilotes > 0 %}
+                    <tr>
+                        <td><strong>{{'Nº de pilotos'|trans}}</strong></td>
+                        <td></td>
+                        <td>{{ prixPilote | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                        <td>{{ invoice.reservation.nbpilotes }}</td>
+                        <td>{{ totalPilote | format_currency('EUR', {fraction_digit: 2}) }}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if invoice.reservation.nbaccomp > 0 %}
+                <tr>
+                    <td><strong>{{'Nº de acompañantes'|trans}}</strong></td>
+                    <td></td>
+                    <td>{{ prixAccomp | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                    <td>{{ invoice.reservation.nbaccomp }}</td>
+                    <td>{{ totalAccomp | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                </tr>
+                {% endif %}
+                {% if invoice.reservation.reservationOptions|length > 0 %}
+                <tr>
+                    <td><strong>{{'Opciones'|trans}}</strong></td>
+                    <td colspan="4">
+                    <table>
+                        {% for reservationOption in invoice.reservation.reservationOptions %}
+                            <tr>
+                                <td>
+                                    <strong>{{reservationOption.ammount}}x</strong>
+                                </td>
+                                <td>
+                                    {{ renderLocalizedOption(reservationOption.options.id, locale) }}
+                                </td>
+                                <td>
+                                    {% set optionPrice = reservationOption.options.price %}
+                                    {% if statusChange is defined and statusChange == 'cancelled' %}
+                                        {% set optionPrice = reservationOption.options.price|negativify %}
+                                    {% endif %}
+                                    {{ optionPrice | format_currency('EUR', {fraction_digit: 2}) }}
+                                </td>
+                                <td>
+                                    
+                                    {{ (reservationOption.ammount * optionPrice) | format_currency('EUR', {fraction_digit: 2}) }}
+                                    
+                                    {% set total = total + reservationOption.ammount * optionPrice %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    </td>
+                </tr>
+                {% endif %}
+                {% for codepromo in invoice.reservation.codespromos %}
+                    <tr>
+                        <th>{{ codepromo.code }}</th>
+                        <td>{{ codepromo.libelle}}</td>
+                        <td>{{ codepromo.commentaire}}</td>
+                        <td align="right">{{ codepromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
+                    </tr>
+                    {% set discount = discount + codepromo.montant %}
+				{% endfor %}
+                {% set total = total - discount %}
+                <tr>
+                    <td colspan="4"><strong>{{'Base'|trans}}</strong></td>
+                    <td>{{ (total/1.21) | format_currency('EUR', {fraction_digit: 2})}} </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><strong>{{'IVA'|trans}} (21%)</strong></td>
+                    <td>{{ (total*(1-1/1.21)) | format_currency('EUR', {fraction_digit: 2})}} </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><strong>{{'Total'|trans}}</strong></td>
+                    <td>{{ total | format_currency('EUR', {fraction_digit: 2})}} </td>
+                </tr>               
+            </tbody>
+        </table>
+        <div id="thanks">{{'¡Muchas gracias!'|trans}}</div>
+    
+                

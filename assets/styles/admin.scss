@@ -1,0 +1,364 @@
+@import "~dropzone/dist/dropzone.css";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-datepicker/dist/css/bootstrap-datepicker3";
+@import "~font-awesome/scss/font-awesome";
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/*Sweet alert text-alignment*/
+
+.align-left {
+    text-align: left;
+}
+
+.swal-wide {
+    width: 850px !important;
+}
+
+
+/*----------- HEADER ------------- */
+
+header {
+    display: block;
+}
+
+
+/* ---------- COLORS TABLES ------ */
+
+.main-red {
+    background-color: #a90000;
+    color: white;
+}
+
+.main-red tr th {
+    color: white !important;
+}
+
+.main-red a,
+.main-red tr th a {
+    color: rgb(240, 240, 240) !important;
+    text-decoration: none;
+}
+
+.badge-secondary {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+
+/* ---------- MEDIA SELECTOR ---- */
+
+#media-selector div.selected {
+    border: 2px solid rgb(199, 6, 6) !important;
+    background: rgb(192, 191, 191);
+}
+
+.media-wrapper.selectedGallery {
+    border: 1px solid rgb(107, 171, 245);
+    background: rgb(192, 191, 191);
+}
+
+.media-wrapper {
+    width: 30%;
+    height: 164px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.media-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.media-wrapper {
+    position: relative;
+}
+
+.media-wrapper .controls {
+    bottom: 8px;
+    right: 4px;
+    height: 36px;
+    width: 97%;
+    position: absolute;
+    z-index: 9999;
+    text-align: right;
+    color: rgb(192, 191, 191);
+    background: rgba(30, 30, 30, 0.6);
+    padding: 6px;
+}
+
+.media-wrapper .controls div {
+    float: right;
+    width: 15%;
+    color: white;
+}
+
+.media-wrapper .controls div:hover {
+    color: yellow;
+}
+
+.media-wrapper .controls div.selectedMedia {
+    color: red !important;
+}
+
+.media-wrapper .controls div.selectedGallery {
+    color: rgb(107, 171, 245) !important;
+    background: none !important;
+}
+
+
+/* ---------- Tabs   ---------- */
+
+.tab-pane {
+    padding: 2rem;
+}
+
+
+/* ----------- ControlBand ----- */
+
+.controlband {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #eee;
+    padding: 1em;
+}
+
+
+/* ---------- Index Table --------*/
+
+.index-table a {
+    color: #37373a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.index-table td.smallerfont {
+    font-size: 0.8em;
+}
+
+
+/* ----- listes ----- */
+
+.small>tr>td {
+    font-size: 0.6rem !important;
+}
+
+.table>thead>tr>th {
+    border-bottom: 0px solid #DDD;
+}
+
+.table tr th {
+    color: #a11e10;
+    font-weight: normal;
+}
+
+.table tr th,
+.table tr td {
+    border-left: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
+}
+
+.table tr td h1 {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.table tr[id]:hover td {
+    background-color: #ffeff6 !important;
+    border-bottom: 1px solid #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+    color: #333333 !important;
+    cursor: pointer;
+}
+
+table.dataTable {
+    border-collapse: collapse !important;
+    border-bottom: 1px solid #dddddd;
+}
+
+table.dataTable.table-condensed>thead>tr>th {
+    padding-right: 25px;
+}
+
+table.dataTable thead tr>.sorting_asc,
+table.dataTable thead tr>.sorting_desc,
+table.dataTable.order-column.stripe thead tr>.sorting_asc,
+table.dataTable.order-column.stripe thead tr>.sorting_desc {
+    background-color: #fafafa;
+}
+
+table.dataTable tbody tr.even>.sorting_1,
+table.dataTable.order-column.stripe tbody tr.even>.sorting_1 {
+    background-color: #fafafa;
+}
+
+table.dataTable tbody tr.odd>.sorting_1,
+table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
+    background-color: #f1f1f1;
+}
+
+table.dataTable tbody tr:hover>.sorting_1,
+table.dataTable.order-column.hover tbody tr:hover>.sorting_1 {
+    background-color: #eaeaea;
+}
+
+.table tr.raye td {
+    opacity: .35;
+    text-decoration: line-through;
+}
+
+.fit {
+    white-space: nowrap !important;
+    width: 1% !important;
+}
+
+.label {
+    font-weight: normal;
+}
+
+#listcontacts {
+    margin-top: 10px;
+}
+
+#listcontacts fieldset .table {
+    margin-bottom: 10px;
+}
+
+#listcontacts .panel-default>.panel-heading {
+    color: #333;
+    background-color: #e5e5e5;
+}
+
+
+/* ----- Filtres ----- */
+
+.filtre {
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.filtre label {
+    position: relative;
+}
+
+.swal2-container {
+    z-index: 99999 !important;
+}
+
+
+/* ---------- SWAL READ MORE STYLES ----------------*/
+
+.swal2-html-container {
+    text-align: left !important;
+}
+
+.swal2-html-container h1 {
+    font-size: medium;
+}
+
+#js-youtube-thumbnail-case {
+    border: 2px dashed #999;
+    width: 80%;
+    height: 240px;
+    background-color: #ccc;
+}
+
+
+/* ---------- Footer ---------- */
+
+footer {
+    background-color: #37373a;
+    border-top: 0px solid #bf3333;
+    margin-top: 35px;
+    padding: 20px 0px 10px 0px;
+}
+
+footer h4 {
+    color: #bf3333;
+    color: #ffffff;
+    font-family: RakaFont, verdana, arial, sans-serif;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+footer p,
+footer i,
+footer a {
+    color: #444444;
+    color: #929497;
+}
+
+footer a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer hr {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-top: 1px solid #929497;
+}
+
+.footer-bottom {
+    margin-top: 5px;
+}
+
+@media (max-width: 767px) {
+    .navbar-default {
+        position: fixed;
+        top: 0px;
+        z-index: 50;
+    }
+    .navbar-brand img {
+        margin-top: -5px;
+        width: 140px;
+    }
+    .dropdown-menu>li>a {
+        color: #e6005f !important;
+    }
+    footer h4 {
+        margin-top: 20px;
+    }
+}
+
+
+/*------------- CUSTOM STYLES ----------------*/
+
+.custom-style-closed td,
+.custom-style-full td {
+    opacity: .35;
+    text-decoration: line-through;
+}
+
+
+/*--------------- FORM STYLES -----------------*/
+
+fieldset {
+    width: 100%;
+    background-color: #fafafa;
+    border: 1px solid #dddddd;
+    padding: 10px 15px 5px 15px !important;
+    margin: 0 0 20px 0 !important;
+}
+
+.nav-link.active {
+    background-color: #fafafa !important;
+}
+
+.tab-content>.active {
+    background-color: #fafafa !important;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+}

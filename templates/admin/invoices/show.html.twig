@@ -1,0 +1,85 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Facturas{% endblock %}
+
+{% block body %}
+<div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12" data-url="">
+                <h1>Facturas</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ invoice.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ invoice.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nif</th>
+                        <td>{{ invoice.nif }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td>{{ invoice.address }}</td>
+                    </tr>
+                    <tr>
+                        <th>Postalcode</th>
+                        <td>{{ invoice.postalcode }}</td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td>{{ invoice.city }}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{ invoice.country }}</td>
+                    </tr>
+                    <tr>
+                        <th>Reservation</th>
+                        <td>
+                            <table>
+
+                                <tr>
+                                    <th>Viaje</th>
+                                    <td>{{ renderLocalizedTravel(invoice.reservation.date.travel.id, "es") }}<br /></td>
+                                </tr>
+                                <tr>
+                                    <th>Fechas</th>
+                                    <td>
+                                        <strong>Inicio:</strong> {{invoice.reservation.date.debut | date('Y/m/d')}}<br />
+                                        <strong>Fin:</strong> {{invoice.reservation.date.fin | date('Y/m/d')}}<br /> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Viajeros</th>
+                                    <td>
+                                        <strong>Piloto/s:</strong> {{invoice.reservation.nbpilotes}}<br />
+                                        <strong>Pasajero/s:</strong> {{invoice.reservation.nbaccomp}}<br />
+                                        <strong>Opcion/es:</strong>
+                                        <ul>
+                                            {% for option in invoice.reservation.reservationOptions %}
+                                                <li><strong>{{option.ammount}}</strong>: {{ renderLocalizedOption(option.id, "es") }} <br /> 
+                                                {{option.options.price}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                </tr>
+
+                </tbody>
+            </table>
+
+            <a href="{{ path('invoices_index') }}" class="btn btn-light">
+                <i class="fa fa-list"></i>Back to list
+            </a>
+
+            <a href="{{ path('invoices_edit', {'id': invoice.id}) }}">edit</a>
+
+            {{ include('admin/invoices/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

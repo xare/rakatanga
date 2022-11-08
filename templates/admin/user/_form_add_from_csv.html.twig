@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %} {{parent()}} | Carga CSV {% endblock %}
+{% block header %}
+   {{ parent() }}
+{% endblock %}
+{% block body %}
+    <h1>Subir el archivo via CSV</h1>
+    {{form_start(form)}}
+        {{form_widget(form.csvFile)}}
+    {{form_end(form)}}
+    <br />
+    <a href="{{ path('user_index') }}" class="btn btn-primary">
+        <i class="fa fa-list"></i>
+        Ver Lista
+    </a>
+{% endblock %}

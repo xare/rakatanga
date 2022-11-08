@@ -1,0 +1,21 @@
+<h4>{{ 'Entrar en tu cuenta'|trans }}</h4>
+
+<p>{{ 'Haz login con tu cuenta'|trans }}</p>
+
+<div class="row">
+    <div class="col-12">
+    {# <form method="post" id="js-reservation-login-form"> #}
+        <label for="loginEmail">Email</label>
+        <input type="email" name="_email" id="loginEmail" class="form-control" required autofocus>
+        <label for="loginPassword">Contraseña</label>
+        <input type="password" name="_password" id="loginPassword" class="form-control" required>
+        {# <input type="hidden" name="_target_path" id="inputTargetPath" value="{{ path(redirect_path, {date:date.id}) }}" /> #}
+        <input type="hidden" name="_csrf_token" id="login_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <br /><br />
+        <button class="btn btn-lg btn-primary" type="submit" id="js-initialize-reservation-login">
+            {{'Inicializar'|trans}}
+        </button>
+        {# </form> #}
+        <p>{{'¿Has olvidado tu contraseña?' |trans}} <a target="_blank" href="{{path('app_forgot_password_request')}}">{{'Haz click aquí'|trans}}</a></p>
+    </div>
+</div>

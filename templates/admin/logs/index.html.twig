@@ -1,0 +1,76 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Menu index
+{% endblock %}
+
+{% block header %}
+	{{ include('admin/shared/_header.html.twig') }}
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h1>Registro de acciones</h1>
+			</div>
+		</div>
+		<div class="row mb-4">
+			<div class="count col-md-3 col-xs-12">
+				<strong>Logs en total:</strong>
+				<span id="totalItemCount">{{logs|length}}</span>
+			</div>
+			<div class="col-md-1 offset-md-7 col-xs-12">
+				{{ include('admin/dashboard/_filter_results.html.twig') }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="navigation">
+				{{ knp_pagination_render(logs) }}
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped table-hover small">
+					<thead class="main-red">
+						<tr>
+							<th>Id</th>
+							<th>Entidad</th>
+							<th>Fecha</th>
+							<th>Acción</th>
+							<th>Contenido</th>
+							<th>Datos</th>
+							{# <th>
+								<i class="fa fa-eye"></i>
+							</th>
+							<th>
+								<i class="fa fa-edit"></i>
+							</th> #}
+							<th>
+								<i class="fa fa-trash"></i>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for log in logs %}
+							{{ include( 'admin/logs/_row.html.twig',{'log': log } ) }}
+						{% else %}
+							<tr>
+								<td colspan="9">no records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="navigation">
+				{{ knp_pagination_render(logs) }}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block footer %}
+	{{ parent() }}
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{# {{ encore_entry_script_tags('admin') }} #}
+{# {{ encore_entry_script_tags('admin_media') }} #}
+{% endblock %}

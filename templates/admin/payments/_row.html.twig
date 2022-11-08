@@ -1,0 +1,45 @@
+<tr>
+    <td>{{ payment.id }}</td>
+    <td>
+        <a href="{{path('payments_edit', { 'id' : payment.id })}}"
+         data-bs-toggle="tooltip"
+            title="Haciendo click verás la página de edición de este pago.">
+            {{ payment.ammount|format_currency('EUR', {fraction_digit: 0}) }}
+            </a>
+    </td>
+    <td data-bs-toggle="tooltip" title="{{payment.stripeId}}">{{payment.stripeId[:10]}}...</td>
+    <td>
+        <a href="{{path('reservation_edit', { 'id' : payment.reservation.id} )}}" 
+            title="Haz click y podrás abrir la página de edición de esta reserva. {{payment.reservation.date.travel}} - 
+            {{payment.reservation.date.debut|date('d/m/Y')}} {{payment.reservation.date.fin|date('d/m/Y')}}" 
+            data-bs-toggle="tooltip">
+            {{ payment.reservation.code }}
+        </a>
+    
+    <td>
+        {{ payment.dateAjout ? payment.dateAjout|date('Y-m-d H:i:s') : '' }}
+    </td>
+    <td><a href="{{path('user_edit',{'id': payment.reservation.user.id})}}" data-bs-toggle="tooltip"
+            title="Haciendo click verás la página de edición de este usuario.">{{ payment.reservation.user.email }}</a></td>
+    <td>
+        {{ renderLocalizedCategory(payment.reservation.date.travel.category.id,'es') }} - 
+        <a href="{{path('travel_edit',{'id': payment.reservation.date.travel.id})}}"
+            data-bs-toggle="tooltip"
+            title="Haciendo click verás la página de edición de este viaje.">
+        {{ renderLocalizedTravel(payment.reservation.date.travel.id,'es') }}
+        </a>
+    </td>
+    <td>
+        <a 
+            href="{{path('dates_edit',{'id':payment.reservation.date.id})}}"
+            data-bs-toggle="tooltip"
+            title="Haciendo click verás la página de edición de esta fecha."
+            >
+            {{payment.reservation.date.debut|date('Y/m/d')}} -
+            {{payment.reservation.date.fin|date('Y/m/d')}}
+        </a>
+    </td>
+    <td>
+        {{ include('admin/payments/_delete_form.html.twig') }}
+    </td>
+</tr>

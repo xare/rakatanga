@@ -1,0 +1,13 @@
+{% for infodoc in travel.infodocs %}
+  <li class="list-group-item">
+    <a href="{{absolute_url(infodoc.infodocsPath)}}">
+    {{infodoc.filename}}
+    <a class="js-remove-infodoc" data-travel="{{travel.id}}" data-infodoc="{{infodoc.id}}" href="#">
+      <i class="fa fa-trash"></i>
+    </a>
+    </a>
+  </li>
+{% else %}
+  <li class="list-group-item">{{'Este viaje no contiene documentos asociados'|trans}}</li>
+{% endfor %}
+

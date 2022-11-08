@@ -1,0 +1,11 @@
+{% set addRoute = entity ~'_new' %}
+{% set index = entity ~'_index' %}
+<div class="row">
+    <div class="col-12">
+        <div class="controlband main-red rounded">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;<a href="{{path(addRoute)}}"> Crear {{entity}}</a>&nbsp;&nbsp;&nbsp;  
+            <i class="fa fa-list"></i>&nbsp;&nbsp;<a href="{{path(index)}}"> Lista {{entity}}</a>
+        </div>
+    </div>
+</div>
+  

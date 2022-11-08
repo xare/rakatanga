@@ -1,0 +1,28 @@
+{% for continentTranslation in form.continentTranslation %}
+    <div 
+        class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" 
+        id="{{continentTranslation.lang.vars.data.name}}" 
+        role="tabpanel" 
+        aria-labelledby="{{continentTranslation.lang.vars.data.name}}-tab">
+            <h3>{{continentTranslation.lang.vars.data.name}}</h3>
+            <div class="form-group">
+             <label 
+                    for="continents_continentTranslation_{{loop.index0}}_name"
+                    class="required">Title</label>
+            <input
+                    type="text"
+                    id="continents_continentTranslation_{{loop.index0}}_name"
+                    name="continents[continentTranslation][{{loop.index0}}][name]"
+                    {% if continent.id != null %}value="{{continentTranslation.vars.data.name}}"{% endif %}
+                    required="required" 
+                    class="form-control" />
+        </div>
+         <input type="hidden" 
+            name="continents[continentTranslation][{{loop.index0}}][lang]" 
+            {% if continent.id != null %}value="{{continentTranslation.vars.data.lang.id}}"{% endif %}/>
+                {# {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button class="btn">{{ button_label|default('Save') }}</button>
+                {{ form_end(form) }} #}
+    </div>
+{% endfor %}

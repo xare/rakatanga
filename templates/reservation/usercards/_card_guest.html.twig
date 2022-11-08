@@ -1,0 +1,11 @@
+<h3>{{ 'Entrar como usuario invitado'|trans }}</h3>
+<p>{{'Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico'|trans}}.</p>
+<span class="form-error">
+    <span class="d-block">
+        <span class="form-error-icon badge badge-danger text-uppercase"></span>
+        <span class="form-error-message"></span>
+    </span>
+</span>
+<input name="email" class="form-control mb-3" id="js-guest-email" required="required" />
+
+<button class="btn btn-primary" id="js-initialize-reservation-guest"> {{ 'Inicializar'|trans }}</button>

@@ -1,0 +1,15 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Lang{% endblock %}
+
+{% block body %}
+<div class="container">
+{{ include ('admin/shared/_controlband.html.twig',{'entity':'lang'})}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12" data-url="">
+            <h1>Crear nuevo Idioma</h1>
+            {{ include('admin/lang/_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - PANEL DE ENTRADA{% endblock %}
+
+{% block header %}
+  {{ parent() }}
+  {{ include('shared/_navbar.html.twig') }}
+{% endblock %}
+
+{% block body %}
+ 
+{# {{ message }} #}
+{{ parent() }}
+<div class="container">
+<div class="row">
+        <div class="col-md-12 col-sm-12">
+        {{ wo_render_breadcrumbs() }}
+        </div>
+    </div>
+  <div class="row">
+    <div class="col-xs-12 col-12">
+        <h1>{{contents.title}}</h1>
+        {{contents.intro|raw}}
+        {{contents.body|raw}}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+  {{ parent() }}
+{% endblock %}
+

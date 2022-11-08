@@ -1,0 +1,33 @@
+<tr>
+    <td>{{ option.id }}</td>
+    <td>
+    <strong>{{ renderLocalizedCategory(option.travel.category.id,'es')}}</strong><br />
+    {{ renderLocalizedTravel(option.travel.id,'es') }}</td>
+    <td>{{ option.price }}</td>
+    
+    <td><a href="{{ path('options_edit', {'id': option.id}) }}">
+        {% for optionTranslation in option.optionsTranslations %}
+            <span class="badge bg-secondary">
+                {{ optionTranslation.lang.isoCode|upper }}
+            </span> {{ optionTranslation.title }}
+            <br />
+        {% endfor %}
+     </a> 
+    </td>
+    
+   {#  <td>
+        <a href="{{ path('options_show', {'id': option.id}) }}"
+        class="btn btn-primary">
+            <i class="fa fa-eye"></i>
+        </a>
+    </td> #}
+    
+    <td>
+        <a href="{{ path('options_duplicate', {'id': option.id}) }}">
+            <i class="fa fa-copy"></i>
+        </a>
+    </td>
+    <td>
+        {{ include('admin/options/_delete_form.html.twig') }}
+    </td>
+</tr>

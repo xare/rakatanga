@@ -1,0 +1,91 @@
+<tr{% if reservation.status == 'cancelled' %} class="
+    raye alert-danger
+"{% endif %}>
+  <td>{{ reservation.id }}</td>
+  <td>
+    <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">
+        {{ reservation.code }}
+    </a>
+</td>
+  <td>
+      <span 
+          class="badge bg-secondary" 
+          data-bs-toggle="tooltip" 
+          data-bs-placement="top" 
+          title="{{ reservation.status }}">
+          {{ reservation.status|slice(0,4) }}
+      </span>
+  </td>
+  <td>
+      <span class="badge bg-primary">
+          {{ reservation.nbPilotes }}
+      </span>
+  </td>
+  <td>
+      <span class="badge bg-primary">
+          {{ reservation.nbaccomp }}
+      </span>
+  </td>
+  <td>
+      {% if reservation.user is defined %}
+          
+          <a href="{{ path('user_show', {
+              'id' : reservation.user.id
+          }) }}"> 
+              {{ reservation.user.prenom }}
+              {{ reservation.user.nom }}<br />
+              [{{ reservation.user }}]
+          </a>
+      {% endif %}
+  </td>
+  <td>
+      <a href="{{ path('travel_show', {
+              'id' : reservation.date.travel.id
+          }) }}">
+          {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }} - 
+          {{ renderLocalizedTravel(reservation.date.travel.id, 'es') }}
+      </a>
+  </td>
+  <td>
+      <a href="{{ path('dates_show', {
+              'id' : reservation.date.id
+          }) }}">
+          {{ reservation.date.debut|date('Y-m-d') }} <br />
+          {{ reservation.date.fin|date('Y-m-d') }}
+      </a>
+  </td>
+  <td>{{ reservation.dateAjout ? reservation.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+  <td>{{ reservation.datePaiement ? reservation.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
+  <td>
+      <ul class="list-group">
+          {% for reservationOption in reservation.reservationOptions %}
+              <li class="list-group-item">
+                  {{ reservationOption.ammount }} - 
+                  {{ renderLocalizedOption(reservationOption.options.id,'es') }}
+              </li>
+          {% endfor %}
+      </ul>
+  </td>
+  <td>
+      {# <a 
+          href="{{ path('reservation_show', {'id': reservation.id}) }}"
+          class="btn btn-primary">
+          <i class="fa fa-eye"></i>
+      </a> #}
+      <button
+            class="btn btn-primary js-send-checkin-request" 
+            data-reservation-id="{{reservation.id}}">
+            <i class="fas fa-envelope"></i>
+        </button>
+  </td>
+  {# <td>
+      <a 
+          href="{{ path('reservation_edit', {'id': reservation.id}) }}"
+          class="btn btn-info">
+          <i class="fa fa-edit"></i>
+      </a>
+  </td> #}
+  <td>
+      {{ include('admin/reservation/_delete_form.html.twig') }}
+  </td>
+</tr>

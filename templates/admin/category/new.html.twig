@@ -1,0 +1,20 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Category{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'category'}) }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Crear una nueva categoría</h1>
+            <br />
+            {{ include('admin/category/_form.html.twig') }}
+            <a href="{{ path('category_index') }}" class="btn btn-primary mt-3">
+                <i class="fa fa-list"></i>
+                Ver lista
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

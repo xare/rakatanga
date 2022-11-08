@@ -1,0 +1,66 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Travel
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		{{ include ('admin/shared/_controlband.html.twig',{'entity':'travel'})}}
+		<div class="row">
+			<div class="col-md-12 col-sm-12" id="js-edit-wrapper">
+				<h1>Edit Travel</h1>
+				<div class="input-group mb-3">
+					<span class="input-group-text"><i class="fas fa-link"></i> </span>
+					<input type="text" class="form-control" id="js-copy-from-input" size="200" value="{{ absolute_url(path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') })) }}">
+					<span 
+						class="input-group-text"
+						data-bs-toggle="tooltip" 
+						title="Abre este vínculo en una nueva ventana">
+						<a target="_blank" href="{{ path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') }) }}">
+						<i class="fas fa-eye"></i>
+						</a>
+					</span>
+					<span 
+						class="input-group-text"
+						data-bs-toggle="tooltip" 
+						title="Envía este url a alguien [INACTIVO]">
+						<i class="fas fa-envelope"></i>
+					</span>
+					<span 
+						class="input-group-text js-copy-content" 
+						data-bs-toggle="tooltip" 
+						title="Copia el url en el clipboard">
+							<i class="fas fa-copy"></i>
+					</span>
+				</div>
+				{{ include('admin/travel/_form.html.twig', {'button_label': 'Actualizar'}) }}
+				<br/>
+				<div class="row">
+					<div class="col-6">
+						<div class="row">
+							<div class="col-1">
+								<a href="{{ path('travel_index') }}" class="btn btn-primary">
+									<i class="fa fa-list"></i>
+								</a>
+							</div>
+							<div class="col-1">
+								{{ include('admin/travel/_delete_form.html.twig') }}
+							</div>
+							<div class="col-1">
+								<a target="_blank" href="{{ path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') }) }}" class="btn btn-info">
+									<i class="fa fa-eye"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('admin-media') }}
+	{{ encore_entry_script_tags('infodocs') }}
+	{# {{ encore_entry_script_tags('admin-upload-media') }} #}
+{% endblock %}

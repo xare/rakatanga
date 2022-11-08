@@ -1,0 +1,179 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-4">
+            <div class="row">
+                <div class="col-6">
+                    {{ form_row(form.nbpilotes) }}
+                </div>
+                <div class="col-6">
+                    {{ form_row(form.nbAccomp) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.status) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.date) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.comment) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.log) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.user) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <ul class="nav nav-tabs" role="tablist" id="myTab">
+             <li class="nav-item">
+                    <button class="nav-link active"
+                            id="options-tab" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#options" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="options"
+                            aria-selected="true"
+                                >Resumen
+                                </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                            id="data-tab" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#data" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="data"
+                            aria-selected="true"
+                                >Datos
+                                </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                            id="documents-tab" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#documents" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="documents"
+                            aria-selected="true"
+                                >Documentos
+                                </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                            id="travellers-tab" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#travellers" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="travellers"
+                            aria-selected="true"
+                                >Viajeros
+                                </button>
+                </li>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                            id="invoices-tab" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#invoices" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="invoices"
+                            aria-selected="true"
+                                >Facturas
+                                </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                            id="payments-tab" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#payments" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="payments"
+                            aria-selected="true"
+                                >Pagos
+                                </button>
+                </li>
+                
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div 
+                        class="tab-pane fade show active" 
+                        id="options" 
+                        role="tabpanel" 
+                        aria-labelledby="options-tab">
+                            {{ include('admin/reservation/_reservation_options.html.twig',{'reservation': reservation}) }}
+                    </div>
+                    <div 
+                        class="tab-pane fade show" 
+                        id="data" 
+                        role="tabpanel" 
+                        aria-labelledby="data-tab">
+                            {{ include('admin/reservation/_reservation_data.html.twig',{'reservation': reservation} )}}
+                    </div>
+                    <div 
+                        class="tab-pane fade show" 
+                        id="documents" 
+                        role="tabpanel" 
+                        aria-labelledby="documents-tab">
+                            {{ include('admin/reservation/_reservation_documents.html.twig',{'reservation': reservation} )}}
+                    </div>
+                    <div 
+                        class="tab-pane fade show" 
+                        id="travellers" 
+                        role="tabpanel" 
+                        aria-labelledby="travellers-tab">
+                            {{ include('admin/reservation/_reservation_travellers.html.twig',{'reservation': reservation} )}}
+                    </div>
+                    <div 
+                        class="tab-pane fade show" 
+                        id="invoices" 
+                        role="tabpanel" 
+                        aria-labelledby="invoices-tab">
+                            {{ include('admin/reservation/_reservation_invoices.html.twig',{'reservation': reservation} )}}
+                    </div>
+                    <div 
+                        class="tab-pane fade show" 
+                        id="payments" 
+                        role="tabpanel" 
+                        aria-labelledby="payments-tab">
+                            {{ include('admin/reservation/_reservation_payments.html.twig',{'reservation': reservation} )}}
+                    </div>
+                    
+                </div>
+        </div>
+    </div>
+    
+
+    <br /><br />
+    <!-- Nav tabs -->
+    <div class="row mb-4">
+        <div class="col-12">
+            
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <button class="btn btn-success">
+                <i class="fa fa-save"></i> {{ button_label|default('Save') }}
+            </button>
+        </div>
+    </div>
+{{ form_end(form) }}

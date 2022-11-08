@@ -1,0 +1,43 @@
+
+<textarea
+        id="{{entity}}_{{entity_property}}"
+        name="{{entity}}[{{entity_property}}]"
+        class="form-control"
+        required="required"
+        >{% if entity_id is defined and entity_id != null %}
+            {% if entity_property == "intro" %}
+                {{ form.vars.data.intro }}
+            {% elseif entity_property == "body" %}
+                {{ form.vars.data.body }}
+            {% endif %}
+        {% endif %}</textarea>
+    
+    {% if ckEditor == true %}
+        <script type="text/javascript">
+            var CKEDITOR_BASEPATH = "{{absolute_url("/build/ckeditor/")}}";
+        </script>
+        <script type="text/javascript" 
+            src="{{absolute_url("/build/ckeditor/")}}ckeditor.js">
+        </script>
+        <script type="text/javascript">        
+            if (CKEDITOR.instances["{{entity}}_{{entity_property}}"]) { 
+                CKEDITOR.instances["{{entity}}_{{entity_property}}"].destroy(true); 
+                delete CKEDITOR.instances["{{entity}}_{{entity_property}}"]; 
+            }
+            {% if entity_id != '' %}
+              CKEDITOR.replace("{{entity}}_{{entity_property}}", {
+                  language:"es",
+                  filebrowserUploadUrl: "{{absolute_url(path('file-browser-upload',{'entity': entity, 'id' :entity_id}))}}",
+                  filebrowserUploadMethod: "form",
+                  filebrowserBrowseUrl: "{{absolute_url(path('file-browser',{'entity' :entity, 'id': entity_id}))}}",
+                                            });
+            {% else %}
+            CKEDITOR.replace("{{entity}}_{{entity_property}}", {
+                  language:"es"
+                                            });
+            {% endif %}
+            CKEDITOR.config.extraAllowedContent = 'div img hr(clearfix) p(clearfix)';
+            CKEDITOR.config.extraPlugins = 'btgrid';
+            CKEDITOR.config.allowedContent = true;
+        </script>
+    {% endif %}

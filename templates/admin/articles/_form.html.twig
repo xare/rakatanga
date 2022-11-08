@@ -1,0 +1,128 @@
+{% if article is defined and article.id != null %}
+    {% set entity_id_value = article.id %}
+{% else %}
+    {% set entity_id_value = '' %}
+{% endif %}
+
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-3">
+        {{ form_row(form.title) }}
+    </div>
+    <div class="col-3">
+        {{ form_row(form.blog) }}
+    </div>
+   <div class="col-3">
+        {{ form_row(form.slug) }}
+    </div>
+    
+</div>
+    <div class="row">
+        <div class="col-12">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="myTab">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active"
+                        id="articleForm-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#articleForm"
+                        type="button" 
+                        role="tab" 
+                        aria-controls="articleForm"
+                        aria-selected="true">
+                        <i class="fa fa-flag"></i>
+                        form
+                    </button>
+                </li>
+                {% if form.vars.value.id != null %}
+                <li class="nav-item" role="presentation">
+                     <button class="nav-link"
+                                id="media-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#media" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="media"
+                                aria-selected="false"
+                        >
+                        <i class="fa fa-image"></i>
+                        Fotos (ver y seleccionar)
+                        {% if article %}
+                            <span class="badge badge-secondary">
+                                {{article.media|length}}
+                            </span>
+                        {% endif %}
+                        </button>
+                </li>
+                {% endif %}
+            </ul>
+            <!-- End Nav tabs -->
+            <!-- Tab content -->
+            <div class="tab-content">
+                <div 
+                    class="tab-pane fade show active"
+                    id="articleForm"
+                    role="tabpane"
+                    aria-labelledby="articleForm-tab">
+                    <div class="form-group">
+                        <label 
+                            for="article_intro"
+                            class="required"
+                        >Introducción</label>
+
+                        {{ include('admin/shared/forms/_form_langform_element_textarea_simple_entity.html.twig', {
+                                        loop_index: 0, 
+                                        entity: 'articles',
+                                        entity_property : 'intro',
+                                        entity_id: entity_id_value,
+                                        ckEditor : true
+                                    }) }}
+                    </div>
+                    <div class="form-group">
+                        <label 
+                            for="article_body"
+                            class="required"
+                        >Body</label>
+                        {{ include('admin/shared/forms/_form_langform_element_textarea_simple_entity.html.twig', {
+                                        loop_index: 0, 
+                                        entity: 'articles',
+                                        entity_property : 'body',
+                                        entity_id: entity_id_value,
+                                        ckEditor : true
+                                    }) }}
+                    </div>
+                </div>
+                {% if form.vars.value.id != null %}
+                <div 
+                    class="tab-pane fade" 
+                    id="media" 
+                    role="tabpanel" 
+                    aria-labelledby="media-tab">
+                    <div id="media-selector">
+		                {{ include('admin/shared/forms/_add_media_modal.html.twig',{
+                            'entity':article
+                        }) }}
+	                </div>
+                </div>
+                {% endif %}
+            </div>
+            <!-- End Tab content -->
+        </div>
+    </div>
+    {{ form_widget(form._token) }}
+   {#  <button class="btn btn-info">{{ button_label|default('Save') }}</button> #}
+    <div class="row mt-4">
+        <div class="col-md-4 col-12">
+            <button class="btn btn-success">
+                <i class="fa fa-save"></i>
+                    {% if form.vars.value.id == null %}
+                        {{ button_label|default('Guardar') }}
+                    {% else %}
+                        {{ button_label|default('Actualizar') }}
+                    {% endif %}
+            </button>
+        </div>
+{{ form_end(form,{'render_rest': false}) }}
+</div>
+<div class="row">
+        <div class="col-md-12 col-sm-12">

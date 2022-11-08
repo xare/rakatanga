@@ -1,0 +1,41 @@
+<div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filtrar resultados
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a 
+                            class="dropdown-item" 
+                            href="{{ path('category_by_continent',{'continentCode':'as'}) }}">
+                            Asia
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{ path('category_by_continent',{'continentCode':'sa'}) }}">
+                            América del Sur
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('category_by_continent',{'continentCode':'eu'})}}">
+                            Europa
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('category_by_continent',{'continentCode':'af'})}}">
+                            África
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('category_index')}}">
+                            Volver a la lista
+                        </a>
+                    </li>
+                </ul>
+            </div>

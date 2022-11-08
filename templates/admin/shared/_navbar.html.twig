@@ -1,0 +1,324 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand link-light" href="{{ path('dashboard') }}">Rakatanga Admin</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link link-light" href="{{ path('dashboard') }}">
+          <i class="fa fa-home"></i>
+          HOME
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle link-light"href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-list"></i> WEB
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('menu_index') }}">
+              <i class="fa fa-list"></i> Menú
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('menu_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Elemento de Menú
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('lang_index') }}">
+              <i class="fa fa-flag"></i> Idiomas
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('lang_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Idioma
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle link-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-file"></i> CONTENIDOS
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item link-dark" href="{{path('popups_index')}}">
+              <i class="fas fa-blog"></i> Popups
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{path('popups_new')}}">
+              <i class="fa fa-plus"></i> New popup
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{path('blog_index')}}">
+              <i class="fas fa-blog"></i> Blogs
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{path('blog_new')}}">
+              <i class="fa fa-plus"></i> New blog
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{path('articles_index')}}">
+              <i class="fas fa-newspaper"></i> Blog Articles
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{path('articles_new')}}">
+              <i class="fa fa-plus"></i> New Article
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('dates_index') }}">
+              <i class="fa fa-calendar"></i> Fechas
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('dates_new') }}">
+              <i class="fa fa-plus"></i> Nueva Fecha
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('travel_index') }}">
+              <i class="fa fa-motorcycle"></i> Viajes
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('travel_new') }}">
+              <i class="fa fa-plus"></i> Nuevo viaje
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('options_index') }}">
+              <i class="fa fa-filter"></i> Opciones
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('options_new') }}">
+              <i class="fa fa-plus"></i> Nueva Opción
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('category_index') }}">
+              <i class="fa fa-bullseye"></i> Países
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('category_new') }}">
+              <i class="fa fa-plus"></i> Nuevo país
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('continents_index') }}">
+              <i class="fa fa-globe"></i> Continentes
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('continents_new') }}">
+              <i class="fa fa-plus"></i> Nuevo continente
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('media_index') }}">
+              <i class="fa fa-image"></i> Media
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('media_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Media
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('pages_index') }}">
+              <i class="fa fa-file"></i> Páginas
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('pages_new') }}">
+              <i class="fa fa-plus"></i> Nueva Página
+            </a>
+          </li>
+           <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('hotels_index') }}">
+              <i class="fa fa-file"></i> Hoteles
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('hotels_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Hotel
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle link-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-user"></i> GESTIONES
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('user_index') }}">
+              <i class="fa fa-user"></i> Usuarios
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('user_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Usuario
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('codespromo_index') }}">
+              <i class="fas fa-check"></i> Códigos promocionales
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('codespromo_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Código promocional
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('reservation_index') }}">
+              <i class="fa fa-suitcase"></i> Reservas
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('reservation_new') }}">
+              <i class="fa fa-plus"></i> Nueva Reserva
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('invoices_index') }}">
+              <i class="fa fa-file"></i> Facturas
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('invoices_new') }}">
+              <i class="fa fa-plus"></i> Nueva factura
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('document_index') }}">
+              <i class="fa fa-id-card"></i> Documentos
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('document_new') }}">
+              <i class="fa fa-plus"></i> Nuevo Documento
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('payments_index') }}">
+              <i class="fa fa-credit-card"></i> Pagos
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('payments_new') }}">
+              <i class="fa fa-plus"></i> Nuevo pago
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('mailings_index') }}">
+              <i class="fa fa-envelope"></i> Mailings
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('mailings_new') }}">
+              <i class="fa fa-plus"></i> Nuevo mailing
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('logs_index') }}">
+              <i class="fa fa-envelope"></i> Logs
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item link-dark" href="{{ path('logs_new') }}">
+              <i class="fa fa-plus"></i> Nuevo log
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle link-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-user"></i> HISTÓRICO
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item link-dark" href="{{ path('inscriptions_index') }}">
+                <i class="fa fa-user"></i> Inscriptions
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item link-dark" href="{{ path('inscriptions_new') }}">
+                <i class="fa fa-plus"></i> Nuevo Inscription
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item link-dark" href="{{ path('oldreservations_index') }}">
+                <i class="fa fa-user"></i> Antiguas Reservas
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item link-dark" href="{{ path('oldreservations_new') }}">
+                <i class="fa fa-plus"></i> Nuevo "antigua reserva"
+              </a>
+            </li>
+          </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link link-light" href="{{ path('app_logout') }}">
+          <i class="fas fa-door-open"></i>
+          Logout
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      {# <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle link-ligh" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item link-light" href="#">Action</a></li>
+            <li><a class="dropdown-item link-light" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item link-light" href="#">Something else here</a></li>
+          </ul>
+        </li> #}
+      {# <li class="nav-item">
+        <a class="nav-link disabled link-light" href="#">Disabled</a>
+      </li> #}
+    </ul>
+    {# <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form> #}
+  </div>
+    </div>
+
+</nav>

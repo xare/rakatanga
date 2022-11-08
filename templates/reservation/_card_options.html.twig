@@ -1,0 +1,69 @@
+{% if  reservation is defined and reservation != null %}
+	{% set reservation = reservation %}
+	{% set options = options %}
+	{% set selectableOptions = selectableOptions %}
+	{% set totalTravellers = reservation.nbpilotes + reservation.nbaccomp %}
+{% else %}
+	{% set reservation = null %}
+	{% set options = date.travel.options %}
+	{% set selectableOptions = date.travel.options %}
+	{% set totalTravellers = 0 %}
+{% endif %}
+<div class="card card-default mb-4 shadow" id="js-card-options">
+	<div class="card-body">
+		<h2>{{'Las opciones'|trans}}</h2>
+		<p>{{'El viaje incluye en el precio una habitación compartida y una moto "Royal Enfield", no obstante puedes optar a otras opciones a continuación' |trans }}</p>
+		<p>{{'Por sistema el número de opciones está limitado por el número total de viajeros, ten en cuenta, no obstante que para el caso de optar a una moto o un seguro este número tendrá que depender del número de pilotos y no de viajeros total'|trans}}.
+		</p>
+		<table class="table table-condensed options">
+			<tbody>
+				{% for option in selectableOptions %}
+							<tr 
+								class="js-options-row-select" 
+								data-option-id="{{ option.id }}" 
+								data-option-price="{{ option.price }}" 
+								data-option-title="{{ renderLocalizedOption(option.id, app.request.locale) }}">
+								<td class="col-1 col-xs-12" style="vertical-align: middle">
+									<span class="badge bg-secondary fs-6 fw-bold bg-opacity-75">
+										<output data-container="current-option-number">{% if reservation is defined and reservation != null %} {{option.ammount}}{% endif %}</output>
+										<output data-container="total-option-number">/ {{totalTravellers}}</output>
+									</span>
+								</td>
+								<td class="col-6 col-xs-12" style="vertical-align: middle">
+									{{ renderLocalizedOption(option.id, app.request.locale) }}
+								</td>
+								<td class="col-1 col-xs-12" style="vertical-align: middle">
+									{% if renderLocalizedOptionIntro(option.id,locale) != null %}
+											<span 
+													data-bs-toggle="tooltip" 
+													title="{{ renderLocalizedOptionIntro(option.id,locale)|striptags|raw}}">
+													<i class="fas fa-question"></i>
+											</span>
+									{% endif %}
+								</td>
+								<td class="col-2 col-xs-12" style="vertical-align: middle">
+									<input 
+										type="range" 
+										min="0" 
+										max="{{totalTravellers}}" class="form-control form-range"  name="reservation_user[option][{{ option.id }}]" 
+										required{%if totalTravellers == 0 %} disabled{%endif%}
+										{% if reservation is defined and reservation != null %} 
+										value="{{option.ammount}}" 
+										{% endif %}
+										data-bs-toggle="tooltip"
+										title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'opciones'|trans}}">
+								</td>
+								<td class="col-2 text-right" style="vertical-align: middle" align="right">
+									<span class="badge bg-secondary fs-6 bg-opacity-75">
+										&#10005;
+										{{ option.price|format_currency('EUR', {fraction_digit: 2}) }}
+									</span>
+								</td>
+							</tr>
+				{% else %}
+					{{'No hay opciones para este viaje'|trans}}.
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>

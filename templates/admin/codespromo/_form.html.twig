@@ -1,0 +1,58 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.code) }}
+        </div>
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.libelle) }}
+        </div>
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.montant) }}
+        </div>
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.pourcentage) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.commentaire) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.type) }}
+        </div>
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.nombre, {
+                'label': 'Núm. de utilizaciones'
+            }) }}
+        </div>
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.nombreTotal, {
+                'label': 'Núm Total de utilizaciones'
+            }) }}
+        </div>
+        <div class="col-6 col-xs-12">
+            <div class="input-daterange input-group" id="datepicker">
+                {{ form_row(form.debut) }} &nbsp; &nbsp; 
+                {{ form_row(form.fin) }}
+            </div>
+        </div>
+    </div>
+      <div class="row">
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="col-6 col-xs-12">
+            {{ form_row(form.user) }}
+        </div>
+        <div class="col-3 col-xs-12">
+            {{ form_row(form.statut) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <button class="btn btn-success"><i class="fa fa-save"></i> {{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

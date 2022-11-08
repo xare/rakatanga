@@ -1,0 +1,189 @@
+{% if  reservation is defined %}
+	{% set reservation = reservation %}
+	{% set reservationId = reservation.id %}
+	{% set nbpilotes = reservation.nbpilotes %}
+	{% set nbaccomp = reservation.nbaccomp %}
+	{% set prixPilote = reservation.date.prixPilote %}
+	{% set prixAccomp = reservation.date.prixAccomp %}
+	{% set discount = 0 %}
+	{% if reservation.payments|length > 0 %}
+		{% set payment = reservation.payments.first.ammount %}
+	{% else %}
+		{% set payment = 0 %}
+	{% endif %}
+	{% set discountType = "ammount" %}
+	{% set discount = 0 %}
+	{% for codepromo in reservation.codespromos %}
+		{% if codepromo.statut == 'act' %}
+			{% if codepromo.montant > 0 %}
+				{% set discountType = "ammount" %}
+				{% set discount = codepromo.montant %}
+			{% elseif codepromo.pourcentage > 0 %}
+				{% set discountType = "pourcentage" %}
+				{% set discount = codepromo.pourcentage %}
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+{% else %}
+	{% set reservation = null %}
+	{% set reservationId = 0 %}
+	{% set nbpilotes = 0 %}
+	{% set nbaccomp = 0 %}
+	{% set prixPilote = 0 %}
+	{% set prixAccomp = 0 %}
+	{% set payment = 0 %}
+	{% set optionsJson = "" %}
+	{% set discount = 0 %}
+	{% set discountType = '' %}
+{% endif %}
+{% set totalOptionsValue = 0 %}
+
+{% if app.user is defined and app.user != null %}
+	{% set userId = app.user.id %}
+{% else %}
+	{% set userId = "" %}
+{% endif %}
+
+	<div 
+		class="card card-tarif shadow" 
+		id="js-calculator"
+		data-nb-pilotes="{{nbpilotes}}" 
+		data-nb-passagers="{{nbaccomp}}" 
+		data-options="{{ optionsJson }}" 
+		data-price-pilote="{{ date.prixPilote }}" 
+		data-price-passager="{{ date.prixAccomp }}" 
+		data-date="{{ date.id }}" 
+		data-reservation="{{ reservationId }}" 
+		data-user="{{ userId }}" 
+		data-payment="{{ payment }}"
+		data-discount="{{ discount }}"
+		data-discount-type="{{ discountType }}">
+		<div class="card-header">
+			{{'Datos del tour seleccionado'|trans}}</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table">
+						<tbody>
+							<tr>
+								<td>
+									<span>
+										{{nbpilotes}}</span>
+									&#10005;
+									{{ 'piloto/a'|trans }}
+								</td>
+								<td align="right">
+									<span class="text-right">{{ (nbpilotes * prixPilote)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span>{{ nbaccomp }}</span>
+									&#10005;
+									{{ 'acompañante'|trans }}
+								</td>
+								<td align="right">
+									<span class="text-right">{{ (nbaccomp * prixAccomp)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</span>
+								</td>
+							</tr>
+						</tbody>
+						<tbody class="js-reservation-options">
+							{% if reservation.reservationOptions is defined %}
+								{% for option in reservation.reservationOptions %}
+									<tr 
+										class="js-calculation-row js-option-row" 
+										id="js-option-row-{{option.options.id}}" 
+										data-option-id="{{option.options.id}}" 
+										data-ammount="{{option.ammount}}" 
+										data-value="{{option.options.price}}" 
+										data-field="option" 
+										data-option-name="{{ renderLocalizedOption(option.options.id,app.request.locale) }}">
+										<td>
+											<span class="js-option-ammount">{{option.ammount}}</span>
+											x
+											{{ renderLocalizedOption(option.options.id,app.request.locale) }}
+										</td>
+										<td align="right" class="js-total-option">
+											{% set totalOptionsValue = totalOptionsValue + (option.options.price * option.ammount) %}
+											{{totalOptionsValue|format_currency('EUR', {fraction_digit: 0})}}
+										</td>
+									</tr>
+								{% endfor %}
+							{% endif %}
+						</tbody>
+						{% set totalprice = ((nbpilotes * prixPilote) + (nbaccomp * prixAccomp) + totalOptionsValue ) %}
+						{% if reservation.codespromos is defined %}
+							<tbody>
+								{% for codepromo in reservation.codespromos %}
+									<tr style="color:green; background:#dedede;">
+										<th>{{ 'Descuento'|trans }} : {{ codepromo.code }}</th>
+										<td align="right">
+											{% if codepromo.montant != 0 %}
+												- {{ codepromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+											{% elseif codepromo.pourcentage != 0 %}
+												- {{ codepromo.pourcentage }} %
+												{% set discount = totalprice * discount / 100 %}
+											{% endif %}		
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						{% endif %}
+						<tbody class="js-total-price">
+							<tr>
+								<th>
+									{{ 'Precio total'|trans|upper }}
+								</th>
+								<td align="right">
+
+									
+									{% if discount is defined %}
+										{% set totalprice = totalprice - discount %}
+									{% endif %}
+									{{ totalprice|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+								</td>
+							</tr>
+						</tbody>
+						{% if reservation != null %}
+							{% if payment > 0 %}
+								<tbody class="js-payment-footer">
+									<tr>
+										<th>
+											{{ 'Total pagado'|trans|upper }}
+										</th>
+										<td align="right">
+
+											{{ payment|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+										</td>
+									</tr>
+								</tbody>
+							
+							{% set toBePaid = totalprice - payment %}
+							{% if toBePaid > 0 %}
+								<tbody class="js-left-payment">
+									<tr>
+										<th>
+											{{ 'Resto por pagar'|trans|upper }}
+										</th>
+										<td align="right">
+											{{ toBePaid|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td>
+											<button 
+												class="btn btn-primary d-none"
+												id="js-update-changes"
+											>{{ 'Actualizar Cambios' |trans }}
+										</td>
+									</tr>
+								</tfoot>
+							{% endif %}
+						{% endif %}
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	</div>

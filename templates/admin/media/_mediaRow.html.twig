@@ -1,0 +1,22 @@
+<tr>
+                    <td>{{ medium.id }}</td>
+                    <td>{{ medium.type }}</td>
+                    <td>{{ medium.name }}</td>
+                    <td>{{ medium.path }}</td>
+                    <td>{{ medium.url }}</td>
+                    <td>{{ medium.filename }}</td>
+                    <td><img src="{{ medium.mediaPath|imagine_filter('squared_thumbnail_small') }}" /></td>
+                    <td>
+                        <a href="{{ path('media_show', {'id': medium.id}) }}" class="btn btn-primary">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
+                    <td>    
+                        <a href="{{ path('media_edit', {'id': medium.id}) }}" class="btn btn-info">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        {{ include('admin/media/_delete_form.html.twig') }}
+                    </td>
+                </tr>

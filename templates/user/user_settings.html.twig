@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	-
+	{{'Configuración de cuenta'|trans}}
+{% endblock %}
+
+{% block body %}
+
+	{{ parent() }}
+	<div class="container">
+		<div class="row">
+      <div class="col-12">
+          {{ wo_render_breadcrumbs() }}
+      </div>
+  	</div>
+		<div class="row">
+			<div class="col-12">
+				<h1>{{'Tus datos'|trans}}</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+		        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+				</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-xs-12">
+				<div class="card">
+					<div class="card-body">
+					
+					{{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+					<div class="row mb-3">
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.email, {
+                            'label':'Correo electrónico'|trans
+                            }) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.prenom, {
+															'label':'Nombre'|trans
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.nom, {
+															'label':'Apellidos'|trans
+															}) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-8 col-xs-12">
+							{{ form_row(form.telephone, {
+															'label':'Teléfono'|trans
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.langue, {
+															'label':'Lengua'|trans ,
+															'attr':{
+																	'class':'form-select'
+																	}   
+															}) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.address, {
+															'label':'Dirección'|trans
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.postcode, {
+															'label':'Código postal'|trans
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.city, {
+															'label':'Ciudad'|trans
+															}) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.country, {
+															'label':'País'|trans,
+															'attr':{
+																	'class':'form-select'
+																	}
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.nationality, {
+															'label':'Nacionalidad'|trans,
+															'attr':{
+																	'class':'form-select'
+																	}
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.idcard, {
+															'label':'DNI'|trans
+															}) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.position, {
+															'label':'Posición'|trans,
+															'attr':{
+																	'class':'form-select'
+																	}
+															}) }}
+						</div>
+						<div class="col-4 col-xs-12">
+							{{ form_row(form.sizes, {
+															'label':'Tamaños de camiseta'|trans,
+															'attr':{
+																	'class':'form-select'
+																	}
+															}) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6 col-xs-12">
+							{{ form_row(form.password, {
+															'label':'Contraseña'|trans
+															}) }}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							{{ form_row(form.agreeTerms, {
+								'label':'Estoy de acuerdo con los términos'|trans
+							}) }}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							{{ form_row(form.Register,{
+															'label' : 'Guardar cambios'|trans
+															}) }}
+						</div>
+					</div>
+					{{ form_row(form._token) }}
+					{# <input type="hidden" name="token" value="{{ csrf_token('user') }}"/> #}
+					{{ form_end(form,{'render_rest': false})}}
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	{{ encore_entry_script_tags('user-documents') }}
+{% endblock %}
+
+{% block footer %}
+	{{ parent() }}
+{% endblock %}

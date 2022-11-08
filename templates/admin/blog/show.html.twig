@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'blog'}) }}
+    <div class="row mb-4">
+        <div class="col-md-12 col-12">
+            <h1>Blog</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ blog.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Published_at</th>
+                        <td>{{ blog.publishedAt ? blog.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Expired_at</th>
+                        <td>{{ blog.expiredAt ? blog.expiredAt|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>State</th>
+                        <td>{{ blog.state }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a href="{{ path('blog_index') }}">back to list</a>
+
+            <a href="{{ path('blog_edit', {'id': blog.id}) }}">edit</a>
+
+            {{ include('blog/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

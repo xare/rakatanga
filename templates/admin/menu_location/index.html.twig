@@ -1,0 +1,51 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}MenuLocation index{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>MenuLocation index</h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Menus</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for menu_location in menu_locations %}
+                        <tr>
+                            <td>{{ menu_location.id }}</td>
+                            <td>{{ menu_location.name }}</td>
+                            <td>
+                                <ul>
+                                    {% for menu in menu_location.Menus %}
+                                        <li>{{menu.title}}</li>
+                                    {% else %}
+                                        <li>No hay menús asignados</li> 
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <a href="{{ path('menu_location_show', {'id': menu_location.id}) }}">show</a>
+                                <a href="{{ path('menu_location_edit', {'id': menu_location.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('menu_location_new') }}">Create new</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

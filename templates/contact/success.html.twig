@@ -1,0 +1,32 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - PANEL DE ENTRADA{% endblock %}
+{% block header %}
+{{ parent() }}
+        {{ include('shared/_navbar.html.twig') }}
+  {% endblock %}
+{% block body %}
+ 
+{# {{ message }} #}
+{{ parent() }}
+<div class="container">
+  <div class="row">
+        <div class="col-md-12 col-sm-12">
+            {{ wo_render_breadcrumbs() }}
+        </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+    <h1>{{ 'Contacto'|trans }}</h1>
+      {{'Tu mensaje ha sido enviado correctamente'|trans }}.
+    </div>
+    <div class="col-md-6 col-sm-12">
+      {{ include('contact/_contact-data.html.twig') }}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{ parent() }}
+{% endblock %}

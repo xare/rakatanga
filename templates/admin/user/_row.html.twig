@@ -1,0 +1,35 @@
+<tr{% if user.reservations|length > 0 %} class="alert alert-info"{% endif %}>
+  <td>{{ user.id }}</td>
+  <td><a href="{{path('user_edit',{'id':user.id})}}">{{ user.email }}</a></td>
+  {# <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
+  <td>{{ user.langue }}</td>
+  <td>{{ user.nom }}</td>
+  <td>{{ user.prenom }}</td>
+  <td>{{ user.telephone }}</td>
+  <td>{% for reservation in user.reservations %}
+      <a 
+        href="path('reservation_show',{id:reservation.id})" 
+        data-bs-toggle="tooltip"
+        title="{{reservation.date.debut|date('d/m/Y')}} {{reservation.date.travel}}">
+          <i class="fa fa-motorcycle"></i>
+      </a>
+      {% endfor %}
+  </td>
+  <td>
+      <a href="{{ path('frontend_user', {'_switch_user': user.email}) }}"
+      class="btn btn-primary" 
+      target="_blank" 
+      data-bs-toggle="tooltip"
+      title="Visitar la web como si fueras {{user.prenom}} {{user.nom}} [{{user.email}}]">
+          <i class="fa fa-eye"></i>
+      </a>
+  </td>
+  {# <td>
+      <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-info">
+          <i class="fa fa-edit"></i>
+      </a>
+  </td> #}
+  <td>
+      {{ include('admin/user/_delete_form.html.twig') }}
+  </td>
+</tr>

@@ -1,0 +1,31 @@
+<h4>Opciones</h4>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Opción</th>
+			<th>Precio</th>
+			<th>Editar</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for option in options %}
+			<tr>
+				<td>
+					{{renderLocalizedOption(option.id,'es')}}
+				</td>
+				<td>{{option.price }}
+				</td>
+				<td>
+					<a href="{{ path('options_edit', {'id': option.id}) }}" class="btn btn-info" target="_blank">
+						<i class="fa fa-edit"></i>
+					</a>
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td>No hay opciones asignadas para este destino</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

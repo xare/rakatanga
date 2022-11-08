@@ -1,0 +1,88 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Oldreservations{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'oldreservations'}) }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Oldreservations</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ oldreservation.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Langue</th>
+                        <td>{{ oldreservation.langue }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nbpilotes</th>
+                        <td>{{ oldreservation.nbpilotes }}</td>
+                    </tr>
+                    <tr>
+                        <th>nbaccomp</th>
+                        <td>{{ oldreservation.nbaccomp }}</td>
+                    </tr>
+                    <tr>
+                        <th>Commentaire</th>
+                        <td>{{ oldreservation.commentaire }}</td>
+                    </tr>
+                    <tr>
+                        <th>Log</th>
+                        <td>{{ oldreservation.log|raw }}</td>
+                    </tr>
+                    <tr>
+                        <th>Codepromo</th>
+                        <td>{{ oldreservation.codepromo }}</td>
+                    </tr>
+                    <tr>
+                        <th>Montant</th>
+                        <td>{{ oldreservation.montant }}</td>
+                    </tr>
+                    <tr>
+                        <th>Reduction</th>
+                        <td>{{ oldreservation.reduction }}</td>
+                    </tr>
+                    <tr>
+                        <th>Totalttc</th>
+                        <td>{{ oldreservation.totalttc }}</td>
+                    </tr>
+                    <tr>
+                        <th>Notes</th>
+                        <td>{{ oldreservation.notes }}</td>
+                    </tr>
+                    <tr>
+                        <th>Statut</th>
+                        <td>{{ oldreservation.statut }}</td>
+                    </tr>
+                    <tr>
+                        <th>Origine_ajout</th>
+                        <td>{{ oldreservation.origineAjout }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date_ajout</th>
+                        <td>{{ oldreservation.dateAjout ? oldreservation.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date_paiement_1</th>
+                        <td>{{ oldreservation.datePaiement1 ? oldreservation.datePaiement1|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date_paiement_2</th>
+                        <td>{{ oldreservation.datePaiement2 ? oldreservation.datePaiement2|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a href="{{ path('oldreservations_edit', {'id': oldreservation.id}) }}">edit</a>
+            {{ include('admin/oldreservations/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+
+    
+{% endblock %}

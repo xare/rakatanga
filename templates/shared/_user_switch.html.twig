@@ -1,0 +1,29 @@
+
+    {% if is_granted('ROLE_USER') %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="{{ path('frontend_user')}}" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ app.user.email }} <i class="fa fa-motorcycle"></i>{# <img class="nav-profile-img rounded-circle" src="{{ asset('images/astronaut-profile.png') }}"> #}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{{ path('frontend_user_settings')}}"><i class="fa fa-cog"></i> {{'Datos del usuario'|trans}}</a></li>
+                <li><a class="dropdown-item" href="{{ path('frontend_user_reservations')}}"><i class="fa fa-motorcycle"></i> {{'Mis reservas'|trans}}</a></li>
+                {# <li><a class="dropdown-item" href="{{path('frontend_user_documents')}}"><i class="fa fa-folder"></i> {{'Documentos'|trans}}</a></li> #}
+                <li><a class="dropdown-item" href="{{path('frontend_user_invoices')}}"><i class="fa fa-file"></i> {{'Facturas'|trans}}</a></li>
+                {# <li><a class="dropdown-item" href="#"><i class="fa fa-suitcase"></i> {{'Reservar un viaje'|trans}}</a></li> #}
+                <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fa fa-power-off"></i> {{'Salir'|trans}}</a></li>
+            </ul>
+        </li>
+    {% else %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user-circle"></i> {{'Usuarios'|trans}}
+            </a>
+            <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+                <li class="nav-item">
+                    <a class="dropdown-item" href="{{ path('app_login') }}"><i class="fa fa-key"></i> {{'Entra'|trans}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="{{ path('register') }}"><i class="fa fa-user-plus"></i> {{'Crea tu cuenta'|trans}}</a>
+                </li>
+            </ul>
+    {% endif %}

@@ -1,0 +1,30 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Pages{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'pages'})}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Editar Páginas</h1>
+
+            {{ include('admin/pages/_form.html.twig', {'button_label': 'Actualizar'}) }}
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-1">
+                            {{ include('admin/pages/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin-media') }}
+{% endblock %}

@@ -1,0 +1,59 @@
+{{ form_start(form, {
+    'attr': {
+        'class':'js-new-item-form',
+        'id': 'js-new-item-form',
+        'novalidate': 'novalidate'
+    }
+}) }}
+
+    {{ form_errors(form) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.travel, {
+                'attr':{
+                    'class':'form-select'
+                    }
+                }) 
+            }}
+        </div>
+        <div class="col-md-6">
+            <div class="row input-daterange input-group" id="datepicker">
+                <div class="col-md-6">
+                    {{ form_row(form.debut, {
+                            'attr':
+                            {
+                                'class' : 'datepicker',
+                            }
+                        }) 
+                    }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.fin) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        {{ form_row(form.prixAccomp) }}
+        </div>
+        <div class="col-md-4">
+        {{ form_row(form.prixAccomp) }}
+        </div>
+        <div class="col-md-4">
+        {{ form_row(form.statut) }}
+        </div>
+    </div>
+    <br />
+    {{ form_widget(form._token)}}
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-success">
+                <i class="fa fa-save"></i>
+                {{ button_label|default('Guardar') }}
+            </button>
+        </div>
+    </div>
+{{ form_end(form,{'render_rest': false}) }}
+
+<br />

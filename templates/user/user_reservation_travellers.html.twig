@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{'Configuración de Viajeros'|trans}}{% endblock %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="container">
+	<div class="row">
+				<div class="col-md-12 col-12">
+						{{ wo_render_breadcrumbs() }}
+				</div>
+			</div>
+  <div class="row">
+			<div class="col-md-12 col-12">
+				<h1>{{'Lista de viajeros'|trans}}</h1>
+        {% for message in app.flashes('success') %}
+						<div class="alert alert-success">
+								{{ message }}.
+						</div>
+					{% endfor %}
+        <p>{{ 'A continuación añade los viajeros que participarán en este viaje'|trans }}</p>
+        <p>{{'Si, lo que deseas es añadir más viajeros a tu reserva, entonces tienes que hacer es acudir a la página de reserva haciendo '|trans}} <a href="{{path('frontend_user_reservation',{'reservation':reservation.id})}}">{{'click aquí'|trans}}</a>.</p>
+			</div>
+		</div>
+  <div class="row"
+        id="js-reservation-wrapper"
+        data-reservation-id="{{reservation.id}}">
+    <div class="col-8 col-xs-12">
+    {{ include('user/_card_add_travellers_data.html.twig',{'reservation':reservation}) }}
+    </div>
+    <div class="col-4 col-xs-12">
+      {{ include('reservation/_reservation_calculator_table.html.twig',{
+                    'reservation':reservation, 
+                    'date':reservation.date
+                    })
+                }}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('reservation-travellers') }}
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

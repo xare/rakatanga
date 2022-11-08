@@ -1,0 +1,68 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Menu{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Menu</h1>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ menu.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Type</th>
+                            <td>{{ menu.type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td>{{ menu.title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Position</th>
+                            <td>{{ menu.position }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <h1>Menu Translations</h1>
+                <table class="table">
+                    <tbody>
+                    {% for menuTranslation in menu.menuTranslations %}
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ menuTranslation.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td>{{ menuTranslation.title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Slug</th>
+                            <td>{{ menuTranslation.slug }}</td>
+                        </tr>
+                        <tr>
+                            <th>Lang</th>
+                            <td>{{ menuTranslation.lang.isoCode }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('menu_index') }}" class="btn btn-primary">
+                    <i class="fa fa-list"></i>
+                    Volver a la lista
+                </a>
+
+                <a href="{{ path('menu_edit', {'id': menu.id}) }}" class="btn btn-info">
+                    <i class="fa fa-edit"></i>
+                    Editar
+                </a>
+                <br /><br />
+                {{ include('admin/menu/_delete_form.html.twig') }}
+            </div>
+    </div>
+</div>
+{% endblock %}

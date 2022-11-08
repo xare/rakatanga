@@ -1,0 +1,21 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Articles{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'articles'}) }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Crear un nuevo artículo</h1>
+
+            {{ include('admin/articles/_form.html.twig') }}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {# {{ encore_entry_script_tags('admin-media') }} #}
+{% endblock %}

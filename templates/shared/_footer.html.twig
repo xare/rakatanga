@@ -1,0 +1,71 @@
+    </div>
+  </div>
+</div>
+<footer>
+  	<div class="footer-top">
+		<div class="container">
+			<div class="row">
+			    <div class="col-md-3 col-sm-4">
+					<h4>{{'¿Quiénes somos?'|trans}}</h4>
+						<p>{{ show_text( {
+								locale: app.request.locale,
+								section: "footer",
+								acronym: "intro" } )|raw }}</p>			    					
+			    </div>
+			    <div class="col-md-3 hidden-sm">
+					<h4>{{'Los destinos'|trans}}</h4>
+						{% set categories = render_category_list({
+							locale: app.request.locale
+						}) %}
+							{% for category in categories %}
+								<i 
+									class="fa fa-arrow-circle-right" 
+									aria-hidden="true"></i>
+									<a href="{{ path('destinations-by-category',{
+											'_locale':app.request.getLocale(), 
+											'category':category.title|lower
+											}) }}">
+										{{ category.title }}
+									</a>
+								<br />
+							{% endfor %}
+			    	</div>
+			    	<div class="col-md-3 hidden-sm">
+				    	
+						<h4>{{'Más información'|trans}}</h4>
+				
+							{# <a href="/es/presentacion/">Nuestra agencia</a><br>
+							<a href="/es/faq/">Información práctica</a><br>
+							<a href="/es/blog/">El blog de Pablo « Rakatanga Tour »</a><br>
+							<a href="/es/blog/">El blog de Raúl « Indiaenmoto »</a><br>
+							<a href="/es/aviso-legal/">Aviso legal</a><br>
+							<a href="/es/cgv/">Condiciones generales de venta</a><br> #}
+							{% for menuItem in menuFooter %}
+              
+                <a href="{{app.request.baseUrl ~ '/' ~ app.request.getLocale() ~ '/' ~ menuItem.slug ~ ''}}">
+                  {{ menuItem.title }}
+                </a><br />
+              
+            {% endfor %}
+			    	</div>
+			    	<div class="col-md-3 col-sm-4">
+						<h4>{{'Síguenos'|trans}}</h4>
+						<a href="https://www.facebook.com/rakatangatour" target="_blank"><i class="fab fa-facebook-square"></i> Facebook</a><br>
+						<!--a href="https://twitter.com/rakatangatour" target="_blank"><i class="fa fa-twitter"></i> Twitter</a><br-->
+						<a href="https://www.instagram.com/rakatangatour/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a><br>
+						<a href="https://youtube.com/channel/UCikmM8fbS0LLqztCF38spqQ" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+			    	</div>
+			    </div>
+				<hr>
+		    </div>
+	  	</div>
+	    <div class="footer-bottom">
+		    <div class="container">    
+				  <div class="row">
+					  <div class="col-sm-12">
+							<p class="text-left">&copy; {{ "now"|date("Y")}} Rakatanga Tour v2. {{'Todos los derechos reservados'|trans}}.</p>
+					  </div>
+				  </div>
+		    </div>
+	    </div>
+</footer>

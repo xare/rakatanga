@@ -1,0 +1,61 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Mailings index{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'mailings'})}}
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <h1>Lista de mensajería de correos</h1>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="count col-md-3 col-xs-12">
+            <strong>Mailings en total:</strong>
+            <span id="totalItemCount"> {# {{ count }} #}</span>
+        </div>
+        <div class="col-md-1 offset-md-7 col-xs-12">
+            {{ include('admin/mailings/_filtrar_resultados.html.twig') }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="navigation col-md-2 col-xs-12">
+            {{ knp_pagination_render(mailings) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+        
+            <table class="table table-striped table-hover small">
+                <thead class="main-red">
+                    <tr>
+                        <th>Id</th>
+                        <th>Fecha de envío</th>
+                        <th>Título</th>
+                        <th>Contenido</th>
+                        <th>Para</th>
+                        <th>Adjunto?</th>
+                        <th>Categoría</th>
+                        <th><i class="fa fa-trash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mailing in mailings %}
+                        {% include('admin/mailings/_row.html.twig')%}
+                    {% else %}
+                        <tr>
+                            <td colspan="6">no records found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="navigation col-md-2 col-xs-12">
+                {{ knp_pagination_render(mailings) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

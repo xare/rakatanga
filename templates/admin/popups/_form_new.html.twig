@@ -1,0 +1,45 @@
+{% for lang in langs %}
+  <div 
+        class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" 
+        id="{{lang.name}}" 
+        role="tabpanel" 
+        aria-labelledby="{{lang.name}}-tab">
+        <h3>{{lang.name}}</h3>
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="form-group">
+                    <label 
+                        for="popups_popupsTranslations_{{loop.index0}}_title"
+                        class="required">Title</label>
+                    <input
+                        type="text"
+                        id="popups_popupsTranslations_{{loop.index0}}_title"
+                        name="popups[popupsTranslations][{{loop.index0}}][title]"
+                        required="required" 
+                        class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label 
+                        for="popups_popupsTranslations_{{loop.index0}}_summary"
+                        class="required"
+                    >Contenido</label>
+                    {{ include('admin/shared/forms/_form_langform_element_textarea.html.twig', {
+                                    loop_index: loop.index0, 
+                                    mainCategory: 'popups',
+                                    subCategory: 'popupsTranslations',
+                                    entity_property : 'content',
+                                    entity_id: '',
+                                    ckEditor : true
+                                }) }}
+                </div>
+            </div>
+        </div>
+    </div> 
+    <input type="hidden" 
+            name="popups[popupsTranslations][{{loop.index0}}][lang]" 
+            value="{{lang.id}}"/>
+{% endfor %}

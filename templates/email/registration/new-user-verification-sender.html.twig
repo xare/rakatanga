@@ -1,0 +1,23 @@
+{% extends 'email/emailBase.html.twig' %}
+{% block content %}
+    <row>
+        <columns>
+            <spacer size="35"></spacer>
+            <h1>
+                <center>Mensaje de RAKATANGA TOUR [ info@rakatanga-tour.com ]</center>
+            </h1>
+            <spacer size="10"></spacer>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <spacer size="35"></spacer>
+            <p>Hola {{user.prenom}} {{user.nom}} [ {{user.email}}]. Tu usuario ha sido registrado en nuestra base de datos. A continuación para poder entrar en el sistema requerimos que introduzcas este código de verficación en el sistema:</p>
+            <p>Te enviamos este código para comprobar que eres tú realmente la persona que se ha inscrito, ojo no es tu contraseña, esa la has creado tú. Ahora accede a este {# <a href="{{absolute_url(path("user-verify",{'user': user.id}))}}">vínculo</a> #} <a href="{{verificationUrl}}">vínculo</a> para comprobar que eres realmente el usuario registrado y podrás continuar.</p>
+            <spacer size="10"></spacer>
+
+            <button href="{{verificationUrl}}" class="radius">Vínculo de verificación</button>
+            <spacer size="10"></spacer>
+        </columns>
+    </row>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% if oldreservation.inscriptions != null %}
+<table class="table">
+    <tr>
+      <th>Apellido:</th>
+      <td>{{ oldreservation.inscriptions.nom }}</td>
+    </tr>
+    <tr>
+      <th>Nombre:</th>
+      <td>{{ oldreservation.inscriptions.prenom }}</td>
+    </tr>
+    <tr>
+      <th>Teléfono:</th>
+      <td>{{ oldreservation.inscriptions.telephone }}</td>
+    </tr>
+    <tr>
+      <th>Position:</th>
+      <td>{{ oldreservation.inscriptions.position }}</td>
+    </tr>
+    <tr>
+      <th>Arrhes:</th>
+      <td>{{ oldreservation.inscriptions.arrhes }}</td>
+    </tr>
+    <tr>
+      <th>Solde:</th>
+      <td>{{ oldreservation.inscriptions.solde }}</td>
+    </tr>
+    <tr>
+      <th>Seguro:</th>
+      <td>{{ oldreservation.inscriptions.assurance }}</td>
+    </tr>
+    <tr>
+      <th>Seguro:</th>
+      <td>{{ oldreservation.inscriptions.vols }}</td>
+    </tr>
+    <tr>
+      <th>Statut:</th>
+      <td>{{ oldreservation.inscriptions.statut }}</td>
+    </tr>
+    <tr>
+      <th>Date Ajout:</th>
+      <td>{{ oldreservation.inscriptions.dateAjout|date('d/m/Y') }}</td>
+    </tr>
+    <tr>
+      <th>Langue:</th>
+      <td>{{ oldreservation.inscriptions.langue }}</td>
+    </tr>
+  </table>
+
+  {% endif %}

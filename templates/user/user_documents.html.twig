@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Zona de Usuario - Documentación{% endblock %}
+
+{% block body %}
+
+{{ parent() }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-12">
+                <h3>Documentos Generales</h3>
+                <p>Añade documentos personales generales</p>
+                <p>Los siguientes documentos han sido recibidos</p>
+                {# <ul>
+                    <li>Pasaporte <i class="fa fa-check-circle" style="color:green"></i></li>
+                </ul>
+                <p>Los siguientes documentos estan <strong>PENDIENTES!!</strong></p>
+                <ul>
+                    <li>Carnet de Conducir <i class="fa fa-exclamation-triangle" style="color:red"></i></li>
+                </ul> #}
+                
+
+                <ul class="list-group small js-documents-list"  data-url="{{ path('frontend_user_list_documents', {id: user.id}) }}">
+                      {% for document in documents %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ path("download_document",{
+                                                'id': document.id}
+                                                )}}">{{ document.originalFilename }}
+                                                <span class="fa fa-download"></span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        No documents yet
+                        </li>
+                    {% endfor %} 
+                </ul>
+                <br />
+                <form action="{{ path('user_add_documents', {
+                    id: app.user.id
+                }) }}" method="POST" enctype="multipart/form-data" class="dropzone js-document-dropzone">
+                   <select name="tipo">
+                        <option>Selecciona el tipo de documento</option>
+                        <option>Pasaporte</option>
+                        <option>Carnet de Conducir</option>
+                        <option>Pasaporte COVID</option>
+                   </select>
+                   
+                   {#  <input type="file" name="document">
+                    <button type="submit" class="btn btn-sm btn-primary">Subir Archivos</button> #}
+                </form>
+
+                <h3>Documentos relacionados con tus reservas</h3>
+                {% for reservation in reservations %}
+                {% else %}
+                    {{'No tienes reservas pendientes'|trans}}.
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('user-documents') }}
+{% endblock %}

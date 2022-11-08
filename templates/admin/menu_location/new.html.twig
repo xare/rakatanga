@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New MenuLocation{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Create new MenuLocation</h1>
+
+                {{ include('admin/menu_location/_form.html.twig') }}
+
+                <a href="{{ path('menu_location_index') }}">back to list</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

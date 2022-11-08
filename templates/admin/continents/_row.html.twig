@@ -1,0 +1,28 @@
+<tr>
+  <td>{{ continent.id }}</td>
+  <td>
+      <a href="{{ path('continents_edit', {'id': continent.id}) }}">
+          {{ continent.code }}
+      </a>
+  </td>
+  <td>
+      <div class="row">
+          {% for continentTranslation in continent.continentTranslation %}
+              <div class="col-4">
+                  <span class="badge bg-secondary">
+                  {{ continentTranslation.lang.isoCode|upper }}
+                  </span> {{ continentTranslation.name }}
+              </div>
+          {% endfor %}
+      </div>
+  </td>
+  {# <td>
+      <a href="{{ path('continents_show', {'id': continent.id}) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+  </td>
+  <td>    
+      <a href="{{ path('continents_edit', {'id': continent.id}) }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+  </td> #}
+  <td>    
+      <a href="{{ path('continents_delete', {'id': continent.id}) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+  </td>
+</tr>

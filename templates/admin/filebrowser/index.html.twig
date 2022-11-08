@@ -1,0 +1,88 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}
+	{{parent()}}
+	| Páginas Estáticas
+{% endblock %}
+{% block header %}{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h2>SELECCIÓN DE FOTOS</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div
+				class="col-8">
+
+				{#  <h3>{{ renderLocalizedTravel(element.id,'es')}} - {{element.media|length}}</h3> #}
+				<p>Selecciona tu foto en la lista siguiente haciendo click, esta pantalla se cerrará automáticamente.</p>
+				<div class="row mb-5">
+					{% for medium in element.media %}
+						{% if loop.first == true %}
+							<div class="row mb-5">
+							{% endif %}
+							<div class="col-md-3 col-12">
+								<img title="{{ medium.MediaPath|imagine_filter(size) }}" alt="{{element.id}}" class="img-fluid" id="{{loop.index}}" src="{{ medium.MediaPath|imagine_filter('squared_thumbnail_medium') }}" onclick="returnFileUrl(this)"/>
+							</div>
+							{% if loop.last != true  %}
+								{% if loop.index % 4 == 0 %}
+								</div>
+								<div class="row mb-5">
+								{% endif %}
+						{% else %}
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="col-4">
+				<h1>Añadir los archivos aquí.</h1>
+				<div action="{{ path('upload_multiple_files') }}" method="POST" enctype="multipart/form-data" class="dropzone js-media-dropzone">
+					{% if type == "travel" %}
+						<input type="hidden" name="travel[type]" id="js-media-type" value="travel">
+						<input type="hidden" name="travel[travel_id]" id="js-media-id" value="{{element.id}}">
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('admin-upload-media') }}
+	<script>
+		// Helper function to get parameters from the query string.
+function getUrlParam(paramName) {
+var reParam = new RegExp('(?:[\?&]|&)' + paramName + '=([^&]+)', 'i');
+var match = window.location.search.match(reParam);
+
+return(match && match.length > 1) ? match[1] : null;
+}
+// Simulate user action of selecting a file to be returned to CKEditor.
+function returnFileUrl(object) {
+var funcNum = getUrlParam('CKEditorFuncNum');
+var fileUrl = object.title;
+window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl, function () { // Get the reference to a dialog window.
+var dialog = this.getDialog();
+
+// Check if this is the Image Properties dialog window.
+if (dialog.getName() == 'image') { // Get the reference to a text field that stores the "alt" attribute.
+var height = dialog.getContentElement('info', 'txtHeight');
+if (height) 
+height.setValue('100%');
+
+
+
+var width = dialog.getContentElement('info', 'txtWidth');
+if (width) 
+width.setValue('100%');
+
+
+
+}
+});
+window.close();
+}
+	</script>
+{% endblock %}

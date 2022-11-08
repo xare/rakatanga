@@ -1,0 +1,19 @@
+<tr>
+  <td>{{ blog.id }}</td>
+  <td><a href="{{ path('blog_edit', {'id': blog.id}) }}">{{ blog.name }}</a></td>
+  <td>{{ blog.slug }}</td>
+  <td>{{ blog.lang }}</td>
+  {# <td>
+      <a href="{{ path('blog_show', {'id': blog.id}) }}" class="btn btn-primary">
+          <i class="fa fa-eye"></i>
+      </a>
+  </td>
+  <td>
+      <a href="{{ path('blog_edit', {'id': blog.id}) }}" class="btn btn-info">
+          <i class="fa fa-edit"></i>
+      </a>
+  </td> #}
+  <td>
+      {{ include('admin/blog/_delete_form.html.twig') }}
+  </td>
+</tr>

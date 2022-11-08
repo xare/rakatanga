@@ -1,0 +1,9 @@
+{% for medium in travel.media %}
+	{% if medium.isGallery == true %}
+		{{ include('frontend/_photo_gallery_item.html.twig',{
+																'medium':medium,
+																'index':loop.index
+																}) }}
+	{% endif %}
+{% endfor %}
+<div class="clearfix"></div>

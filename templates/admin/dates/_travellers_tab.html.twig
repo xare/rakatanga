@@ -1,0 +1,49 @@
+<table class="table table-striped">
+
+{% for reservation in date.reservations %}
+  {% for traveller in reservation.travellers %}
+    <tr>
+      <td>{{ traveller.email }}</td>
+      <td>{{ traveller.prenom }}</td>
+      <td>{{ traveller.nom }}</td>
+      <td>{{ traveller.telephone }}</td>
+      <td><strong>{{ traveller.position }}</strong></td>
+      <td>
+      {% if traveller.reservationData|length > 0 %}
+        {{ include( 'admin/dates/_reservation_data_icons.html.twig' , { 'reservationData':traveller.reservationData } ) }}
+        <a 
+          class="btn btn-secondary js-show-reservation-data" 
+          data-traveller-id="{{traveller.id}}">
+            Reservation Data
+        </a> 
+      {% endif %}
+      </td>
+      <td>
+      {% if traveller.reservationData|length > 0 %}
+      <ul class="list-group">
+        {% for reservationDatum in traveller.reservationData %}
+          {% for document in reservationDatum.documents %}
+            <li class="list-group-item">
+              <a href="{{ path("download_document",{
+                                'id': document.id}
+                                )}}">
+                {% if document.doctype == "passport" %}
+                  <i class="fas fa-passport"></i>
+                {% endif %}
+                {% if document.doctype == "visa" %}
+                  <i class="fas fa-book"></i>
+                {% endif %}
+                {% if document.doctype == "drivers" %}
+                  <i class="fas fa-id-card"></i>
+                {% endif %}
+                {{document.originalFilename}}
+                {# <i class="fas fa-download"></i> #}
+              </a>
+            </li>
+          {% endfor %}
+        {% endfor %}
+      {% endif %}
+    </tr>
+  {% endfor %}
+{% endfor %}
+</table>

@@ -1,0 +1,70 @@
+{% set duePayment = 0 %}
+{% if reservation is defined and reservation != null %}
+	{% set duePayment = (reservation.nbpilotes * reservation.date.prixPilote) + (reservation.nbaccomp * reservation.date.prixAccomp) %}
+		{% set TotalPayment = 0 %}
+		{% if reservation.payments|length > 0 %}
+			{% for payment in reservation.payments %}
+				{% set TotalPayment = TotalPayment + payment.ammount %}
+			{% endfor %}
+		{% endif %}
+			{% set totalOptionsValue = 0 %}
+		{% for option in reservationOptions %}
+			{% if option.ammount > 0 %}
+				{% set totalOptionsValue = totalOptionsValue + (option.ammount * option.price) %}
+			{% endif %}
+		{% endfor %}
+		{% set duePayment = duePayment + totalOptionsValue %}
+{% endif %}
+<div class="card card-default mb-4 shadow card-logged-user{% if isInitialized == false %} d-none{% endif %}">
+	<div class="card-body">
+		<h4 class="text-center">{{'Hola'|trans}}
+			{{ app.user.prenom }}
+			{{ app.user.nom }}
+			[{{ app.user.email }}]</h4>
+				
+		{% if isInitialized != false %}
+			{# <div class="text-center">
+				<button type="button" class="btn btn-success btn-lg" data-action="js-initialize-reservation-logged">
+					{{ 'Iniciar Reserva'|trans }}
+				</button>
+			</div>
+		{% else %} #}
+			 {# {% if (duePayment-TotalPayment) > 0 %} #}
+			 <p>{{ 'Hemos recibido los detalles de tu reserva'|trans}}. {{'Recibirás un mensaje de correo electrónico con los detalles más importantes, y con instrucciones para poder gestionar los datos'|trans }}.</p>
+			 <p>{{ 'A continuación puedes pasar a la página de prepago para comprobar bien todos los datos y elegir el modo de pago, o si deseas pagar más adelante'|trans }}.</p>
+			 
+			{% if userEdit is defined and userEdit == true %}
+				<form 
+					method="post" 
+					action="{{ path('reservation_payment', { 'reservation':reservation.id, '_locale':app.request.getLocale() }) }}">
+					{% if app.request.request.get('userEdit') == true %}
+						<input type="hidden" name="userEdit" value="{{app.request.request.get('userEdit')}}">
+						{% if app.request.request.get('nbpilotes') != '' %}
+							<input type="hidden" name="nbpilotes" value="{{app.request.request.get('nbpilotes')}}">
+						{% endif %}
+						{% if app.request.request.get('nbaccomp') != '' %}
+							<input type="hidden" name="nbaccomp" value="{{app.request.request.get('nbaccomp')}}">
+						{% endif %}
+						{% for option in app.request.request.get('finalOptions') %}
+							<input type="hidden" name="finalOptions[{{loop.index0}}][id]" value="{{option.id}}">
+							<input type="hidden" name="finalOptions[{{loop.index0}}][ammount]" value="{{option.ammount}}">
+							<input type="hidden" name="finalOptions[{{loop.index0}}][title]" value="{{option.title}}">
+							<input type="hidden" name="finalOptions[{{loop.index0}}][price]" value="{{option.price}}">
+						{% endfor %}
+					{% endif %}
+					<button class="btn btn-primary btn-lg">
+						{{ 'Continuar'|trans }}
+					</button>
+				</form>
+			{% else %}
+				{% if reservation is defined and reservation != null %}
+					<a href="{{ path('reservation_payment', { 'reservation': reservation.id, '_locale':app.request.getLocale() }) }}" 
+						class="btn btn-primary btn-lg">
+							{{ 'Continuar'|trans }}
+					</a>
+				{% endif %}
+			{% endif %}
+			<a href="{{path('main-content',{'slug':'cgv','_locale':app.request.locale})}}">{{'Condiciones generales de venta'|trans}}</a>
+		{% endif %}
+	</div>
+</div>

@@ -1,0 +1,22 @@
+<p>{{'Estás conectado como'|trans}} {{user.prenom}} {{user.nom}} [{{user.email}}]</p>
+
+{% if status is defined and status != true %}
+    <p>{{'Tu reserva ya había sido realizada con anterioridad, si deseas realizar un cambio puedes acceder a ella a través de este vínculo'|trans}}:</p>
+<a 
+    href="{{ path('user_reservation', {
+                    '_locale' : app.request.locale,
+                    'reservation' : reservationId } )}}" 
+    class="btn btn-primary float-end">
+        {{ 'Realizar el pago'|trans }}
+    </a>
+
+{% endif %}
+<p>
+<a 
+    href="{{ path('reservation_payment', {
+                    '_locale' : app.request.locale,
+                    'reservation' : reservationId } )}}" 
+    class="btn btn-primary">
+        {{ 'Realizar el pago'|trans }}
+    </a>
+</p>

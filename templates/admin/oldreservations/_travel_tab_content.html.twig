@@ -1,0 +1,28 @@
+{% if oldreservation.Travel != null %}
+<table class="table">
+  <tr>
+    <th>Category:</th>
+    <td>{{ renderLocalizedCategory(oldreservation.Travel.category.id,'es') }}</td>
+  </tr>
+  <tr>
+    <th>Main Title:</th>
+    <td>{{ oldreservation.Travel.mainTitle }}</td>
+  </tr>
+  <tr>
+    <th>Km:</th>
+    <td>{{ oldreservation.Travel.km }}</td>
+  </tr>
+  <tr>
+    <th>Duration:</th>
+    <td>{{ oldreservation.Travel.duration }}</td>
+  </tr>
+  <tr>
+    <th>Status:</th>
+    <td>{{ oldreservation.Travel.status }}</td>
+  </tr>
+  <tr>
+    <th>Nivel:</th>
+    <td>{{ oldreservation.Travel.level }}</td>
+  </tr> 
+</table>
+{% endif %}

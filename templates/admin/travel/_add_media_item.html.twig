@@ -1,0 +1,18 @@
+<div class="img-thumbnail media-wrapper{% if travel.id != null and travel.mainPhoto != null %}{% if medium.id == travel.mainPhoto.id %} selected{% endif %}{% endif %}{% if medium.isGallery == 1 %} selectedGallery{% endif %}">
+	<img title="{{ medium.filename }}" alt="{{ medium.filename }}" src="{{ medium.MediaPath|imagine_filter('rectangular_thumbnail_medium') }}"/>
+	<div class="controls">
+		<div data-action="click->media-selector#selectMedia" data-media-selector-target="mediaSelector" data-media-id="{{medium.id}}">
+			<i class="fa fa-star"></i>
+			{#  {% if travel.id != null and travel.mainPhoto != null %}
+									                                        {% if medium.id != travel.mainPhoto.id %}
+									                                                <i class="fa fa-star"></i>
+									                                        {% endif %}
+									                                {% endif %} #}
+		</div>
+		<div class="js-remove-media" data-media-id="{{medium.id}}" {% if travel %} data-travel-id={{travel.id}} {% endif %}>
+			<i class="fa fa-minus-circle"></i>
+		</div>
+		<input type="hidden" name="travel[media][{{count}}]" value="{{medium.id}}"/>
+
+	</div>
+</div>

@@ -1,0 +1,28 @@
+<!-- Modal {{index}} -->
+    <div
+      class="modal fade"
+      id="exampleModal{{index}}"
+      tabindex="-1"
+      aria-labelledby="exampleModal{{index}}Label"
+      aria-hidden="true"
+      role="dialog"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal{{index}}Label">Fotos</h5>
+            </div>    
+            <div class="modal-body">
+                <img
+                    src="{{ medium.MediaPath|imagine_filter('travel_full_gallery') }}"
+                    class="w-100"
+                />
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+            </div>
+        </div>
+    </div>
+</div>

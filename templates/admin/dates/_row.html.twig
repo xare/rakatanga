@@ -1,0 +1,42 @@
+    {% set rowStyle = 'open' %}
+    
+    {% if date.fin|date("U") < "now"|date("U") %}
+        {% set rowStyle = 'full' %}
+    {% endif %}
+    <tr class="custom-style-{{ rowStyle }}">
+        {# <td>{{ date.id }}</td> #}
+        <td>
+            <a href="{{ path('dates_edit', {'id': date.id}) }}">
+                <strong>{{ date.travel.category }}</strong> <br /> 
+                {{ date.travel }}
+            </a>        
+        </td>
+        <td>{{ date.debut ? date.debut|date('d-m-Y') : '' }}</td>
+        <td>{{ date.fin ? date.fin|date('d-m-Y') : '' }}</td>
+        <td>
+            {% set difference = date(date.fin).diff(date(date.debut)) %}
+            {% set duration = difference.days %}
+            {{ duration }}
+        </td>
+        <td>{{ date.prixPilote|format_currency('EUR', {fraction_digit: 0}) }}</td>
+        <td>{{ date.prixAccomp|format_currency('EUR', {fraction_digit: 0}) }}</td>
+        <td>{{ date.reservations|length + date.oldreservations|length }}</td>
+        <td>
+            <span class="badge bg-{% if date.statut == "open" %}success{% elseif date.statut == "closed" or date.statut == "full" %}danger{% endif %}">
+                {{ date.statut }}
+            </span>
+        </td>
+       {#  <td>
+            <a href="{{ path('dates_show', {'id': date.id}) }}" class="btn btn-primary">
+                <i class="fa fa-eye"></i>
+            </a>
+        </td> #}
+        {# <td>    
+            <a href="{{ path('dates_edit', {'id': date.id}) }}" class="btn btn-info">
+                <i class="fa fa-edit"></i>
+            </a>
+        </td> #}
+        <td>
+            {{ include('admin/dates/_delete_form.html.twig') }}
+        </td>
+    </tr>

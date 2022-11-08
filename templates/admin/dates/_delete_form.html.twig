@@ -1,0 +1,16 @@
+<form method="post" action="{{ path('dates_delete', {'id': date.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ date.id) }}">
+    <button 
+        class="btn btn-danger"
+        data-bs-toggle="tooltip" 
+        data-bs-placement="top"
+        title="Borrar Fecha">
+        <i class="fa fa-trash"></i>
+    </button>
+</form> 
+
+{# <a href="#" 
+        class="btn btn-danger js-delete-item"
+        data-url="{{ path('api_dates_delete', {id: date.id}) }}">
+        <i class="fa fa-trash"></i>
+    </a> #}

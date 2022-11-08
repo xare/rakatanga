@@ -1,0 +1,10 @@
+    <h1>Añadir los archivos aquí.</h1>
+    <br>
+    <div 
+        action="{{ path('upload_multiple_files') }}" 
+        method="POST" 
+        enctype="multipart/form-data" 
+        class="dropzone js-media-dropzone">
+        <input type="hidden" name="category[type]" id="js-media-type" value="category">
+        <input type="hidden" name="category[category_id]" id="js-media-id" value="{{category.id}}">
+    </div>

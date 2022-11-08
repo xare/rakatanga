@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	-
+	{{category|capitalize}}
+	-
+	{{travel.title}}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('photogallery')  }}
+{% endblock %}
+
+{% block body %}
+
+	{# {{ message }} #}
+	{{ parent() }}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				{{ wo_render_breadcrumbs() }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-12">
+				<h1>{{ travel.title }}</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9 col-12">
+				{{ travel.intro|raw }}
+			</div>
+			<div class="col-md-3 col-sm-12">
+				{{ include('frontend/_reservation_box.html.twig',{'dates': dates}) }}
+			</div>
+			<div class="row">
+				<div class="col-12">	
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button data-bs-target="#det" aria-controls="det" class="nav-link active" type="button" role="tab" data-bs-toggle="tab">
+								<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Detalle de las etapas'|trans}}</span>
+								<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Etapas'|trans}}</span>
+							</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button data-bs-target="#iti" class="nav-link" type="button" aria-controls="iti" role="tab" data-bs-toggle="tab">
+								<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Mapa del recorrido'|trans}}</span>
+								<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Mapa'|trans}}</span>
+							</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button data-bs-target="#pra" class="nav-link" type="button" aria-controls="pra" role="tab" data-bs-toggle="tab">
+								<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Informaciones prácticas'|trans}}</span>
+								<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Infos'|trans}}</span>
+							</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button data-bs-target="#pho" class="nav-link" type="button" aria-controls="pho" role="tab" data-bs-toggle="tab">
+								<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Fotos y videos'|trans}}</span>
+								<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Fotos'|trans}}</span>
+							</button>
+					</li>
+					{% if travelObject.infodocs|length > 0 %}
+					<li class="nav-item" role="infodocs">
+							<button data-bs-target="#inf" class="nav-link" type="button" aria-controls="inf" role="tab" data-bs-toggle="tab">
+								<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Documentación informativa'|trans}}</span>
+								<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Documentación'|trans}}</span>
+							</button>
+					</li>
+					{% endif %}
+					<!--li role="presentation"><a href="#avi" aria-controls="avi" role="tab" data-bs-toggle="tab">Opiniones de clientes</a></li-->
+				</ul>
+				<div class="tab-content">
+					<div
+						role="tabpanel" class="tab-pane active" id="det">
+						{{ travel.description | raw }}
+					</div>
+					<div role="tabpanel" class="tab-pane" id="iti">
+						{{ travel.itinerary | raw  }}
+					</div>
+					<div role="tabpanel" class="tab-pane" id="pra">
+						{{ travel.practical_info | raw  }}
+					</div>
+					<div role="tabpanel" class="tab-pane" id="pho">
+						<div class="grid" data-carousel data-slides>
+								{{ include('frontend/_photo_gallery.html.twig',{ 'travel':travelObject })}}
+						</div>
+					</div>
+					{% if travelObject.infodocs|length > 0 %}
+						<div role="tabpanel" class="tab-pane" id="inf">
+									{{ include('frontend/_list_infodocs.html.twig',{ 'travel':travelObject })}}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+	{% block footer %}
+		{{ parent() }}
+
+	{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+		{{ encore_entry_script_tags('photogallery') }}
+	{% endblock %}

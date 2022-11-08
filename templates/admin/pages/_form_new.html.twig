@@ -1,0 +1,71 @@
+    {% for lang in langs %}
+    
+     <div 
+        class="tab-pane fade{% if loop.index0 == 0 %} show active{% endif %}" 
+        id="{{lang.name}}" 
+        role="tabpanel" 
+        aria-labelledby="{{lang.name}}-tab">
+            <h3>{{lang.name}}</h3>
+    
+        <div class="form-group">
+             <label 
+                    for="pages_pageTranslations_{{loop.index0}}_title"
+                    class="required">Title [{{lang.name}}]</label>
+            <input
+                    type="text"
+                    id="pages_pageTranslations_{{loop.index0}}_title"
+                    name="pages[pageTranslations][{{loop.index0}}][title]"
+                    required="required" 
+                    class="form-control" />
+        </div>
+        <div class="form-group">
+             <label 
+                    for="pages_pageTranslations_{{loop.index0}}_slug"
+                    class="required"
+                    >Slug [{{lang.name}}]</label>
+            <input
+                    type="text"
+                    id="pages_pageTranslations_{{loop.index0}}_slug"
+                    name="pages[pageTranslations][{{loop.index0}}][slug]"
+                    required="required" 
+                    class="form-control" />
+        </div>
+        <div class="form-group">
+       <div class="form-group">
+                <label 
+                    for="pages_pageTranslations_{{loop.index0}}_intro"
+                    class="required"
+                    >Introducción [{{lang.name}}]</label>
+                    {{ include('admin/shared/forms/_form_langform_element_textarea_ckeditor.html.twig', {
+                                loop_index: loop.index0, 
+                                mainCategory: 'pages',
+                                subCategory: 'pageTranslations',
+                                entity_property : 'intro',
+                                entity_id: '',
+                                ckEditor : true
+                            }) }}
+            </div>
+            <div class="form-group">
+                <label 
+                    for="pages_pageTranslations_{{loop.index0}}_body"
+                    class="required"
+                    >Texto [{{lang.name}}]</label>
+
+                    {{ include('admin/shared/forms/_form_langform_element_textarea_ckeditor.html.twig', {
+                                loop_index: loop.index0, 
+                                mainCategory: 'pages',
+                                subCategory: 'pageTranslations',
+                                entity_property : 'body',
+                                entity_id: '',
+                                ckEditor : true
+                            }) }}
+            </div>
+        </div>
+
+        <input type="hidden" 
+            name="pages[pageTranslations][{{loop.index0}}][lang]" 
+            value="{{lang.id}}"/>
+                
+    </div>   
+    {% endfor %}
+

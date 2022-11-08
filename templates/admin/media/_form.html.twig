@@ -1,0 +1,26 @@
+
+        {{ form_start(form) }}
+            {{ form_row(form.type) }}
+            {{ form_row(form.name) }}
+            {% if form.vars.value.id != null %}
+                {{ form_row(form.path) }}
+                {{ form_row(form.url) }}
+                <strong>Original:</strong> {{ upload_asset(medium.mediaPath) }}<br />
+                <strong>Thumb Small:</strong> {{ upload_asset(medium.mediaPath)|imagine_filter('squared_thumbnail_small') }}<br />
+                <strong>Thumb Medium:</strong> {{ upload_asset(medium.mediaPath)|imagine_filter('squared_thumbnail_medium') }}
+                {# Original URL: {{asset()}} #}
+            {% endif %}
+            {{ form_row(form.file,{
+                    attr:{
+                        class:'form-control'
+                    }
+                }) 
+            }}
+            <button class="btn btn-success">
+                <i class="fa fa-save"></i>
+                {{ button_label|default('Save') }}
+            </button>
+            <br /><br />
+        {{ form_widget(form._token)}}
+    {{ form_end(form,{'render_rest': false}) }}
+    

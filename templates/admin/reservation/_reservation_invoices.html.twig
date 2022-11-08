@@ -1,0 +1,26 @@
+A continuación puedes ver las facturas realizadas por el cliente.
+
+
+<table class="table small">
+{% for invoice in reservation.invoices %}
+  <tr>
+    <td>{{ invoice.name }}</td>
+    <td>{{ invoice.nif }}</td>
+    <td>{{ invoice.address }}</td>
+    <td>{{ invoice.postalcode }}</td>
+    <td>{{ invoice.city }}</td>
+    <td>{{ invoice.country }}</td>
+    <td>{{ invoice.invoiceNumber }}</td>
+    <td>{{ invoice.dueAmmount|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
+    <td>
+      <a target="_blank" href="{{ path('user-download-invoice',{ 'invoice': invoice.id } )}}"><i class="fa fa-download"></i></a>
+    </td>
+  </tr>
+
+{% else %}
+  <tr>
+    <td>Todavía no se han asociado facturas a esta reserva.</td>
+  </tr>
+  
+{% endfor %}
+</table>

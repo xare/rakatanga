@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}
+	-
+	{{ 'Pago realizado'|trans }}
+{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('reservations')  }}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ '¡Gracias por hacer tu reserva con Rakatanga Tour!'|trans }}</h1>
+            <p>
+                {{ 'Para cualquier duda puedes ponerte en contacto con nosotros en la dirección siguiente' |trans }}
+                <a href="mailto:info@rakatanga-tour.com">info@rakatanga-tour.com</a>.
+            </p>
+            <p>
+                {{'Si lo deseas puedes acceder a tu cuenta y ver la reserva realizada en tu espacio, seleccionando'|trans}} <a href="{{path('frontend_user_reservations')}}">{{'Mis reservas'|trans}}"</a>,  {{'desde ahí podrás realizar modificaciones y añadir los datos necesario para organizar tu viaje'|trans}}.
+            </p>
+            {{ include ('user/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
+            <a href="{{path('frontend_user_reservations')}}" class="btn btn-primary btn-lg">{{'Mis reservas'|trans}}</a>
+            <a href="{{path('frontend_user_settings')}}" class="btn btn-info btn-lg">{{'Mis datos'|trans}}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('reservations-user')}}
+	{{ encore_entry_script_tags('readmore')}}
+	
+{% endblock %}

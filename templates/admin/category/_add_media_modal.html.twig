@@ -1,0 +1,41 @@
+<div class="row">
+        <div 
+                class="col-9" 
+                id="js-media-modal-container"
+                data-baseUrl="{{ url('index')|slice(0,-4) }}" >
+        {% for medium in category.media %}
+                {{ include('admin/shared/forms/_add_media_item.html.twig',
+                                {'medium': medium,
+                                'category': category,
+                                'count': loop.index0
+                                 }) }}
+        {% endfor %}
+        </div>
+        <div class="col-3">
+                {{include('admin/category/_upload_media_modal.html.twig')}}
+        </div>
+</div>
+
+<div class="clearfix"></div>
+ {# {{ include('admin/travel/_form_dropzone.html.twig') }} #}
+
+{# {% for item in form.vars.data.media %}
+
+        <div class="img-thumbnail media-wrapper {% if category.id != null and category.mainPhoto != null %}{% if item.id == category.mainPhoto.id %}selected{% endif %}{% endif %}">
+                <img 
+                        title="{{ item.filename }}" 
+                        alt="{{ item.filename }}" 
+                        src="{{ item.MediaPath|imagine_filter('rectangular_thumbnail_medium') }}">
+                <div class="controls"
+                        data-action="click->media-selector#selectMedia"
+                        data-media-selector-target="mediaSelector"
+                        data-media-id="{{item.id}}" />
+                        {% if category.id != null and category.mainPhoto != null %}
+                                {% if item.id != category.mainPhoto.id %}
+                                        <i class="fa fa-star"></i>
+                                {% endif %}
+                        {% endif %}
+                </div>
+        </div>
+{% endfor %}
+<div class="clearfix"></div> #}

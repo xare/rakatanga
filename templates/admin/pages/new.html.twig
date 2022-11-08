@@ -1,0 +1,18 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}} {{parent()}} | Crear una página nueva{% endblock %}
+{% block header %}
+   {{ parent() }}
+{% endblock %}
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'pages'})}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Crear página nueva</h1>
+
+            {{ include('admin/pages/_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

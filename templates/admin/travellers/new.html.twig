@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Travellers{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'travellers'})}}
+    <div class="row mb-4">
+        <div class="col-12 col-md-12 ">
+            <h1>Create new Travellers</h1>
+
+            {{ include('travellers/_form.html.twig') }}
+
+            <a href="{{ path('travellers_index') }}">back to list</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

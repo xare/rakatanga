@@ -1,0 +1,197 @@
+<h2>{{'Tus datos'|trans}}</h2>
+<h3>{{'Pasaporte'|trans}}</h3>
+<div class="row mb-3">
+	<div class="col-md-7 col-12">
+		<div class="js-dropzone-container" id="js-dropzone-passport-container">
+			{% if hasPassport is defined and hasPassport == true %}
+			{% if reservationData is defined and reservationData != null %}
+				{% if reservationData is defined and reservationData.traveller != null %}
+					{% set traveller = reservationData.traveller %}
+				{% else %}
+					{% set traveller = reservationData.user %}
+				{% endif %}
+				{% else %}
+					{% set traveller = user %}
+			{% endif %}
+				{{ include('user/_renderFile_in_dropzone.html.twig',{
+													'type':'passport',
+													'document':passportDocument,
+													'reservation': reservation,
+													'traveller':traveller
+													}) }}
+			{% else %}
+				{{ include('user/_dropzone_input.html.twig',{'type':'passport'}) }}
+			{% endif %}
+		</div>
+	</div>
+	<div class="col-md-5 col-12">
+		<div class="row">
+			<div class="col-12">
+				{% if( form.passportNo.vars.value != '' ) %}
+					{% set inputIsFull = ' is-valid' %}
+				{% else %}
+						{% set inputIsFull = '' %}
+				{% endif %}
+				{{ form_row(form.passportNo,{
+													'label': 'Número del pasaporte'|trans,
+													'attr':{
+															
+															'placeholder': 'AA0000000',
+															'data-type': form.passportNo.vars.name,
+															'class' : 'form-control input-fa-id-card'~inputIsFull
+													}
+											}) }}
+				<div class="input-daterange input-group" id="datepicker">
+					{% if( form.passportIssueDate.vars.value != '' ) %}
+						{% set inputIsFull = ' is-valid' %}
+					{% else %}
+						{% set inputIsFull = '' %}
+					{% endif %}
+					{{ form_row(form.passportIssueDate,{
+															'label': 'Fecha de expedición del pasaporte'|trans,
+															'attr':{
+																	'title': 'Pasaporte - Expedición'|trans,
+																	'placeholder': '0000-00-00',
+																	'data-type' : form.passportIssueDate.vars.name,
+																	'class':inputIsFull
+															}
+													}) }}
+					{% if( form.passportExpirationDate.vars.value != '' ) %}
+						{% set inputIsFull = ' is-valid' %}
+					{% else %}
+						{% set inputIsFull = '' %}
+					{% endif %}
+					{{ form_row(form.passportExpirationDate,{
+															'label': 'Fecha de caducidad del pasaporte'|trans,
+															'attr':{
+																	'title': 'Pasaporte - Caducidad'|trans,
+																	'placeholder': '0000-00-00',
+																	'data-type' : form.passportExpirationDate.vars.name,
+																	'class' : inputIsFull
+															}
+													}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<h3>{{'Visado'|trans}}</h3>
+<div class="row">
+	<div class="col-md-7 col-12">
+		<div class="js-dropzone-container" id="js-dropzone-visa-container">
+			{% if hasVisa is defined and hasVisa == true %}
+				{{ include('user/_renderFile_in_dropzone.html.twig',{'type':'visa','document':visaDocument}) }}
+			{% else %}
+				{{ include('user/_dropzone_input.html.twig',{'type':'visa'}) }}
+			{% endif %}
+		</div>
+	</div>
+	<div class="col-md-5 col-12">
+		<div class="row">
+			<div class="col-12">
+				{% if( form.visaNumber.vars.value != '' ) %}
+					{% set inputIsFull = ' is-valid' %}
+				{% endif %}
+				{{ form_row(form.visaNumber,{
+													'label': 'Número del visado'|trans,
+													'attr':{
+															'title': 'Número del visado'|trans,
+															'data-type' : form.visaNumber.vars.name,
+															'class': inputIsFull
+													}
+											}) }}
+			</div>
+		</div>
+		<div class="input-daterange input-group" id="datepicker">
+			<div class="col-12">
+				{% if( form.visaIssueDate.vars.value != '' ) %}
+					{% set inputIsFull = ' is-valid' %}
+				{% endif %}
+				{{ form_row(form.visaIssueDate,{
+													'label':'Fecha de emisión del visado'|trans,
+													'attr':{
+															'title': 'Visado - Fecha'|trans,
+															'placeholder': '0000-00-00',
+															'data-type' : form.visaIssueDate.vars.name,
+															'class': inputIsFull
+													}
+											}) }}
+			</div>
+
+			<div class="col-12">
+				{% if( form.visaExpirationDate.vars.value != '' ) %}
+					{% set inputIsFull = ' is-valid' %}
+				{% endif %}
+				{{ form_row(form.visaExpirationDate,{
+													'label': 'Fecha de caducidad del visado'|trans,
+													'attr':{
+															'title': 'Visado - Caducidad'|trans,
+															'placeholder': '0000-00-00',
+															'data-type' : form.visaExpirationDate.vars.name,
+															'class': inputIsFull
+													}
+											}) }}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<h3>{{'Carnet de conducir'|trans}}</h3>
+	<div class="col-md-7 col-12">
+		<div class="js-dropzone-container" id="js-dropzone-drivers-container">
+			{% if hasDrivers is defined and hasDrivers == true %}
+				{{ include('user/_renderFile_in_dropzone.html.twig', {             
+																	'type':'drivers',
+																	'document':driversDocument
+											}) }}
+			{% else %}
+				{{ include('user/_dropzone_input.html.twig',{'type':'drivers'}) }}
+			{% endif %}
+		</div>
+	</div>
+	<div class="col-md-5 col-12">
+		<div class="row">
+			<div class="col-12">
+				{% if( form.driversNumber.vars.value != '' ) %}
+					{% set inputIsFull = ' is-valid' %}
+				{% endif %}
+				{{ form_row(form.driversNumber,{
+													'label':'Nº del carnet de conducir'|trans,
+													'attr':{
+															'data-type': form.driversNumber.vars.name,
+															'title': 'Nº carnet de conducir'|trans,
+															'class': inputIsFull
+													}
+											}) }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="input-daterange input-group" id="datepicker">
+					{% if( form.driversIssueDate.vars.value != '' ) %}
+						{% set inputIsFull = ' is-valid' %}
+					{% endif %}
+					{{ form_row(form.driversIssueDate,{
+															'label': 'Fecha de emisión del carnet de conducir'|trans,
+															'attr':{
+																	'data-type' : form.driversIssueDate.vars.name,
+																	'placeholder': '0000-00-00',
+																	'class':inputIsFull
+															}
+													}) }}
+					{% if( form.driversExpirationDate.vars.value != '' ) %}
+						{% set inputIsFull = ' is-valid' %}
+					{% endif %}
+					{{ form_row(form.driversExpirationDate,{
+															'label': 'Fecha de caducidad del carnet de conducir'|trans,
+															'attr':{
+																	'data-type' : form.driversExpirationDate.vars.name,
+																	'placeholder': '0000-00-00',
+																	'class': inputIsFull
+															}
+													}) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

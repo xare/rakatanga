@@ -1,0 +1,74 @@
+
+
+<ul class="nav navbar-nav ms-auto">
+    <li>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{'Idioma'|trans}}
+					<span class="caret"></span>
+				</button>
+            <ul class="dropdown-menu shadow" role="menu">
+                {% for lang in langs %}
+								
+                <li>
+                    <a class="dropdown-item" href='
+														{% if app.request.get("_route") == "destination" %}
+															{{path(app.request.get("_route"),{
+																'_locale': lang.iso_code,
+																'category':lang.category,
+																'travel': lang.travel
+															})}}
+														{% elseif app.request.get("_route") == "reservation" %}
+																{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code,
+																	'category': lang.category,
+																	'travel':lang.travel,
+																	'date': lang.date }) }}
+														{% elseif app.request.get("_route") == "main-content" %}
+																{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code,
+																	'slug':lang.page }) }}
+														{% elseif app.request.get("_route") == "index" or 
+															app.request.get("_route") == "destinations" or 
+															app.request.get("_route") == "frontend_user" or
+															app.request.get("_route") == "frontend_user_settings" or 
+															app.request.get("_route") == "calendar" or 
+															app.request.get("_route") == "contact" or 
+															app.request.get("_route") == "main-content" or 
+															app.request.get("_route") == "app_login" or 
+															app.request.get("_route") == "blog" or 
+															app.request.get("_route") == "faq" or 
+															app.request.get("_route") == "frontend_user_reservations" or 
+															app.request.get("_route") == "register" or 
+															app.request.get("_route") == "presentation" or 
+															app.request.get("_route") == "app_forgot_password_request" %} 
+															{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code}) }}
+														{% elseif app.request.get("_route") == "destinations-by-category" %}
+															{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code,
+																	'category': lang.category}) }}
+														{% elseif app.request.get("_route") == "reservation_payment" %}
+															{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code,
+																	'reservation': lang.reservation}) }}
+														{% elseif app.request.get("_route") == "frontend_user_reservation_data_traveller" %}
+															{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code,
+																	'reservation': reservation.id,
+																	'traveller': traveller.id}) }}
+														{% elseif app.request.get("_route") ==
+														"frontend_user_reservation" or 
+														app.request.get("_route") == "frontend_user_reservation_data" %}
+														{{ path(app.request.get("_route"),{
+																	'_locale': lang.iso_code,
+																	'reservation': reservation.id}) }}
+														{% endif %}
+							'>{{lang.lang_name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </li>
+</ul>
+

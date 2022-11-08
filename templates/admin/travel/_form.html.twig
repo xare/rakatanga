@@ -1,0 +1,166 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<fieldset>
+    <div class="row">
+            <div class="col-md-3 col-12">
+                {{ form_row(form.main_title) }}
+                {{ form_row(form.category,{
+                    'attr':{
+                        'class':'form-control form-select'
+                    }
+                }) }}
+            </div>
+            <div class="col-md-1 col-12">
+            </div>
+            <div class="col-md-3 col-12">
+                {{ form_row(form.level,{
+                    'attr':{
+                        'class':'form-control form-select'
+                    }
+                }) }}
+                {{ form_row(form.km) }}
+            </div>
+            <div class="col-md-1 col-12">
+            </div>
+            <div class="col-md-3 col-12">
+                {{ form_row(form.duration) }}
+                {# {{ form_row(form.price_driver) }}
+                {{ form_row(form.price_codriver) }} #}
+                {{ form_row(form.status,{
+                    'attr':{
+                        'class':'form-control form-select'
+                    }
+                }) }}
+                <br /><br />
+            </div>
+            <div class="col-md-1 col-12">
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12 col-12 d-flex justify-content-center">
+        {% if travel.mainPhoto %}
+            <img 
+                class="mb-4"
+                id="js-travel-photo"
+                title="{{ travel.mainPhoto.filename }}" 
+                alt="{{ travel.mainPhoto.filename }}" 
+                src="{{ travel.mainPhoto.MediaPath|imagine_filter('travel_thumbnail_intro') }}"
+            /> 
+            {% endif %}
+        </div>
+    </div>
+    </fieldset>
+    
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="myTab">
+                {% for lang in langs %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link{% if loop.index0 == 0 %} active{% endif %}"
+                                id="{{lang.name}}-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#{{lang.name}}" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="#{{lang.name}}"
+                                aria-selected="{% if loop.index0 == 0 %}true{% else %}false{% endif %}"
+                        >
+                        <i class="fa fa-flag"></i>
+                        {{lang.name}}
+                        </button>
+                    </li>
+                   
+                {% endfor %}
+                 <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="media-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#media" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="#media"
+                                aria-selected="false"
+                        >
+                        <i class="fa fa-image"></i>
+                        Fotos (ver y seleccionar)
+                        {% if travel %}
+                            <span class="badge badge-secondary">
+                                {{travel.media|length}}
+                            </span>
+                        {% endif %}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="dates-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#options" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="#options"
+                                aria-selected="false"
+                        ><i class="fa fa-calendar"></i>
+                        Opciones
+                        {% if travel.options %}
+                        <span class="badge badge-secondary">
+                            {{travel.options|length}}
+                        </span>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="dates-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#dates" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="#dates"
+                                aria-selected="false"
+                        ><i class="fa fa-calendar"></i>
+                        Fechas
+                        {% if travel.dates %}
+                        <span class="badge badge-secondary">
+                            {{travel.dates|length}}
+                        </span>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                <button class="nav-link"
+                    id="documentation-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#documentation" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="documentation"
+                    aria-selected="true"
+                        >Documentación
+                </button>
+            </li>
+            </ul>
+            <!-- Tab panes -->
+             <div class="tab-content">
+                {% if form.vars.value.id == null %}
+                    {{ include('admin/travel/_form_new.html.twig') }}
+                {% else %}
+                    {{ include('admin/travel/_form_edit.html.twig') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {{ form_widget(form._token)}}
+    <div class="row mt-4">
+        <div class="col-md-4 col-12">
+            <button class="btn btn-success">
+                <i class="fa fa-save"></i>
+                    {% if form.vars.value.id == null %}
+                        {{ button_label|default('Guardar') }}
+                    {% else %}
+                        {{ button_label|default('Actualizar') }}
+                    {% endif %}
+            </button>
+        </div>
+        {{ form_end(form,{'render_rest': false}) }}
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">

@@ -1,0 +1,77 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Pages{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1>Pages</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ page.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Default_slug</th>
+                        <td>{{ page.defaultSlug }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date_created</th>
+                        <td>{{ page.dateCreated ? page.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date_modified</th>
+                        <td>{{ page.dateModified ? page.dateModified|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h1>Page Translations</h1>
+            <table class="table">
+                <tbody>
+                {% for pageTranslation in page.pageTranslations %}
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ pageTranslation.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ pageTranslation.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Slug</th>
+                        <td>{{ pageTranslation.slug }}</td>
+                    </tr>
+                    <tr>
+                        <th>Intro</th>
+                        <td>{{ pageTranslation.Intro }}</td>
+                    </tr>
+                    <tr>
+                        <th>Body</th>
+                        <td>{{ pageTranslation.body }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lang</th>
+                        <td>{{ pageTranslation.lang.isoCode }}</td>
+                    </tr>
+                    <tr>
+                        <th>Page</th>
+                        <td>{{ pageTranslation.page.Id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{{ path('pages_index') }}" class="btn btn-light">
+                <i class="fa fa-list"></i>Back to list
+            </a>
+
+            <a href="{{ path('pages_edit', {'id': page.id}) }}">edit</a>
+
+            {{ include('admin/pages/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}
