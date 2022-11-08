@@ -32,7 +32,7 @@ yarn-error.log
 
 ###> Editor's
 .vscode-upload.json
-/.vscode
+/.vscode/
 ###< editor's
 
 
