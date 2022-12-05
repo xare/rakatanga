@@ -21,17 +21,13 @@ framework:
     #fragments: true
     php_errors:
         log: true
-<<<<<<< ours
-    
     form:
         legacy_error_messages: false
     
     # error_controller: App\Controller\ErrorController::show
-=======
 
 when@test:
     framework:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
->>>>>>> theirs
