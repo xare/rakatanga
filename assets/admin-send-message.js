@@ -1,3 +1,7 @@
+/**
+ * .addEntry('admin-send-message', './assets/admin-send-message.js')
+ * templates\admin\reservation\index.html.twig
+ */
 import adminMessagesApp from './adminMessagesApp.js';
 
 $(document).ready(() => {

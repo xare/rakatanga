@@ -19,8 +19,8 @@ class Reservation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $id;
 
     /**
@@ -36,8 +36,8 @@ class Reservation
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $comment;
 
     /**
@@ -58,19 +58,19 @@ class Reservation
      /**
      * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private \DateTimeInterface $date_ajout;
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $date_paiement;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $status;
 
     /**
@@ -80,14 +80,14 @@ class Reservation
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $nbpilotes;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $nbaccomp;
 
     /**
@@ -98,24 +98,22 @@ class Reservation
     /**
      * @ORM\OneToMany(targetEntity=Payments::class, 
      * mappedBy="reservation",
-     * orphanRemoval=true)
+     * orphanRemoval=true,
+     * cascade={"persist","remove"})
      */
     private $payments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="reservation")
+     * @ORM\OneToMany(targetEntity=Document::class, 
+     * mappedBy="reservation",
+     * orphanRemoval=true)
      */
     private $documents;
 
     /**
-     * @ORM\OneToMany(targetEntity=Invoices::class, mappedBy="reservation", cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity=Invoices::class, mappedBy="reservation", cascade={"persist", "remove"})
      */
-    private $invoices;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Codespromo::class, mappedBy="reservation", fetch="EAGER")
-     */
-    private $codespromos;
+    private $invoice;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -127,6 +125,11 @@ class Reservation
      */
     private $mailings;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Codespromo::class, inversedBy="reservations")
+     */
+    private $codespromo;
+
 
     public function __construct()
     {
@@ -136,8 +139,6 @@ class Reservation
         $this->reservationData = new ArrayCollection();
         $this->payments = new ArrayCollection();
         $this->documents = new ArrayCollection();
-        $this->invoices = new ArrayCollection();
-        $this->codespromos = new ArrayCollection();
         $this->mailings = new ArrayCollection();
     }
 
@@ -235,8 +236,6 @@ class Reservation
 
         return $this;
     }
-
-    
 
     public function getStatus(): ?string
     {
@@ -401,61 +400,26 @@ class Reservation
     }
 
     /**
-     * @return Collection|Invoices[]
+     * @return Invoices $invoice
      */
-    public function getInvoices(): Collection
+    public function getInvoice(): ?Invoices
     {
-        return $this->invoices;
-    }
-
-    public function addInvoice(Invoices $invoice): self
-    {
-        if (!$this->invoices->contains($invoice)) {
-            $this->invoices[] = $invoice;
-            $invoice->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInvoice(Invoices $invoice): self
-    {
-        if ($this->invoices->removeElement($invoice)) {
-            // set the owning side to null (unless already changed)
-            if ($invoice->getReservation() === $this) {
-                $invoice->setReservation(null);
-            }
-        }
-
-        return $this;
+        return $this->invoice;
     }
 
     /**
-     * @return Collection|Codespromo[]
+     * setInvoice
+     *
+     * @param Invoices|null $invoice
+     * @return self
      */
-    public function getCodespromos(): Collection
+    public function setInvoice(?Invoices $invoice): self
     {
-        return $this->codespromos;
-    }
-
-    public function addCodespromo(Codespromo $codespromo): self
-    {
-        if (!$this->codespromos->contains($codespromo)) {
-            $this->codespromos[] = $codespromo;
-            $codespromo->addReservation($this);
-        }
-
+        $this->invoice = $invoice;
         return $this;
     }
 
-    public function removeCodespromo(Codespromo $codespromo): self
-    {
-        if ($this->codespromos->removeElement($codespromo)) {
-            $codespromo->removeReservation($this);
-        }
 
-        return $this;
-    }
 
     public function getCode(): ?string
     {
@@ -495,6 +459,18 @@ class Reservation
                 $mailing->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodespromo(): ?Codespromo
+    {
+        return $this->codespromo;
+    }
+
+    public function setCodespromo(?Codespromo $codespromo): self
+    {
+        $this->codespromo = $codespromo;
 
         return $this;
     }

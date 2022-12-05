@@ -17,9 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/admin/dashboard")
- */
+#[Route(path: '/admin')]
 class DashboardController extends AbstractController
 {
     private $entityManager;
@@ -27,11 +25,8 @@ class DashboardController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", methods="GET", name="dashboard")
-     */
+    #[Route(path: '/', methods: 'GET', name: 'dashboard')]
     public function index(
-        Request $request,
         PaginatorInterface $paginator,
         UserRepository $userRepository,
         ReservationRepository $reservationRepository,
@@ -57,9 +52,7 @@ class DashboardController extends AbstractController
 
 
 
-    /**
-     * @Route("/dashboard-items", methods="GET", name="dashboard_items")
-     */
+    #[Route(path: '/dashboard-items', methods: 'GET', name: 'dashboard_items')]
     public function getLogItems(
         Request $request, 
         LogsRepository $LogsRepository,

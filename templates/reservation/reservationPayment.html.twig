@@ -21,7 +21,7 @@
         <div class="col-md-8 col-xs-12" id="js-reservation-wrapper">
             <h2>{{'Página de pago'|trans}}</h2>
             <p>{{'A continuación puedes ver todos los datos que hemos guardado sobre tu reserva'|trans}}.</p>
-            <p>{{'Si por algún motivo deseas consultarlo con nosotros ponte en contacto con nosotros haciendo click aquí, y escribiendonos un mensaje rápido paa que podamos asistirte'|trans}}.</p>
+            <p>{{'Si por algún motivo deseas consultarlo con nosotros ponte en contacto con nosotros haciendo click'|trans}}<a href="{{path('contact')}}" target="_blank"> {{'aquí'|trans}}</a>, {{'y escribiendonos un mensaje rápido paa que podamos asistirte'|trans}}.</p>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <div class="table-responsive">
                 <table class="table">
@@ -55,25 +55,21 @@
                         <td><strong>{{ 'Facturas asociadas a esta reserva'|trans }}</strong></td>
                         <td>
                         <ul class="list-group">
-                            {% for invoice in reservation.invoices %}
+                            {% if reservation.invoice != null %}
                                 <li class="list-group-item">
-                                    <a href="{{path('user-download-invoice',{'invoice':invoice.id})}}"
+                                    <a href="{{path('user-download-invoice',{'invoice':reservation.invoice.id})}}"
                                         target="_blank">
-                                            {{ invoice.invoiceNumber }}
+                                            {{ reservation.invoice.invoiceNumber }}
                                             <i class="fa fa-download"></i>
-                                        </a>
+                                    </a>
                                 </li>
-                            {% endfor %}
+                            {% else %}
+                            <li class="list-group-item">{{ 'No hay facturas asociadas a esta reserva'|trans }}</li>
+                            {% endif %}
                         </td>
                     </tr>
                 </table>
                 </div>
-                
-            {# <a href="#" class="btn btn-primary">
-                {{ 'Pagar por transferencia bancaria' | trans }}
-            </a> #}
-            {% else %}
-                {# {{ include ( 'reservation/_login_form.html.twig',{redirect_path:'reservation_payment'} ) }} #}
             {% endif %}
         </div>
         <div class="col-md-4 col-xs-12">

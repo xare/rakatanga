@@ -6,45 +6,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\MainController;
 use App\Entity\Contact;
-use App\Entity\Lang;
-use App\Entity\Travel;
-use App\Entity\TravelTranslation;
 use App\Form\ContactType;
 use App\Manager\ContactManager;
 use App\Repository\LangRepository;
-use App\Service\logHelper;
-use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
-class ContactController extends MainController
+class ContactController extends AbstractController
 {
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager )
+    public function __construct(private EntityManagerInterface $entityManager )
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route({
-     *      "en": "{_locale}/contact/",
-     *      "es": "{_locale}/contacto/",
-     *      "fr": "{_locale}/contacte/"
-     *      }, name="contact")
-     */
+    #[Route(path: ['en' => '{_locale}/contact/', 'es' => '{_locale}/contacto/', 'fr' => '{_locale}/contacte/'], name: 'contact')]
     public function index(
         Request $request,
         Breadcrumbs $breadcrumbs,
-        Mailer $mailer,
-        logHelper $logHelper,
         LangRepository $langRepository,
         TranslatorInterface $translator,
         ContactManager $contactManager,

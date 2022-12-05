@@ -13,9 +13,7 @@ use App\Controller\admin\MainadminController;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/admin/contact")
- */
+#[Route(path: '/admin/contact')]
 class ContactController extends MainadminController
 {
     private $entityManager;
@@ -24,9 +22,7 @@ class ContactController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="contact_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'contact_index', methods: ['GET'])]
     public function index(
         Request $request, 
         PaginatorInterface $paginator): Response
@@ -45,9 +41,7 @@ class ContactController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="contact_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'contact_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $contact = new Contact();
@@ -68,9 +62,7 @@ class ContactController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="contact_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'contact_show', methods: ['GET'])]
     public function show(Contact $contact): Response
     {
         return $this->render('admin/contact/show.html.twig', [
@@ -78,9 +70,7 @@ class ContactController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="contact_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'contact_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Contact $contact): Response
     {
         
@@ -99,9 +89,7 @@ class ContactController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="contact_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'contact_delete', methods: ['POST'])]
     public function delete(Request $request, Contact $contact): Response
     {
         if ($this->isCsrfTokenValid('delete'.$contact->getId(), $request->request->get('_token'))) {

@@ -10,6 +10,7 @@
 				<i class="fa fa-check-circle" style="color:#155724"></i>
 				{{ child.vars.label }}:
 				{{ child.vars.value }}
+			</li>
 			{% else %}
 				<li data-type="{{ child.vars.name }}" data-checked="true" class="list-group-item bg-warning mb-1">
 					<i class="fa fa-exclamation-triangle" style="color:red"></i>
@@ -71,6 +72,11 @@
 						{{traveller.nom}}</h1>
 
 					<p>{{ 'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.</p>
+					{% for message in app.flashes('success') %}
+						<div class="alert alert-success">
+								{{ message }}.
+						</div>
+					{% endfor %}
 					<div class="alert alert-primary" role="alert">
 						<strong>{{ 'Nota'|trans }}</strong>:
 						<p>{{'Por favor rellena con tus datos este formulario, SI NO DISPONES DE TODOS LOS DATOS en este momento, puedes dar a GUARDAR en cualquier momento y seguir en otro momento'|trans }}.</p>
@@ -122,6 +128,10 @@
 											{% set inputIsFull = '' %}
 											{% if( form.passportNo.vars.value != '' ) %}
 												{% set inputIsFull = ' is-valid' %}
+												{% set inputFilled = true %}
+											{% else %}
+												{% set inputIsFull = '' %}
+												{% set inputFilled = false %}
 											{% endif %}
 											{{ form_row(form.passportNo,{
 																				'label': 'Número del pasaporte'|trans,
@@ -129,12 +139,17 @@
                                             
                                             'placeholder': 'AA0000000',
                                             'data-type': form.passportNo.vars.name,
-                                            'class' : 'form-control input-fa-id-card'~inputIsFull
+                                            'class' : 'form-control input-fa-id-card'~inputIsFull,
+																						'data-filled' : inputFilled
                                         }
                                     }) }}
 											<div class="input-daterange input-group" id="datepicker">
 												{% if( form.passportIssueDate.vars.value != '' ) %}
 													{% set inputIsFull = ' is-valid' %}
+													{% set inputFilled = true %}
+												{% else %}
+													{% set inputIsFull = '' %}
+													{% set inputFilled = false %}
 												{% endif %}
 												{{ form_row(form.passportIssueDate,{
 																						'label': 'Fecha de expedición del pasaporte'|trans,
@@ -142,11 +157,16 @@
                                                 'title': 'Pasaporte - Expedición'|trans,
                                                 'placeholder': '0000-00-00',
                                                 'data-type' : form.passportIssueDate.vars.name,
-                                                'class':inputIsFull
+                                                'class':inputIsFull,
+																								'data-filled' : inputFilled
                                             }
                                         }) }}
 												{% if( form.passportExpirationDate.vars.value != '' ) %}
 													{% set inputIsFull = ' is-valid' %}
+													{% set inputFilled = true %}
+												{% else %}
+													{% set inputIsFull = '' %}
+													{% set inputFilled = false %}
 												{% endif %}
 												{{ form_row(form.passportExpirationDate,{
 																						'label': 'Fecha de expedición del pasaporte'|trans,
@@ -154,7 +174,8 @@
                                                 'title': 'Pasaporte - Caducidad'|trans,
                                                 'placeholder': '0000-00-00',
                                                 'data-type' : form.passportExpirationDate.vars.name,
-                                                'class' : inputIsFull
+                                                'class' : inputIsFull,
+																								'data-filled' : inputFilled
                                             }
                                         }) }}
 											</div>
@@ -178,13 +199,18 @@
 										<div class="col-12">
 											{% if( form.visaNumber.vars.value != '' ) %}
 												{% set inputIsFull = ' is-valid' %}
+												{% set inputFilled = true %}
+											{% else %}
+												{% set inputIsFull = '' %}
+												{% set inputFilled = false %}
 											{% endif %}
 											{{ form_row(form.visaNumber,{
 																				'label': 'Número del visado'|trans,
                                         'attr':{
                                             'title': 'Número del visado'|trans,
                                             'data-type' : form.visaNumber.vars.name,
-                                            'class': inputIsFull
+                                            'class': inputIsFull,
+																						'data-filled' : inputFilled
                                         }
                                     }) }}
 										</div>
@@ -193,6 +219,10 @@
 										<div class="col-12">
 											{% if( form.visaIssueDate.vars.value != '' ) %}
 												{% set inputIsFull = ' is-valid' %}
+												{% set inputFilled = true %}
+											{% else %}
+												{% set inputIsFull = '' %}
+												{% set inputFilled = false %}
 											{% endif %}
 											{{ form_row(form.visaIssueDate,{
 																				'label':'Fecha de emisión del visado'|trans,
@@ -200,7 +230,8 @@
                                             'title': 'Visado - Fecha'|trans,
                                             'placeholder': '0000-00-00',
                                             'data-type' : form.visaIssueDate.vars.name,
-                                            'class': inputIsFull
+                                            'class': inputIsFull,
+																						'data-filled' : inputFilled
                                         }
                                     }) }}
 										</div>
@@ -208,6 +239,10 @@
 										<div class="col-12">
 											{% if( form.visaExpirationDate.vars.value != '' ) %}
 												{% set inputIsFull = ' is-valid' %}
+												{% set inputFilled = true %}
+											{% else %}
+												{% set inputIsFull = '' %}
+												{% set inputFilled = false %}
 											{% endif %}
 											{{ form_row(form.visaExpirationDate,{
 																				'label': 'Fecha de caducidad del visado'|trans,
@@ -215,7 +250,8 @@
                                             'title': 'Visado - Caducidad'|trans,
                                             'placeholder': '0000-00-00',
                                             'data-type' : form.visaExpirationDate.vars.name,
-                                            'class': inputIsFull
+                                            'class': inputIsFull,
+																						'data-filled' : inputFilled
                                         }
                                     }) }}
 										</div>
@@ -240,13 +276,18 @@
 										<div class="col-12">
 											{% if( form.driversNumber.vars.value != '' ) %}
 												{% set inputIsFull = ' is-valid' %}
+												{% set inputFilled = true %}
+											{% else %}
+												{% set inputIsFull = '' %}
+												{% set inputFilled = false %}
 											{% endif %}
 											{{ form_row(form.driversNumber,{
 																				'label':'Nº del carnet de conducir'|trans,
                                         'attr':{
                                             'data-type': form.driversNumber.vars.name,
                                             'title': 'Nº carnet de conducir'|trans,
-                                            'class': inputIsFull
+                                            'class': inputIsFull,
+																						'data-filled' : inputFilled
                                         }
                                     }) }}
 										</div>
@@ -256,24 +297,34 @@
 											<div class="input-daterange input-group" id="datepicker">
 												{% if( form.driversIssueDate.vars.value != '' ) %}
 													{% set inputIsFull = ' is-valid' %}
+													{% set inputFilled = true %}
+												{% else %}
+													{% set inputIsFull = '' %}
+													{% set inputFilled = false %}
 												{% endif %}
 												{{ form_row(form.driversIssueDate,{
 																						'label': 'Fecha de emisión del carnet de conducir'|trans,
                                             'attr':{
                                                 'data-type' : form.driversIssueDate.vars.name,
                                                 'placeholder': '0000-00-00',
-                                                'class':inputIsFull
+                                                'class':inputIsFull,
+																								'data-filled' : inputFilled
                                             }
                                         }) }}
 												{% if( form.driversExpirationDate.vars.value != '' ) %}
 													{% set inputIsFull = ' is-valid' %}
+													{% set inputFilled = true %}
+												{% else %}
+													{% set inputIsFull = '' %}
+													{% set inputFilled = false %}
 												{% endif %}
 												{{ form_row(form.driversExpirationDate,{
 																						'label': 'Fecha de caducidad del carnet de conducir'|trans,
                                             'attr':{
                                                 'data-type' : form.driversExpirationDate.vars.name,
                                                 'placeholder': '0000-00-00',
-                                                'class': inputIsFull
+                                                'class': inputIsFull,
+																								'data-filled' : inputFilled
                                             }
                                         }) }}
 											</div>
@@ -286,26 +337,36 @@
 							<h3>{{ 'Seguro'|trans }}</h3>
 							<div class="row">
 								<div class="col-md-4 col-12">
-									{% if( form.insuranceCompany.vars.value != '' ) %}
+									{% if ( form.insuranceCompany.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.insuranceCompany,{
 																'label': 'Compañía de seguros'|trans,
                                 'attr': {
                                     'data-type' : form.insuranceCompany.vars.name,
-                                    'class' : inputIsFull
+                                    'class' : inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             })}}
 								</div>
 								<div class="col-md-8 col-12">
-									{% if( form.insuranceContractNumber.vars.value != '' ) %}
+									{% if ( form.insuranceContractNumber.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.insuranceContractNumber,{
 																'label': 'Nº del contrato del seguro'|trans,
                                 'attr': {
                                     'data-type' : form.insuranceContractNumber.vars.name,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             })}}
 								</div>
@@ -314,36 +375,51 @@
 								<div class="col-md-4 col-12">
 									{% if( form.abroadPhoneNumber.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.abroadPhoneNumber,{
 																'label': 'Número de teléfono de contacto'|trans,
                                 'attr': {
                                     'data-type' : form.abroadPhoneNumber.vars.name,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             })}}
 								</div>
 								<div class="col-md-4 col-12">
 									{% if( form.contactPersonName.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.contactPersonName,{
 																'label': 'Nombre de la persona de contacto'|trans,
                                 'attr': {
                                     'data-type' : form.contactPersonName.vars.name,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             })}}
 								</div>
 								<div class="col-md-4 col-12">
 									{% if( form.contactPersonPhone.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.contactPersonPhone,{
 																'label': 'Número de teléfono de tu contacto'|trans,
                                 'attr': {
                                     'data-type' : form.contactPersonPhone.vars.name,
-                                    'class' : inputIsFull
+                                    'class' : inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             })}}
 								</div>
@@ -354,15 +430,20 @@
 							<h4>{{'Llegada'|trans}}</h4>
 							<div class="row">
 								<div class="col-md-4 col-12">
-									{% if( form.flightNumber.vars.value != '' ) %}
+									{% if ( form.flightNumber.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.flightNumber,{
 																'label': 'Nº de vuelo de ida'|trans,
                                 'attr':{
                                     'data-type':form.flightNumber.vars.name,
                                     'title':'Número del vuelo'|trans,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             }) }}
 								</div>
@@ -372,26 +453,36 @@
 											<div class="col-md-6 col-12">
 												{% if( form.flightArrival.vars.value != '' ) %}
 													{% set inputIsFull = ' is-valid' %}
+													{% set inputFilled = true %}
+												{% else %}
+													{% set inputIsFull = '' %}
+													{% set inputFilled = false %}
 												{% endif %}
 												{{ form_row(form.flightArrival,{
 																						'label': 'Fecha de llegada'|trans,
                                             'attr': {
                                                 'data-type' : form.flightArrival.vars.name,
                                                 'title':'Fecha de llegada'|trans,
-                                                'class': inputIsFull
+                                                'class': inputIsFull,
+																								'data-filled' : inputFilled
                                             }
                                         }) }}
 											</div>
 											<div class="col-md-6 col-12">
 												{% if( form.flightDeparture.vars.value != '' ) %}
 													{% set inputIsFull = ' is-valid' %}
+													{% set inputFilled = true %}
+												{% else %}
+													{% set inputIsFull = '' %}
+													{% set inputFilled = false %}
 												{% endif %}
 												{{ form_row(form.flightDeparture,{
 																						'label': 'Fecha de regreso'|trans,
                                             'attr': {
                                                 'data-type' : form.flightDeparture.vars.name,
                                                 'title':'Fecha de regreso'|trans,
-                                                'class': inputIsFull
+                                                'class': inputIsFull,
+																								'data-filled' : inputFilled
                                             }
                                         }) }}
 											</div>
@@ -403,26 +494,36 @@
 								<div class="col-md-6 col-12">
 									{% if( form.flightArrivalAirport.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
-									{% endif %}
+										{% set inputFilled = true %}
+										{% else %}
+											{% set inputIsFull = '' %}
+											{% set inputFilled = false %}
+										{% endif %}
 									{{ form_row(form.flightArrivalAirport,{
 																'label': 'Aeropuerto de llegada'|trans,
                                 'attr': {
                                     'data-type' : form.flightArrivalAirport.vars.name,
                                     'title':'Aeropuerto de llegada'|trans,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             }) }}
 								</div>
 								<div class="col-md-6 col-12">
 									{% if( form.ArrivalHotel.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.ArrivalHotel,{
 																'label': 'Hotel a la llegada'|trans,
                                 'attr': {
                                     'data-type' : form.ArrivalHotel.vars.name,
                                     'title':'Hotel de llegada'|trans,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             }) }}
 								</div>
@@ -430,41 +531,56 @@
 							<h4>{{'Salida'|trans}}</h4>
 							<div class="row">
 								<div class="col-md-4 col-12">
-									{% if( form.flightDepartureNumber.vars.value != '' ) %}
+									{% if ( form.flightDepartureNumber.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.flightDepartureNumber,{
 																'label': 'Nº de vuelo de regreso'|trans,
                                 'attr': {
                                     'data-type' : form.flightDepartureNumber.vars.name,
                                     'title':'Vuelo de regreso'|trans,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             }) }}
 								</div>
 								<div class="col-md-4 col-12">
-									{% if( form.flightDepartureAirport.vars.value != '' ) %}
+									{% if ( form.flightDepartureAirport.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.flightDepartureAirport,{
 																'label': 'Aeropuerto de salida (regreso)'|trans,
                                 'attr': {
                                     'data-type' : form.flightDepartureAirport.vars.name,
                                     'title': 'Aeropuerto de salida'|trans,
-                                    'class': inputIsFull
+                                    'class': inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             }) }}
 								</div>
 								<div class="col-md-4 col-12">
-									{% if( form.DepartureHotel.vars.value != '' ) %}
+									{% if ( form.DepartureHotel.vars.value != '' ) %}
 										{% set inputIsFull = ' is-valid' %}
+										{% set inputFilled = true %}
+									{% else %}
+										{% set inputIsFull = '' %}
+										{% set inputFilled = false %}
 									{% endif %}
 									{{ form_row(form.DepartureHotel,{
 																'label': 'Hotel antes del regreso'|trans,
                                 'attr': {
                                     'data-type' : form.DepartureHotel.vars.name,
                                     'title' : 'Hotel de salida'|trans,
-                                    'class' : inputIsFull
+                                    'class' : inputIsFull,
+																		'data-filled' : inputFilled
                                 }
                             }) }}
 								</div>

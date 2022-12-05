@@ -1,0 +1,27 @@
+<div class="col-12 col-xs-12">
+  <h4>Reservas de la web anterior</h4>
+  <table class="table">
+      <tr>
+          <td>Inscrito</td>
+          <td>Nº Pilotos</td>
+          <td>Nº Acompañantes</td>
+          <td>Codepromo</td>
+          <td>Precio</td>
+          <td>Fecha Añadido</td>
+      </tr>
+      {% for oldreservation in date.oldreservations %}
+          <tr>
+              <td>
+                  {% if oldreservation.inscriptions != null %}
+                      {{ oldreservation.inscriptions.email }}
+                  {% endif %}
+              </td>
+              <td>{{ oldreservation.nbpilotes }}</td>
+              <td>{{ oldreservation.nbAccomp }}</td>
+              <td>{{ oldreservation.codepromo }}</td>
+              <td>{{ oldreservation.montant|format_currency('EUR', {fraction_digit: 0}) }}</td>
+              <td>{{ oldreservation.dateAjout|date('d/m/Y H:m') }}</td>
+          </tr>
+      {% endfor %}
+  </table>
+</div>

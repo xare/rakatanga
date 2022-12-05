@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/document")
- */
+#[Route(path: '/admin/document')]
 class DocumentController extends MainadminController
 {
     private $entityManager;
@@ -22,9 +20,7 @@ class DocumentController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="document_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'document_index', methods: ['GET'])]
     public function index(
         Request $request,
         PaginatorInterface $paginator
@@ -45,9 +41,7 @@ class DocumentController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="document_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'document_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
 
@@ -68,9 +62,7 @@ class DocumentController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="document_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'document_show', methods: ['GET'])]
     public function show(Document $document): Response
     {
         return $this->render('admin/document/show.html.twig', [
@@ -78,9 +70,7 @@ class DocumentController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="document_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'document_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Document $document): Response
     {
         $form = $this->createForm(DocumentType::class, $document);
@@ -98,9 +88,7 @@ class DocumentController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="document_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'document_delete', methods: ['POST'])]
     public function delete(Request $request, Document $document): Response
     {
         if ($this->isCsrfTokenValid('delete'.$document->getId(), $request->request->get('_token'))) {

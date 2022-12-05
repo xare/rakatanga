@@ -105,7 +105,7 @@
     </a>
   {% endif %}
   &nbsp;&nbsp;
-  {% if reservation.invoices|length > 0 %}
+  {% if reservation.invoice != null %}
     <a class="btn btn-rakatanga-secondary{% if reservation.status == 'cancelled' %} d-none{% endif %}"
         href="{{path('frontend_user_invoices')}}">
       <i class="fa fa-download"></i>

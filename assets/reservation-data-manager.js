@@ -19,7 +19,7 @@ $(document).ready(function() {
         documentsList.initializeDropzone(type, documentsList.travellerId);
     });
     let locale = $wrapper.data('locale');
-    console.info(locale);
+
     $('.input-daterange').datepicker({
         format: 'dd-mm-yyyy',
         language: locale
@@ -63,17 +63,17 @@ $(document).ready(function() {
         event.preventDefault();
         const $activeElement = $("#myTabContent div.active");
         const $activeTabLink = $("#myTabs li button.active");
-        console.info($activeElement);
+
         const $tabs = $('#myTabContent > div');
         const totalTabs = $tabs.length;
         let tabIndex = $activeElement.index();
-        console.info('initial Tab Index', tabIndex);
+
         tabIndex == totalTabs ? tabIndex == totalTabs : tabIndex++;
-        console.info('totalTabs', totalTabs, 'tabIndex', tabIndex);
+
         $activeElement.removeClass('active');
         $activeTabLink.removeClass('active');
         if (tabIndex + 1 == totalTabs) {
-            console.info('tabIndex == totalTabs')
+
             $("#myTabContent > div").last().addClass('active');
             $("#myTabs > li").last().find('button').addClass('active');
             $('[data-action="previous"]').show();
@@ -89,16 +89,16 @@ $(document).ready(function() {
     $('[data-action="previous"]').on('click', function(event) {
         event.preventDefault();
         const $activeElement = $("#myTabContent div.active");
-        console.info($activeElement);
+
         const $activeTabLink = $("#myTabs li button.active");
         let tabIndex = $activeElement.index();
-        console.info('tabIndex', tabIndex);
+
         tabIndex == 0 ? tabIndex == 0 : tabIndex--;
-        console.info('tabIndex apres', tabIndex);
+
         $activeElement.removeClass('active');
         $activeTabLink.removeClass('active');
         if (tabIndex == 0) {
-            console.info('tabIndex == 0')
+
             $("#myTabContent > div").first().addClass('active');
             $("#myTabs > li").first().find('button').addClass('active');
             $('[data-action="next"]').show();

@@ -14,8 +14,8 @@ use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as Asser
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="This value is already used.")
  */
+#[UniqueEntity(fields: ['email'], message: 'This value is already used.')]
 class User implements UserInterface
 {
 
@@ -29,66 +29,65 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups("main")
-     * 
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     *
      */
+    #[Groups('main')]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups("main")
      *
      */
+    #[Groups('main')]
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
      */
+    #[Assert\NotBlank]
     private $password;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
-     * @Assert\NotBlank()
      */
+    #[Groups('main')]
+    #[Assert\NotBlank]
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
-     * @Assert\NotBlank()
      */
+    #[Groups('main')]
+    #[Assert\NotBlank]
     private $prenom;
 
     /**
-     * @Groups("main")
      * @AssertPhoneNumber
      * @ORM\Column(name="telephone", type="phone_number", nullable=true)
      */
-
+    #[Groups('main')]
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $position;
 
     /**
      * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private \DateTimeInterface $date_ajout;
 
     /**

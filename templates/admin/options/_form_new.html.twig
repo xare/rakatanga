@@ -32,7 +32,7 @@
                                 entity_id: '',
                             }) }}
             </div>
-            
+            {{ include( 'admin/options/_form_dropzone.html.twig' ) }}
         <input type="hidden" 
             name="options1[optionsTranslations][{{loop.index0}}][lang]" 
             value="{{lang.id}}"/>

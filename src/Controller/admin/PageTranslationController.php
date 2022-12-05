@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/page/translation")
- */
+#[Route(path: '/page/translation')]
 class PageTranslationController extends AbstractController
 {
     private $entityManager;
@@ -22,9 +20,7 @@ class PageTranslationController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="page_translation_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'page_translation_index', methods: ['GET'])]
     public function index(PageTranslationRepository $pageTranslationRepository): Response
     {
         return $this->render('page_translation/index.html.twig', [
@@ -32,9 +28,7 @@ class PageTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="page_translation_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'page_translation_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $pageTranslation = new PageTranslation();
@@ -55,9 +49,7 @@ class PageTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="page_translation_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'page_translation_show', methods: ['GET'])]
     public function show(PageTranslation $pageTranslation): Response
     {
         return $this->render('page_translation/show.html.twig', [
@@ -65,9 +57,7 @@ class PageTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="page_translation_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'page_translation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, PageTranslation $pageTranslation): Response
     {
         $form = $this->createForm(PageTranslationType::class, $pageTranslation);
@@ -85,9 +75,7 @@ class PageTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="page_translation_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'page_translation_delete', methods: ['POST'])]
     public function delete(Request $request, PageTranslation $pageTranslation): Response
     {
         if ($this->isCsrfTokenValid('delete'.$pageTranslation->getId(), $request->request->get('_token'))) {

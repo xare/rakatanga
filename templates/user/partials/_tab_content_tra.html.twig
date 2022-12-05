@@ -4,8 +4,10 @@
 	<div class="col-md-4 col-12">
 		{% if( form.flightNumber.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+		{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.flightNumber,{
 									'label': 'Nº de vuelo de ida'|trans,
@@ -22,30 +24,36 @@
 				<div class="col-md-6 col-12">
 					{% if( form.flightArrival.vars.value != '' ) %}
 						{% set inputIsFull = ' is-valid' %}
+						{% set inputFilled = true %}
 					{% else %}
 						{% set inputIsFull = '' %}
+						{% set inputFilled = false %}
 					{% endif %}
 					{{ form_row(form.flightArrival,{
 															'label': 'Fecha de llegada'|trans,
 															'attr': {
 																	'data-type' : form.flightArrival.vars.name,
 																	'title':'Fecha de llegada'|trans,
-																	'class': inputIsFull
+																	'class': inputIsFull,
+																	'data-filled': inputFilled
 															}
 													}) }}
 				</div>
 				<div class="col-md-6 col-12">
 					{% if( form.flightDeparture.vars.value != '' ) %}
 						{% set inputIsFull = ' is-valid' %}
+						{% set inputFilled = true %}
 					{% else %}
 						{% set inputIsFull = '' %}
+						{% set inputFilled = false %}
 					{% endif %}
 					{{ form_row(form.flightDeparture,{
 															'label': 'Fecha de regreso'|trans,
 															'attr': {
 																	'data-type' : form.flightDeparture.vars.name,
 																	'title':'Fecha de regreso'|trans,
-																	'class': inputIsFull
+																	'class': inputIsFull,
+																	'data-filled': inputFilled
 															}
 													}) }}
 				</div>
@@ -57,8 +65,10 @@
 	<div class="col-md-6 col-12">
 		{% if( form.flightArrivalAirport.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.flightArrivalAirport,{
 									'label': 'Aeropuerto de llegada'|trans,
@@ -66,22 +76,26 @@
 									'attr': {
 											'data-type' : form.flightArrivalAirport.vars.name,
 											'title':'Aeropuerto de llegada'|trans,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							}) }}
 	</div>
 	<div class="col-md-6 col-12">
 		{% if( form.ArrivalHotel.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.ArrivalHotel,{
 									'label': 'Hotel a la llegada'|trans,
 									'attr': {
 											'data-type' : form.ArrivalHotel.vars.name,
 											'title':'Hotel de llegada'|trans,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							}) }}
 	</div>
@@ -91,23 +105,28 @@
 	<div class="col-md-4 col-12">
 		{% if( form.flightDepartureNumber.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.flightDepartureNumber,{
 									'label': 'Nº de vuelo de regreso'|trans,
 									'attr': {
 											'data-type' : form.flightDepartureNumber.vars.name,
 											'title':'Vuelo de regreso'|trans,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							}) }}
 	</div>
 	<div class="col-md-4 col-12">
 		{% if( form.flightDepartureAirport.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.flightDepartureAirport,{
 									'label': 'Aeropuerto de salida (regreso)'|trans,
@@ -115,22 +134,26 @@
 									'attr': {
 											'data-type' : form.flightDepartureAirport.vars.name,
 											'title': 'Aeropuerto de salida'|trans,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							}) }}
 	</div>
 	<div class="col-md-4 col-12">
 		{% if( form.DepartureHotel.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.DepartureHotel,{
 									'label': 'Hotel antes del regreso'|trans,
 									'attr': {
 											'data-type' : form.DepartureHotel.vars.name,
 											'title' : 'Hotel de salida'|trans,
-											'class' : inputIsFull
+											'class' : inputIsFull,
+											'data-filled': inputFilled
 									}
 							}) }}
 	</div>

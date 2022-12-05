@@ -53,27 +53,8 @@ class TravelType extends AbstractType
                 'class' => Category::class,
                 'placeholder' => 'Elige categoría',
                 'choice_label' => 'name',
-                'query_builder' => function(EntityRepository $er) {
-                                        return $er->createQueryBuilder('c')
-                                                ->andWhere('c.type = :type')
-                                                ->setParameter('type', 'country')
-                                                ->orderBy('c.name', 'ASC');
-                },
             ])
-            /* ->add('media', EntityType::class, [
-                'class' => Media::class,
-                'choice_label' => 'name', */
-                /* 'choices' => $this->travel->getMedia(), */
-                /* 'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('m')
-                            ->innerJoin(Travel::class, 't')
-                            ->andWhere('c.type = :type')
-                            ->setParameter('type', 'country') 
-                            ->orderBy('c.name', 'ASC');
-                }, */
-                /* 'multiple' => true
-            ])   */
-            //->add('media')
+            
             ->add('travelTranslation', CollectionType::class, [
                 'entry_type' => TravelTranslationType::class,
                 'entry_options' => [
@@ -86,10 +67,7 @@ class TravelType extends AbstractType
                 // self explanatory, this one allows the form to be removed
                 'allow_delete' => true
             ]) 
-             /* ->addEventListener(
-                FormEvents::PRE_SET_DATA,
-                array($this, 'onPreSetData')
-            ) */
+    
         ;
     }
     public function onPreSetData(FormEvent $event){

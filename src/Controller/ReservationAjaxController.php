@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Codespromo;
 use App\Entity\Invoices;
 use App\Entity\Reservation;
+use App\Entity\ReservationOptions;
 use App\Entity\Travellers;
 use App\Entity\User;
 use App\Form\InvoicesType;
@@ -20,6 +21,7 @@ use App\Repository\TravelRepository;
 use App\Repository\TravelTranslationRepository;
 use App\Repository\UserRepository;
 use App\Repository\CodespromoRepository;
+use App\Repository\OptionsRepository;
 use App\Service\invoiceHelper;
 use App\Service\logHelper;
 use App\Service\Mailer;
@@ -42,25 +44,27 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ReservationAjaxController extends AbstractController
 {
-    private $translator; 
-    private $langRepository;
+    private TranslatorInterface $translator; 
+    private LangRepository $langRepository;
+    private EntityManagerInterface $entityManager;
+    private reservationHelper $reservationHelper;
+    private invoiceHelper $invoiceHelper;
 
     public function __construct(
         TranslatorInterface $translator,
-        EntityManagerInterface $em,
-        LangRepository $langRepository)
+        EntityManagerInterface $entityManager,
+        LangRepository $langRepository,
+        reservationHelper $reservationHelper,
+        invoiceHelper $invoiceHelper)
         {
             $this->translator = $translator;
-            $this->em = $em;
+            $this->entityManager = $entityManager;
             $this->langRepository = $langRepository;
+            $this->reservationHelper = $reservationHelper;
+            $this->invoiceHelper = $invoiceHelper;
         }
    #[Route('/reservation/ajax', name: 'reservation_ajax')]
-    /* public function index(): Response
-    {
-        return $this->render('reservation_ajax/index.html.twig', [
-            'controller_name' => 'ReservationAjaxController',
-        ]);
-    }  */
+    
 
     /**
       * @Route("/ajax/initialize/reservation/logged",
@@ -72,12 +76,11 @@ class ReservationAjaxController extends AbstractController
       public function initializeAsLogged(
         Request $request,
         logHelper $logHelper,
-        EntityManagerInterface $em,
         DatesRepository $datesRepository,
         reservationHelper $reservationHelper,
         InvoiceHelper $invoiceHelper,
         TranslatorInterface $translator
-    ) {
+    ): \Symfony\Component\HttpFoundation\Response {
 
       $reservationData = [
           'nbPilotes' => $request->request->get('nbPilotes'),
@@ -87,9 +90,12 @@ class ReservationAjaxController extends AbstractController
       ];
 
       $date = $datesRepository->find($reservationData['dateId']);
+      /**
+       * @var User $user
+       */
       $user = $this->getUser();
-      $reservation = $reservationHelper->makeReservation($reservationData, $date, $user, $request->getLocale());
-      $invoiceHelper->makeInvoice($reservation, '', [
+      $reservation = $reservationHelper->makeReservation($reservationData, $date, $user, $request->getLocale(),'');
+      $invoiceHelper->newInvoice($reservation, [
           'name' => $user->getPrenom(). ' '.$user->getNom(),
           'address' => $user->getAddress(),
           'nif' => $user->getIdCard(),
@@ -102,7 +108,7 @@ class ReservationAjaxController extends AbstractController
       if ($reservation != null){
          $status = true;
       }
-      $html=$this->renderView('reservation/_login_result_card.html.twig', [
+      $html = $this->renderView('reservation/_login_result_card.html.twig', [
           'status' => $status,
           'user' => $user,
           'reservationId' => $reservation->getId()
@@ -124,15 +130,10 @@ class ReservationAjaxController extends AbstractController
   
   }
 
-  /**
-     * @Route("/ajax/initialize/reservation/register/", 
-     * options = { "expose" = true }, 
-     * name="initialize-reservation-register")
-     */
+  #[Route(path: '/ajax/initialize/reservation/register/', options: ['expose' => true], name: 'initialize-reservation-register')]
     public function initializeAsRegister(
         Request $request,
         logHelper $logHelper,
-        EntityManagerInterface $em,
         DatesRepository $datesRepository,
         reservationHelper $reservationHelper,
         UserAuthenticatorInterface $userAuthenticator,
@@ -161,8 +162,8 @@ class ReservationAjaxController extends AbstractController
                             $userData->getPassword())
                 );
                 $user->setRoles(["ROLE_USER"]);
-                $em->persist($user);
-                $em->flush();
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
                 
                 $userAuthenticator->authenticateUser(
                     $user,
@@ -233,19 +234,15 @@ class ReservationAjaxController extends AbstractController
            
     }
 
-     /**
-     * @Route("/ajax/initialize/reservation/login/", 
-     * options = { "expose" = true }, 
-     * name="api_auth_login",
-     * methods={"POST"})
-     */
+     #[Route(path: '/ajax/initialize/reservation/login/', options: ['expose' => true], name: 'api_auth_login', methods: ['POST'])]
     public function initializeAsLogin(
-        Request $request,
         TokenStorageInterface $tokenStorage,
         RememberMeHandlerInterface $rememberMe
         ) : Response
     {
-        
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
        
         if ($user instanceof User ){
@@ -271,26 +268,14 @@ class ReservationAjaxController extends AbstractController
         
     }
 
-    /**
-     * @Route("/ajax/registered/", name="ajax_registered")
-     */
+    #[Route(path: '/ajax/registered/', name: 'ajax_registered')]
     public function ajaxRegistered() :Response
     {
         return new response(true);
     }
 
-    /**
-     * @Route("/ajax/reservation/initialize/{_locale}", 
-     * options = { "expose" = true }, 
-     * name="initialize_reservation")
-     * @Route({
-     *      "en": "/ajax/reservation/initialize/{_locale}",
-     *      "es": "/ajax/reservation/initialize/{_locale}",
-     *      "fr": "/ajax/reservation/initialize/{_locale}"
-     *      }, 
-     * options = { "expose" = true }, 
-     * name="initialize_reservation")
-     */
+    #[Route(path: '/ajax/reservation/initialize/{_locale}', options: ['expose' => true], name: 'initialize_reservation')]
+    #[Route(path: ['en' => '/ajax/reservation/initialize/{_locale}', 'es' => '/ajax/reservation/initialize/{_locale}', 'fr' => '/ajax/reservation/initialize/{_locale}'], options: ['expose' => true], name: 'initialize_reservation')]
     public function initializeReservation(
         Request $request,
         DatesRepository $datesRepository,
@@ -298,9 +283,6 @@ class ReservationAjaxController extends AbstractController
         reservationHelper $reservationHelper,
         logHelper $logHelper,
         LangRepository $langRepository,
-        TravelRepository $travelRepository,
-        UserRepository $userRepository,
-        InvoiceHelper $invoiceHelper,
         TravelTranslationRepository $travelTranslationRepository,
         CodespromoRepository $codespromoRepository,
         ReservationManager $reservationManager,
@@ -316,8 +298,10 @@ class ReservationAjaxController extends AbstractController
                 'userId' => $request->request->get('user')
             ];
             
-            
             $date = $datesRepository->find($requestData['dateId']);
+            /**
+             * @var User $user
+             */
             $user = $this->getUser();
             $isReservedObject = $reservationRepository->findOneBy([
                 'user' => $user,
@@ -337,20 +321,19 @@ class ReservationAjaxController extends AbstractController
 
                 ], 403, [], ['groups'=>'main']);
             } 
+           $codepromo = $codespromoRepository
+                            ->findOneBy([
+                                'email' => $user->getEmail()
+                            ]);
+            if(null == $codepromo) {
+                $codepromo = $codespromoRepository
+                                ->findOneBy([
+                                    'user' => $user
+                                ]);
+            }
+
             $reservation = $reservationManager->sendReservation($requestData, $date, $user, $request->getLocale());
             
-            /* $invoiceHelper->makeInvoice($reservation, '', [
-                'name' => $user->getPrenom(). ' '.$user->getNom(),
-                'address' => $user->getAddress(),
-                'nif' => $user->getIdCard(),
-                'postalcode' => $user->getPostcode(),
-                'city' => $user->getCity(),
-                'country' => $user->getCountry()
-            ]); */
-            
-            
-            //LOG INITIALISATION
-            //$logHelper->logReservationInitialize($date, $reservation);
         
             // GET TRANSLATION FOR TRAVEL $travelTranslation
             $lang = $langRepository->findOneBy(['iso_code' => $locale]);
@@ -361,16 +344,7 @@ class ReservationAjaxController extends AbstractController
             //CREATE RESERVATION OPTIONS ARRAY 
             $reservationOptions = $reservationHelper->getReservationOptions($reservation, $lang);
             
-            $codepromo = $codespromoRepository
-                            ->findOneBy([
-                                'email' => $user->getEmail()
-                            ]);
-            if(null == $codepromo) {
-                $codepromo = $codespromoRepository
-                                ->findOneBy([
-                                    'user' => $user
-                                ]);
-            }
+            
             $swalHtml = $this->renderView('reservation/_swal_confirmation_message.html.twig', 
                                                 [
                                                     'codepromo' => $codepromo,
@@ -416,27 +390,21 @@ class ReservationAjaxController extends AbstractController
             return $this->json($renderArray, 200,[],['groups'=>'main']);
     }
 
-    /**
-     * @Route("/ajax/load-user-switch",
-     *  options = { "expose" = true },
-     *  name="ajax_load_user_switch")
-     */
-    public function ajaxLoadUserSwitch(Request $request): Response{
+    #[Route(path: '/ajax/load-user-switch', options: ['expose' => true], name: 'ajax_load_user_switch')]
+    public function ajaxLoadUserSwitch() : Response
+    {
         return $this->render('shared/_user_switch.html.twig');
     }
 
-    /**
-     * @Route("/ajax/login-result",
-     * options = { "expose" = true },
-     * name="ajax_login_result",
-     * methods={"POST"})
-     */
+    #[Route(path: '/ajax/login-result', options: ['expose' => true], name: 'ajax_login_result', methods: ['POST'])]
     public function ajaxLoginResult(
         Request $request,
-        ReservationRepository $reservationRepository,
-        EntityManagerInterface $em
+        ReservationRepository $reservationRepository
         ): Response {
-
+        
+            /**
+             * @var User $user
+             */
         $user = $this->getUser();
         $reservationId = $request->request->get('reservationId');
         if (null !== $reservationId) {
@@ -445,8 +413,8 @@ class ReservationAjaxController extends AbstractController
 
             $reservation->setUser($user);
             $reservation->setStatus('assigned');
-            $em->persist($reservation);
-            $em->flush();
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();
         }
 
         return $this->render('reservation/_login_result_card.html.twig', [
@@ -455,32 +423,19 @@ class ReservationAjaxController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/ajax/assign/codepromo/{reservation}/{codepromo}",
-     * options={"expose":true },
-     * methods={"GET"},
-     * name="assign-codepromo" )
-     */
-
+    #[Route(path: '/ajax/assign/codepromo/{reservation}/{codepromo}', options: ['expose' => true], methods: ['GET'], name: 'assign-codepromo')]
     public function ajaxAssignCodepromo(
-        Request $request,
         Codespromo $codepromo,
-        Reservation $reservation,
-        EntityManagerInterface $em )
+        Reservation $reservation)
         {
-            $reservation->addCodespromo($codepromo);
-            $em->persist($reservation);
-            $em->flush();            
-            return new Response('addes codes promo');
+            $reservation->setCodespromo($codepromo);
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();            
+            return new Response(true);
         }
 
-    /**
-     * @Route("/ajax/invoice/{invoice}", 
-     * options = { "expose" = true },
-     * name="ajax_invoice")
-     */
+    #[Route(path: '/ajax/invoice/{invoice}', options: ['expose' => true], name: 'ajax_invoice')]
     public function ajaxInvoice(
-        Request $request, 
         Invoices $invoice
         ) :Response
         {
@@ -496,15 +451,10 @@ class ReservationAjaxController extends AbstractController
             ], 200, [], ['group'=>'main']);
         }
 
-    /**
-    * @Route("/ajax/save-invoice/{invoice}", 
-    * options = { "expose" = true },
-    * name="ajax_save_invoice")
-    */
+    #[Route(path: '/ajax/save-invoice/{invoice}', options: ['expose' => true], name: 'ajax_save_invoice')]
     public function ajaxSaveInvoice(
             Request $request,
             Invoices $invoice,
-            EntityManagerInterface $em,
             pdfHelper $pdfHelper,
             UploadHelper $uploadHelper,
             Mailer $mailer,
@@ -537,20 +487,16 @@ class ReservationAjaxController extends AbstractController
         return new Response( "The pdf has been saved" );
     }
 
-    /**
-    * @Route("/ajax/add-travellers/{reservation}", 
-    * options = { "expose" = true },
-    * name="ajax-add-travellers")
-    */
-
+    #[Route(path: '/ajax/add-travellers/{reservation}', options: ['expose' => true], name: 'ajax-add-travellers')]
     public function ajaxAddTravellers(
-        Request $request,
         Reservation $reservation,
         TravellersRepository $travellersRepository
     )
     {
-        
-
+        /**
+         * @var Array $travellersArray
+         */
+        $travellersArray = [];
         foreach($travellersArray['traveller'] as $data){
             $traveller = new Travellers;
             $now = new \DateTime();
@@ -562,9 +508,9 @@ class ReservationAjaxController extends AbstractController
             $traveller->setUser($this->getUser());
             $traveller->setDateAjout($now);
             $traveller->addReservation($reservation);
-            $this->em->persist($traveller);
+            $this->entityManager->persist($traveller);
         }
-        $this->em->flush();
+        $this->entityManager->flush();
 
         $travellersTableHtml = $this->renderView('reservation/_travellers_table.html.twig',[
             'travellers' => $reservation->getTravellers()
@@ -575,14 +521,11 @@ class ReservationAjaxController extends AbstractController
             ], 200, [], ['groups'=>'main']);
     }
 
-    /**
-    * @Route("/ajax/add/user",
-    * options = { "expose" = true },
-    * name="ajax-assign-user"
-    * )
-    */
-
+    #[Route(path: '/ajax/add/user', options: ['expose' => true], name: 'ajax-assign-user')]
     public function ajaxAssignUser(){
+        /**
+         * @var $user
+         */
         $user = $this->getUser();
         return $this->json([
             'user' => [
@@ -598,73 +541,52 @@ class ReservationAjaxController extends AbstractController
         );
     }
 
-    /**
-    * @Route("/ajax/cancel/reservation",
-    * options = {"expose" = true},
-    * methods = {"POST"},
-    *  name = "ajax-cancel-reservation")
-    */
-
+    #[Route(path: '/ajax/cancel/reservation', options: ['expose' => true], methods: ['POST'], name: 'ajax-cancel-reservation')]
     public function ajaxCancelReservation(
             Request $request, 
             ReservationRepository $reservationRepository,
-            EntityManagerInterface $em,
             InvoiceHelper $invoiceHelper ){
         $reservation = $reservationRepository
                         ->find($request->request->get('reservationId'));
         $reservation->setStatus('cancelled');
-        $em->flush();
+        $this->entityManager->flush();
         $customerData = [];
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
-        $invoiceHelper->makeInvoice($reservation, 'cancelled', [
-            'name' => $user->getPrenom(). ' '.$user->getNom(),
-            'address' => $user->getAdress(),
-            'nif' => $user->getIdCard(),
-            'postalcode' => $user->getPostalCode(),
-            'city' => $user->getCity(),
-            'country' => $user->getCountry()
-        ], $request->getLocale());
-        $invoiceHelper->createCancelationInvoice($reservation);
+
+        $this->invoiceHelper->cancelInvoice($reservation->getInvoice());
+        $this->invoiceHelper->createCancelationInvoice($reservation);
 
 
 
         return new Response('Cancel Reservation');
     }
 
-    /**
-    * @Route("/ajax/reactivate/reservation",
-    * options = {"expose" = true},
-    * methods = {"POST"},
-    *  name = "ajax-reactivate-reservation")
-    */
-
+    #[Route(path: '/ajax/reactivate/reservation', options: ['expose' => true], methods: ['POST'], name: 'ajax-reactivate-reservation')]
     public function ajaxReactivateReservation(
         Request $request, 
-        ReservationRepository $reservationRepository,
-        EntityManagerInterface $em ){
+        ReservationRepository $reservationRepository
+         ){
     $reservation = $reservationRepository->find($request->request->get('reservationId'));
     $reservation->setStatus('initialized');
-    $em->flush();
+    $this->entityManager->flush();
     return new Response('Reactivate Reservation');
 }
 
-    /**
-    * @Route("ajax/reservation/setStatus/{reservation}",
-    * options = {"expose" = true},
-    * methods = {"POST"},
-    * name="ajax_reservation_set_status")
-    */
-
+    #[Route(path: 'ajax/reservation/setStatus/{reservation}', options: ['expose' => true], methods: ['POST'], name: 'ajax_reservation_set_status')]
     public function ajaxReservationSetStatus(
         Request $request,
         Reservation $reservation,
-        EntityManagerInterface $em,
-        TranslatorInterface $translator,
-        invoiceHelper $invoiceHelper
+        TranslatorInterface $translator
     ) {
         $previousStatus = $reservation->getStatus();
 
         $newStatus = $request->request->get('status');
+        /**
+         * @var User @user
+         */
         $user = $this->getUser();
         $customerData = [
             'name' => $user->getPrenom(). ' '.$user->getNom(),
@@ -674,12 +596,12 @@ class ReservationAjaxController extends AbstractController
             'city' => $user->getCity(),
             'country' => $user->getCountry()
         ];
-       
+
         if ($newStatus != $previousStatus) {
-            $invoiceHelper->makeInvoice($reservation, $newStatus, $customerData, $request->getLocale());
+            $this->invoiceHelper->makeInvoice($reservation, $newStatus, $customerData, $request->getLocale());
             $reservation->setStatus($newStatus);
-            $em->persist($reservation);
-            $em->flush();
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();
 
             if($newStatus == 'initialized') {
                 return $this->json([
@@ -713,31 +635,27 @@ class ReservationAjaxController extends AbstractController
         ],200); */
     }    
 
-    /**
-     * @Route(
-     * "ajax/update/changes/{reservation}",
-     * options = {"expose" = true},
-     * name="ajax-update-changes", 
-     * methods={"POST"})
-     * 
-     */
-
+    #[Route(path: 'ajax/update/changes/{reservation}', options: ['expose' => true], name: 'ajax-update-changes', methods: ['POST'])]
      public function ajaxUpdateChanges(
         Request $request,
         Reservation $reservation,
         ReservationRepository $reservationRepository,
-        invoiceHelper $invoiceHelper,
+        OptionsRepository $optionsRepository,
         ReservationOptionsRepository $reservationOptionsRepository
      )
      {
         $requestData = [
             'nbPilotes' => $request->request->get('nbPilotes'),
             'nbAccomp' => $request->request->get('nbAccomp'),
-            'options' => json_decode($request->request->get('options'))
+            'options' => $request->request->get('options')
         ];
         
+
         $reservationRepository->find($reservation->getId());
 
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
         $customerData = [
             'name' => $user->getPrenom(). ' '.$user->getNom(),
@@ -748,41 +666,59 @@ class ReservationAjaxController extends AbstractController
             'country' => $user->getCountry()
         ];
         
-        $invoiceHelper->makeInvoice($reservation, 'cancelled', $customerData, $request->getLocale());
         
+        //$invoiceHelper->updateInvoice($reservation,'updated',$customerData,$request->getLocale(),$requestData);
         $reservation->setNbpilotes($requestData['nbPilotes']);
         $reservation->setNbAccomp($requestData['nbAccomp']);
         
-        foreach( $reservation->getReservationOptions() as $reservationOption){
-            $reservationOptionObject = $reservationOptionsRepository->find( $reservationOption->getId() );
-           foreach( $requestData['options'] as $changedOption ) {
-               //dd($changedOption);
-               if(isset($changedOption->ReservationOptionId) && $reservationOptionObject->getId() == $changedOption->ReservationOptionId) {
-                    $reservationOptionObject->setAmmount($changedOption->ammount);
-               }
-           }
+        
+        if( count($requestData['options']) > 0 ) {
+            foreach ($requestData['options'] as $optionArray){
+                $option = $optionsRepository->find($optionArray['id']);
+                $reservationOptions = $reservationOptionsRepository->findBy(['options'=> $optionArray['id']]);
+                ($reservationOptions);
+                ($option);
+                if ( count($reservationOptions) == 0 ) {
+                        $reservationOption = new ReservationOptions;
+                        $reservationOption->setAmmount($optionArray['ammount']);
+                        $reservationOption->setOptions($option);
+                        ($reservationOption);
+                        $reservation->addReservationOption($reservationOption);
+                } else {
+                    foreach($reservationOptions as $reservationOption) {
+                        $reservationOption->setAmmount($optionArray['ammount']); 
+                        $reservationOption->setOptions($option);
+                        ($reservationOption);
+                        $reservation->addReservationOption($reservationOption);
+                    }
+                }
+                
+                
+            }
         }
-           
-        $invoiceHelper->makeInvoice($reservation, 'initialized', $customerData , $request->getLocale());
-        return new Response('Done');
+        
+        $this->entityManager->persist($reservation);
+        $this->entityManager->flush();
+
+        $this->invoiceHelper->updateReservationInvoice($reservation, $customerData, $request->getLocale());   
+
+        $html = $this->renderView('user/partials/_card_reservation_updated.html.twig',['reservation'=>$reservation]);
+        return $this->json([
+            'html' => $html
+        ],200);
 
      }
 
-     /**
-      * @Route("ajax/reservation/applyCodePromo/{codepromo}", 
-      * options = {"expose" = true},
-      * name="apply-code-promo", methods={"POST"})
-      */
+     #[Route(path: 'ajax/reservation/applyCodePromo/{codepromo}', options: ['expose' => true], name: 'apply-code-promo', methods: ['POST'])]
      public function applyCodePromo(
          Request $request,
          Codespromo $codepromo,
          ReservationRepository $reservationRepository,
-         reservationHelper $reservationHelper,
-         EntityManagerInterface $em ){
+         reservationHelper $reservationHelper ){
         $reservationId = $request->request->get('reservation');
         $reservation = $reservationRepository->find($reservationId);
         $reservation->addCodespromo($codepromo);
-        $em->persist($reservation);
+        $this->entityManager->persist($reservation);
         
         $totalAmmount = $reservationHelper->getReservationAmmountBeforeDiscount($reservation);
         $now = new \DateTime();
@@ -791,14 +727,14 @@ class ReservationAjaxController extends AbstractController
             if($codepromo->getNombre() == 0 ){
                 $codepromo->setStatut('Inactif');
             }
-            $em->persist($codepromo);
+            $this->entityManager->persist($codepromo);
         } else if ($codepromo->getType() == 'period'){
             if($codepromo->getDebut() <= $now && $now <= $codepromo->getFin()){
                 dd('valid period');
             }
         }
         
-        $em->flush();
+        $this->entityManager->flush();
         if ($codepromo->getMontant() != null && $codepromo->getPourcentage() == null){
             $discountedAmmount = $totalAmmount - $codepromo->getMontant();
         }
@@ -818,21 +754,8 @@ class ReservationAjaxController extends AbstractController
         ] , 200);
      }
 
-     /**
-      * @Route("ajax/update-calculator/{_locale}",
-      * methods={"POST","GET"}, 
-      * name="update-calculator", 
-      * options={ "expose" = true })
-      * @Route({
-      *      "en": "ajax/update-calculator/{_locale}",
-      *      "es": "ajax/actualizar-calculadora/{_locale}",
-      *      "fr": "ajax/actualiser-calculatrice/{_locale}"
-      *      },
-      * methods={"POST","GET"}, 
-      * name="update-calculator", 
-      * options={ "expose" = true })
-      */
-
+     #[Route(path: 'ajax/update-calculator/{_locale}', methods: ['POST', 'GET'], name: 'update-calculator', options: ['expose' => true])]
+      #[Route(path: ['en' => 'ajax/update-calculator/{_locale}', 'es' => 'ajax/actualizar-calculadora/{_locale}', 'fr' => 'ajax/actualiser-calculatrice/{_locale}'], methods: ['POST', 'GET'], name: 'update-calculator', options: ['expose' => true])]
       public function updateCalculator(
         Request $request,
         ReservationRepository $reservationRepository,
@@ -841,28 +764,22 @@ class ReservationAjaxController extends AbstractController
         $_locale = null
       ) : Response
       {
-        //dump($_locale);
         $locale = $_locale? $_locale : $locale;
-        dump($locale);
+
         $data = $request->request->all();
-        /* $request->setLocale($data['locale']);
-        dump($request->getLocale($locale));
-        dump($data); */
+
         $date = $datesRepository->find($data['dateId']);
         $renderArray = [
             'date' => $date,
             'locale'=> $_locale,
             '_locale'=> $locale
         ];
-        dump($renderArray);
+
         $renderArray = array_merge($renderArray,$data);
-        dump($renderArray);
-        //$options = $reservationHelper->getReservationOptions($reservation, $this->langRepository->findBy(['iso_code'=>$request->getLocale()]));
+        
         if(isset ($data['reservation'])){
             $reservation = $reservationRepository->find($data['reservation']);
             $renderArray['reservation'] = $reservation;
-            dump($reservation->getId());
-            dump($reservation->getCodespromos());
         }
         
         $renderArray['options'] = (isset( $data['options'] ))? $data['options'] : "";
@@ -871,7 +788,6 @@ class ReservationAjaxController extends AbstractController
         $renderArray['isInitialized'] = (isset( $data['isInitialized'] ))? $data['isInitialized'] : "";
         $renderArray['userEdit'] = (isset( $data['userEdit'] ))? $data['userEdit'] : "";
        
-        dump($renderArray);
         return $this->render('reservation/_wrapper_calculator_logged_user.html.twig',$renderArray);
       }
 }

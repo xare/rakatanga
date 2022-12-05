@@ -31,9 +31,7 @@ class MailingsController extends AbstractController
             'count'=>$count
         ]);
     }
-    /**
-     * @Route("/search/{categoryName}", name="mailings_by_category", methods={"GET","POST"})
-     */
+    #[Route(path: '/search/{categoryName}', name: 'mailings_by_category', methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
         string $categoryName,

@@ -1,0 +1,22 @@
+{% extends 'email/emailBase.html.twig' %}
+{% block content %}
+<h1>
+    <center>{{'Gracias'|trans}} {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}], {{'hemos recibido tu pago'|trans}}.</center>
+</h1>
+<p><strong>{{'Viaje'|trans}}:</strong> {{reservation.date.travel.mainTitle}}.</p>
+<p><strong>{{'Fecha'|trans}}:</strong> {{reservation.date.debut|date('Y-m-d')}}.</p>
+<p><strong>{{'Número de pilotos'|trans}}:</strong> {{reservation.nbpilotes}}.</p>
+<p><strong>{{'Número de Acompañantes'|trans}}:</strong> {{reservation.nbaccomp}}.</p>
+<p><strong>{{'Opciones'|trans}}:</strong>
+    <ul>
+        {% for reservationOption in reservation.reservationOptions %}
+        <li>
+            {{ renderLocalizedOption(
+                    reservationOption.options.id,
+                    app.request.getLocale())
+            }}
+            </li> 
+        {% endfor %}
+    </ul>
+</p>
+{% endblock %}

@@ -25,41 +25,41 @@ class Contact
     /**
      * @ORM\Column(type="string", length=255)
      * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=20)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 20)]
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=40)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 40)]
     private $lastname;
 
     /**
      * @ORM\Column(type="phone_number", nullable=true)
      * @var string|null
      * @AssertPhoneNumber
-     * @Assert\NotBlank()
      */
+    #[Assert\NotBlank]
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Email() 
+     * @var string|null 
      */
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private $email;
 
     /**
      * @ORM\Column(type="text")
      * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(min=10, max=1000)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 10, max: 1000)]
     private $message;
 
 

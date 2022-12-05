@@ -4,7 +4,7 @@
         <columns>
             <spacer size="35"></spacer>
             <h1>
-                <center>Hola {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}]</center>
+                <center>{{'Hola'|trans}} {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}]</center>
             </h1>
             <spacer size="10"></spacer>
         </columns>
@@ -13,16 +13,16 @@
   <row>
     <columns>
       <spacer size="30"></spacer>
-        <p>Te invitamos a realizar el checkin para tu viaje.</p>
-        <p> Antes de hacer click intenta agenciarte y tener a mano un scaneo o fotografía de los siguientes documentos:
+        <p>{{'Te invitamos a realizar el checkin para tu viaje'|trans}}.</p>
+        <p>{{'Antes de hacer click intenta agenciarte y tener a mano un scaneo o fotografía de los siguientes documentos'|trans}}:
         </p>
         <ul>
-          <li>Pasaporte</li>
-          <li>Visado</li>
-          <li>Permiso de circulación</li>
+          <li>{{'Pasaporte'|trans}}</li>
+          <li>{{'Visado'|trans}}</li>
+          <li>{{'Permiso de circulación'|trans}}</li>
         </ul>
-        <p>Haciendo click en el vínculo que te ofrecemos a continuación te trasladaremos a un asistente para que nos deposites tus documentos y los documentos asociados a tu reserva. Este proceso nos permitirá gestionar tu viaje de un modo más eficiente y podremos asistirte mejor durante tu viaje.</p>
-        <p><button class="radius" href="{{ absolute_url( path('frontend_user_reservation_data',{'reservation':reservation.id})) }}">Realizar el check-in</button></p>
+        <p>{{'Haciendo click en el vínculo que te ofrecemos a continuación te trasladaremos a un asistente para que nos deposites tus documentos y los documentos asociados a tu reserva. Este proceso nos permitirá gestionar tu viaje de un modo más eficiente y podremos asistirte mejor durante tu viaje'|trans}}.</p>
+        <p><button class="radius" href="{{ absolute_url( path('frontend_user_reservation_data',{'reservation':reservation.id})) }}">{{'Realizar el check-in'|trans}}</button></p>
       <spacer size="10"></spacer>
     </columns>
   </row>

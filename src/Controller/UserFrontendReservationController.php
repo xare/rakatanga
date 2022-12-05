@@ -36,120 +36,9 @@ class UserFrontendReservationController extends AbstractController
         $this->translatorInterface = $translatorInterface;
         $this->breadcrumbs = $breadcrumbs;
     }
-    /* #[Route('/user/frontend/reservation', name: 'user_frontend_reservation')]
-    public function index(): Response
-    {
-        return $this->render('user_frontend_reservation/index.html.twig', [
-            'controller_name' => 'UserFrontendReservationController',
-        ]);
-    } */
-
-    /**
-     * @Route({
-     *      "en": "{_locale}/user/reservation/data/{reservation}",
-     *      "es": "{_locale}/usuario/reserva/datos/{reservation}",
-     *      "fr": "{_locale}/utilisateur/reservation/donnees/{reservation}"
-     *      }, name="frontend_user_reservation_data")
-     */
-    public function frontend_user_reservation_data(
-        Request $request,
-        string $_locale = null,
-        Reservation $reservation,
-        LangRepository $langRepository,
-        ReservationDataRepository $reservationDataRepository,
-        DocumentRepository $documentRepository,
-        EntityManagerInterface $em,
-        Mailer $mailer,
-        logHelper $logHelper,
-        $locale = "es"
-    ) {
-        $locale = $_locale ?: $locale;
-        $user = $this->getUser();
-        //Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $i = 0;
-        $urlArray = [];
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $urlArray[$i]['reservation'] = $reservation;
-            $i++;
-        }
-        //End switch locale loader
-
-        //BREADCRUMBS
-        $this->breadcrumbs->addRouteItem(
-            $this->translatorInterface->trans("Tus Reservas"), 
-            "frontend_user_reservations",
-            [
-                '_locale' => $locale
-            ]
-        );
-        $this->breadcrumbs->prependRouteItem(
-            $this
-                ->translatorInterface
-                ->trans("Inicio"),
-            "index"
-        );
-        $this->breadcrumbs->addItem(
-            $this
-                ->translatorInterface
-                ->trans("Reserva")
-        );
-        //END BREADCRUMBS
-
-        $reservationData = $reservationDataRepository->findOneBy([
-            'reservation' => $reservation
-        ]);
-        
-        $reservationData = $reservationData ?: new ReservationData;
-        $documents = $reservationData->getDocuments();
-        $form = $this->createForm(ReservationDataType::class, $reservationData);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $reservationData = $form->getData();
-            $reservationData->setReservation($reservation);
-            $reservationData->setUser($this->getUser());
-            $em->persist($reservationData);
-            $em->flush();
-            $logHelper->logThis(
-                'Datos aportados a una reserva', 
-                "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] ha depositados datos para una reserva para el viaje
-                {$reservation->getDate()->getTravel()->getMainTitle()} en
-                {$reservation->getDate()->getDebut()->format('d/m/Y')} with reference
-                {$reservation->getId()} " . strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(),0,3))."",
-                [],
-                'reservation');
-            $mailer->sendEmailonDataCompletionToUs($reservation);
-            $this->addFlash('success', $this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente'));
-        }
-        return $this->render("user/user_reservation_data.html.twig", [
-            'langs' => $urlArray,
-            'locale' => $locale,
-            'user' => $this->getUser(),
-            'reservation' => $reservation,
-            'documents' => $documents,
-            'form' => $form->createView()
-        ]);
-    }
-    
-
-     /**
-     * @Route({"/user/reservation/{reservation}"},
-     * options = { "expose" = true },
-     * name="frontend_user_reservation")
-     * 
-     * @Route({
-     *      "en": "{_locale}/user/reservation/{reservation}",
-     *      "es": "{_locale}/usuario/reserva/{reservation}",
-     *      "fr": "{_locale}/utilisateur/reservation/{reservation}"
-     *      },
-     *  options = { "expose" = true },
-     *  name="frontend_user_reservation")
-     */
+    #[Route(path: ['/user/reservation/{reservation}'], options: ['expose' => true], name: 'frontend_user_reservation')]
+    #[Route(path: ['en' => '{_locale}/user/reservation/{reservation}', 'es' => '{_locale}/usuario/reserva/{reservation}', 'fr' => '{_locale}/utilisateur/reservation/{reservation}'], options: ['expose' => true], name: 'frontend_user_reservation')]
     public function frontend_user_reservation(
-        Request $request,
         Reservation $reservation,
         LangRepository $langRepository,
         ReservationOptionsRepository $reservationOptionsRepository,
@@ -203,9 +92,8 @@ class UserFrontendReservationController extends AbstractController
         );
         //END BREADCRUMBS
 
-        dump($reservation);
         $options = $reservationHelper->getReservedOptions($reservation, $lang->getIsoCode());
-        dump($options);
+
         $selectableOptions = $reservationHelper->getReservationOptions($reservation, $lang);
         return $this->render("reservation/index.html.twig", [
             'date' => $reservation->getDate(),
@@ -223,12 +111,7 @@ class UserFrontendReservationController extends AbstractController
 
      
      
-    /**
-     * @Route("/user/reservation/{reservation}/change/option",
-     * options = { "expose" = true }, 
-     * name="user_reservation_change_option",
-     * methods = {"POST"})
-     */
+    #[Route(path: '/user/reservation/{reservation}/change/option', options: ['expose' => true], name: 'user_reservation_change_option', methods: ['POST'])]
     public function userReservationChangeOption(
         Request $request,
         Reservation $reservation,
@@ -254,12 +137,7 @@ class UserFrontendReservationController extends AbstractController
         return new Response('nothing');
     }
 
-    /**
-     * @Route("/user/reservation/{reservation}/change/nb",
-     * options = { "expose" = true }, 
-     * name="user_reservation_change_nb",
-     * methods = {"POST"})
-     */
+    #[Route(path: '/user/reservation/{reservation}/change/nb', options: ['expose' => true], name: 'user_reservation_change_nb', methods: ['POST'])]
     public function userReservationChangeNb(
         Request $request,
         Reservation $reservation,

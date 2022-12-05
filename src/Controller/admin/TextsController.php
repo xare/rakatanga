@@ -59,7 +59,7 @@ class TextsController extends MainadminController
     }
     
     #[Route("/items", methods: ['GET'], name: "texts_items")]
-    public function getTextsItems(Request $request, TextsRepository $textsRepository)
+    public function getTextsItems(Request $request, TextsRepository $textsRepository): \Symfony\Component\HttpFoundation\Response
     {
        
         if (!$presentPage = $request->query->get('page'))

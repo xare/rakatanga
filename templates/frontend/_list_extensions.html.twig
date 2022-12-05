@@ -1,0 +1,34 @@
+
+{% for option in travelObject.options %}
+  {% if option.isExtension == 1 %}
+        <h4>{{ renderLocalizedOption(
+                                option.id,
+                                app.request.getLocale())
+                        }}
+        </h4>
+        <p>{{ renderLocalizedOptionIntro(
+                                option.id,
+                                app.request.getLocale())|raw
+                        }}
+        </p>
+   
+        {% set infodoc = renderLocalizedOptionInfodoc(option.id, app.request.getLocale()) %}
+        {% if infodoc != null %}
+        <p>
+          {{' Hemos preparado esta guía que te puedes descargar para conocer al detalle esta oferta'|trans }}.
+        </p>
+        
+        <p>
+          <a 
+            href="{{absolute_url(infodoc.infodocsPath)}}" 
+            target="_blank">
+            <i class="fas fa-file-pdf"></i>
+              {{ infodoc.title }}
+          </a>
+        {% endif %}
+        </p>
+  {% endif %}
+  {% else %}
+    <li class="list-group-item">{{ 'Este viaje no ofrece extensiones'|trans }}</li>
+{% endfor %}
+</ul>

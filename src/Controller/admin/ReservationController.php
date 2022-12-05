@@ -15,9 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/reservation")
- */
+#[Route(path: '/admin/reservation')]
 class ReservationController extends MainadminController
 {
     private $entityManager;
@@ -26,9 +24,7 @@ class ReservationController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="reservation_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'reservation_index', methods: ['GET'])]
     public function index(
         Request $request, 
         ReservationRepository $reservationRepository,
@@ -50,9 +46,7 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="reservation_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $reservation = new Reservation();
@@ -72,9 +66,7 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/search/{categoryName}", name="reservation_by_category", methods={"GET","POST"})
-     */
+    #[Route(path: '/search/{categoryName}', name: 'reservation_by_category', methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
         string $categoryName,
@@ -92,9 +84,7 @@ class ReservationController extends MainadminController
             ]);
         }
 
-    /**
-     * @Route("/items", methods="GET", name="reservation_items")
-     */
+    #[Route(path: '/items', methods: 'GET', name: 'reservation_items')]
     public function getReservationItems(Request $request, ReservationRepository $reservationRepository, OptionsRepository $optionsRepository)
     {
        
@@ -143,9 +133,7 @@ class ReservationController extends MainadminController
         return $this->json($data,200,[],['groups'=>'main']);
     }
 
-    /**
-     * @Route("/{id}", name="reservation_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'reservation_show', methods: ['GET'])]
     public function show(Reservation $reservation): Response
     {
         return $this->render('admin/reservation/show.html.twig', [
@@ -153,9 +141,7 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="reservation_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'reservation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reservation $reservation): Response
     {
         $form = $this->createForm(ReservationType::class, $reservation);
@@ -175,9 +161,7 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="reservation_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'reservation_delete', methods: ['POST'])]
     public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->request->get('_token'))) {
@@ -188,14 +172,8 @@ class ReservationController extends MainadminController
         return $this->redirectToRoute('reservation_index');
     }
 
-    /**
-    * @Route("ajax/reservation/send-checkin-message/{reservation}",
-    * options = { "expose" = true},
-    * name="ajax-reservation-send-checkin-message")
-    */
-
+    #[Route(path: 'ajax/reservation/send-checkin-message/{reservation}', options: ['expose' => true], name: 'ajax-reservation-send-checkin-message')]
     public function ajaxReservationSendCheckinMessage(
-        Request $request,
         Reservation $reservation,
         Mailer $mailer
     ) {

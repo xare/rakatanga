@@ -87,7 +87,6 @@ class InscriptionsController extends AbstractController
 
     #[Route('/inscription/preAddUser/{inscription}', name: 'inscriptions_preadd_user', options: ["expose" => true ], methods: ['GET','POST'])]
     public function inscriptionsPreAddUser(
-                        Request $request, 
                         Inscriptions $inscription, 
                         EntityManagerInterface $entityManager,
                         UserPasswordHasherInterface $userPasswordHasher): Response 
@@ -104,10 +103,10 @@ class InscriptionsController extends AbstractController
                         Request $request, 
                         Inscriptions $inscription, 
                         EntityManagerInterface $entityManager,
-                        UserPasswordHasherInterface $userPasswordHasher): Response 
+                        UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $password = $request->request->get('password') ? null : 'r4k4t4ng4';
-        
+
         $user = new User();
         $user->setNom($inscription->getNom());
         $user->setPrenom($inscription->getPrenom());

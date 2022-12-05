@@ -37,16 +37,7 @@ class BlogController extends AbstractController
         $this->paginator = $paginator;
         $this->articlesRepository = $articlesRepository;
     }
-    /**
-    * @Route({
-    *            "en": "{_locale}/blog/",
-    *            "fr": "{_locale}/blog/",
-    *            "es": "{_locale}/blog/",
-    *        }, 
-    *            name = "blog",
-    *            requirements={"_locale"="^[a-z]{2}$"}
-    * )
-    */
+    #[Route(path: ['en' => '{_locale}/blog/', 'fr' => '{_locale}/blog/', 'es' => '{_locale}/blog/'], name: 'blog', requirements: ['_locale' => '^[a-z]{2}$'])]
     public function index(
         Request $request,
         string $locale = "es",
@@ -77,17 +68,7 @@ class BlogController extends AbstractController
             'articles' => $articles
         ]);
     }
-    /**
-     * @Route({
-     *          "en":"/{_locale}/blog/{article}",
-     *          "es":"/{_locale}/blog/{article}",
-     *          "fr":"/{_locale}/blog/{article}",
-     *          },
-     *          name="blog-article",
-     *          requirements={"_locale"="^[a-z]{2}$"}
-     * )
-     */
-
+    #[Route(path: ['en' => '/{_locale}/blog/{slug}', 'es' => '/{_locale}/blog/{slug}', 'fr' => '/{_locale}/blog/{slug}'], name: 'blog-article', requirements: ['_locale' => '^[a-z]{2}$'])]
     public function blogArticle(
                 string $slug,
                 string $_locale = null, 

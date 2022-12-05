@@ -19,14 +19,14 @@ class Travel
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $id;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $km;
 
     /**
@@ -36,27 +36,27 @@ class Travel
 
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups("main")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups('main')]
     private $status;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Groups("main")
+     * @ORM\Column(type="integer", nullable=true)
      */
+    #[Groups('main')]
     private $duration;
 
     /**
-     * @ORM\Column(type="string", length=3)
-     * @Groups("main")
+     * @ORM\Column(type="string", length=3, nullable=true)
      */
+    #[Groups('main')]
     private $level;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $date;
 
     /**
@@ -66,15 +66,15 @@ class Travel
 
     /**
      * @ORM\OneToMany(targetEntity=TravelTranslation::class, mappedBy="travel", orphanRemoval=true, cascade={"persist"})
-     * @Groups("main")
-     * @Assert\Valid()
      */
+    #[Groups('main')]
+    #[Assert\Valid]
     private $travelTranslation;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $main_title;
 
     /**

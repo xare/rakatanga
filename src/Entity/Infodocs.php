@@ -50,9 +50,15 @@ class Infodocs
      */
     private $travel;
 
+    /**
+     * @ORM\OneToMany(targetEntity=OptionsTranslations::class, mappedBy="infodocs")
+     */
+    private $optionsTranslations;
+
     public function __construct()
     {
         $this->travel = new ArrayCollection();
+        $this->optionsTranslations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +153,36 @@ class Infodocs
     public function removeTravel(Travel $travel): self
     {
         $this->travel->removeElement($travel);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OptionsTranslations[]
+     */
+    public function getOptionsTranslations(): Collection
+    {
+        return $this->optionsTranslations;
+    }
+
+    public function addOptionsTranslation(OptionsTranslations $optionsTranslation): self
+    {
+        if (!$this->optionsTranslations->contains($optionsTranslation)) {
+            $this->optionsTranslations[] = $optionsTranslation;
+            $optionsTranslation->setInfodocs($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOptionsTranslation(OptionsTranslations $optionsTranslation): self
+    {
+        if ($this->optionsTranslations->removeElement($optionsTranslation)) {
+            // set the owning side to null (unless already changed)
+            if ($optionsTranslation->getInfodocs() === $this) {
+                $optionsTranslation->setInfodocs(null);
+            }
+        }
 
         return $this;
     }

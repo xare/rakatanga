@@ -13,17 +13,19 @@
 	{% endif %}
 	{% set discountType = "ammount" %}
 	{% set discount = 0 %}
-	{% for codepromo in reservation.codespromos %}
-		{% if codepromo.statut == 'act' %}
-			{% if codepromo.montant > 0 %}
-				{% set discountType = "ammount" %}
-				{% set discount = codepromo.montant %}
-			{% elseif codepromo.pourcentage > 0 %}
-				{% set discountType = "pourcentage" %}
-				{% set discount = codepromo.pourcentage %}
-			{% endif %}
-		{% endif %}
-	{% endfor %}
+    {% if reservation.codespromo|length > 0 %}
+        {% for codepromo in reservation.codespromo %}
+            {% if codepromo.statut == 'act' %}
+                {% if codepromo.montant > 0 %}
+                    {% set discountType = "ammount" %}
+                    {% set discount = codepromo.montant %}
+                {% elseif codepromo.pourcentage > 0 %}
+                    {% set discountType = "pourcentage" %}
+                    {% set discount = codepromo.pourcentage %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 {% else %}
 	{% set reservation = null %}
 	{% set reservationId = 0 %}
@@ -127,7 +129,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-xs-12">
+            <div class="col-4 col-xs-12">
                 <div class="position-sticky"
                         data-spy="affix" 
                         data-offset-top="135" 

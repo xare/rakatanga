@@ -43,7 +43,7 @@ var AdminTemplate = {
         return itemsHtml;
     },
     renderRow: function(item) {
-        //console.log(item);
+        //
         var rowContent = `<tr>`;
         for (const property in item) {
             if (property == 'totalPath') {
@@ -85,7 +85,7 @@ var AdminTemplate = {
             </td>`;
     },
     renderEditCell: function(baseUrl, id) {
-        console.log(baseUrl);
+
         return `
             <td>
                 <a href="${baseUrl}/${id}/edit" class="btn btn-info">
@@ -104,9 +104,9 @@ var AdminTemplate = {
             </td>`;
     },
     renderPagination: function(count, page) {
-        /* console.log(count); */
+        /*  */
         var pages = Math.ceil(count / 10);
-        /* console.log(pages); */
+        /*  */
         var pageLinks = '';
         var i;
         var isActive = '';
@@ -133,9 +133,9 @@ var AdminTemplate = {
                 } else {
                     bottom = page - (interval / 2);
                 }
-                /* console.log(page);
-                console.log(pages);
-                console.log(bottom); */
+                /* 
+                
+                 */
                 for (i = bottom + 1; i <= (bottom + interval); i++) {
                     if (page == i) {
                         isActive = ` active`;

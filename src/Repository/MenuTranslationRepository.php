@@ -60,7 +60,7 @@ class MenuTranslationRepository extends ServiceEntityRepository
                     Menu::class, 
                     'menuTable', 
                     Join::WITH, 
-                    'menuTable.id = m.Menu')     
+                    'menuTable.id = m.menu')     
                 ->andWhere('m.slug = :slug')
                 ->setParameter('slug', $slug)
                 ->getQuery()
@@ -74,7 +74,7 @@ class MenuTranslationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->select('m.title as title','m.slug as slug' ,'l.name as name', 'l.iso_code as isocode')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = m.lang')
-            ->andWhere('m.Menu = :menu')
+            ->andWhere('m.menu = :menu')
             ->setParameter('menu', $menu)
             ->andWhere('l.iso_code != :lang')
             ->setParameter('lang', $lang)
@@ -89,8 +89,8 @@ class MenuTranslationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->select('m.title as title','m.slug as slug' ,'l.name as name', 'l.iso_code as isocode')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = m.lang')
-            ->andWhere('m.Menu = :menu')
-            ->setParameter('menu', $menu)
+            ->andWhere('m.menu = :menu')
+            ->setParameter('menu', $menu[0])
             ->andWhere('l.iso_code = :lang')
             ->setParameter('lang', $lang)
             ->getQuery()
@@ -102,7 +102,7 @@ class MenuTranslationRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('mt')
             ->select('pt.title as title', 'pt.body as body')
-            ->innerJoin(Menu::class, 'mn', Join::WITH, 'mn.id = mt.Menu' )
+            ->innerJoin(Menu::class, 'mn', Join::WITH, 'mn.id = mt.menu' )
             ->innerJoin(Pages::class, 'p', Join::WITH, 'p.id = mn.page')
             ->innerJoin(PageTranslation::class, 'pt', Join::WITH, 'p.id = pt')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id= mt.lang' )

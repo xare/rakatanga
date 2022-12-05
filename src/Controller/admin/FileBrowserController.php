@@ -26,10 +26,7 @@ class FileBrowserController extends AbstractController
     {
         $this->requestStackContext = $requestStackContext;
     }
-    /**
-     * @Route("/filebrowser/{entity}/{id}", name="file-browser")
-     */
-
+    #[Route(path: '/filebrowser/{entity}/{id}', name: 'file-browser')]
     public function index(
         Request $request,
         string $entity,
@@ -68,10 +65,7 @@ class FileBrowserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/filebrowser/upload/{entity}/{id}", name="file-browser-upload")
-     */
-
+    #[Route(path: '/filebrowser/upload/{entity}/{id}', name: 'file-browser-upload')]
     public function upload(
         Request $request,
         UploadHelper $uploadHelper,

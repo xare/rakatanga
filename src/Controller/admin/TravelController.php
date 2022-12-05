@@ -10,17 +10,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\admin\MainadminController;
-
+use App\Entity\Category;
 use App\Entity\Lang;
 use App\Entity\Media;
 use App\Entity\TravelTranslation;
 use App\Form\LoadTravelCsvType;
+use App\Repository\CategoryRepository;
 use App\Repository\InfodocsRepository;
 use App\Repository\LangRepository;
 use App\Repository\MediaRepository;
 use App\Service\slugifyHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Knp\Component\Pager\PaginatorInterface;
 use League\Csv\Reader;
 use Symfony\Component\Form\FileUploadError;
@@ -29,20 +31,17 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolation;
 
-/**
- * @Route("/admin/travel")
- */
+#[Route(path: '/admin/travel')]
 class TravelController extends MainadminController
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    private EntityManagerInterface $entityManager;
+    private TravelRepository $travelRepository;
+    public function __construct(EntityManagerInterface $entityManager, TravelRepository $travelRepository, private string $csvDirectory )
     {
         $this->entityManager = $entityManager;
+        $this->travelRepository = $travelRepository;
     }
-    /**
-     * @Route("/", name="travel_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'travel_index', methods: ['GET'])]
     public function index(
         Request $request,
         PaginatorInterface $paginator,
@@ -64,9 +63,7 @@ class TravelController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/search/{categoryName}", name="travel_by_category", methods={"GET","POST"})
-     */
+    #[Route(path: '/search/{categoryName}', name: 'travel_by_category', methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
         string $categoryName,
@@ -85,11 +82,11 @@ class TravelController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="travel_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'travel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository, MediaRepository $mediaRepository): Response
     {
+        $plantilla = $this->travelRepository->findBy(['main_title' => "PLANTILLA"]);
+        return $this->redirectToRoute('travel_new_from_template',['travel' => $plantilla[0]->getId()]);
         $this->redirectToLogin($request);
         $langs = $langRepository->findAll();
         $media = $mediaRepository->findAll();
@@ -114,9 +111,39 @@ class TravelController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/items", methods="GET", name="travel_items")
-     */
+    #[Route(path: '/new_from_template/{travel}', name: 'travel_new_from_template', methods: ['GET', 'POST'])]
+     public function newFromTemplate(
+        Travel $travel,
+        TravelRepository $travelRepository, 
+        slugifyHelper $slugifyHelper, 
+        LangRepository $langRepository,
+        CategoryRepository $categoryRepository ){
+        $langs = $langRepository->findAll();
+        $travelData = $travelRepository->findBy(['main_title' => "PLANTILLA"]);
+
+        $newTravel = new Travel();
+        $newTravel->setMainTitle("NUEVO VIAJE DESDE PLANTILLA");
+        $newTravel->setStatus($travel->getStatus());
+        $now = new \DateTime();
+        $newTravel->setDate($now);
+        $newTravel->setDuration($travel->getDuration());
+        $newTravel->setCategory($travel->getCategory());
+        foreach ($travel->getTravelTranslation() as $travelTranslation){
+            $newTravelTranslation = new TravelTranslation();
+            $newTravelTranslation->setLang($travelTranslation->getLang());
+            $newTravelTranslation->setTitle("Nuevo viaje desde Plantilla");
+            $newTravelTranslation->setIntro($travelTranslation->getIntro());
+            $newTravelTranslation->setDescription($travelTranslation->getDescription());
+            $newTravelTranslation->setUrl($slugifyHelper->slugify($travelTranslation->getTitle()));
+            $newTravel->addTravelTranslation($newTravelTranslation);
+            $this->entityManager->persist($newTravelTranslation);
+        }
+        $this->entityManager->persist($newTravel);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('travel_edit', [ 'id' => $newTravel->getId() ]);
+     }
+
+    #[Route(path: '/items', methods: 'GET', name: 'travel_items')]
     public function getItems(Request $request, PaginatorInterface $paginator, TravelRepository $travelRepository)
     {
 
@@ -125,7 +152,7 @@ class TravelController extends MainadminController
         }
 
         $allTravels = $travelRepository->findAll();
-    
+
         $count = count($allTravels);
         $properties = [
             'id',
@@ -155,9 +182,7 @@ class TravelController extends MainadminController
         /* return $this->json($mediaRepository->findAll()); */
     }
 
-    /**
-     * @Route("/loadFromCsv", name="load_travels", methods={"GET","POST"})
-     */
+    #[Route(path: '/loadFromCsv', name: 'load_travels', methods: ['GET', 'POST'])]
     public function LoadFromCsv(Request $request, UploadHelper $uploadHelper, LangRepository $langRepository)
     {
         $form = $this->createForm(LoadTravelCsvType::class);
@@ -167,10 +192,10 @@ class TravelController extends MainadminController
             $csvFile = $form->get('csvFile')->getData();
             if ($csvFile) {
                 $csvUploadedFile = $uploadHelper->upload($csvFile);
-                $reader = Reader::createFromPath($this->getParameter('csv_directory') . '/' . $csvUploadedFile, 'r');
+                $reader = Reader::createFromPath($this->csvDirectory . '/' . $csvUploadedFile, 'r');
                 $reader->setHeaderOffset(0);
                 $records = $reader->getRecords();
- 
+
                 $langArray = $langRepository->findAll();
                 foreach ($records as $record) {
                     $travel = new Travel();
@@ -195,7 +220,7 @@ class TravelController extends MainadminController
                         $travel->addTravelTranslation($travelTranslation);
                     }
 
-                    
+
                     $this->entityManager->persist($travel);
                     $this->entityManager->flush();
                 }
@@ -210,9 +235,7 @@ class TravelController extends MainadminController
 
         // 2. When a file has been submitted process it.
     }
-    /**
-     * @Route("/{id}", name="travel_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'travel_show', methods: ['GET'])]
     public function show(Travel $travel): Response
     {
         return $this->render('admin/travel/show.html.twig', [
@@ -220,12 +243,7 @@ class TravelController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/assign",
-     *  options = { "expose" = true }, 
-     *  name="assign_main_photo_travel", 
-     *  methods={"POST"})
-     */
+    #[Route(path: '/{id}/assign', options: ['expose' => true], name: 'assign_main_photo_travel', methods: ['POST'])]
     public function assign(
         Request $request,
         Travel $travel,
@@ -241,9 +259,7 @@ class TravelController extends MainadminController
         return new Response($travel->getId() . ', ' . $mediaId);
     }
 
-    /**
-     * @Route("/{id}/edit", name="travel_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'travel_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Travel $travel,
@@ -252,13 +268,11 @@ class TravelController extends MainadminController
     ): Response {
 
         $langs = $langRepository->findAll();
-
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $travelData = $form->getData();
-
             foreach ($travelData->getTravelTranslation() as $travelTranslation) {
                 $travelTranslation->setUrl($slugifyHelper->slugify($travelTranslation->getTitle()));
             }
@@ -279,9 +293,7 @@ class TravelController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="travel_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'travel_delete', methods: ['POST'])]
     public function delete(Request $request, Travel $travel): Response
     {
         if ($this->isCsrfTokenValid('delete' . $travel->getId(), $request->request->get('_token'))) {
@@ -292,12 +304,7 @@ class TravelController extends MainadminController
         return $this->redirectToRoute('travel_index');
     }
 
-    /**
-     * @Route("/uploadocumentationToTravel/{travel}/", 
-     * name="upload_documentation_to_travel", 
-     * methods={"POST"})
-     */
-
+    #[Route(path: '/uploadocumentationToTravel/{travel}/', name: 'upload_documentation_to_travel', methods: ['POST'])]
     public function uploadocumentationToTravel(
         Request $request,
         UploadHelper $uploadHelper,
@@ -345,12 +352,7 @@ class TravelController extends MainadminController
         
     }
 
-    /**
-     * @Route("/ajax/removeInfoDocs/{travel}/{infodoc}",
-     * options = {"expose" = true},
-     * name= "ajax-remove-infodocs",
-     * methods="GET")
-     */
+    #[Route(path: '/ajax/removeInfoDocs/{travel}/{infodoc}', options: ['expose' => true], name: 'ajax-remove-infodocs', methods: 'GET')]
     public function removeInfodocs(
         Travel $travel, 
         Infodocs $infodoc,

@@ -1,0 +1,19 @@
+
+    <h1>Añadir los archivos aquí.</h1>
+    <div 
+        action="{{ path('upload_documentation_to_optionsTranslations',{'optionTranslation':optionTranslation.id}) }}" 
+        method="POST" 
+        enctype="multipart/form-data" 
+        class="dropzone js-infodoc-dropzone"
+        data-action="js-infodoc-dropzone">
+    </div>
+
+    <div class="row js-infodocs-wrapper">
+        <div class="col-9">
+            <div id="js-infodocs-modal-container">
+                <ul class="js-list-infodocs list-group">
+                    {{ include('admin/options/_display_infodoc.html.twig',{'optionTranslation':optionTranslation} )}}
+                </ul>
+            </div>
+        </div>
+    </div>

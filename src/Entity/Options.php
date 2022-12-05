@@ -46,6 +46,11 @@ class Options
      */
     private $reservationOptions;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isExtension;
+
     public function __construct()
     {
         $this->optionsTranslations = new ArrayCollection();
@@ -141,6 +146,18 @@ class Options
                 $reservationOption->setOptions(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsExtension(): ?bool
+    {
+        return $this->isExtension;
+    }
+
+    public function setIsExtension(?bool $isExtension): self
+    {
+        $this->isExtension = $isExtension;
 
         return $this;
     }

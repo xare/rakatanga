@@ -22,21 +22,17 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelper;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
-/**
- * @Route("/admin/user")
- */
+#[Route(path: '/admin/user')]
 class UserController extends MainadminController
 {
     private $entityManager;
 
     public function __construct(
-        EntityManagerInterface $entityManager)
+        EntityManagerInterface $entityManager, private string $csvDirectory)
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="user_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'user_index', methods: ['GET'])]
     public function index(Request $request,
     PaginatorInterface $paginator): Response
     {
@@ -56,9 +52,7 @@ class UserController extends MainadminController
             'pageNumber' => $pageNumber
         ]);
     }
-/**
-     * @Route("/user-items", methods="GET", name="user_items")
-     */
+#[Route(path: '/user-items', methods: 'GET', name: 'user_items')]
     public function getUserItems(Request $request, PaginatorInterface $paginator, UserRepository $userRepository)
     {
        
@@ -91,9 +85,7 @@ class UserController extends MainadminController
         ];
         return $this->json($data,200,[],['groups'=>'main']);
     }
-    /**
-     * @Route("/new", name="user_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'user_new', methods: ['GET', 'POST'])]
     public function new(
                     Request $request, 
                     UserPasswordHasherInterface $userPasswordHasher,
@@ -135,9 +127,7 @@ class UserController extends MainadminController
             'form' => $form->createView(),
         ]);
     }
-    /**
-     * @Route("/loadFromCsv", name="load_users", methods={"GET","POST"})
-     */
+    #[Route(path: '/loadFromCsv', name: 'load_users', methods: ['GET', 'POST'])]
     public function LoadFromCsv(
         Request $request, 
         UploadHelper $uploadHelper,
@@ -154,13 +144,13 @@ class UserController extends MainadminController
              if ($csvFile) {
 
                 $csvUploadedFile = $uploadHelper->upload($csvFile); 
-                $reader = Reader::createFromPath($this->getParameter('csv_directory').'/'.$csvUploadedFile , 'r');
+                $reader = Reader::createFromPath($this->csvDirectory.'/'.$csvUploadedFile , 'r');
                 $reader->setHeaderOffset(0);
                 $records = $reader->getRecords();
-               
+
                 foreach($records as $record){
                     $user = new User();
-                    
+
                     $user->setEmail($record['email']);
                     $user->setRoles(['ROLE_USER']);
                     $user->setNom($record['nom']);
@@ -178,7 +168,7 @@ class UserController extends MainadminController
                     $user->setLangue($record['langue']);
                     $user->setRemarque($record['remarque']);
                     $this->entityManager->persist($user);
-                    
+
                 }
                 $this->entityManager->flush();
              }
@@ -189,9 +179,7 @@ class UserController extends MainadminController
                 'form' => $form->createView()
         ]);
     }
-    /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render('admin/user/show.html.twig', [
@@ -199,9 +187,7 @@ class UserController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request, 
         User $user, 
@@ -223,9 +209,7 @@ class UserController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="user_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
@@ -238,9 +222,7 @@ class UserController extends MainadminController
 
     }
     
-    /**
-     * @Route("/search/{term}", name="search_user")
-     */
+    #[Route(path: '/search/{term}', name: 'search_user')]
     public function search(Request $request, string $term, UserRepository $userRepository): Response{
 
         if (!$presentPage = $request->query->get('page'))

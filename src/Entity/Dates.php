@@ -27,40 +27,40 @@ class Dates
      * @var \Date
      *
      * @ORM\Column(name="debut", type="date", nullable=false)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $debut;
 
     /**
      * @var \Date
      *
      * @ORM\Column(name="fin", type="date", nullable=false)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $fin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prix_pilote", type="decimal", precision=10, scale=2, nullable=false)
-     * @Groups("main")     
+     * @ORM\Column(name="prix_pilote", type="decimal", precision=10, scale=2, nullable=false)     
      */
+    #[Groups('main')]
     private $prixPilote;
 
     /**
      * @var string
      *
      * @ORM\Column(name="prix_accomp", type="decimal", precision=10, scale=2, nullable=false)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $prixAccomp;
 
     /**
      * @var string
      *
      * @ORM\Column(name="statut", type="string", length=15, nullable=false)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $statut;
 
     /**

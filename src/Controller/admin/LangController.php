@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/lang")
- */
+#[Route(path: '/admin/lang')]
 class LangController extends AbstractController
 {
     private $entityManager;
@@ -21,9 +19,7 @@ class LangController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="lang_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'lang_index', methods: ['GET'])]
     public function index(LangRepository $langRepository): Response
     {
         return $this->render('admin/lang/index.html.twig', [
@@ -31,9 +27,7 @@ class LangController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="lang_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'lang_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $lang = new Lang();
@@ -54,9 +48,7 @@ class LangController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="lang_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'lang_show', methods: ['GET'])]
     public function show(Lang $lang): Response
     {
         return $this->render('admin/lang/show.html.twig', [
@@ -64,9 +56,7 @@ class LangController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="lang_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'lang_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Lang $lang): Response
     {
         $form = $this->createForm(LangType::class, $lang);
@@ -84,9 +74,7 @@ class LangController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="lang_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'lang_delete', methods: ['POST'])]
     public function delete(Request $request, Lang $lang): Response
     {
         if ($this->isCsrfTokenValid('delete'.$lang->getId(), $request->request->get('_token'))) {

@@ -7,7 +7,7 @@ Routing.setRoutingData(routes);
 class mediaApp {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
-
+        this.$blocksWrapper = $wrapper.find('#js-media-modal-blocks-container');
         //upload file
 
         // remove media
@@ -48,10 +48,10 @@ class mediaApp {
         const mediaId = $(event.currentTarget).data('media-id');
         const entityId = $(event.currentTarget).closest('#js-media-modal-blocks-container').data('entity-id');
         const entityType = $(event.currentTarget).closest('#js-media-modal-blocks-container').data('entity-type');
-        console.log('entityId', entityId);
+
         const $mediaWrappers = this.$wrapper.find('.media-wrapper');
 
-        console.info($mediaWrappers);
+
 
         $mediaWrappers.each((index, element) => {
             $(element).is('.selected') ? $(element).removeClass('selected') : '';
@@ -63,7 +63,7 @@ class mediaApp {
                     type: "POST",
                     data: { 'entityId': entityId, 'entityType': entityType }
                 });
-                console.info($(event.currentTarget).closest('.media-wrapper'));
+
                 $(event.currentTarget).addClass('selectedMedia');
                 $(event.currentTarget).closest('.media-wrapper').addClass('selected');
                 console.info(response);
@@ -74,9 +74,10 @@ class mediaApp {
     }
     gallerifyMedia(event) {
         event.preventDefault;
-        console.info('gallerifyMedia');
-        let mediaId = $(event.currentTarget).data('media-id');
-        let entityId = this.$wrapper.data('entity-id');
+
+        const mediaId = $(event.currentTarget).data('media-id');
+        const entityId = $(event.currentTarget).closest('#js-media-modal-blocks-container').data('entity-id');
+        const entityType = $(event.currentTarget).closest('#js-media-modal-blocks-container').data('entity-type');
         let data = { 'mediaId': mediaId, 'entityId': entityId };
         if (!$(event.currentTarget).hasClass('selectedGallery')) {
             (async() => {
@@ -113,16 +114,16 @@ class mediaApp {
 
     removeMedia(event) {
         event.preventDefault();
-        console.info('inside removeMedia');
-        console.info(event.currentTarget);
+
+
         let self = this;
-        console.log(this);
-        console.log('wrapper', this.$wrapper);
+
+
         let mediaId = $(event.currentTarget).data('media-id');
         let entityId = $('#js-media-modal-blocks-container').data('entity-id');
         let entityType = $('#js-media-modal-blocks-container').data('entity-type');
         let data = { mediaId, entityId, entityType };
-        console.info(data);
+
 
         (async() => {
             try {
@@ -187,7 +188,7 @@ class mediaApp {
                                             datatype: "json",
                                             encode: true
                                         });
-                                        console.info("hello");
+
                                         console.info(response3.html);
                                         $('#js-media-modal-blocks-container').prepend(response3.html);
 
@@ -239,7 +240,7 @@ class mediaApp {
                     })
             }
         }).then((result) => {
-            console.log(result.value.url);
+
             async() => {
                 try {
                     const response3 = await $.ajax({

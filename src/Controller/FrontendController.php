@@ -21,6 +21,7 @@ use App\Service\breadcrumbsHelper;
 use App\Service\contentHelper;
 use App\Service\localizationHelper;
 use Entity\Repository\CategoryRepository as RepositoryCategoryRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
-class FrontendController extends MainController
+class FrontendController extends AbstractController
 {
     private $travelRepository;
     private $datesRepository;
@@ -76,14 +77,8 @@ class FrontendController extends MainController
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
 
-    /**
-     * @Route("/", name="index")
-     * @Route({
-     *      "en": "{_locale}/",
-     *      "es": "{_locale}/",
-     *      "fr": "{_locale}/"
-     *      }, name="index")
-     */
+    #[Route(path: '/', name: 'index')]
+    #[Route(path: ['en' => '{_locale}/', 'es' => '{_locale}/', 'fr' => '{_locale}/'], name: 'index')]
     public function index(
         string $locale = 'es',
         string $_locale = null
@@ -106,12 +101,10 @@ class FrontendController extends MainController
             ['code' => 'as']
         );
 
-        // Categories for destinations in first main block.
+        
         $categories = $this->categoryRepository->findCategoriesForIndex($locale, $continent);
-        // Categories for destinations' in second main block.
         $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex($locale, $continent);
 
-        // Dates to show in right side block.
         $years = $this->datesRepository->getDatesByYear();
 
         $calendarDates = [];
@@ -147,14 +140,7 @@ class FrontendController extends MainController
         ]);
     }
 
-    /**
-     * @Route({
-     *      "en": "{_locale}/trips/{category}/{travel}/",
-     *      "es": "{_locale}/destinos/{category}/{travel}/",
-     *      "fr": "{_locale}/destinations/{category}/{travel}/"
-     *      }, name="destination")
-     */
-
+    #[Route(path: ['en' => '{_locale}/trips/{category}/{travel}/', 'es' => '{_locale}/destinos/{category}/{travel}/', 'fr' => '{_locale}/destinations/{category}/{travel}/'], name: 'destination')]
     public function Destination(
         Request $request,
         Breadcrumbs $breadcrumbs,
@@ -205,6 +191,7 @@ class FrontendController extends MainController
         $travel = $this->travelRepository->showTravelFromTranslationSlug($travel);
 
         $travelObject = $this->travelRepository->find($travel['id']);
+        
         // BREADCRUMBS //
         // Get Content
         // 1. Get the lang object for $locale
@@ -232,13 +219,7 @@ class FrontendController extends MainController
         ]);
     }
 
-    /**
-     * @Route({
-     *      "en": "{_locale}/trips/{category}/",
-     *      "es": "{_locale}/destinos/{category}/",
-     *      "fr": "{_locale}/destinations/{category}/"
-     *      }, name="destinations-by-category")
-     */
+    #[Route(path: ['en' => '{_locale}/trips/{category}/', 'es' => '{_locale}/destinos/{category}/', 'fr' => '{_locale}/destinations/{category}/'], name: 'destinations-by-category')]
     public function DestinationsByCategory(
         Request $request,
         CategoryTranslationRepository $categoryTranslationRepository,
@@ -307,13 +288,7 @@ class FrontendController extends MainController
             'category' => $categoryTranslation,
         ]);
     }
-    /**
-     * @Route({
-     *      "en": "{_locale}/trips/",
-     *      "es": "{_locale}/destinos/",
-     *      "fr": "{_locale}/destinations/"
-     *      }, name="destinations")
-     */
+    #[Route(path: ['en' => '{_locale}/trips/', 'es' => '{_locale}/destinos/', 'fr' => '{_locale}/destinations/'], name: 'destinations')]
     public function Destinations(
         Request $request,
         breadcrumbsHelper $breadcrumbsHelper,
@@ -349,13 +324,7 @@ class FrontendController extends MainController
             'otherDestinations' => $otherDestinations
         ]);
     }
-    /**
-     * @Route({
-     *      "en": "{_locale}/calendar/",
-     *      "es": "{_locale}/calendario/",
-     *      "fr": "{_locale}/calendrier/"
-     *      }, name="calendar")
-     */
+    #[Route(path: ['en' => '{_locale}/calendar/', 'es' => '{_locale}/calendario/', 'fr' => '{_locale}/calendrier/'], name: 'calendar')]
     public function Calendar(
         Request $request,
         Breadcrumbs $breadcrumbs,
@@ -403,34 +372,7 @@ class FrontendController extends MainController
         ]);
     }
 
-    /**
-     * @Route({
-     *      "en": "{_locale}/recover/",
-     *      "es": "{_locale}/recover/",
-     *      "fr": "{_locale}/recover/"
-     *      }, name="frontend_recover")
-     */
-
-/*     public function frontend_recover(Request $request, $locale = 'es', string $_locale = null)
-    {
-        $locale = $_locale ? $_locale : $locale;
-
-        $langArray = $this->langMenu($request, $locale);
-        $navMenu = $this->showMenu($locale, $request);
-        return $this->render('user/user_recover.html.twig', [
-            'locale' => $locale,
-            'langs' => $langArray,
-            'menu' => $navMenu,
-        ]);
-    } */
-
-    /**
-     * @Route({
-     *      "en": "{_locale}/{slug}/",
-     *      "es": "{_locale}/{slug}/",
-     *      "fr": "{_locale}/{slug}/"
-     *      }, name="main-content")
-     */
+    #[Route(path: ['en' => '{_locale}/{slug}/', 'es' => '{_locale}/{slug}/', 'fr' => '{_locale}/{slug}/'], name: 'main-content')]
     public function main(
         string $slug,
         string $locale = "es",
@@ -485,12 +427,8 @@ class FrontendController extends MainController
         ]);
     }
 
-    /**
-     * @Route("/ajax/show-popup",
-     * options = { "expose" = true },
-     * name="ajax-show-popup")
-     */
-    public function showPopup(Request $request, PopupsRepository $popupsRepository )
+    #[Route(path: '/ajax/show-popup', options: ['expose' => true], name: 'ajax-show-popup')]
+    public function showPopup(PopupsRepository $popupsRepository )
     {
         $popup = $popupsRepository->showPopup('es');
         if($popup != null )

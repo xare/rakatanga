@@ -30,6 +30,10 @@ use App\Service\reservationHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Validator\Constraints\File;
@@ -38,34 +42,29 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
-class UserFrontendController extends MainController
-{
-    private TranslatorInterface $translator;
-    private EntityManagerInterface $entityManager;
+use Stripe\Checkout\Session as CheckoutSession;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-    public function __construct(TranslatorInterface $translatorInterface, EntityManagerInterface $entityManager){
+class UserFrontendController extends AbstractController
+{
+
+    public function __construct(private TranslatorInterface $translatorInterface, private EntityManagerInterface $entityManager){
         $this->translator = $translatorInterface;
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/user", name="frontend_user")
-     * @Route({
-     *      "en": "{_locale}/user",
-     *      "es": "{_locale}/usuario",
-     *      "fr": "{_locale}/utilisateur"
-     *      }, name="frontend_user",
-     *       priority=2)
-     */
+    #[Route(path: '/user', name: 'frontend_user')]
+    #[Route(path: ['en' => '{_locale}/user', 'es' => '{_locale}/usuario', 'fr' => '{_locale}/utilisateur'], name: 'frontend_user', priority: 2)]
     public function frontend_user(
-        Request $request,
         DatesRepository $datesRepository,
         LangRepository $langRepository,
-        ReservationRepository $reservationRepository,
         string $_locale = null,
         $locale = 'es'
     ) {
 
         $locale = $_locale ? $_locale : $locale;
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
 
         //Swith Locale Loader
@@ -89,24 +88,16 @@ class UserFrontendController extends MainController
             'user' => $this->getUser()
         ]);
     }
-    /**
-     * @Route("/user/reservations/", name="frontend_user_reservations")
-     * @Route({
-     *      "en": "{_locale}/user/reservations/",
-     *      "es": "{_locale}/usuario/reservas/",
-     *      "fr": "{_locale}/utilisateur/reservations/"
-     *      }, name="frontend_user_reservations",
-     *       priority=2)
-     */
+    #[Route(path: '/user/reservations/', name: 'frontend_user_reservations')]
+    #[Route(path: ['en' => '{_locale}/user/reservations/', 'es' => '{_locale}/usuario/reservas/', 'fr' => '{_locale}/utilisateur/reservations/'], name: 'frontend_user_reservations', priority: 2)]
     public function frontend_user_reservations(
-        Request $request,
         LangRepository $langRepository,
         $_locale = null,
         Breadcrumbs $breadcrumbs,
         ReservationRepository $reservationRepository,
         $locale = "es",
     ) {
-        $locale = $_locale ?: $locale;
+        $locale = $_locale ? $_locale: $locale;
         $user = $this->getUser();
 
         //Swith Locale Loader
@@ -137,22 +128,16 @@ class UserFrontendController extends MainController
         );
         //END BREADCRUMBS
 
-        //$reservations = $user->getReservations();
-        //$reservations = $userRepository->listReservations();
+       
         $reservations = $reservationRepository->findBy(['user' => $user], ['date_ajout'=>'DESC']);
+
         return $this->render('/user/user_reservations.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
             'reservations' => $reservations
         ]);
     }
-    /**
-     * @Route({
-     *      "en": "{_locale}/user/settings",
-     *      "es": "{_locale}/usuario/datos",
-     *      "fr": "{_locale}/utilisateur/donnees"
-     *      }, name="frontend_user_settings")
-     */
+    #[Route(path: ['en' => '{_locale}/user/settings', 'es' => '{_locale}/usuario/datos', 'fr' => '{_locale}/utilisateur/donnees'], name: 'frontend_user_settings')]
     public function frontend_user_settings(
         Request $request,
         LangRepository $langRepository,
@@ -223,11 +208,8 @@ class UserFrontendController extends MainController
 
     
 
-    /**
-     * @Route("/user/download/document/{document}", name="user-download-document2")
-     */
+    #[Route(path: '/user/download/document/{document}', name: 'user-download-document2')]
     public function downloadDocument2(
-        Request $request,
         Document $document,
         UploadHelper $uploadHelper
     ) {
@@ -247,10 +229,7 @@ class UserFrontendController extends MainController
         return $response;
     }
 
-    /**
-     * @Route("/user/ajax/reservation-manager/changeNb/", name="user-ajax-reservation-manager-add-pilote")
-     */
-
+    #[Route(path: '/user/ajax/reservation-manager/changeNb/', name: 'user-ajax-reservation-manager-add-pilote')]
     public function reservationManagerChangeNb(
         Request $request,
         ReservationRepository $reservationRepository,
@@ -290,11 +269,7 @@ class UserFrontendController extends MainController
         ], 200);
     }
 
-    /**
-     * @Route("/user/ajax/reservation-manager/changeOptionAmmount/", 
-     * name="user-ajax-reservation-manager-change-option-ammount")
-     */
-
+    #[Route(path: '/user/ajax/reservation-manager/changeOptionAmmount/', name: 'user-ajax-reservation-manager-change-option-ammount')]
     public function reservationManagerChangeOptionAmmount(
         Request $request,
         ReservationRepository $reservationRepository,
@@ -330,10 +305,7 @@ class UserFrontendController extends MainController
         ], 200);
     }
 
-    /**
-     * @Route("/user/ajax/reservation-manager/updateReservation/{reservation}", name="user-ajax-reservation-manager-update-reservation")
-     */
-
+    #[Route(path: '/user/ajax/reservation-manager/updateReservation/{reservation}', name: 'user-ajax-reservation-manager-update-reservation')]
     public function reservationManagerUpdateReservation(
         Request $request,
         Reservation $reservation,

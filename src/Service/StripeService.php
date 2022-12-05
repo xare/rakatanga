@@ -1,6 +1,7 @@
 <?php 
 namespace App\Service;
 
+use App\Entity\Reservation;
 use App\Entity\Reservations;
 
 class StripeService
@@ -52,10 +53,10 @@ class StripeService
         return $payment_intent;
     }
 
-    public function stripe(array $stripeParameters, Reservations $reservation)
+    public function stripe(array $stripeParameters, Reservation $reservation)
     {
         return $this->payment(
-            $reservation->getTotalttc()*100,
+            $reservation->getTotalAmmount()*100,
             'eur',
             $reservation->getId(),
             $stripeParameters

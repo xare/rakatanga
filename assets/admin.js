@@ -85,9 +85,9 @@ function addNewForm() {
     $card.append($cardBody);
     // initialize new DateTime fields
     var $newRow = $card.children().last();
-    //console.log($newRow.find('.datepicker'));
+    //
     $newRow.children('.datepicker').each(function() {
-        console.log('TEST');
+
         document.write("Hello");
         /* initializeDatePicker($(this)); */
     });
@@ -170,7 +170,7 @@ var itemsList = {
             this.handleSearch.bind(this)
         )
         if (this.$wrapper.data('dynamic-table') == 'no') { throw ''; }
-        console.log(this.$wrapper);
+
         this.loadItems();
 
     },
@@ -178,7 +178,7 @@ var itemsList = {
         $.ajax({
             url: this.$wrapper.data('url')
         }).then(data => {
-            //console.log(data);
+            //
             this.items = data.items;
             this.count = data.count;
             this.presentPage = data.presentPage;
@@ -202,13 +202,13 @@ var itemsList = {
             $("[name='travel']").hide();
             $("[name='category']").show();
         }
-        //console.log(type);
+        //
     },
     resetIndex: function(event) {
         event.preventDefault();
         this.presentPage = $(event.currentTarget).text();
         this.offset = ((this.presentPage - 1) * this.itemsPerPage) + 1;
-        //console.log(this.count);
+        //
         this.$navigation.html(AdminTemplate.renderPagination(this.count, this.presentPage));
         this.$itemsContainer.html(AdminTemplate.renderTable(this.items, this.offset, this.itemsPerPage));
     },
@@ -233,17 +233,17 @@ var itemsList = {
         event.preventDefault();
         var parameter = $(event.currentTarget).text();
         var direction = $(event.currentTarget).data('direction');
-        //console.log(this.items);
+        //
         this.items.sort(function(a, b) {
             var x = a[parameter];
             var y = b[parameter];
 
             if (isNaN(x) && isNaN(y)) {
-                console.log(typeof x);
+
                 x.toLowerCase();
                 y.toLowerCase();
                 if (direction == "sort") {
-                    console.log(x);
+
                     direction = "reverse";
 
                     if (x == null && y != null) {
@@ -255,7 +255,7 @@ var itemsList = {
                         return 1;
                     }
                 } else {
-                    console.log(x);
+
                     direction = "sort";
                     if (x == null && y != null) {
                         console.log('null')
@@ -312,7 +312,7 @@ var itemsList = {
         var inputSearch = $(e.currentTarget);
         var searchTerm = inputSearch.val();
         if (searchTerm.length > 3) {
-            console.log(searchTerm);
+
             $.ajax({
                 url: "crud/" + entity + "/search",
                 method: "POST",

@@ -15,7 +15,7 @@
             <ul>
                 <li> <strong>{{ 'País'|trans }}</strong>: {{ reservation.date.travel.category.name }}</li>
                 <li> <strong>{{ 'Viaje'|trans }}</strong>:  {{reservation.date.travel.mainTitle}}</li>
-                <li> <strong>{{ 'Fecha'|trans }}</strong>: {{reservation.date.debut|date('Y-m-d')}}</li>
+                <li> <strong>{{ 'Fecha'|trans }}</strong>: {{reservation.date.debut|date('d/m/Y')}} - {{reservation.date.fin|date('d/m/Y')}}</li>
                 <li> <strong>{{ 'Ref. reserva'|trans }}</strong>: {{ reference }}
             </ul>
         </td>
@@ -64,18 +64,18 @@
                             <strong>{{ subtotal }}</strong>
                         </td>
                     </tr>
-                    {% for codepromo in reservation.codespromos%}
+                    {% if reservation.codespromo is defined and reservation.codespromo != null %}
                         <tr>
                             <td>
                                 {{ 'Descuento'|trans }}
-                                    {{codepromo.code}} ({codepromo.libelle})                
+                                    {{reservation.codespromo.code}} ({codepromo.libelle})                
                             </td>
                             <td>
-                                    {{codepromo.montant}}
+                                    {{reservation.codespromo.montant}}
                             </td>
                         </tr>
-                        {% set subtotal = subtotal - codepromo.montant %}
-                    {% endfor %}
+                        {% set subtotal = subtotal - reservation.codespromo.montant %}
+                    {% endif %}
                     <tr>
                         <td>
                             <strong>{{ 'Total'|trans }}</strong>

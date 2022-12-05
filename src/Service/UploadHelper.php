@@ -101,7 +101,14 @@ class UploadHelper
         ->getBasePath().$this->publicAssetBaseUrl.'/'.$path;
     }
 
-    public function deleteFile(string $path, bool $isPublic)
+    /**
+     * Undocumented deleteFile
+     *
+     * @param string $path
+     * @param boolean $isPublic
+     * @return boolean
+     */
+    public function deleteFile(string $path, bool $isPublic): bool
     {
         $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
 
@@ -109,6 +116,8 @@ class UploadHelper
 
         if ($result === false) {
             throw new \Exception(sprintf('Error deleting "%s"', $path));
+        } else {
+            return true;
         }
     }
 

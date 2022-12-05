@@ -71,10 +71,8 @@ class reservationsApp {
     }
     cancelReservation(event) {
         event.preventDefault();
-        const $reservationCard = $(event.currentTarget).closest('.js-user-reservation-card');
-        console.info($reservationCard);
-        const reservationId = $reservationCard.attr('data-reservation-id');
-        console.info(reservationId);
+        const $reservationCard = $(event.currentTarget).closest('.js-user-reservation-card');;
+        const reservationId = $reservationCard.attr('data-reservation-id');;
         const reservationStatus = $reservationCard.attr('data-reservation-status');
         (
             async() => {
@@ -115,8 +113,7 @@ class reservationsApp {
         event.preventDefault();
         const self = this;
         const invoiceId = $(event.currentTarget)
-            .data("invoiceid");
-        console.info(invoiceId);
+            .data("invoiceid");;
         (async() => {
             try {
                 const invoiceFormResponse = await $.ajax({

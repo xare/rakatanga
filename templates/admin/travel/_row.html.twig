@@ -13,15 +13,19 @@
             {{ renderLocalizedTravel(travel.id,'es')}}
         </a>
     </td>
-    <td class="smallerfont">
-        {% for dates in travel.dates %}
-            {% if dates.debut > date() %}
-            <a href="{{ path('dates_edit', {'id': dates.id}) }}">
-                {{dates.debut|date("d/m/Y")}} - {{dates.fin|date("d/m/Y")}}
-            </a><br />
+    <td>
+    {{ travel.duration }}
+   </td>
+    <td>
+        {% for date in travel.dates %}
+            {% if date.debut > date() %}
+            <a class="smallerfont" href="{{ path('dates_edit', {'id': date.id}) }}">
+                {{date.debut|date("d/m/Y")}} - {{date.fin|date("d/m/Y")}}
+            </a><span class="badge bg-primary">{{date.reservations|length}}</span><br />
             {% endif %}
         {% endfor %}
     </td>
+     
     <td>{{ travel.status }}</td>
     <td>
         {% if travel.mainPhoto %}
@@ -45,22 +49,12 @@
             {% endfor %}
         {% endif %}
     </td>
-   {#  <td>
-        <a href="{{ path('destination',{
-                            _locale: 'es',
-                            category: renderLocalizedCategory(travel.category.id,'es')|slugify,
-                            travel: renderLocalizedTravelUrl(travel.id,'es')
-                }) }}"
-        class="btn btn-primary">
-            <i class="fa fa-eye"></i>
-        </a>
-    </td>
     <td>
-        <a href="{{ path('travel_edit', {'id': travel.id}) }}"
-        class="btn btn-info">
-            <i class="fa fa-edit"></i>
-        </a>
-    </td> #}
+    {% if travel.mainTitle == "PLANTILLA" %}
+        <a href="{{path('travel_new_from_template',{'travel': travel.id})}}" class="btn btn-primary"> Duplicar desde plantilla</a>
+    {% endif %}
+
+    </td>
     <td>
         {{ include('admin/travel/_delete_form.html.twig') }}
     </td>

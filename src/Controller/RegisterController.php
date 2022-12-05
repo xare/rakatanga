@@ -32,7 +32,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelper;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
-class RegisterController extends MainController
+class RegisterController extends AbstractController
 {
 
   private \Doctrine\ORM\EntityManagerInterface $entityManager;
@@ -43,14 +43,8 @@ class RegisterController extends MainController
     $this->breadcrumbsHelper = $breadcrumbsHelper;
   }
 
-  /**
-   * @Route("/register", name="register", priority="10")
-   * @Route({
-   *  "en": "{_locale}/register",
-   *  "es": "{_locale}/registro",
-   *  "fr": "{_locale}/enregistrement",
-   * }, name="register", priority="10")
-   */
+  #[Route(path: '/register', name: 'register', priority: 10)]
+  #[Route(path: ['en' => '{_locale}/register', 'es' => '{_locale}/registro', 'fr' => '{_locale}/enregistrement'], name: 'register', priority: 10)]
   public function index(
     Request $request,
     UserPasswordHasherInterface $userPasswordHasher,
@@ -165,10 +159,7 @@ class RegisterController extends MainController
     }
   }
 
-  /**
-   * @Route("/verify/{user}", name="user-verify")
-   */
-
+  #[Route(path: '/verify/{user}', name: 'user-verify')]
   public function userVerify(
     User $user,
     EntityManagerInterface $em,
@@ -229,9 +220,7 @@ class RegisterController extends MainController
     ]);
   }
 
-  /**
-   * @Route("/verify", name="user_verify_email")
-   */
+  #[Route(path: '/verify', name: 'user_verify_email')]
   public function userVerifyEmail(
     Request $request,
     VerifyEmailHelperInterface $verifyEmailHelper,
@@ -271,7 +260,7 @@ class RegisterController extends MainController
       return new Response('Email got validated');
     } catch(VerifyEmailExceptionInterface $e) {
       dd($e->getReason());
-      return new Response($e->getReason(),401);
+      return new Response($e->getReason(),\Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED);
     }
     
   }

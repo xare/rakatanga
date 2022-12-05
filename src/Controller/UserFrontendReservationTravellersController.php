@@ -35,25 +35,8 @@ class UserFrontendReservationTravellersController extends AbstractController
         $this->breadcrumbs = $breadcrumbs;
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
-   /*  #[Route('/user/frontend/reservation/travellers', name: 'user_frontend_reservation_travellers')]
-    public function index(): Response
-    {
-        return $this->render('user_frontend_reservation_travellers/index.html.twig', [
-            'controller_name' => 'UserFrontendReservationTravellersController',
-        ]);
-    } */
-
-    /**
-     * @Route({"/user/reservation/data/{reservation}/{traveller}"},
-     * name="frontend_user_reservation_data_traveller",
-     * requirements={"reservation":"\d+","traveller":"\d+"})
-     * @Route({
-     *      "en": "{_locale}/user/reservation/data/{reservation}/{traveller}",
-     *      "es": "{_locale}/usuario/reserva/datos/{reservation}/{traveller}",
-     *      "fr": "{_locale}/utilisateur/reservation/donnees/{reservation}/{traveller}"
-     *      }, name="frontend_user_reservation_data_traveller",
-     * requirements={"reservation":"\d+","traveller":"\d+"})
-     */
+   #[Route(path: ['/user/reservation/data/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
+    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/{traveller}', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/{traveller}', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
     public function frontendUserReservationDataTraveller(
         Request $request,
         Reservation $reservation,
@@ -101,30 +84,26 @@ class UserFrontendReservationTravellersController extends AbstractController
             'reservation'=> $reservation,
             'traveller'=> $traveller
         ]);
-        return $this->render("user/user_reservation_data_traveller.html.twig", [
+
+        $array = [];
+        $i = 0;
+        foreach ($reservation->getReservationData() as $reservationDatum){
+            $array[$i] = $reservationDatum;
+        }        
+        //dd($reservationData);
+        return $this->render("user/user_reservation_data.html.twig", [
             'langs' => $urlArray,
             'locale' => $locale,
             'traveller' => $traveller,
             'reservation' => $reservation,
+            'reservationData' => $reservationData,
             'documents' => $documents,
             'form' => $form->createView()
         ]);
     }
 
-    /**
-     * @Route("/user/reservation/{reservation}/travellers/save/",
-     * name = "user_reservation_travellers_save",
-     * requirements = {"reservation":"\d+"},
-     * methods = {"POST"})
-     * @Route({
-     *      "en": "{_locale}/user/reservation/data/{reservation}/travellers/save/",
-     *      "es": "{_locale}/usuario/reserva/datos/{reservation}/travellers/save/",
-     *      "fr": "{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/save/"
-     *      }, 
-     * name = "user_reservation_travellers",
-     * requirements = {"reservation":"\d+"},
-     * methods = {"POST"})
-     */
+    #[Route(path: '/user/reservation/{reservation}/travellers/save/', name: 'user_reservation_travellers_save', requirements: ['reservation' => '\d+'], methods: ['POST'])]
+    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/travellers/save/', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/save/', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/save/'], name: 'user_reservation_travellers', requirements: ['reservation' => '\d+'], methods: ['POST'])]
     public function userReservationTravellersSave(
         Request $request,
         Reservation $reservation,
@@ -136,27 +115,7 @@ class UserFrontendReservationTravellersController extends AbstractController
         $locale = $request->request->get('locale');
         $travellersArray = $request->request->all();
         
-        foreach ($travellersArray['traveller'] as $travellerItem) {
-            if ($travellerItem['id'] != '') {
-                $traveller = $travellersRepository->find($travellerItem['id']);
-                if($traveller == null && $travellerItem['email'] == $this->getUser()->getEmail()) {
-                    $traveller = new Travellers();
-                }
-            } else {
-                $traveller = new Travellers();
-            }
-            $now = new \DateTime();
-            $traveller->setPrenom($travellerItem['prenom']);
-            $traveller->setNom($travellerItem['nom']);
-            $traveller->setEmail($travellerItem['email']);
-            $traveller->setTelephone($travellerItem['telephone']);
-            $traveller->setPosition($travellerItem['position']);
-            $traveller->setUser($this->getUser());
-            $traveller->setDateAjout($now);
-            $traveller->addReservation($reservation);
-            $em->persist($traveller);
-        }
-        $em->flush();
+        
         $lang = $langRepository->findOneBy([
             'iso_code' => $locale
         ]);
@@ -171,8 +130,62 @@ class UserFrontendReservationTravellersController extends AbstractController
         //End swith locale Loader
 
         $options = $reservationHelper->getReservationOptions($reservation, $lang);
-        $this->addFlash('success', $this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente'));
-        
+        $this->addFlash('success',
+                            "{$this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente')}  
+                            {$this->translatorInterface->trans('Puedes volver a tu reserva')}"." <a href=".$this->generateUrl('frontend_user_reservations').">{$this->translatorInterface->trans('aquí')}"."</a>" );
+                            dump($travellersArray);
+                            $isTravellerInReservation = false;
+                            foreach($travellersArray['traveller'] as $travellerArrayItem) {
+                                foreach($reservation->getTravellers() as $reservationTravellerObject) {
+                                    if($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()) {
+                                        $isTravellerInReservation = true;
+                                    }
+                                }
+                            }
+                            if($isTravellerInReservation == false) {    
+                                foreach($travellersArray['traveller'] as $travellerArrayItem){
+                                    $now = new \DateTime();
+                                    $traveller = new Travellers();
+                                    $traveller->setPrenom($travellerArrayItem['prenom']);
+                                    $traveller->setNom($travellerArrayItem['nom']);
+                                    $traveller->setEmail($travellerArrayItem['email']);
+                                    $traveller->setTelephone($travellerArrayItem['telephone']);
+                                    $traveller->setPosition($travellerArrayItem['position']);
+                                    $traveller->setUser($this->getUser());
+                                    $traveller->setDateAjout($now);
+                                    $traveller->addReservation($reservation);
+                                    $em->persist($traveller);
+                                }
+                                $em->flush();
+                            }
+                            /* foreach($travellersArray['traveller'] as $travellerArrayItem){
+                                foreach($reservation->getTravellers() as $reservationTravellerObject){
+                                    if($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()){
+                                        
+                                    } elseif($isTravellerInReservation == false) {
+                                        if ($travellerArrayItem['id'] != '') {
+                                            $traveller = $travellersRepository->find($travellerArrayItem['id']);
+                                            if($traveller == null && $travellerArrayItem['email'] == $this->getUser()->getEmail()) {
+                                                $traveller = new Travellers();
+                                            }
+                                        } else {
+                                            $traveller = new Travellers();
+                                        }
+                                        $now = new \DateTime();
+                                        $traveller->setPrenom($travellerArrayItem['prenom']);
+                                        $traveller->setNom($travellerArrayItem['nom']);
+                                        $traveller->setEmail($travellerArrayItem['email']);
+                                        $traveller->setTelephone($travellerArrayItem['telephone']);
+                                        $traveller->setPosition($travellerArrayItem['position']);
+                                        $traveller->setUser($this->getUser());
+                                        $traveller->setDateAjout($now);
+                                        $traveller->addReservation($reservation);
+                                        $em->persist($traveller);
+                                    }
+                                    dump($isTravellerInReservation);
+                                }    
+                            }
+                            $em->flush(); */
         return $this->render('user/user_reservation_travellers.html.twig', [
             'reservation' => $reservation,
             'nbpilotes' => $reservation->getNbpilotes(),
@@ -182,20 +195,9 @@ class UserFrontendReservationTravellersController extends AbstractController
             'langs' => $urlArray
         ]);
     }
-    /**
-     * @Route("/user/reservation/{reservation}/travellers/",
-     *          name="user_reservation_travellers",
-     *          methods = {"GET"})
-     * @Route({
-     *      "en": "{_locale}/user/reservation/data/{reservation}/travellers/",
-     *      "es": "{_locale}/usuario/reserva/datos/{reservation}/travellers/",
-     *      "fr": "{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/"
-     *      }, name="user_reservation_travellers",
-     * methods = {"GET"})
-     */
-
+    #[Route(path: '/user/reservation/{reservation}/travellers/', name: 'user_reservation_travellers', methods: ['GET'])]
+    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/travellers/', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/'], name: 'user_reservation_travellers', methods: ['GET'])]
     public function userReservationTravellers(
-        Request $request,
         Reservation $reservation,
         LangRepository $langRepository,
         reservationHelper $reservationHelper,

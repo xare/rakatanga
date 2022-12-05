@@ -102,15 +102,17 @@
                     </td>
                 </tr>
                 {% endif %}
-                {% for codepromo in invoice.reservation.codespromos %}
+
+                {% if invoice.reservation.codespromo is defined and invoice.reservation.codespromo != null %}
                     <tr>
-                        <th>{{ codepromo.code }}</th>
-                        <td>{{ codepromo.libelle}}</td>
-                        <td>{{ codepromo.commentaire}}</td>
-                        <td align="right">{{ codepromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
+                        <th>{{ 'Bono descuento'|trans}}</th>
+                        <td>{{ invoice.reservation.codespromo.code }}</td>
+                        <td>{{ invoice.reservation.codespromo.libelle}}</td>
+                        <td>{{ invoice.reservation.codespromo.commentaire}}</td>
+                        <td align="right">{{ invoice.reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
                     </tr>
-                    {% set discount = discount + codepromo.montant %}
-				{% endfor %}
+                    {% set discount = discount + invoice.reservation.codespromo.montant %}
+				{% endif %}
                 {% set total = total - discount %}
                 <tr>
                     <td colspan="4"><strong>{{'Base'|trans}}</strong></td>
@@ -123,7 +125,17 @@
                 <tr>
                     <td colspan="4"><strong>{{'Total'|trans}}</strong></td>
                     <td>{{ total | format_currency('EUR', {fraction_digit: 2})}} </td>
-                </tr>               
+                </tr>
+                {% if invoice.reservation.status == "cancelled" %}
+                    <tr>
+                        <td colspan="4"><strong>{{'Valor de cancelación'|trans}}</strong></td>
+                        <td>- {{ total | format_currency('EUR', {fraction_digit: 2})}} </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><strong>{{'Total a pagar'|trans}}</strong></td>
+                        <td> {{ 0 | format_currency('EUR', {fraction_digit: 2})}} </td>
+                    </tr>
+                {% endif %}             
             </tbody>
         </table>
         <div id="thanks">{{'¡Muchas gracias!'|trans}}</div>

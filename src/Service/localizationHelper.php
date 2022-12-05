@@ -89,9 +89,7 @@ class localizationHelper
     {
 
         $option = $this->optionsRepository->find($id);
-
         $lang = $this->_getLang($locale);
-
         $Object = $this->em
         ->getRepository(OptionsTranslations::class)
         ->findOneBy(
@@ -99,16 +97,34 @@ class localizationHelper
                 'options'=>$option,
                 'lang'=>$lang
             ]); 
-        
         if ($Object === null){
             return null;
         } else {
             return $Object->getIntro();
         }       
     } 
+    public function renderOptionInfodoc($id, $locale)
+    {
+
+        $option = $this->optionsRepository->find($id);
+        $lang = $this->_getLang($locale);
+        $Object = $this->em
+        ->getRepository(OptionsTranslations::class)
+        ->findOneBy(
+            [
+                'options'=>$option,
+                'lang'=>$lang
+            ]); 
+        if ($Object->getInfodocs() === null){
+            return null;
+        } else {
+            return $Object->getInfodocs();
+        }       
+    } 
 
     public function renderCategoryString($id,$locale){
         $category = $this->em->getRepository(Category::class)->find($id);
+        
         $lang = $this->_getLang($locale);
         $Object = $this->em
         ->getRepository(CategoryTranslation::class)

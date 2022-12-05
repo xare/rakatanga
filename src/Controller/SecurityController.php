@@ -18,9 +18,10 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Service\logHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class SecurityController extends MainController
+class SecurityController extends AbstractController
 {
     private \Doctrine\ORM\EntityManagerInterface $entityManager;
     private \App\Service\breadcrumbsHelper $breadcrumbsHelper;
@@ -30,29 +31,18 @@ class SecurityController extends MainController
         $this->entityManager = $entityManager;
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
-    /**
-     * @Route("/login", 
-     * options = { "expose" = true }, 
-     * name = "app_login")
-     * @Route({
-     *      "en": "{_locale}/login/",
-     *      "es": "{_locale}/login/",
-     *      "fr": "{_locale}/login/"
-     *      },
-     * priority=10, 
-     * name="app_login")
-     */
+    #[Route(path: '/login', options: ['expose' => true], name: 'app_login')]
+    #[Route(path: ['en' => '{_locale}/login/', 'es' => '{_locale}/login/', 'fr' => '{_locale}/login/'], priority: 10, name: 'app_login')]
     public function login(
         AuthenticationUtils $authenticationUtils,
-        Request $request,
         string $_locale = null,
         LangRepository $langRepository,
         $locale = 'es'
         ): Response
     {
-        
+
         /* if ($this->getUser()) {
-            
+
              return $this->redirectToRoute('target_path');
         } */
         $locale = $_locale ? $_locale : $locale;
@@ -67,12 +57,12 @@ class SecurityController extends MainController
         }
 
         // get the login error if there is one
-        
+
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        
-        
+
+
         return $this->render('user/user_login.html.twig',[
             'locale' => $locale,
             'langs' => $urlArray,
@@ -81,9 +71,7 @@ class SecurityController extends MainController
         ]);
     }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
+    #[Route(path: '/logout', name: 'app_logout')]
     public function logout()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
@@ -97,7 +85,7 @@ class SecurityController extends MainController
      *      }, name="app_register", priority=1)
      */
 
-    public function register(
+    /* public function register(
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher,
         LoginFormAuthenticator $formAuthenticator,
@@ -108,9 +96,9 @@ class SecurityController extends MainController
         )
     {
         $locale = $_locale ? $_locale : $locale;
-        
-        $langArray = $this->langMenu($request, $locale);
-        $navMenu = $this->showMenu($locale, $request);
+
+       /*  $langArray = $this->langMenu($request, $locale);
+        $navMenu = $this->showMenu($locale, $request); 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -132,11 +120,11 @@ class SecurityController extends MainController
             $user->setNom($userModel->getNom());
             $user->setTelephone($userModel->getTelephone());
             $user->setPosition($userModel->getPosition());
-            
+
             $this->entityManager->persist($user);
 
             $logHelper->logNewUser($user);
-            
+
             $this->entityManager->flush();
             // WE CLEAN THE ENTITY MANAGER FOR REUSE LATER
             // WE ADD A SUCCESS MESSAGE
@@ -150,12 +138,12 @@ class SecurityController extends MainController
 
         }
         return $this->render('security/register.html.twig',[
-            'menu'=>$navMenu,
+           /*  'menu'=>$navMenu, 
             'locale'=>$locale,
-            'langs' => $langArray,
+            /* 'langs' => $langArray, 
             'form' => $form->createView()
         ]);
-    }
+    } */
 
     
 }

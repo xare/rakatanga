@@ -1,7 +1,7 @@
 .reservation-container {
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
     background: #fff;
     align-items: top;
     padding: 20px;
@@ -19,25 +19,33 @@
     text-align: right;
 }
 
+.travelPhoto {
+    grid-row: auto / span 2;
+    grid-column: auto;
+}
 
-/* .travelPhoto {
-    grid-row: 1 / span 2;
-    grid-column: 1 / span 2;
-} */
+.reservation-container .travelPhoto img {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    margin-right: 40px;
+}
 
 .travelName {
     grid-row: auto;
-    grid-column: auto / span 5;
+    grid-column: 2;
 }
 
 .reservationOptions {
     grid-row: auto;
-    grid-column: auto / span 2;
+    grid-column: 1;
+    border-right: 1px solid rgb(209, 215, 222);
+    padding-right: 1rem;
 }
 
 .reservationCalculator {
     grid-row: auto;
-    grid-column: auto / span 2;
+    grid-column: 2;
 }
 
 //END TAGS
@@ -68,10 +76,10 @@
 
 @media all and (min-width: 1024px) and (max-width: 1280px) {
     .reservationOptions {
-        grid-column: auto / span 5;
+        grid-column: auto / span 3;
     }
     .reservationCalculator {
-        grid-column: auto / span 5;
+        grid-column: auto / span 3;
     }
 }
 

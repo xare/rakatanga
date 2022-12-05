@@ -2,7 +2,8 @@
 
 namespace App\Service;
 
-
+use App\Entity\Invoices;
+use Exception;
 use Mpdf\Mpdf;
 use Symfony\Component\HttpFoundation\File\File;
 use Twig\Environment;
@@ -33,42 +34,82 @@ class pdfHelper
     }
 
 
-
-    public function createInvoicePdf($invoice, $locale, $invoiceNumber,$statusChange="") {
+    /**
+     * createInvoicePdf function
+     *
+     * @param Invoices $invoice
+     * @param string $locale
+     * @param string $status
+     * @return string
+     */
+    public function createInvoicePdf(Invoices $invoice, string $locale, string $status=""):string {
         
-        $path = $_SERVER["DOCUMENT_ROOT"];    // C:/wamp64/www/
-        $path = rtrim($path, "/");                         // C:/wamp64/www
+        /**
+         * @var string $path
+         */
+        $path = rtrim($_SERVER["DOCUMENT_ROOT"], "/");                         // C:/wamp64/www
 
-        $TwigVars = [
+        /**
+         * @var array $twigVars
+         */
+        $twigVars = [
             'invoice' => $invoice,
-            'entityObject' => "",
             'locale' => $locale,
             'path' => $path,
-            'statusChange' => $statusChange
+            'status' => $status
         ];
-        $css = $this->getBootstrap_custom();
-        $this->mPdf->SetTopMargin("50");
-        $this->mPdf->SetHTMLHeader($this->twig->render('pdf/pdf_header.html.twig', $TwigVars));
-        $this->mPdf->SetFooter($this->twig->render('pdf/pdf_footer.html.twig', $TwigVars));
-        $this->mPdf->writeHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
-        $this->mPdf->WriteHTML($this->twig->render('pdf/pdf_content.html.twig', $TwigVars), \Mpdf\HTMLParserMode::HTML_BODY);
-        $dateTime = new \DateTime();
-        $filename = $this::INVOICE_TITLE."-".$invoiceNumber."-".uniqid().".pdf";
+        dump($invoice->getReservation());
+         /**
+         * @var string $css
+         */
+        $css = $this->_getBootstrap_custom();
+        
+        $filename = $this::INVOICE_TITLE."-".$invoice->getInvoiceNumber()."-".uniqid().".pdf";
         $path = $this->appKernel->getProjectDir().self::INVOICES_FOLDER;
-        $this->mPdf->Output($path.$filename, "F");
+        /**
+         * @var string $filepath
+         */
+        $filepath = $path.$filename;
+        try {
+            $this->mPdf->SetTopMargin("50");
+            $this->mPdf->SetHTMLHeader($this->twig->render('pdf/pdf_header.html.twig', $twigVars));
+            $this->mPdf->SetFooter($this->twig->render('pdf/pdf_footer.html.twig', $twigVars));
+            $this->mPdf->writeHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $this->mPdf->WriteHTML($this->twig->render('pdf/pdf_content.html.twig', $twigVars), \Mpdf\HTMLParserMode::HTML_BODY);
+            $this->mPdf->Output($filepath, "F");
+        } catch (\Exception $exception) {
+            error_log("{$exception->getFile()}: ln {$exception->getLine()} throw error message '{$exception->getMessage()}'");
+            throw $exception;
+        }
         return $filename;
     }
 
-    public function removeInvoicePdf($invoice){
+    /**
+     * removeInvoicePdf function
+     *
+     * @param Invoices $invoice
+     * @return boolean
+     */
+    public function removeInvoicePdf(Invoices $invoice):bool {
         
         $path = $this->appKernel->getProjectDir()
                 .self::INVOICES_FOLDER
                 .$invoice->getFilename();
-
-        $this->uploadHelper->deleteFile($path, false);
+        try {
+            $this->uploadHelper->deleteFile($path, false);
+        } catch(\Exception $exception) {
+            error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
+            throw $exception;
+        }
+        return true;
     }
 
-    public function getBootstrap_custom(){
+    /**
+     * _getBootstrap_custom function
+     *
+     * @return string
+     */
+    private function _getBootstrap_custom():string {
         return '
           
           .clearfix:after {

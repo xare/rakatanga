@@ -1,8 +1,7 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
     <div class="row">
-        {# main menu table form inputs #}
-        <div class="col-4 col-sm-12">
+        <div class="col-4 col-xs-12">
             {{ form_row(form.type, {'label':'Tipo'}) }}
             {{ form_row(form.title, {'label':'Título'}) }}
             {{ form_row(form.route_name, {'label':'Ruta'}) }}
@@ -12,7 +11,7 @@
             {{ form_row(form.page, {'label':'Página'}) }}
         </div>
 
-        <div class="col-8 col-sm-12">
+        <div class="col-8 col-xs-12">
                 <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist" id="myTab">
                 {% for lang in langs %}
@@ -42,7 +41,7 @@
     </div>
     <br />
     <div class="row">
-        <div class="col-md-4 col-sm-12">
+        <div class="col-4 col-xs-12">
             <button class="btn btn-success">
                 <i class="fa fa-save"></i>
                 {% if form.vars.value.id == null %}

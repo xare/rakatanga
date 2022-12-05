@@ -24,6 +24,7 @@ class Options1Type extends AbstractType
             ->add('intro') */
             ->add('price')
             ->add('travel')
+            ->add('isExtension')
             ->add('optionsTranslations', CollectionType::class, [
                 'entry_type' => OptionsTranslationsType::class,
                 'entry_options' => [

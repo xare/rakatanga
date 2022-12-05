@@ -35,26 +35,26 @@ class Travellers
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $position;
 
     /**

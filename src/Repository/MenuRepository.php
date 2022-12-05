@@ -64,14 +64,15 @@ class MenuRepository extends ServiceEntityRepository
                 ->select(
                     'mt.title as title, 
                     mt.slug as slug,
-                    m.route_name as routeName')
+                    m.routeName as routeName')
             ->innerJoin( 'm.menuLocations', 'ml', 'm.ml = ml.m' )
-            ->innerJoin( MenuTranslation::class, 'mt', Join::WITH, 'mt.Menu = m.id')
+            ->innerJoin( MenuTranslation::class, 'mt', Join::WITH, 'mt.menu = m.id')
             ->innerJoin( Lang::class, 'l', join::WITH, 'l.id = mt.lang')
             ->andWhere('ml.name = :location')
             ->setParameter('location', $location)
             ->andWhere('l.iso_code = :locale')
             ->setParameter('locale', $locale)
+            ->orderBy('m.position','ASC')
             ->getQuery()
             ->getResult();
     }

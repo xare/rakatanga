@@ -1,13 +1,21 @@
 {# templates/bundles/TwigBundle/Exception/error404.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>{{ 'Page not found'|trans }}</h1>
+{% block title %}{{ parent() }} - Página de error{% endblock %}
 
-    <p>
-        {{ 'The requested page couldn\'t be located. Checkout for any URL
-        misspelling or'|trans }} <a href="{{ path('homepage') }}">{{ 'return to the homepage'|trans }}</a>.
-    </p>
-    <p>{{ status_code }}</p>
-    <p>{{ status_text }}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Error {{ exception.statusCode }} - {{ 'No hemos encontrado la página que buscabas'|trans }}</h1>
+
+                {# <p>
+                    {{ 'La página que buscabas no se encuentra en esta web. Comprueba cualquier error en tu url o'|trans }} <a href="{{ path('index') }}">{{ 'regresa a la página de inicio'|trans }}</a>.
+                </p> #}
+                <p>{{ exception.message }}</p>
+                {# <p>{{ status_code }}</p>
+                <p>{{ status_text }}</p> #}
+            </div>
+        </div>
+    </div>
 {% endblock %}

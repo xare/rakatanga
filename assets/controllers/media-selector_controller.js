@@ -6,9 +6,7 @@ export default class extends Controller {
         url: String,
     };
     async selectMedia(event) {
-        var urlElements = this.urlValue.split('/', 4).reverse();
-        console.log(urlElements[0]);
-        console.log(event.currentTarget.dataset.mediaId);
+        var urlElements = this.urlValue.split('/', 4).reverse();;;
         this.mediaSelectorTargets.forEach((element) => {
             element.parentNode.parentNode.classList.remove('selected');
             if (element.firstChild.nextSibling === null) {
@@ -28,18 +26,6 @@ export default class extends Controller {
             preview: 1
         });
         const response = await fetch(`${this.urlValue}?${params.toString()}`);
-        console.log(await response.text());
-
-        /* this.selectTarget.options.forEach((element) => {
-            if (element.value == event.currentTarget.dataset.mediaId) {
-                if (element.selected == true) {
-                    element.selected = false
-                } else {
-                    element.selected = true;
-                }
-            }
-        }); */
-
 
     }
 }

@@ -10,6 +10,9 @@
         {% elseif page is defined %}
             <input type="hidden" name="page[type]" id="js-media-type" value="pages">
             <input type="hidden" name="page[page_id]" id="js-media-id" value="{{entity.id}}">
+        {% elseif category is defined %}
+            <input type="hidden" name="category[type]" id="js-media-type" value="categories">
+            <input type="hidden" name="category[category_id]" id="js-media-id" value="{{entity.id}}">
         {% elseif popup is defined %}
             <input type="hidden" name="popups[type]" id="js-media-type" value="popups">
             <input type="hidden" name="popups[popup_id]" id="js-media-id" value="{{entity.id}}">

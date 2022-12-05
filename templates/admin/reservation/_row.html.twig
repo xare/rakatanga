@@ -27,6 +27,9 @@
       </span>
   </td>
   <td>
+    {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}
+  </td>
+  <td>
       {% if reservation.user is defined %}
           
           <a href="{{ path('user_show', {
@@ -74,7 +77,12 @@
       </a> #}
       <button
             class="btn btn-primary js-send-checkin-request" 
-            data-reservation-id="{{reservation.id}}">
+            data-reservation-id="{{reservation.id}}"
+            data-action="send-checkin-request"
+            data-bs-toggle="tooltip"
+            data-swal-waiting-title="Enviando un email"
+            data-swal-waiting-text="Estamos enviando un email con in vínculo " 
+            title="Enviar un email para pedir los datos">
             <i class="fas fa-envelope"></i>
         </button>
   </td>

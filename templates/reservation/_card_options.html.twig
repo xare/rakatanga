@@ -23,12 +23,12 @@
 								data-option-id="{{ option.id }}" 
 								data-option-price="{{ option.price }}" 
 								data-option-title="{{ renderLocalizedOption(option.id, app.request.locale) }}">
-								<td class="col-1 col-xs-12" style="vertical-align: middle">
+								{# <td class="col-1 col-xs-12" style="vertical-align: middle">
 									<span class="badge bg-secondary fs-6 fw-bold bg-opacity-75">
 										<output data-container="current-option-number">{% if reservation is defined and reservation != null %} {{option.ammount}}{% endif %}</output>
 										<output data-container="total-option-number">/ {{totalTravellers}}</output>
 									</span>
-								</td>
+								</td> #}
 								<td class="col-6 col-xs-12" style="vertical-align: middle">
 									{{ renderLocalizedOption(option.id, app.request.locale) }}
 								</td>
@@ -42,7 +42,7 @@
 									{% endif %}
 								</td>
 								<td class="col-2 col-xs-12" style="vertical-align: middle">
-									<input 
+									{# <input 
 										type="range" 
 										min="0" 
 										max="{{totalTravellers}}" class="form-control form-range"  name="reservation_user[option][{{ option.id }}]" 
@@ -51,7 +51,12 @@
 										value="{{option.ammount}}" 
 										{% endif %}
 										data-bs-toggle="tooltip"
-										title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'opciones'|trans}}">
+										title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'opciones'|trans}}"> #}
+										<select class="form-control form-select" name="reservation_user[option][{{ option.id }}]">
+											{% for i in 0..9 %}
+											<option value="{{i}}" {% if reservation is defined and reservation != null %}{% if i == option.ammount %}selected{% endif %}{% endif %}>{{i}}</option>
+											{% endfor %}
+										</select>
 								</td>
 								<td class="col-2 text-right" style="vertical-align: middle" align="right">
 									<span class="badge bg-secondary fs-6 bg-opacity-75">

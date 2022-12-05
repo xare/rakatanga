@@ -1,3 +1,9 @@
+{% set extensionsCounter = 0 %}
+{% for option in travelObject.options %}
+	{% if option.isExtension == 1 %}
+		{% set extensionsCounter = extensionsCounter + 1 %}
+	{% endif %}
+{% endfor %}
 {% extends 'base.html.twig' %}
 
 {% block title %}
@@ -26,6 +32,7 @@
 		<div class="row">
 			<div class="col-md-12 col-12">
 				<h1>{{ travel.title }}</h1>
+				
 			</div>
 		</div>
 		<div class="row">
@@ -36,7 +43,7 @@
 				{{ include('frontend/_reservation_box.html.twig',{'dates': dates}) }}
 			</div>
 			<div class="row">
-				<div class="col-12">	
+				<div class="col-9">	
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item" role="presentation">
 							<button data-bs-target="#det" aria-controls="det" class="nav-link active" type="button" role="tab" data-bs-toggle="tab">
@@ -63,14 +70,21 @@
 							</button>
 					</li>
 					{% if travelObject.infodocs|length > 0 %}
-					<li class="nav-item" role="infodocs">
-							<button data-bs-target="#inf" class="nav-link" type="button" aria-controls="inf" role="tab" data-bs-toggle="tab">
-								<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Documentación informativa'|trans}}</span>
-								<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Documentación'|trans}}</span>
-							</button>
-					</li>
+						<li class="nav-item" role="infodocs">
+								<button data-bs-target="#inf" class="nav-link" type="button" aria-controls="inf" role="tab" data-bs-toggle="tab">
+									<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Documentación informativa'|trans}}</span>
+									<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Documentación'|trans}}</span>
+								</button>
+						</li>
 					{% endif %}
 					<!--li role="presentation"><a href="#avi" aria-controls="avi" role="tab" data-bs-toggle="tab">Opiniones de clientes</a></li-->
+					{% if extensionsCounter > 0 %}
+						<li class="nav-item" role="extensions">
+								<button data-bs-target="#ext" class="nav-link" type="button" aria-controls="ext" role="tab" data-bs-toggle="tab">
+									<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Extensiones'|trans}}</span>
+								</button>
+						</li>
+					{% endif %}
 				</ul>
 				<div class="tab-content">
 					<div
@@ -84,13 +98,18 @@
 						{{ travel.practical_info | raw  }}
 					</div>
 					<div role="tabpanel" class="tab-pane" id="pho">
-						<div class="grid" data-carousel data-slides>
+					
 								{{ include('frontend/_photo_gallery.html.twig',{ 'travel':travelObject })}}
-						</div>
+
 					</div>
 					{% if travelObject.infodocs|length > 0 %}
 						<div role="tabpanel" class="tab-pane" id="inf">
-									{{ include('frontend/_list_infodocs.html.twig',{ 'travel':travelObject })}}
+							{{ include('frontend/_list_infodocs.html.twig',{ 'travel':travelObject })}}
+						</div>
+					{% endif %}
+					{% if extensionsCounter > 0 %}
+						<div role="tabpanel" class="tab-pane" id="ext">
+							{{ include('frontend/_list_extensions.html.twig',{ 'travel': travelObject})}}
 						</div>
 					{% endif %}
 				</div>

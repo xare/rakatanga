@@ -29,7 +29,7 @@ class Payments
     private \DateTimeInterface $date_ajout;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="payments")
+     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="payments", cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $reservation;

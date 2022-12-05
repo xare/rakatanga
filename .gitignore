@@ -34,5 +34,6 @@ yarn-error.log
 .vscode-upload.json
 /.vscode/
 ###< editor's
-
+/tools/php-cs-fixer/vendor/
+/.php-cs-fixer.cache
 

@@ -23,7 +23,7 @@ class OptionsTranslations
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $intro;
 
@@ -38,6 +38,11 @@ class OptionsTranslations
      * @ORM\JoinColumn(nullable=false)
      */
     private $options;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Infodocs::class, inversedBy="optionsTranslations")
+     */
+    private $infodocs;
 
     public function getId(): ?int
     {
@@ -88,6 +93,18 @@ class OptionsTranslations
     public function setOptions(?Options $options): self
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    public function getInfodocs(): ?Infodocs
+    {
+        return $this->infodocs;
+    }
+
+    public function setInfodocs(?Infodocs $infodocs): self
+    {
+        $this->infodocs = $infodocs;
 
         return $this;
     }

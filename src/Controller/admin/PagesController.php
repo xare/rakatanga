@@ -18,9 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/admin/pages")
- */
+#[Route(path: '/admin/pages')]
 class PagesController extends MainadminController
 {
     private $entityManager;
@@ -29,9 +27,7 @@ class PagesController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="pages_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'pages_index', methods: ['GET'])]
     public function index(
         PagesRepository $pagesRepository, 
         Request $request,
@@ -51,9 +47,7 @@ class PagesController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="pages_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'pages_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository, PagesRepository $pagesRepository): Response
     {
         $this->redirectToLogin($request); 
@@ -82,12 +76,10 @@ class PagesController extends MainadminController
             'form' => $form->createView(),
         ]);
     }
-    /**
-     * @Route("/items", methods="GET", name="pages_items")
-     */
+    #[Route(path: '/items', methods: 'GET', name: 'pages_items')]
     public function getItems(Request $request, PaginatorInterface $paginator, PagesRepository $pagesRepository)
     {
-       
+
         if (!$presentPage = $request->query->get('page'))
         {
             $presentPage = 1;
@@ -102,10 +94,10 @@ class PagesController extends MainadminController
             'path',
             'filename',
             'mediaPath'];
-        
+
         $defaultPage = 1;
         $itemsPerPage = 10;
-        
+
         $data = [
             'items' => $items,
             'count' => $count,
@@ -117,9 +109,7 @@ class PagesController extends MainadminController
         return $this->json($data,200,[],['groups'=>'main']);
         /* return $this->json($mediaRepository->findAll()); */
     }
-    /**
-     * @Route("/{id}", name="pages_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'pages_show', methods: ['GET'])]
     public function show(Pages $page): Response
     {
         return $this->render('admin/pages/show.html.twig', [
@@ -127,9 +117,7 @@ class PagesController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="pages_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'pages_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Pages $page, LangRepository $langRepository): Response
     {
         $langs = $langRepository->findAll();
@@ -152,9 +140,7 @@ class PagesController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="pages_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'pages_delete', methods: ['POST'])]
     public function delete(Request $request, Pages $page): Response
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {

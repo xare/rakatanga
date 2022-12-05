@@ -2,9 +2,14 @@
 
 namespace App\Service;
 
+use App\Entity\Codespromo;
+use App\Entity\Invoices;
+use App\Entity\Dates;
 use App\Entity\Options;
 use App\Entity\Reservation;
 use App\Entity\ReservationOptions;
+use App\Entity\User;
+use App\Repository\CodespromoRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\OptionsTranslationsRepository;
 use App\Repository\PaymentsRepository;
@@ -18,6 +23,7 @@ class reservationHelper
     private $optionsTranslationsRepository;
     private $paymentsRepository;
     private $reservationRepository;
+    private $codespromoRepository;
     private $localizationHelper;
     private invoiceHelper $invoiceHelper;
 
@@ -27,6 +33,7 @@ class reservationHelper
                         OptionsTranslationsRepository $optionsTranslationsRepository,
                         PaymentsRepository $paymentsRepository,
                         ReservationRepository $reservationRepository,
+                        CodespromoRepository $codespromoRepository,
                         localizationHelper $localizationHelper,
                         invoiceHelper $invoiceHelper)
     {
@@ -35,21 +42,52 @@ class reservationHelper
         $this->optionsTranslationsRepository = $optionsTranslationsRepository;
         $this->paymentsRepository = $paymentsRepository;
         $this->reservationRepository = $reservationRepository;
+        $this->codespromoRepository = $codespromoRepository;
         $this->localizationHelper = $localizationHelper;
         $this->invoiceHelper = $invoiceHelper;
+        
     }
-
-    public function makeReservation($data,$date,$user, string $locale){
+    /**
+     * makeReservation function
+     *
+     * @param array $data
+     * @param Dates $date
+     * @param User $user
+     * @param string $locale
+     * @param Codespromo $codepromo
+     * 
+     * @return Reservation
+     */
+    public function makeReservation(
+                        array $data, 
+                        Dates $date, 
+                        User $user, 
+                        string $locale
+                        ):Reservation {
         $reservation = $this->_isReserved($user,$date);
         
         if($reservation == false) {
             $reservation = new Reservation();
-            
+            /**
+             * @var Codespromo $codepromo
+             */
+            $codepromo = $this->codespromoRepository
+                            ->findOneBy([
+                                'email' => $user->getEmail()
+                            ]);
+            if(null == $codepromo) {
+                $codepromo = $this->codespromoRepository
+                                ->findOneBy([
+                                    'user' => $user
+                                ]);
+            }
+            dump($codepromo);
             $reservation->setNbpilotes($data['nbPilotes']);
             $reservation->setNbAccomp($data['nbAccomp']);
             $reservation->setStatus('initialized');
             $reservation->setDate($date);
             $reservation->setUser($user);
+            $reservation->setCodespromo($codepromo);
             
             //PERSIST OPTIONS TO RESERVATION
             if($data['options'] != null && count($data['options']) > 0) {
@@ -60,7 +98,10 @@ class reservationHelper
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
             $reservation->setCode(strtoupper(substr($date->getTravel()->getCategory(),0,3)) .'-'.$reservation->getId());
-            $invoiceResult = $this->invoiceHelper->makeInvoice($reservation, '', [
+            /**
+             * @var Invoices $invoice
+             */
+            $invoice = $this->invoiceHelper->newInvoice($reservation, [
                 'name' => $user->getPrenom(). ' '.$user->getNom(),
                 'address' => $user->getAddress(),
                 'nif' => $user->getIdCard(),
@@ -68,18 +109,16 @@ class reservationHelper
                 'city' => $user->getCity(),
                 'country' => $user->getCountry()
             ], $locale);
-            $reservation->addInvoice($invoiceResult['invoice']);
+            $reservation->setInvoice($invoice);
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
         } else if ($reservation->getStatus() == 'cancelled') {
             $reservation->setStatus = 'initialized';
         }
-        
-        dump($reservation->getInvoices());
        return $reservation;
     }
 
-   public function updateReservation($reservation, $data) {
+   public function updateReservation($reservation, $data, $locale) {
         
         $reservation->setNbpilotes($data['nbpilotes']);
         $reservation->setNbAccomp($data['nbaccomp']);
@@ -92,15 +131,37 @@ class reservationHelper
         }
         $this->entityManager->persist($reservation);
         $this->entityManager->flush();
-        $this->invoiceHelper->updateInvoice($reservation);
+        $this->invoiceHelper->updateReservationInvoice($reservation, $data, 'updated',$locale);
         return $reservation;
     }
 
+    public function cancelReservation(Reservation $reservation, $locale) {
+        try{
+            $reservation->setStatus('cancelled');
+            /**
+             * @var User $user
+             */
+            $user = $reservation->getUser();
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();
+            $this->invoiceHelper->cancelInvoice($reservation, [
+                'name' => $user->getPrenom(). ' '.$user->getNom(),
+                'address' => $user->getAddress(),
+                'nif' => $user->getIdCard(),
+                'postalcode' => $user->getPostcode(),
+                'city' => $user->getCity(),
+                'country' => $user->getCountry()
+            ], $locale);
+        }catch(\Exception $exception){
+            error_log("{$exception->getFile()}: ln {$exception->getLine()} throw error message '{$exception->getMessage()}'");
+            throw $exception;
+            return false;
+        }
+        return true;
+    }
     private function _feedReservationOptions($reservation, $option){
         $optionItem = $this->optionsRepository->find($option['id']);
-        dump($optionItem);
-        dump($option);
-        dump($reservation);
+
         $this->_isReservationOptionDuplicated($reservation, $option);
         $reservationOptions = new ReservationOptions();
         
@@ -176,57 +237,9 @@ class reservationHelper
             }
         return $reservedOptions;
     }
-    public function getReservationAmmount(Reservation $reservation){
-        
-        $total =  $this->getReservationAmmountBeforeDiscount($reservation);
-        $discount = $this->getDiscount($reservation, $total);
-        
-        $total = $total - $discount;
-        return $total;
-    }
+    
 
-    public function getReservationAmmountBeforeDiscount(Reservation $reservation){
-        $nbPilotes = $reservation->getNbpilotes();
-        $prixPilote =  $reservation->getDate()->getPrixPilote();
-        $nbAccomp = $reservation->getNbAccomp();
-        $prixAccomp = $reservation->getDate()->getPrixaccomp();
-        
-        $total = ($nbPilotes * $prixPilote) + ($nbAccomp * $prixAccomp);
-        
-        foreach ($reservation->getReservationOptions() as $reservationOption){
-            $ammount = $reservationOption->getAmmount();
-            $optionPrice = $reservationOption->getOptions()->getPrice();
-            $total = $total + ($ammount * $optionPrice);
-        }
-        return $total;
-    }
-    public function getDiscount($reservation, $total = 0) {
-        $codepromos = $reservation->getCodespromos();
-        
-        $discount = 0;
-        foreach ($codepromos as $codepromo) {
-            if($codepromo->getMontant() > 0) {
-                $discount += $codepromo->getMontant();
-            } else if($codepromo->getPourcentage()){
-                $discount += $total * $codepromo->getPourcentage() / 100;
-            }
-        }
-        
-        return $discount;
-    }
-
-    public function determineDuePayment (Reservation $reservation){
-        $payments = $this->paymentsRepository->findBy([
-            'reservation' => $reservation
-        ]);
-
-        $totalDueAmmount = 0;
-        foreach($payments as $payment){
-            $totalDueAmmount =+ $payment->getAmmount();
-        }
-
-        return $totalDueAmmount;
-    }
+    
 
     public function _isReserved($user, $date){
         $reservation = $this->reservationRepository->findOneBy([
@@ -239,5 +252,4 @@ class reservationHelper
             return false;
         }
     }
-
 }

@@ -2,8 +2,11 @@
 
 namespace App\Twig;
 
+use App\Entity\Reservation;
 use App\Service\contentHelper;
 use App\Service\localizationHelper;
+use App\Service\reservationHelper;
+use App\Service\reservationDataHelper;
 use App\Service\slugifyHelper;
 use App\Service\UploadHelper;
 use Psr\Container\ContainerInterface;
@@ -48,9 +51,12 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('renderLocalizedOption', [$this, 'getLocalizedOptionTranslation']),
             new TwigFunction('renderLocalizedOptionIntro', [$this, 'getLocalizedOptionTranslationIntro']),
             new TwigFunction('renderLocalizedCategory', [$this, 'getLocalizedCategoryTranslation']),
+            new TwigFunction('renderLocalizedOptionInfodoc', [$this, 'getLocalizedOptionTranslationInfodoc']),
             new TwigFunction('render_category_list', [$this, 'renderCategoryList']),
             new TwigFunction('encore_entry_css_source', [$this, 'getEncoreEntryCssSource']),
-            new TwigFunction('class', [$this, 'getClass'])
+            new TwigFunction('class', [$this, 'getClass']),
+            new TwigFunction('renderReservationAmmount',[$this,'getReservationAmmount']),
+            new TwigFunction('renderReservationDuePayment',[$this,'getReservationDuePayment'])
         ];
     }
 
@@ -114,6 +120,12 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->get(localizationHelper::class)
             ->renderOptionIntro($id, $locale);
     }
+    public function getLocalizedOptionTranslationInfodoc($id, $locale)
+    {
+        return $this->container
+            ->get(localizationHelper::class)
+            ->renderOptionInfodoc($id, $locale);
+    }
     public function getLocalizedCategoryTranslation($id, $locale)
     {
         return $this->container
@@ -154,10 +166,24 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         return (new \ReflectionClass($object))->getShortName();
     }
+    public function getReservationAmmount(Reservation $reservation)
+    {
+        return $this->container
+        ->get(reservationDataHelper::class)
+        ->getReservationAmmount($reservation);
+    }
+    public function getReservationDuePayment(Reservation $reservation)
+    {
+        return $this->container
+            ->get(reservationDataHelper::class)
+            ->getReservationDueAmmount($reservation);
+    }
     public static function getSubscribedServices()
     {
         return [
             UploadHelper::class,
+            reservationHelper::class,
+            reservationDataHelper::class,
             contentHelper::class,
             localizationHelper::class,
             slugifyHelper::class,

@@ -1,6 +1,7 @@
 framework:
     mailer:
         dsn: "%env(MAILER_DSN)%"
-        envelope:
-            sender: "webmaster@rakatanga-tour.com"
-            recipients: ["webmaster@rakatanga-tour.com"]
+        #envelope:
+            #sender: "webmaster@rakatanga-tour.com"
+            #recipients: ["webmaster@rakatanga-tour.com"]
+            #recipients: null

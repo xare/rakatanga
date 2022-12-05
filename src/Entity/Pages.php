@@ -17,28 +17,28 @@ class Pages
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $default_slug;
 
      /**
      * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private \DateTimeInterface $date_created;
 
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $date_modified;
 
     /**

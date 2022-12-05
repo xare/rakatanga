@@ -44,7 +44,7 @@ class OldReservationsIndexerCommand extends Command
   public function execute(
     InputInterface $inputInterface, 
     OutputInterface $outputInterface,
-    ){
+    ): int{
     // Browse all of the OldReservationsRepository
     $oldReservations = $this->oldreservationsRepository->findAll();
     $i = 0;

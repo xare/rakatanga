@@ -1,7 +1,17 @@
+{% set totalMedia = 0 %}
+{% for medium in article.media %}
+	{% if medium.isGallery == true %}
+		{% set totalMedia = totalMedia + 1 %}
+	{% endif %}
+{% endfor %}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Rakatanga Tour - Blog{% endblock %}
-
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('photogallery')  }}
+{% endblock %}
 {% block body %}
 
 
@@ -36,15 +46,13 @@
       <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="media-tab">
         {% for medium in article.media %}
 	        {# {% if medium.isGallery == true %} #}
-          {% if loop.index0 == 0 or loop.index0 % 4 == 0 %}
-			      <div class="row">
-		      {% endif %}
-		        {{ include('shared/photogallery/_photo_gallery_item.html.twig',{'medium':medium,'index':loop.index}) }}
-          {% if loop.index0 != 0 and ((loop.index0 -1) % 4 == 0 or loop.index0 == (article.media|length -1)) %}
-			      </div>
-		      {% endif %}
-	        
+		        {{ include('shared/photogallery/_photo_gallery_item.html.twig',{
+                                                                              'medium':medium,
+                                                                              'loop':loop,
+                                                                              'totalMedia':totalMedia
+                                                                              }) }}
         {% endfor %}
+        <div class="clearfix"></div>
       </div>
   </div>
     </div>
@@ -54,3 +62,11 @@
     
 </div>
 {% endblock %}
+{% block footer %}
+		{{ parent() }}
+
+	{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+		{{ encore_entry_script_tags('photogallery') }}
+	{% endblock %}

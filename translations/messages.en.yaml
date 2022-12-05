@@ -260,7 +260,9 @@ Resumen datos de la reserva y pago: Summary of reservation and payment details
 Reserva tu viaje: Reserve your trip
 Página de pago: Payment page
 A continuación puedes ver todos los datos que hemos guardado sobre tu reserva: Below you can see all the data we have saved about your reservation
-Si por algún motivo deseas consultarlo con nosotros ponte en contacto con nosotros haciendo click aquí, y escribiendonos un mensaje rápido paa que podamos asistirte: If for any reason you wish to consult with us, please contact us by clicking here, and writing us a quick message so that we can assist you.
+Si por algún motivo deseas consultarlo con nosotros ponte en contacto con nosotros haciendo click: If for any reason you wish to consult with us, please contact us by clicking
+aquí: here
+y escribiendonos un mensaje rápido paa que podamos asistirte:  and writing us a quick message so that we can assist you.
 Fecha del inicio: Start date
 Fecha del final: End date
 Facturas asociadas a esta reserva: Invoices associated with this reservation
@@ -344,3 +346,5 @@ intentalo de nuevo: try again
 Este vínculo caducará dentro de: This link will expire in
 Recuperación de contraseña: Password recovery
 Ha habido un problema validando tu petición de reinicio de contraseña: There was a problem validating your reset request
+Permiso: Drivers
+Permiso de conducir: Drivers license

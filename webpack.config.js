@@ -23,10 +23,10 @@ Encore
  */
 .addEntry('app', './assets/app.js')
     .addEntry('admin', './assets/admin.js')
-    .addEntry('admin_media', './assets/admin_media.js')
+    .addEntry('admin-tools', './assets/admin-tools.js')
     .addEntry('admin-dates-reservation-data', './assets/admin-dates-reservation-data-manager.js')
     .addEntry('admin-send-message', './assets/admin-send-message.js')
-    .addEntry('admin-parentChild-select-form', './assets/admin_parentChild_select_form.js')
+    .addEntry('admin-parentChild-select-form', './assets/admin_parentChild_select_form.js') //??
     .addEntry('admin-inscriptions', './assets/admin-inscriptions.js')
     .addEntry('admin-media', './assets/media.js')
     .addEntry('admin-upload-media', './assets/upload-media.js')
@@ -34,7 +34,6 @@ Encore
     .addEntry('documents', './assets/documents.js')
     .addEntry('reservation', './assets/reservation.js')
     .addEntry('reservation-payment', './assets/reservation-payment.js')
-    .addEntry('reservation-manager', './assets/reservation-manager.js')
     .addEntry('reservation-data-manager', './assets/reservation-data-manager.js')
     .addEntry('reservation-dropzone', './assets/reservation-dropzone.js')
     .addEntry('reservation-docs', './assets/reservation-docs.js')

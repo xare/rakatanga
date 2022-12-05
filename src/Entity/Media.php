@@ -21,33 +21,33 @@ class Media
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Groups("main")
      */
+    #[Assert\NotBlank]
+    #[Groups('main')]
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $url;
 
 
@@ -58,8 +58,8 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $filename;
 
     /**

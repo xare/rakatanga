@@ -24,8 +24,8 @@ document.querySelector('[data-action="js-cookies-button"]').addEventListener("cl
 
 
 cookieMessage = () => {
-    console.info('cookieMessage');
-    console.log(getCookie("cookie"));
+
+
     if (!getCookie("cookie"))
         document.querySelector('#cookies').style.display = "block";
 }

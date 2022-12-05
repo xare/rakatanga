@@ -1,26 +1,26 @@
-A continuación puedes ver las facturas realizadas por el cliente.
+<p>A continuación puedes ver las facturas realizadas por el cliente.</p>
 
 
 <table class="table small">
-{% for invoice in reservation.invoices %}
+{# {% for invoice in reservation.invoices %} #}
   <tr>
-    <td>{{ invoice.name }}</td>
-    <td>{{ invoice.nif }}</td>
-    <td>{{ invoice.address }}</td>
-    <td>{{ invoice.postalcode }}</td>
-    <td>{{ invoice.city }}</td>
-    <td>{{ invoice.country }}</td>
-    <td>{{ invoice.invoiceNumber }}</td>
-    <td>{{ invoice.dueAmmount|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
+    <td>{{ reservation.invoice.name }}</td>
+    <td>{{ reservation.invoice.nif }}</td>
+    <td>{{ reservation.invoice.address }}</td>
+    <td>{{ reservation.invoice.postalcode }}</td>
+    <td>{{ reservation.invoice.city }}</td>
+    <td>{{ reservation.invoice.country }}</td>
+    <td>{{ reservation.invoice.invoiceNumber }}</td>
+    <td>{{ reservation.invoice.dueAmmount|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
     <td>
-      <a target="_blank" href="{{ path('user-download-invoice',{ 'invoice': invoice.id } )}}"><i class="fa fa-download"></i></a>
+      <a target="_blank" href="{{ path('user-download-invoice',{ 'invoice': reservation.invoice.id } )}}"><i class="fa fa-download"></i></a>
     </td>
   </tr>
 
-{% else %}
+{# {% else %}
   <tr>
     <td>Todavía no se han asociado facturas a esta reserva.</td>
   </tr>
   
-{% endfor %}
+{% endfor %} #}
 </table>

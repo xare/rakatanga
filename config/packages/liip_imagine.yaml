@@ -45,13 +45,13 @@ liip_imagine:
                 thumbnail:
                     size:           [366,204]
                     mode:           outbound
-                    allow_upscale:  true
+                    allow_upscale:  true  
         index_thumbnail_destinations:
             filters:
                 thumbnail:
                     size:           [415,231]
                     mode:           outbound
-                    allow_upscale:  true
+                    allow_upscale:  true   
         blog_thumbnail_medium:
             filters:
                 thumbnail:

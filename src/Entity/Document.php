@@ -20,8 +20,8 @@ class Document
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $id;
 
     /**
@@ -32,20 +32,20 @@ class Document
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $filename;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $originalFilename;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $mimeType;
 
     /**
@@ -70,8 +70,8 @@ class Document
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $doctype;
 
     /**

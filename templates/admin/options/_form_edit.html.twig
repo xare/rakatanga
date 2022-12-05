@@ -32,7 +32,7 @@
                                     entity_id: option.id,
                                     entityTranslation_data_property: optionTranslation.vars.data.intro}) }}
             </div>
-
+            {{ include( 'admin/options/_form_dropzone.html.twig',{'optionTranslation': optionTranslation.vars.data} ) }}
             <input type="hidden" 
                 name="options1[optionsTranslations][{{loop.index0}}][lang]" 
                 {% if option.id != null %}value="{{optionTranslation.vars.data.lang.id}}"{% endif %}/>

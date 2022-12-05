@@ -1,3 +1,8 @@
+/**
+ * .addEntry('admin-upload-media', './assets/upload-media.js')
+ * templates\admin\travel\edit.html.twig
+ */
+
 import Dropzone from 'dropzone';
 
 /************************ */
@@ -12,11 +17,9 @@ $(document).ready(function() {
 });
 
 function initializeDropzone() {
-    console.log("Dropzone initialized!");
     var Element = document.querySelector('.js-media-dropzone');
     var type = document.querySelector('#js-media-type').value;
-    var id = document.querySelector('#js-media-id').value;
-    console.log(Element);
+    var id = document.querySelector('#js-media-id').value;;
     if (!Element) {
         return;
     }
@@ -28,9 +31,8 @@ function initializeDropzone() {
                 data.append('type', type);
                 data.append(type, id);
             });
-            this.on('success', function(file, data) {
-                console.log(data);
-                $('#js-media-modal-container').prepend(data);
+            this.on('success', function(file, data) {;
+                $('#js-media-modal-blocks-container').html(data);
             });
 
             this.on('error', function(file, data) {

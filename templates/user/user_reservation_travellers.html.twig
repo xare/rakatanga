@@ -17,7 +17,7 @@
 				<h1>{{'Lista de viajeros'|trans}}</h1>
         {% for message in app.flashes('success') %}
 						<div class="alert alert-success">
-								{{ message }}.
+								{{ message|raw }}.
 						</div>
 					{% endfor %}
         <p>{{ 'A continuación añade los viajeros que participarán en este viaje'|trans }}</p>
@@ -31,7 +31,7 @@
     {{ include('user/_card_add_travellers_data.html.twig',{'reservation':reservation}) }}
     </div>
     <div class="col-4 col-xs-12">
-      {{ include('reservation/_reservation_calculator_table.html.twig',{
+      {{ include('reservation/_new_reservation_calculator_table.html.twig',{
                     'reservation':reservation, 
                     'date':reservation.date
                     })

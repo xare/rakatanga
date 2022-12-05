@@ -1,14 +1,5 @@
-
-
 {{ include( 'reservation/_new_reservation_calculator_table.html.twig', {'_locale': app.request.getLocale()})}}
-{# {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (reservation is defined and reservation != null) %} #}
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        {# {{ include( 'reservation/usercards/_card_logged_user.html.twig', { 
-                        'reservation' : reservation, 
-                        'options' : options, 
-                        'isInitialized' : isInitialized } ) }} #}
-                        {{ include( 'reservation/usercards/_card_logged_user.html.twig' ) }}
-   {#  {% else %}
-    {{ dump('not initialized') }}
-    {{ include('reservation/usercards/_card_logged_user_not_initialized.html.twig') }} #}
+
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    {{ include( 'reservation/usercards/_card_logged_user.html.twig' ) }}
 {% endif %}

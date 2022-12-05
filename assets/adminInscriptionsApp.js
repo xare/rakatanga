@@ -19,7 +19,7 @@ class adminInscriptionsApp {
     convert2user(event) {
         event.preventDefault();
         const inscription = $(event.currentTarget).data('inscription');
-        console.info('convert2user');
+
         (
             async() => {
                 try {
@@ -42,7 +42,7 @@ class adminInscriptionsApp {
                     });
                     console.log(swalResponse);
                     if (swalResponse.isConfirmed) {
-                        console.info('Swal response is confirmed');
+
                         (
                             async() => {
                                 try {
@@ -50,7 +50,7 @@ class adminInscriptionsApp {
                                         'url': Routing.generate('inscriptions_add_user', { inscription }),
                                         'type': 'POST'
                                     });
-                                    console.info(response2);
+
                                     Swal.fire({
                                         'html': response2.message
                                     });

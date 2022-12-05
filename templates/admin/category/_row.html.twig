@@ -6,7 +6,6 @@
                           </a>
                         </td>
                         <td>{% if category.continents %}{{ category.continents.code }}{% endif %}</td>
-                        <td>{{ category.type }}</td>
                         <td>{{ category.status }}</td>
                         <td>
                             <div class="row">
@@ -18,18 +17,9 @@
                                 {% endfor %}
                             </div>
                         </td>
-                        {# <td>
-                            <a href="{{ path('category_show', {'id': category.id}) }}" 
-                            class="btn btn-primary">
-                                <i class="fa fa-eye"></i>
-                            </a>
-                        </td> #}
-                        {# <td>
-                            <a href="{{ path('category_edit', {'id': category.id}) }}"
-                            class="btn btn-info">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                        </td> #}
+                        <td>
+                            {{category.travel|length}}
+                        </td>
                         <td>
                             {{ include('admin/category/_delete_form.html.twig') }}
                         </td>

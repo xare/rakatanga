@@ -12,7 +12,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MainadminController extends AbstractController
 {
-    public function redirectToLogin(Request $request)
+    public function __construct(private \Symfony\Component\Serializer\Serializer $serializer)
+    {
+    }
+    public function redirectToLogin()
     {
         $user = $this->getUser();
         if(!$user)
@@ -31,7 +34,7 @@ class MainadminController extends AbstractController
      */
     protected function createApiResponse($data, $statusCode = 200)
     {
-        $json = $this->get('serializer')
+        $json = $this->serializer
             ->serialize($data, 'json');
 
         return new JsonResponse($json, $statusCode, [], true);

@@ -18,9 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/admin/options")
- */
+#[Route(path: '/admin/options')]
 class OptionsController extends MainadminController
 {
 
@@ -30,9 +28,7 @@ class OptionsController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="options_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'options_index', methods: ['GET'])]
     public function index(
         Request $request,
         OptionsRepository $optionsRepository,
@@ -48,9 +44,7 @@ class OptionsController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/search/{categoryName}", name="options_by_category", methods={"GET","POST"})
-     */
+    #[Route(path: '/search/{categoryName}', name: 'options_by_category', methods: ['GET', 'POST'])]
     public function searchByContinent(
         Request $request,
         string $categoryName,
@@ -67,9 +61,7 @@ class OptionsController extends MainadminController
                 'count' => 10
             ]);
         }
-    /**
-     * @Route("/new", name="options_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'options_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository): Response
     {
         $langs = $langRepository->findAll();
@@ -92,9 +84,7 @@ class OptionsController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="options_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'options_show', methods: ['GET'])]
     public function show(Options $option): Response
     {
         return $this->render('admin/options/show.html.twig', [
@@ -102,9 +92,7 @@ class OptionsController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="options_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'options_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Options $option): Response
     {
         $langs = $this->entityManager->getRepository(Lang::class)->findAll();
@@ -126,9 +114,7 @@ class OptionsController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="options_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'options_delete', methods: ['POST'])]
     public function delete(Request $request, Options $option): Response
     {
         if ($this->isCsrfTokenValid('delete'.$option->getId(), $request->request->get('_token'))) {
@@ -138,10 +124,8 @@ class OptionsController extends MainadminController
 
         return $this->redirectToRoute('options_index');
     }
-    /**
-     * @Route("/duplicate/{id}", name= "options_duplicate", methods={"GET","POST"})
-     */
-    public function duplicate(Request $request, Options $option): Response
+    #[Route(path: '/duplicate/{id}', name: 'options_duplicate', methods: ['GET', 'POST'])]
+    public function duplicate(Options $option): Response
     {
 
         $newOption = new Options();

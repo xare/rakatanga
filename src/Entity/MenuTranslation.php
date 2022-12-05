@@ -3,15 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\MenuTranslationRepository;
-use App\Entity\Menu;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=MenuTranslationRepository::class)
+ * @ORM\Entity(repositoryClass=MenuTranlationRepository::class)
  */
-class MenuTranslation
-{
-    /**
+class MenuTranslation {
+  /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -19,32 +19,41 @@ class MenuTranslation
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="menuTranslations")
+     * @ORM\JoinColumn(name="menu_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $menu;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Lang::class, inversedBy="menuTranslations")
+     * @ORM\ManyToOne(targetEntity=Lang::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $lang;
 
-    
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="menuTranslations", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    private $Menu;
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getMenu(): ?Menu
+    {
+        return $this->menu;
+    }
+
+    public function setMenu(?Menu $menu): self
+    {
+        $this->menu = $menu;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -52,7 +61,7 @@ class MenuTranslation
         return $this->title;
     }
 
-    public function setTitle(?string $title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -71,7 +80,7 @@ class MenuTranslation
         return $this;
     }
 
-    public function getLang(): ?lang
+    public function getLang(): ?Lang
     {
         return $this->lang;
     }
@@ -79,18 +88,6 @@ class MenuTranslation
     public function setLang(?Lang $lang): self
     {
         $this->lang = $lang;
-
-        return $this;
-    }
-
-    public function getMenu(): ?Menu
-    {
-        return $this->Menu;
-    }
-
-    public function setMenu(?Menu $Menu): self
-    {
-        $this->Menu = $Menu;
 
         return $this;
     }

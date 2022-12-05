@@ -1,9 +1,18 @@
+{% set totalMedia = 0 %}
 {% for medium in travel.media %}
 	{% if medium.isGallery == true %}
-		{{ include('frontend/_photo_gallery_item.html.twig',{
-																'medium':medium,
-																'index':loop.index
-																}) }}
+		{% set totalMedia = totalMedia + 1 %}
 	{% endif %}
 {% endfor %}
+<div class="grid">
+	{% for medium in travel.media %}
+		{% if medium.isGallery == true %}
+			{{ include('frontend/_photo_gallery_item.html.twig',{
+																	'medium':medium,
+																	'loop':loop,
+																	'totalMedia':totalMedia
+																	}) }}
+		{% endif %}
+	{% endfor %}
+</div>
 <div class="clearfix"></div>

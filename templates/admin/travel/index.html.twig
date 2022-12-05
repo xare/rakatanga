@@ -36,27 +36,12 @@
                             <th{% if travels.isSorted('t.mainTitle') %} class="sorted"{% endif %}>
                                 {{ knp_pagination_sortable(travels, 'Título', 't.mainTitle',{'class':'text-decoration-none link-light'}) }}
                             </th>
-                            {# <th{% if travels.isSorted('t.DepartureDate') %} class="sorted"{% endif %}>
-                                {{ knp_pagination_sortable(travels, 'Salida', 't.DepartureDate',{'class':'text-decoration-none link-light'}) }}
-                            </th>
-                            <th{% if travels.isSorted('t.ArrivalDate') %} class="sorted"{% endif %}>
-                                {{ knp_pagination_sortable(travels, 'Llegada', 't.ArrivalDate',{'class':'text-decoration-none link-light'}) }}
-                            </th> #}
-                            {#  <th{% if travels.isSorted('t.PriceDriver') %} class="sorted"{% endif %}>
-                                {{ knp_pagination_sortable(travels, 'Price Driver', 't.PriceDriver',{'class':'text-decoration-none link-light'}) }}
-                            </th>
-                            <th{% if travels.isSorted('t.PriceCodriver') %} class="sorted"{% endif %}>
-                                {{ knp_pagination_sortable(travels, 'Price Codriver', 't.PriceCodriver',{'class':'text-decoration-none link-light'}) }}
-                            </th> #}
-                            {# <th{% if travels.isSorted('t.Km') %} class="sorted"{% endif %}>
-                                {{ knp_pagination_sortable(travels, 'Km', 't.Km',{'class':'text-decoration-none link-light'}) }}
-                            </th> #}
-                            <th>Fechas</th>
+                            <th>Duración</th>
+                            <th>Fechas [reservas]</th>
                             <th>Visible</th>
                             <th>Media</th>
                             <th>Traducciones</th>
-                            {# <th class="fit"><i class="fa fa-eye"></i></th> #}
-                            {# <th class="fit"><i class="fa fa-edit"></i></th> #}
+                            
                             <th class="fit"><i class="fa fa-trash"></i></th> 
                         </tr>
                     </thead>

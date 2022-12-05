@@ -1,0 +1,12 @@
+{% if optionTranslation.infodocs != null %}
+  <li class="list-group-item">
+    <a href="{{absolute_url(optionTranslation.infodocs.infodocsPath)}}">
+    {{optionTranslation.infodocs.filename}}
+    <a class="js-remove-infodoc" data-optionTranslation="{{optionTranslation.id}}" data-infodoc="{{optionTranslation.infodocs.id}}" href="#">
+      <i class="fa fa-trash"></i>
+    </a>
+    </a>
+  </li>
+{% else %}
+  <li class="list-group-item">{{'Este viaje no contiene documentos asociados'|trans}}</li>
+{% endif %}

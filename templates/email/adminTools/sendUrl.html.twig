@@ -1,0 +1,25 @@
+{% trans_default_domain 'email' %}
+{% extends 'email/emailBase.html.twig' %}
+
+{% block content %}
+
+<row class="welcome">
+        <columns>
+            <spacer size="35"></spacer>
+            <h1>
+                <center>{{ 'Rakatanga Tours'|trans }}: {{'Información sobre el viaje'|trans}}</center>
+            </h1>
+            <spacer size="10"></spacer>
+        </columns>
+    </row>
+    <spacer size="30"></spacer>
+     <row>
+        <columns>
+            <p>{{'Hola te has puesto en contacto con nosotros pregutandonos información sobre un viaje'|trans}}.</p>
+            <p>{{'Desde Rakatanga agradecemos tu interés en nuestro proyecto y por haberte puesto en contacto con nosotros. El el botón siguiente tienes un vínculo que te llevará a conocer todos los detalles del viaje al que te referías. Muchas gracias'|trans}}.</p>
+            <p>
+            <p><button class="radius" href="{{url}}">{{'Visitar el viaje requerido'|trans}}</button></p>
+            </p>
+        </columns>
+    </row>
+{% endblock %}

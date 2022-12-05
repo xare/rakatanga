@@ -10,31 +10,17 @@
       </button>
     <div id="navbar" class="navbar-collapse collapse"> 
           <ul class="nav navbar-nav">
-
             {% for menuItem in menu %}
-              
-              <li class="nav-item{% if menuItem.routeName == app.request.attributes.get('_route') %} active{% endif %}">
-                <a class="nav-link" href="{{app.request.baseUrl ~ '/' ~ app.request.getLocale() ~ '/' ~ menuItem.slug ~ ''}}">
-                  {{ menuItem.title }}
+              <li class="nav-item">
+                <a class="nav-link" 
+                    href="{{app.request.baseUrl ~ '/' ~ app.request.getLocale() ~ '/' ~ menuItem.slug ~ ''}}">
+                    {{ menuItem.title }}
                 </a>
               </li>
-              
             {% endfor %}
-            <li class="nav-item">
-              <a href="https://www.facebook.com/rakatangatour" target="_blank" class="nav-link">
-                <i class="fab fa-facebook"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="https://www.instagram.com/rakatangatour/" target="_blank" class="nav-link">
-                <i class="fab fa-instagram"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="https://youtube.com/channel/UCikmM8fbS0LLqztCF38spqQ" target="_blank" class="nav-link">
-                <i class="fab fa-youtube"></i>
-              </a>
-            </li>
+          </ul>
+          <ul class="nav navbar-nav" id="social-switch">
+            {{ include('shared/_social_menu.html.twig') }}
           </ul>
           <ul class="nav navbar-nav" id="user-switch">
             {{ include('shared/_user_switch.html.twig') }}

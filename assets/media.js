@@ -1,3 +1,12 @@
+/**
+ * .addEntry('admin-media', './assets/media.js')
+ * F:\www\localhost\rakatangaclean\templates\admin\articles\edit.html.twig
+ * F:\www\localhost\rakatangaclean\templates\admin\articles\new.html.twig
+ * F:\www\localhost\rakatangaclean\templates\admin\pages\edit.html.twig
+ * F:\www\localhost\rakatangaclean\templates\admin\popups\edit.html.twig
+ * F:\www\localhost\rakatangaclean\templates\admin\travel\edit.html.twig
+ */
+
 import Dropzone from 'dropzone';
 import mediaApp from './mediaApp.js';
 import Sortable from 'sortablejs';
@@ -32,7 +41,7 @@ function initializeDropzone() {
                 data.append(type, id);
             });
             this.on('success', function(file, data) {
-                $('#js-media-modal-container').prepend(data);
+                $('#js-media-modal-blocks-container').prepend(data);
             });
 
             this.on('error', function(file, data) {

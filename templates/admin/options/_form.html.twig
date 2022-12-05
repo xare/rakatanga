@@ -2,9 +2,12 @@
     <div class="row">
         <div class="col-md-4 col-sm-12">
             {{ form_row(form.price) }}
-            {{ form_row(form.travel,{
+            {{ form_row(form.travel, {
                 'attr': {'class': 'form-select'}
-            }) }}     
+            }) }}  
+            {{ form_row(form.isExtension, {
+                'label': '¿Es una extensión?'
+            }) }}   
         </div>
 
         <div class="col-md-8 col-sm-12">

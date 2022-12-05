@@ -34,6 +34,7 @@
                         <th>Estatus</th>
                         <th>Pil.</th>
                         <th>Acomp.</th>
+                        <th>Cantidad</th>
                         <th>Usuario</th>
                         <th>Viaje</th>
                         <th>Fecha</th>
@@ -41,7 +42,6 @@
                         <th>Fecha Pago</th>
                         <th>Opciones</th>
                         <th><i class="fas fa-envelope"></i></th>
-                        <th><i class="fa fa-edit"></i></th>
                         <th><i class="fa fa-trash"></i></th>
                     </tr>
                 </thead>
@@ -67,6 +67,4 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('admin-send-message')}}
-    {# {{ encore_entry_script_tags('admin') }} #}
-    {# {{ encore_entry_script_tags('admin_media') }} #}
 {% endblock %}

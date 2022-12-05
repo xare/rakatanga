@@ -139,28 +139,7 @@
                     id="oldreservations" 
                     role="tabpanel" 
                     aria-labelledby="oldreservations-tab">
-                    <div class="col-md-12 col-xs-12">
-                        <table class="table">
-                            <tr>
-                                <td>Inscrito</td>
-                                <td>Nº Pilotos</td>
-                                <td>Nº Acompañantes</td>
-                                <td>Precio</td>
-                            </tr>
-                            {% for oldreservation in date.oldreservations %}
-                                <tr>
-                                    <td>
-                                        {% if oldreservation.inscriptions != null %}
-                                            {{ oldreservation.inscriptions.email }}
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ oldreservation.nbpilotes }}</td>
-                                    <td>{{ oldreservation.nbAccomp }}</td>
-                                    <td>{{ oldreservation.montant|format_currency('EUR', {fraction_digit: 0}) }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
+                    {{ include('admin/dates/_old_reservations_tab.html.twig',{'date':date}) }}
                 </div>
             {% endif %}
         </div>

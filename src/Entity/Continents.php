@@ -34,8 +34,8 @@ class Continents
 
     /**
      * @ORM\OneToMany(targetEntity=ContinentTranslation::class, mappedBy="continents", orphanRemoval=true, cascade={"persist"})
-     * @Assert\Valid()
      */
+    #[Assert\Valid]
     private $continentTranslation;
 
     /**

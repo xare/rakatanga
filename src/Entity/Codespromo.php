@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Reservation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -96,7 +97,7 @@ class Codespromo
     /**
      * @var string
      *
-     * @ORM\Column(name="statut", type="string", length=3, nullable=false)
+     * @ORM\Column(name="statut", type="string", length=255, nullable=false)
      */
     private $statut;
 
@@ -114,18 +115,18 @@ class Codespromo
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Reservation::class, inversedBy="codespromos", fetch="EAGER")
-     */
-    private $reservation;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $nombreTotal;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="codespromo")
+     */
+    private $reservations;
+
     public function __construct()
     {
-        $this->reservation = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -294,29 +295,8 @@ class Codespromo
         return $this->getCode();
     }
 
-    /**
-     * @return Collection|Reservation[]
-     */
-    public function getReservation(): Collection
-    {
-        return $this->reservation;
-    }
+  
 
-    public function addReservation(Reservation $reservation): self
-    {
-        if (!$this->reservation->contains($reservation)) {
-            $this->reservation[] = $reservation;
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): self
-    {
-        $this->reservation->removeElement($reservation);
-
-        return $this;
-    }
 
     public function getNombreTotal(): ?int
     {
@@ -326,6 +306,36 @@ class Codespromo
     public function setNombreTotal(?int $nombreTotal): self
     {
         $this->nombreTotal = $nombreTotal;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setCodespromo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getCodespromo() === $this) {
+                $reservation->setCodespromo(null);
+            }
+        }
 
         return $this;
     }

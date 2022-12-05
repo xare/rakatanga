@@ -19,3 +19,4 @@ framework:
     form:
         legacy_error_messages: false
     
+    # error_controller: App\Controller\ErrorController::show

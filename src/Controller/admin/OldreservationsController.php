@@ -96,9 +96,7 @@ class OldreservationsController extends AbstractController
         return $this->redirectToRoute('oldreservations_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/location-select", name="ajax_oldreservation_location_select", priority="10")
-     */
+    #[Route(path: '/location-select', name: 'ajax_oldreservation_location_select', priority: 10)]
     public function getDatesByTravelSelect(Request $request)
     {
         $oldReservation = new Oldreservations();
@@ -109,7 +107,7 @@ class OldreservationsController extends AbstractController
         //no field? Return an empty response
 
         if(!$form->has('dates')) {
-            return new Response(null, 204);
+            return new Response(null, \Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
         }
         return $this->render('admin/oldreservations/_form_dates_field.html.twig',[
             'oldReservationForm' => $form->createView()

@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/menu/translation")
- */
+#[Route(path: '/menu/translation')]
 class MenuTranslationController extends AbstractController
 {
     private $entityManager;
@@ -22,9 +20,7 @@ class MenuTranslationController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="menu_translation_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'menu_translation_index', methods: ['GET'])]
     public function index(MenuTranslationRepository $menuTranslationRepository): Response
     {
         return $this->render('menu_translation/index.html.twig', [
@@ -32,9 +28,7 @@ class MenuTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="menu_translation_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'menu_translation_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $menuTranslation = new MenuTranslation();
@@ -54,9 +48,7 @@ class MenuTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="menu_translation_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'menu_translation_show', methods: ['GET'])]
     public function show(MenuTranslation $menuTranslation): Response
     {
         return $this->render('menu_translation/show.html.twig', [
@@ -64,9 +56,7 @@ class MenuTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="menu_translation_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'menu_translation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, MenuTranslation $menuTranslation): Response
     {
         $form = $this->createForm(MenuTranslationType::class, $menuTranslation);
@@ -84,9 +74,7 @@ class MenuTranslationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="menu_translation_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'menu_translation_delete', methods: ['POST'])]
     public function delete(Request $request, MenuTranslation $menuTranslation): Response
     {
         if ($this->isCsrfTokenValid('delete'.$menuTranslation->getId(), $request->request->get('_token'))) {

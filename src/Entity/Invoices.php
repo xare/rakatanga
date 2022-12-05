@@ -76,10 +76,10 @@ class Invoices
     private $dueAmmount;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="invoices")
-     * @ORM\JoinColumn(name="reservation_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\OneToOne(targetEntity=Reservation::class, inversedBy="invoice", cascade={"persist"})
      */
     private $reservation;
+
     public function __construct()
     {
         $this->date_created = new \DateTimeImmutable();
@@ -226,7 +226,11 @@ class Invoices
 
         return $this;
     }
-
+    /**
+     * getReservation function
+     *
+     * @return Reservation|null
+     */
     public function getReservation(): ?Reservation
     {
         return $this->reservation;

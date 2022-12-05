@@ -11,7 +11,7 @@
 				<h1>Edit Travel</h1>
 				<div class="input-group mb-3">
 					<span class="input-group-text"><i class="fas fa-link"></i> </span>
-					<input type="text" class="form-control" id="js-copy-from-input" size="200" value="{{ absolute_url(path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') })) }}">
+					<input type="text" class="form-control" data-container="js-copy-from-input" size="200" value="{{ absolute_url(path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') })) }}">
 					<span 
 						class="input-group-text"
 						data-bs-toggle="tooltip" 
@@ -22,12 +22,14 @@
 					</span>
 					<span 
 						class="input-group-text"
+						data-action="js-email-url"
 						data-bs-toggle="tooltip" 
 						title="Envía este url a alguien [INACTIVO]">
 						<i class="fas fa-envelope"></i>
 					</span>
 					<span 
-						class="input-group-text js-copy-content" 
+						class="input-group-text"
+						data-action="js-copy-content"
 						data-bs-toggle="tooltip" 
 						title="Copia el url en el clipboard">
 							<i class="fas fa-copy"></i>

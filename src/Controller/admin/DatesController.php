@@ -15,9 +15,7 @@ use App\Repository\DatesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/admin/dates")
- */
+#[Route(path: '/admin/dates')]
 class DatesController extends MainadminController
 {
 
@@ -28,9 +26,7 @@ class DatesController extends MainadminController
         $this->datesRepository = $datesRepository;
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="dates_index", methods={"GET","POST"})
-     */
+    #[Route(path: '/', name: 'dates_index', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
         PaginatorInterface $paginator,
@@ -76,9 +72,7 @@ class DatesController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/search/{categoryName}", name="dates_by_category", methods={"GET","POST"})
-     */
+    #[Route(path: '/search/{categoryName}', name: 'dates_by_category', methods: ['GET', 'POST'])]
     public function searchByContinent(
         Request $request,
         string $categoryName,
@@ -97,9 +91,7 @@ class DatesController extends MainadminController
         }
 
 
-    /**
-     * @Route("/new", name="dates_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'dates_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $date = new Dates();
@@ -118,9 +110,7 @@ class DatesController extends MainadminController
             'form' => $form->createView(),
         ]);
     }
-    /**
-     * @Route("/items", methods="GET", name="dates_items")
-     */
+    #[Route(path: '/items', methods: 'GET', name: 'dates_items')]
     public function getItems(Request $request, PaginatorInterface $paginator)
     {
        
@@ -168,9 +158,7 @@ class DatesController extends MainadminController
         ];
         return $this->json($data,200,[],['groups'=>'main']);
     }
-    /**
-     * @Route("/{id}", name="dates_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'dates_show', methods: ['GET'])]
     public function show(Dates $date): Response
     {
         return $this->render('admin/dates/show.html.twig', [
@@ -178,9 +166,7 @@ class DatesController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="dates_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'dates_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dates $date): Response
     {
         $form = $this->createForm(DatesType::class, $date);
@@ -198,9 +184,7 @@ class DatesController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="dates_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'dates_delete', methods: ['POST'])]
     public function delete(Request $request, Dates $date): Response
     {
         if ($this->isCsrfTokenValid('delete'.$date->getId(), $request->request->get('_token'))) {
@@ -211,31 +195,19 @@ class DatesController extends MainadminController
         return $this->redirectToRoute('dates_index');
     }
 
-    /**
-     * @Route("/api/delete/{id}", name="api_dates_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/api/delete/{id}', name: 'api_dates_delete', methods: ['DELETE'])]
     public function apiDeleteDate(Dates $date)
     {
         $this->entityManager->remove($date);
         $this->entityManager->flush();
-        return new Response(null, 204);
+        return new Response(null, \Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
     }
-    /**
-    * @Route("/dates/search"), name="dates_search") 
-    */
-
+    #[Route(path: '/dates/search')]
     public function search($searchTerm){
         return new Response("search");
     }
 
-    /**
-     * @Route("/dates/travellerData/{traveller}",
-     * options = { "expose" = true },
-     * name="date_show_traveller_data",
-     * methods={"POST"}
-     * )
-     */
-
+    #[Route(path: '/dates/travellerData/{traveller}', options: ['expose' => true], name: 'date_show_traveller_data', methods: ['POST'])]
      public function showTravellerData(
          Travellers $traveller
      ){

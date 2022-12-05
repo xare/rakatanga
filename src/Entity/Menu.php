@@ -12,35 +12,39 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Menu
 {
-    /**
+   /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $position;
 
     /**
-     * @ORM\OneToMany(targetEntity=MenuTranslation::class, mappedBy="Menu", cascade={"persist"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $routeName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=MenuTranslation::class, mappedBy="menu", cascade={"persist", "remove"})
      */
     private $menuTranslations;
 
     /**
-     * @ORM\OneToOne(targetEntity=Pages::class, inversedBy="menu", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Pages::class, cascade={"persist", "remove"})
      */
     private $page;
 
@@ -49,32 +53,20 @@ class Menu
      */
     private $visibility;
 
-    
     /**
-     * @ORM\ManyToMany(targetEntity=MenuLocation::class, mappedBy="Menus", cascade={"persist", "remove"})
-     * @ORM\JoinTable(name="menu_location_menu",
-     *  joinColumns={@ORM\JoinColumn(name="menu_id", referencedColumnName="id")},
-     *  inverseJoinColumns={@ORM\JoinColumn(name="menu_location_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity=MenuLocation::class, inversedBy="menus")
      */
     private $menuLocations;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $route_name;
 
     public function __construct()
     {
         $this->menuTranslations = new ArrayCollection();
         $this->menuLocations = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
     public function getType(): ?string
     {
         return $this->type;
@@ -92,7 +84,7 @@ class Menu
         return $this->title;
     }
 
-    public function setTitle(?string $title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -104,9 +96,21 @@ class Menu
         return $this->position;
     }
 
-    public function setPosition(int $position): self
+    public function setPosition(?int $position): self
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getRouteName(): ?string
+    {
+        return $this->routeName;
+    }
+
+    public function setRouteName(?string $routeName): self
+    {
+        $this->routeName = $routeName;
 
         return $this;
     }
@@ -138,14 +142,6 @@ class Menu
             }
         }
 
-        return $this;
-    }
-
-    public function removeMenuTranslations(): self
-    {
-        foreach ($this->getMenuTranslations() as $menuTranslation){
-            $this->removeMenuTranslation($menuTranslation);
-        }
         return $this;
     }
 
@@ -185,35 +181,14 @@ class Menu
     {
         if (!$this->menuLocations->contains($menuLocation)) {
             $this->menuLocations[] = $menuLocation;
-            $$menuLocations->addMenu($this);
         }
 
         return $this;
     }
 
-    public function removeMenu(MenuLocation $menuLocation): self
+    public function removeMenuLocation(MenuLocation $menuLocation): self
     {
-        if ($this->menuLocations->removeElement($menuLocation)) {
-            $menuLocation->removeMenu($this);
-        }
-
-        return $this;
-    }
-
-
-    public function __toString()
-    {
-        return $this->title;
-    }
-
-    public function getRouteName(): ?string
-    {
-        return $this->route_name;
-    }
-
-    public function setRouteName(?string $route_name): self
-    {
-        $this->route_name = $route_name;
+        $this->menuLocations->removeElement($menuLocation);
 
         return $this;
     }

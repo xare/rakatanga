@@ -20,14 +20,10 @@ use Doctrine\ORM\EntityManagerInterface;
 // Include paginator interface
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @Route("/admin/category")
- */
+#[Route(path: '/admin/category')]
 class CategoryController extends MainadminController
 {
-    /**
-     * @Route("/", name="category_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'category_index', methods: ['GET'])]
     public function index(
         Request $request,
         PaginatorInterface $paginator,
@@ -39,16 +35,14 @@ class CategoryController extends MainadminController
         $categories = $paginator->paginate(
             $query,
             $request->query->getInt('page',1),
-            10
+            20
         );
 
         return $this->render('admin/category/index.html.twig', [
             'categories' => $categories,
         ]);
     }
-    /**
-     * @Route("/search/{continentCode}", name="category_by_continent", methods={"GET","POST"})
-     */
+    #[Route(path: '/search/{continentCode}', name: 'category_by_continent', methods: ['GET', 'POST'])]
     public function searchByContinent(
                             Request $request,
                             string $continentCode,
@@ -69,9 +63,7 @@ class CategoryController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="category_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'category_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request, 
         LangRepository $langRepository,
@@ -98,18 +90,14 @@ class CategoryController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="category_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'category_show', methods: ['GET'])]
     public function show(Category $category): Response
     {
         return $this->render('admin/category/show.html.twig', [
             'category' => $category,
         ]);
     }
-    /**
-     * @Route("/{id}/assign", name="assign_main_photo", methods={"GET"})
-     */
+    #[Route(path: '/{id}/assign', name: 'assign_main_photo', methods: ['GET'])]
     public function assign(
                     Request $request, 
                     Category $category,
@@ -124,9 +112,7 @@ class CategoryController extends MainadminController
             $em->flush();
         return new Response($category->getId().', '. $mediaId);
     }
-    /**
-     * @Route("/{id}/edit", name="category_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'category_edit', methods: ['GET', 'POST'])]
     public function edit(
                     Request $request, 
                     Category $category,
@@ -154,9 +140,7 @@ class CategoryController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="category_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'category_delete', methods: ['POST'])]
     public function delete(
                         Request $request, 
                         Category $category,

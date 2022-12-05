@@ -21,43 +21,44 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactType extends AbstractType
 {
-    private $travelTranslationRepository;
-    private $langRepository;
+    private TravelTranslationRepository $travelTranslationRepository;
+    private LangRepository $langRepository;
+    private TranslatorInterface $translator;
 
     public function __construct(
         TravelTranslationRepository $travelTranslationRepository,
-        LangRepository $langRepository){
+        LangRepository $langRepository,
+        TranslatorInterface $translator
+        ){
         $this->travelTranslationRepository = $travelTranslationRepository;
         $this->langRepository = $langRepository;
+        $this->translator = $translator;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $travelTranslations = $this
                                 ->travelTranslationRepository
                                 ->findBy([
-                                    'lang' => $options['lang']
+                                    'lang' => $options['lang'],
                                 ]);
-        
-        $choices = $travelTranslations;
         
         $builder
             ->add('firstname', TextType::class)
             ->add('lastname', TextType::class)
-           // ->add('phone', TextType::class)
-            //->add('country', CountryType::class)
             ->add('travel', EntityType::class, [
                     'class' => TravelTranslation::class,
-                    'placeholder'=> "Elige los viajes que más te interesan",
-                    'choices' => $choices,
+                    'placeholder'=> $this->translator->trans("Elige los viajes que más te interesan"),
+                    'choices' => $travelTranslations,
                     'multiple' => true,
-                    'expanded' => true,
+                    'expanded' => false,
                     'mapped' => false
                     ])
             ->add('info', ChoiceType::class,[
-                'choices' => ["Información general" => "Información general"],
+                'choices' => [$this->translator->trans("Información general") => $this->translator->trans("Información general")],
                 'multiple' => true,
                 'expanded' => true,
                 'mapped' => false

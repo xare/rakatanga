@@ -8,7 +8,10 @@ use App\Entity\Travellers;
 use App\Form\ReservationDataType;
 use App\Repository\DocumentRepository;
 use App\Repository\LangRepository;
+use App\Repository\ReservationDataRepository;
 use App\Repository\TravellersRepository;
+use App\Service\breadcrumbsHelper;
+use App\Service\logHelper;
 use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,20 +21,84 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserFrontendReservationDataController extends AbstractController
 {
 
-  private $entityManager;
-  private $mailer;
-
-  public function __construct( EntityManagerInterface $entityManager, Mailer $mailer )
+  public function __construct( private EntityManagerInterface $entityManager, private Mailer $mailer, private breadcrumbsHelper $breadcrumbsHelper )
   {
+    $this->breadcrumbsHelper = $breadcrumbsHelper;
     $this->entityManager = $entityManager;
     $this->mailer = $mailer;
   }
-  /** 
-  * @Route("user/reservationData/new/{reservation}/{traveller}/", 
-  * methods={"GET","POST"},
-  * name="frontend-user-reservation-data-new")
-  */
+  #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}', 'es' => '{_locale}/usuario/reserva/datos/{reservation}', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}'], name: 'frontend_user_reservation_data')]
+    public function frontend_user_reservation_data(
+      Request $request,
+      string $_locale = null,
+      Reservation $reservation,
+      LangRepository $langRepository,
+      ReservationDataRepository $reservationDataRepository,
+      DocumentRepository $documentRepository,
+      EntityManagerInterface $em,
+      Mailer $mailer,
+      logHelper $logHelper,
+      $locale = "es"
+  ) {
+      $locale = $_locale ?: $locale;
+      /**
+       * @var User $user
+       */
+      $user = $this->getUser();
+      //Swith Locale Loader
+      $otherLangsArray = $langRepository->findOthers($locale);
+      $i = 0;
+      $urlArray = [];
+      foreach ($otherLangsArray as $otherLangArray) {
+          $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
+          $urlArray[$i]['lang_name'] = $otherLangArray->getName();
+          $urlArray[$i]['reservation'] = $reservation;
+          $i++;
+      }
+      //End switch locale loader
 
+      //BREADCRUMBS
+      $this->breadcrumbsHelper->reservationTravellersBreadcrumbs("Inicio");
+      //END BREADCRUMBS
+
+      $reservationData = $reservationDataRepository->findOneBy([
+          'reservation' => $reservation
+      ]);
+      
+      $reservationData = $reservationData ?: new ReservationData;
+      $documents = $reservationData->getDocuments();
+      $form = $this->createForm(ReservationDataType::class, $reservationData);
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+          $reservationData = $form->getData();
+          $reservationData->setReservation($reservation);
+          $reservationData->setUser($this->getUser());
+          $em->persist($reservationData);
+          $em->flush();
+          $logHelper->logThis(
+              'Datos aportados a una reserva', 
+              "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] ha depositados datos para una reserva para el viaje
+              {$reservation->getDate()->getTravel()->getMainTitle()} en
+              {$reservation->getDate()->getDebut()->format('d/m/Y')} with reference
+              {$reservation->getId()} " . strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(),0,3))."",
+              [],
+              'reservation');
+          $mailer->sendEmailonDataCompletionToUs($reservation);
+          $this->addFlash('success', $this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente'));
+      }
+      
+      return $this->render("user/user_reservation_data.html.twig", [
+          'langs' => $urlArray,
+          'locale' => $locale,
+          'user' => $this->getUser(),
+          'reservationData' => $reservationData,
+          'reservation' => $reservation,
+          'documents' => $documents,
+          'form' => $form->createView()
+      ]);
+  }
+  #[Route(path: 'user/reservationData/new/{reservation}/{traveller}/', methods: ['GET', 'POST'], name: 'frontend-user-reservation-data-new')]
  public function userReservationDataNew(
   Request $request,
   LangRepository $langRepository,
@@ -84,10 +151,7 @@ class UserFrontendReservationDataController extends AbstractController
 ]);
  }
 
-  /**
-   * @Route("/user/reservationData/{reservationData}", name="frontend-user-reservation-data")
-   */
-
+  #[Route(path: '/user/reservationData/{reservationData}', name: 'frontend-user-reservation-data')]
    public function userReservationData(
       Request $request,
       ReservationData $reservationData,

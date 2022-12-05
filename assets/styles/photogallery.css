@@ -1,95 +1,12 @@
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
 .grid {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 1em;
-}
-
-.grid img {
-    width: 100%;
-    height: auto;
-    -webkit-box-shadow: 2px 2px 4px 0px #B0B0B0;
-    box-shadow: 2px 2px 4px 0px #B0B0B0;
-    border: 5px solid #e1e0e0;
-}
-
-.grid a.lightbox-item-link {
-    display: block;
-    /* width: 260px;
-    height: 200px; */
-    position: relative;
-    float: left;
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
-#lightbox {
-    position: fixed;
-    z-index: 1100;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .8);
-    display: none;
-}
-
-#lightbox.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#lightbox img {
-    max-width: 90%;
-    max-height: 80%;
-    padding: 8px;
-    background-color: rgb(223, 223, 223);
-    border: 2px solid rgb(223, 223, 223);
-}
-
-.carousel-button {
-    position: absolute;
-    background: none;
-    z-index: 2;
-    border: none;
-    font-size: 4em;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, .5);
-    cursor: pointer;
-    border-radius: .25rem;
-    padding: 0 .5rem;
-    background-color: rgba(0, 0, 0, .1);
-    height: 2em;
-}
-
-.carousel-button:hover,
-.carousel-button:focus {
-    color: white;
-    background-color: rgba(0, 0, 0, .2);
-}
-
-.carousel-button:focus {
-    outline: 1px solid black;
-}
-
-.carousel-button.next {
-    right: 1rem;
-}
-
-.carousel-button.prev {
-    left: 1rem;
 }
 
 .video-overlay {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .4);
     position: absolute;
     top: 0;
     left: 0;
@@ -98,8 +15,8 @@
 
 .video-icon {
     position: absolute;
-    left: 45%;
-    top: 45%;
+    left: 30%;
+    top: 30%;
     z-index: 901;
     width: 40px;
     height: 40px;

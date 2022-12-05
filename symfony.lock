@@ -272,6 +272,9 @@
     "phpstan/phpdoc-parser": {
         "version": "1.2.0"
     },
+    "phpstan/phpstan": {
+        "version": "1.9.2"
+    },
     "psr/cache": {
         "version": "2.0.0"
     },
@@ -286,6 +289,9 @@
     },
     "psr/log": {
         "version": "2.0.0"
+    },
+    "rector/rector": {
+        "version": "0.15.0"
     },
     "sasedev/mpdf-bundle": {
         "version": "2.0.0"
@@ -628,9 +634,6 @@
     },
     "symfony/string": {
         "version": "v5.2.11"
-    },
-    "symfony/templating": {
-        "version": "v5.4.3"
     },
     "symfony/translation": {
         "version": "5.2",

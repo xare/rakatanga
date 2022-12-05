@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Dates;
 use App\Entity\Reservation;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
@@ -115,6 +116,23 @@ class breadcrumbsHelper
     $this->breadcrumbs->prependRouteItem($this->translator->trans("Inicio"), "index");
   }
 
+  public function reservationBreadcrumbs(string $locale, Dates $date):void {
+    $this->breadcrumbs->addRouteItem($this->translator->trans("Nuestras rutas en moto") , "destinations");
+    $this->breadcrumbs->addRouteItem(
+         $this->localizationHelper->renderCategoryString($date->getTravel()->getCategory()->getId(),$locale) , "destinations-by-category", [
+             '_locale' => $locale,
+             'category'=> $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($date->getTravel()->getCategory()->getId(),$locale))
+     ]);
+     $this->breadcrumbs->addRouteItem(
+             $this->localizationHelper->renderTravelString($date->getTravel()->getId(),$locale) , "destination", [
+                 '_locale' => $locale,
+                 'category'=> $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($date->getTravel()->getCategory()->getId(),$locale)),
+                 'travel'=> $this->slugifyHelper->slugify($this->localizationHelper->renderTravelString($date->getTravel()->getId(),$locale))
+     ]);
+     $this->breadcrumbs->addItem($this->translator->trans("Reserva")); 
+     $this->breadcrumbs->prependRouteItem($this->translator->trans("Inicio"), "index");
+  }
+
   public function reservationPaymentBreadcrumbs(string $locale, Reservation $reservation) : void
   {
     $this->breadcrumbs->addRouteItem($this->translator->trans("Nuestras rutas en moto") , "destinations");
@@ -158,5 +176,9 @@ class breadcrumbsHelper
             ->translator
             ->trans("Reserva")
     );
+  }
+
+  public function reservationDataBreadcrumbs(string $locale){
+    
   }
 }

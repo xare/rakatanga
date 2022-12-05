@@ -24,20 +24,11 @@ class CategoryType extends AbstractType
                     'No' => 'no'
                 ]
             ])
-            /* ->add('Category') */
-            ->add('Type', ChoiceType::class,[
-                /* 'placeholder'=>"Qué pongo aquí??", */
-                'choices' => [
-                    'Continent' => 'continent',
-                    'Country' => 'country',
-                ]
-            ])
             ->add('Continents', EntityType::class, [
                 'class' => Continents::class,
                 'placeholder' => 'Elige Continente: ',
                 'choice_label' => 'code'
             ] )
-            /* ->add('categories') */
             ->add('blogs')
             ->add('categoryTranslations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,

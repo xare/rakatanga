@@ -15,17 +15,17 @@
 	{% endif %}
 	{% set discountType = "ammount" %}
 	{% set discount = 0 %}
-	{% for codepromo in reservation.codespromos %}
-		{% if codepromo.statut == 'act' %}
-			{% if codepromo.montant > 0 %}
-				{% set discountType = "ammount" %}
-				{% set discount = codepromo.montant %}
-			{% elseif codepromo.pourcentage > 0 %}
-				{% set discountType = "pourcentage" %}
-				{% set discount = codepromo.pourcentage %}
+	  {% if reservation.codespromo|length > 0 %}
+			{% if reservation.codespromo.statut == 'actif' %}
+				{% if reservation.codespromo.montant > 0 %}
+					{% set discountType = "ammount" %}
+					{% set discount = reservation.codespromo.montant %}
+				{% elseif reservation.codespromo.pourcentage > 0 %}
+					{% set discountType = "pourcentage" %}
+					{% set discount = reservation.codespromo.pourcentage %}
+				{% endif %}
 			{% endif %}
 		{% endif %}
-	{% endfor %}
 {% else %}
 	{% set reservation = null %}
 	{% set reservationId = 0 %}
@@ -56,7 +56,7 @@
 {% set totalPrice = 0 %}
 
 <div 
-		class="card card-tarif shadow mt-4 mb-2" 
+		class="card card-tarif shadow mb-2" 
     data-container="calculator"
 		data-waiting="{{'Cargando'|trans}}..."
 		data-date-id="{{date.id}}"
@@ -65,7 +65,9 @@
 		{% endif %}
     data-nbpilotes="{{nbpilotes}}"
     data-nbaccomp="{{nbaccomp}}"
-		data-options="{{optionsJson}}">
+		data-options="{{optionsJson}}"
+		data-swal-waiting-title="{{ 'Espere un momento, por favor'|trans }}"
+		data-swal-waiting-text="{{ 'Estamos esperando una respuesta por parte del servidor'|trans }}">
     <div class="card-header">
 			{{'Datos del tour seleccionado'|trans}}</div>
 			<div class="card-body">
@@ -107,25 +109,28 @@
 								{% endif %}
 							</tbody>
 							{% set totalPrice = ((nbpilotes * date.prixPilote) + (nbaccomp * date.prixAccomp) + totalOptionsValue ) %}
-							{% if reservation is defined and reservation != null %}
-							{# {{dump(reservation.codespromos)}} #}
-							{% endif %}
-							{% if reservation.codespromos is defined %}
-							
+							{% if reservation.codespromo is defined and reservation.codespromo|length > 0 %}
 								<tbody>
-									{% for codepromo in reservation.codespromos %}
 										<tr style="color:green; background:#dedede;">
-											<th>{{ 'Descuento'|trans }} : {{ codepromo.code }}</th>
+											<th>{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</th>
 											<td align="right">
-												{% if codepromo.montant != 0 %}
-													- {{ codepromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
-												{% elseif codepromo.pourcentage != 0 %}
-													- {{ codepromo.pourcentage }} %
+												{% if reservation.codespromo.montant != 0 %}
+													- {{ reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+												
+												{% elseif reservation.codespromo.pourcentage != 0 %}
+													- {{ reservation.codespromo.pourcentage }} %
 													{% set discount = totalPrice * discount / 100 %}
 												{% endif %}		
 											</td>
 										</tr>
-									{% endfor %}
+										{% else %}
+											{% if discount != 0 %}
+												<tr style="color:green; background:#dedede;">
+													<th>{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</th>
+													<td align="right">
+														{{ discount | format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+													</td>
+											{% endif %}
 								</tbody>
 							{% endif %}
 								<tbody data-container="total-calculator">
@@ -137,7 +142,7 @@
 											{% if discount is defined %}
 												{% set totalPrice = totalPrice - discount %}
 											{% endif %}
-											{{ totalPrice|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+											<strong>{{ totalPrice|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</strong>
 										</td>
 										
 									</tr>
@@ -172,7 +177,7 @@
 														class="btn btn-primary d-none"
 														id="js-update-changes"
 														data-container="js-update-changes"
-													>{{ 'Actualizar Cambios' |trans }}
+													>{{ 'Actualizar Cambios'|trans }}
 												</td>
 											</tr>
 										</tfoot>
@@ -185,8 +190,8 @@
 													<button 
 																class="btn btn-primary d-none"
 																data-action="js-initialize-reservation-logged"
-																data-swal-waiting-title="{{ 'Espere un momento, por favor' |trans }}"
-																data-swal-waiting-text="{{ 'Estamos esperando una respuesta por parte del servidor' |trans }}"
+																data-swal-waiting-title="{{ 'Espere un momento, por favor'|trans }}"
+																data-swal-waiting-text="{{ 'Estamos esperando una respuesta por parte del servidor'|trans }}"
 															>{{ 'Iniciar reserva' |trans }}
 												</td>
 											</tr>

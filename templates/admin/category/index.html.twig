@@ -37,16 +37,12 @@
                         <th{% if categories.isSorted('c.continent') %} class="sorted"{% endif %}>
                             {{ knp_pagination_sortable(categories, 'Continente', 'c.continent',{'class':'text-decoration-none link-light'}) }}
                         </th>
-                        <th{% if categories.isSorted('c.type') %} class="sorted"{% endif %}>
-                            {{ knp_pagination_sortable(categories, 'Tipo', 'c.type',{'class':'text-decoration-none link-light'}) }}
-                        </th>
                         
                         <th{% if categories.isSorted('c.status') %} class="sorted"{% endif %}>
                             {{ knp_pagination_sortable(categories, 'Estatus', 'c.status',{'class':'text-decoration-none link-light'}) }}
                         </th>
                         <th>Traducciones</th>
-                        {# <th><i class="fa fa-eye"></i></th> #}
-                        {# <th><i class="fa fa-edit"></i></th> #}
+                        <th>Nº viajes</th>
                         <th><i class="fa fa-trash"></i></th>
                     </tr>
                 </thead>
@@ -73,6 +69,4 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {# {{ encore_entry_script_tags('admin') }}
-    {{ encore_entry_script_tags('admin_media') }} #}
 {% endblock %}

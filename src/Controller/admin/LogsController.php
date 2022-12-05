@@ -49,7 +49,7 @@ class LogsController extends MainadminController
         LogsRepository $logsRepository,
         string $entity,
         PaginatorInterface $paginator
-    ) {
+    ): \Symfony\Component\HttpFoundation\Response {
         $logs = $paginator->paginate(
             $logsRepository->listLogsByEntity($entity),
             $request->query->getInt('page', 1),

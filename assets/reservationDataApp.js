@@ -1,64 +1,65 @@
 class reservationDataApp {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
-        this.$totalInputs = this.$wrapper.find('input');
         this.counter = $('#js-progress').attr('data-counter');
-        this.$totalInputs.map((index, element) => {
+        this.totalInputs = this.$wrapper.find('input');
+        this.totalInputsIndex = this.totalInputs.map((index, element) => {
             $(element).attr('data-index', index);
         });
-        let $input = this.$wrapper.find('input:not(".datepicker")');
-        let $inputDatepicker = this.$wrapper.find('input.datepicker');
+        let input = this.$wrapper.find('input:not(".datepicker")');
+        let inputDatepicker = this.$wrapper.find('input.datepicker');
+        let notInputDatepicker = this.$wrapper.find('input:not(".datepicker")');
+        this.filledElements = this.$wrapper.find('[data-filled="data-filled"]');
+        console.info(this.filledElements);
+        console.info(this.filledElements.length);
         this.$wrapper.on(
             'blur',
-            'input:not(".datepicker")',
-            this.handleBlur.bind(this)
-        );
-        this.$wrapper.on(
-            'blur',
-            'input.datepicker',
+            'input',
             this.handleBlur.bind(this)
         );
 
 
         this.$elementListContainer = this.$wrapper.find('#js-verification-list');
         this.elements = this.$elementListContainer.find('li');
-        //this.render();
 
     }
 
-    handleBlur(e) {
-        e.preventDefault();
+    handleBlur(event) {
+        event.preventDefault();
+        console.info("new value for", event.target.id, event.target.value);
         let self = this;
-        let $thisElement = $(e.currentTarget);
-        let counter = $('#js-progress').attr('data-counter');
-        let type = $thisElement.attr('data-type');
-        /* let validate = false; */
+        let thisElement = event.currentTarget;
+        let filledElements = [];
+        console.info(this.filledElements);
+        console.info($(thisElement).val());
+        if ($(thisElement).val() != '') {
+            $(thisElement).attr('data-filled', 'data-filled');
+            filledElements = [thisElement, ...this.filledElements];
+        }
+        console.info(this.filledElements);
+        console.info(filledElements);
+        console.info(filledElements.length);
+        let type = $(thisElement).attr('data-type');
+
         if (undefined !== type) {
-            /* validate = this._said_validate($thisElement.val(), type); */
-            /* if (validate !== false) { */
-            $('#js-progress').attr('data-counter', parseFloat(counter) + parseFloat(1));
-            $thisElement.addClass('checked-control');
+            $('#js-progress').attr('data-counter', parseFloat(filledElements.length) + parseFloat(1));
+            $(thisElement).addClass('checked-control');
             self._redrawProgressBar();
             this._checkList(type);
-            /*}  else {
-                $('#js-progress').append(
-                    `<strong>${$thisElement.attr('title')}</strong>Error de validación`
-                )
-            } */
         } else {
-            $('#js-progress').attr('data-counter', parseFloat(counter) + parseFloat(1));
+            $('#js-progress').attr('data-counter', parseFloat(filledElements.length) + parseFloat(1));
             self._redrawProgressBar();
             this._checkList(type);
         }
-
     }
     _checkList(type) {
         const self = this;
+        console.info(this.elements);
         this.elements.map((index, element) => {
-            if (type == $(element).attr('data-type')) {
-                console.log($(element));
+            if (type == $(element).attr('data-type')) {;
                 $(element).attr('data-checked', true);
-                $(element).removeClass('bg-warning').addClass('list-success');
+                $(element).removeClass('bg-warning');
+                $(element).addClass('list-success');
                 $(element).find('i').removeClass('fa-exclamation-triangle').addClass('fa-check-circle').css('color', '#155724');
             }
         })
@@ -83,30 +84,25 @@ class reservationDataApp {
     }
 
     _redrawProgressBar() {
-        let total = this.$totalInputs.length;
-        let counter = $('#js-progress').attr('data-counter');
-        let $progressBar = $('#js-progress .progress .progress-bar');
-        let progress = (eval(counter) / eval(total)) * 100;
+        let total = this.totalInputs.length;
+        let filledElements = $('[data-filled="data-filled"]');
+        let progressBar = $('#js-progress .progress .progress-bar');
+        let progress = (eval(filledElements.length) / eval(total)) * 100;
         $('#js-progress .progress .progress-bar').css('width', progress + '%');
         if (progress >= 0 && progress < 25) {
-            $progressBar.addClass('bg-danger');
+            progressBar.addClass('bg-danger');
         } else if (progress >= 25 && progress < 50) {
-            $progressBar.removeClass('bg-danger').addClass('bg-warning');
+            progressBar.removeClass('bg-danger').addClass('bg-warning');
         } else if (progress >= 50 && progress < 75) {
-            $progressBar.removeClass('bg-warning').addClass('bg-info');
+            progressBar.removeClass('bg-warning').addClass('bg-info');
         } else if (progress >= 75 && progress <= 100) {
-            $progressBar.removeClass('bg-info').addClass('bg-success');
+            progressBar.removeClass('bg-info').addClass('bg-success');
         }
     }
 
-    render() {
-        console.log('render');
+    /* render() {;
         this.$elementListContainer.html('Hello');
-        /* const itemsHtml = this.elements.map(item => {
-            `hello`
-        });
-        this.$elementListContainer.html(itemsHtml.join('')); */
-    }
+    } */
 }
 
 export default reservationDataApp;

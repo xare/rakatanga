@@ -6,6 +6,7 @@
 												 child.vars.name == parameterName3) and
 												 child.vars.value != null %}
 			{% set isComplete = true %}
+			
 			<li data-type="{{ child.vars.name }}" data-checked="false" class="list-group-item list-success mb-1">
 				<i class="fa fa-check-circle" style="color:#155724"></i>
 				{{ child.vars.label }}:
@@ -19,6 +20,7 @@
 		{% endif %}
 
 	{% endmacro %}
+
   {% set inputIsFull = '' %}
 	{% set hasPassport = false %}
 	{% set hasVisa = false %}
@@ -26,12 +28,14 @@
 	{% set passportDocument = false %}
 	{% set visaDocument = false %}
 	{% set driversDocument = false %}
+	
+	
 	{% if reservationData is defined and reservationData != null %}
 		{% set reservation = reservationData.reservation %}
 		{% if reservationData.documents != null %}
 			{% set documents = reservationData.documents %}
 		{% endif %}
-		{% if reservationData.documents != null %}
+		{% if reservationData.traveller != null %}
 			{% set travellerId = reservationData.traveller.id %}
 		{% endif %}
 	{% endif %}
@@ -67,9 +71,17 @@
 
 	{% block body %}
 	
-
+{# {{ dump(reservation.reservationData) }}
 		{{ parent() }}
-
+{% if reservationData is defined %}
+    {% else %}
+	{{dump(reservation) }}
+{% endif %}
+<ol>
+    {% for key, value in _context  %}
+      <li>{{ key }}</li>
+    {% endfor %}
+</ol> #}
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 col-12">
@@ -95,8 +107,8 @@
 							{{ reservationData.traveller.prenom }}
 							{{ reservationData.traveller.nom }}
 						{% else %}
-							{{ user.prenom }}
-							{{ user.nom }}
+							{{ app.user.prenom }}
+							{{ app.user.nom }}
 						{% endif %}
 					</h1>
 
@@ -113,7 +125,7 @@
 						<p>{{'Por favor rellena con tus datos este formulario, SI NO DISPONES DE TODOS LOS DATOS en este momento, puedes dar a GUARDAR en cualquier momento y seguir en otro momento'|trans }}.</p>
 						<p>{{'La columna de la derecha te indica los pasos que ya tienes completados'|trans }}</p>
 					</div>
-					{# {{ include('reservation/_card_travel.html.twig',{'date':reservation.date}) }} #}
+					{{ include('reservation/_card_travel.html.twig',{'date':reservation.date}) }}
 					<div class="nav-container">
 						<ul class="nav nav-tabs" role="tablist" id="myTabs">
 							<li class="nav-item" role="presentation">

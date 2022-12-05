@@ -2,17 +2,16 @@
 {% set subtotal = 0 %}
 {% extends 'email/emailBase.html.twig' %}
 {% block content %}
-{{(app.request.getLocale())}}
     <row class="welcome">
         <columns>
             <spacer size="35"></spacer>
-            <h1>
+            <h4>
                 <center>
                     {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}], 
                     {{ 'hemos recibido tu reserva'|trans}}. {{'Te agradecemos el haber hecho la reserva para el viaje'|trans }}:<br />
                     "{{reservation.date.travel.mainTitle}}
                 </center>
-            </h1>
+            </h4>
             <spacer size="10"></spacer>
             
         </columns>
@@ -43,9 +42,18 @@
     <row>
         <columns>
             <table>
-                <tr><td><strong>{{ 'País'|trans }}</strong>:</td><td> {{ reservation.date.travel.category.name }}</td></tr>
-                <tr><td><strong>{{ 'Viaje'|trans }}</strong>:</td><td>  {{reservation.date.travel.mainTitle}}</td></tr>
-                <tr><td><strong>{{ 'Fecha'|trans }}</strong>:</td><td> {{reservation.date.debut|date('Y-m-d')}}</td></tr>
+                <tr>
+                    <td><strong>{{ 'País'|trans }}</strong>:</td>
+                    <td> {{ reservation.date.travel.category.name }}</td>
+                </tr>
+                <tr>
+                    <td><strong>{{ 'Viaje'|trans }}</strong>:</td>
+                    <td>{{reservation.date.travel.mainTitle}}</td>
+                </tr>
+                <tr>
+                    <td><strong>{{ 'Fecha'|trans }}</strong>:</td>
+                    <td>{{reservation.date.debut|date('d/m/Y')}} - {{reservation.date.fin|date('d/m/Y')}}</td>
+                </tr>
                 <tr><td><strong>{{ 'Ref. reserva'|trans }}:</td><td> {{ reference }}</td></tr>
             </table>
         </columns>
@@ -105,18 +113,18 @@
             <p class="text-right">{{ subtotal|format_currency('EUR', {fraction_digit: 0}) }}</p>
         </columns>
     </row>
-    {% for codepromo in reservation.codespromos%}
+    {% if reservation.codespromo is defined and reservation.codespromo != null %}
         <row>
             <columns>
                 {{ 'Descuento'|trans }}
-                    {{codepromo.code}} ({codepromo.libelle})                
+                    {{reservation.codespromo.code}} ({{reservation.codespromo.libelle}})                
             </columns>
             <columns>
-                    <p class="text-right">{{codepromo.montant|format_currency('EUR', {fraction_digit: 0})}}</p>
+                    <p class="text-right">{{reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 0})}}</p>
             </columns>
         </row>
-        {% set subtotal = subtotal - codepromo.montant %}
-    {% endfor %}
+        {% set subtotal = subtotal - reservation.codespromo.montant %}
+    {% endif %}
     <row>
         <columns>
             <strong>{{ 'Total'|trans }}</strong>

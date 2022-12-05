@@ -31,9 +31,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File as FileFile;
 
-/**
- * @Route("/admin/media")
- */
+#[Route(path: '/admin/media')]
 class MediaController extends MainadminController
 {
     protected $parameterBag;
@@ -43,15 +41,14 @@ class MediaController extends MainadminController
     public function __construct(
         ParameterBagInterface $parameterBag,
         CacheManager $liipCache,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        private string $kernelProjectDir
     ) {
         $this->parameterBag = $parameterBag;
         $this->imagineCacheManager = $liipCache;
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/", name="media_index", methods={"GET","POST"})
-     */
+    #[Route(path: '/', name: 'media_index', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
         PaginatorInterface $paginator,
@@ -81,7 +78,7 @@ class MediaController extends MainadminController
                 $medium->setFilename($newFilename);
             }
 
-            $medium->setPath($this->getParameter('kernel.project_dir') . '/public' . $uploadHelper->getPublicPath($medium->getMediaPath()));
+            $medium->setPath($this->kernelProjectDir . '/public' . $uploadHelper->getPublicPath($medium->getMediaPath()));
             $medium->addTravel($travel);
 
             $this->entityManager->persist($medium);
@@ -113,7 +110,7 @@ class MediaController extends MainadminController
             $html = $this->renderView('admin/media/_dynamic_form.html.twig', [
                 'form' => $form->createView()
             ]);
-            return new Response($html, 400);
+            return new Response($html, \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST);
         }
         return $this->render('admin/media/index.html.twig', [
             'form' => $form->createView(),
@@ -124,9 +121,7 @@ class MediaController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/new", name="media_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'media_new', methods: ['GET', 'POST'])]
     public function new(Request $request, UploadHelper $uploadHelper): Response
     {
         $media = $request->files->get('media');
@@ -142,7 +137,7 @@ class MediaController extends MainadminController
 
                 $medium->setFilename($newFilename);
             }
-            $medium->setPath($this->getParameter('kernel.project_dir') . '/public' . $uploadHelper->getPublicPath($medium->getMediaPath()));
+            $medium->setPath($this->kernelProjectDir . '/public' . $uploadHelper->getPublicPath($medium->getMediaPath()));
 
             $this->entityManager->persist($medium);
             $this->entityManager->flush();
@@ -159,23 +154,19 @@ class MediaController extends MainadminController
             'form' => $form->createView(),
         ]);
     }
-    /**
-     * @Route("/loadMultiplFiles", name="load_files", methods={"GET","POST"})
-     */
+    #[Route(path: '/loadMultiplFiles', name: 'load_files', methods: ['GET', 'POST'])]
     public function loadMultipleFiles()
     {
 
         return $this->render('admin/media/_form_dropzone.html.twig', []);
     }
 
-    /**
-     * @Route("/uploadMultipleFiles" , name="upload_multiple_files", methods={"POST"})
-     */
+    #[Route(path: '/uploadMultipleFiles', name: 'upload_multiple_files', methods: ['POST'])]
     public function uploadMultipleFiles(
         Request $request,
         UploadHelper $uploadHelper,
         ValidatorInterface $validator,
-        CategoryRepository $categoryRepository,
+        CategoryRepository $categoriesRepository,
         TravelRepository $travelRepository,
         MediaRepository $mediaRepository,
         EntityManagerInterface $em,
@@ -238,9 +229,11 @@ class MediaController extends MainadminController
             if ($entity == "popups") {
                 $medium->addPopup($element);
             }
-            
+
             $em->persist($medium);
+
             $em->flush();
+
             $renderArray['count'] = count($element->getMedia()) - 1;
             $renderArray[$entity] = $element;
             $renderArray['medium'] = $medium;
@@ -252,12 +245,7 @@ class MediaController extends MainadminController
         return $this->json($medium, 200, [], ['groups' => 'main']);
     }
 
-    /**
-     * @Route("uploadYoutubeThumbnail", 
-     * name="upload-youtube-thumbnail",
-     * options = { "expose" = true },
-     * methods = {"POST"} )
-     */
+    #[Route(path: 'uploadYoutubeThumbnail', name: 'upload-youtube-thumbnail', options: ['expose' => true], methods: ['POST'])]
     public function uploadYoutubeThumbnail(
         Request $request,
         UploadHelper $uploadHelper,
@@ -307,12 +295,7 @@ class MediaController extends MainadminController
         ],200);
         //return new response ('uploaded');
     }
-    /**
-     * @Route("/{id}/assign",
-     *  options = { "expose" = true }, 
-     *  name="assign_main_photo_entity", 
-     *  methods={"POST"})
-     */
+    #[Route(path: '/{id}/assign', options: ['expose' => true], name: 'assign_main_photo_entity', methods: ['POST'])]
     public function assign(
         Request $request,
         Media $media,
@@ -320,6 +303,7 @@ class MediaController extends MainadminController
         TravelRepository $travelRepository,
         PagesRepository $pagesRepository,
         ArticlesRepository $articleRepository,
+        CategoryRepository $categoryRepository,
         EntityManagerInterface $em
     ): Response {
 
@@ -330,6 +314,11 @@ class MediaController extends MainadminController
             $travel = $travelRepository->find($entityId);
             $travel->setMainPhoto($media);
             $em->persist($travel);
+        }
+        if($entityType=='Category') {
+            $category = $categoryRepository->find($entityId);
+            $category->setMainPhoto($media);
+            $em->persist($category);
         }
         if($entityType=='Pages') {
             $page = $pagesRepository->find($entityId);
@@ -346,9 +335,7 @@ class MediaController extends MainadminController
         $em->flush();
         return new Response($entityId . ', ' . $media->getId());
     }
-    /**
-     * @Route("/items", methods="GET", name="media_items")
-     */
+    #[Route(path: '/items', methods: 'GET', name: 'media_items')]
     public function getMediaItems(Request $request, MediaRepository $mediaRepository, PaginatorInterface $paginator)
     {
 
@@ -397,27 +384,20 @@ class MediaController extends MainadminController
         ];
         return $this->json($data, 200, [], ['groups' => 'main']);
     }
-    /**
-     * @Route("/show/{id}", name="media_show", methods={"GET"}, requirements={"id":"\d+"})
-     */
+    #[Route(path: '/show/{id}', name: 'media_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Media $medium): Response
     {
         return $this->render('admin/media/show.html.twig', [
             'medium' => $medium,
         ]);
     }
-    /**
-     * @Route("/removeMedia",
-     * options = { "expose" = true }, 
-     * name="remove-media", 
-     * methods={"POST"})
-     */
-
+    #[Route(path: '/removeMedia', options: ['expose' => true], name: 'remove-media', methods: ['POST'])]
     public function removeMedia(
         Request $request,
         EntityManagerInterface $em,
         TravelRepository $TravelRepository,
         PagesRepository $PagesRepository,
+        CategoryRepository $CategoryRepository,
         MediaRepository $mediaRepository
     ) {
         $mediaId = $request->request->get('mediaId');
@@ -437,12 +417,7 @@ class MediaController extends MainadminController
         return new Response('test ' . $mediaId . ' - ' . $entityId);
     }
 
-    /**
-     * @Route("/gallerifyMedia",
-     * options= { "expose" = true },
-     * name="gallerify_media",
-     * methods={"POST"})
-     */
+    #[Route(path: '/gallerifyMedia', options: ['expose' => true], name: 'gallerify_media', methods: ['POST'])]
     public function gallerifyMedia(
         Request $request,
         EntityManagerInterface $em,
@@ -461,12 +436,7 @@ class MediaController extends MainadminController
 
         return new Response('gallerifyMedia');
     }
-    /**
-     * @Route("/unGallerifyMedia",
-     * options= { "expose" = true },
-     * name="ungallerify_media",
-     * methods={"POST"})
-     */
+    #[Route(path: '/unGallerifyMedia', options: ['expose' => true], name: 'ungallerify_media', methods: ['POST'])]
     public function unGallerifyMedia(
         Request $request,
         EntityManagerInterface $em,
@@ -486,9 +456,7 @@ class MediaController extends MainadminController
         return new Response('ungallerifyMedia');
     }
 
-    /**
-     * @Route("/{id}/edit", name="media_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'media_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Media $medium, UploadHelper $uploadHelper): Response
     {
         $form = $this->createForm(MediaType::class, $medium);
@@ -512,11 +480,8 @@ class MediaController extends MainadminController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="media_delete", methods={"POST"},requirements={"id"="\d+"})
-     */
+    #[Route(path: '/{id}', name: 'media_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(
-        Request $request,
         Media $medium,
         UploadHelper $uploadHelper,
         EntityManagerInterface $em
@@ -536,19 +501,15 @@ class MediaController extends MainadminController
     }
 
     
-    /**
-     * @Route("/api/delete/{id}", name="api_media_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/api/delete/{id}', name: 'api_media_delete', methods: ['DELETE'])]
     public function apiDeleteMedia(Media $media)
     {
         $this->entityManager->remove($media);
         $this->entityManager->flush();
-        return new Response(null, 204);
+        return new Response(null, \Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @Route("/api/new", name="api_media_new", methods={"POST"})
-     */
+    #[Route(path: '/api/new', name: 'api_media_new', methods: ['POST'])]
     public function apiNewMedia(Request $request, UploadHelper $uploadHelper)
     {
         $data = json_decode($request->getContent(), true);
@@ -577,13 +538,13 @@ class MediaController extends MainadminController
 
             $medium->setFilename($newFilename);
         }
-        $medium->setPath($this->getParameter('kernel.project_dir') . '/public' . $uploadHelper->getPublicPath($medium->getMediaPath()));
+        $medium->setPath($this->kernelProjectDir . '/public' . $uploadHelper->getPublicPath($medium->getMediaPath()));
         $this->entityManager->persist($medium);
         $this->entityManager->flush();
 
         $apiModel = $this->createMediaApiModel($medium);
 
-        $response = new Response(null, 204);
+        $response = new Response(null, \Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
 
         $response->headers->set(
             'Location',
@@ -593,15 +554,9 @@ class MediaController extends MainadminController
         return $response;
     }
 
-    /**
-     * @Route("/ajax/openVideoForm/",
-     * name="open-video-form",
-     * options= { "expose" = true },
-     * methods={"GET"}
-     * )
-     */
-    public function openVideoForm(Request $request){
-        
+    #[Route(path: '/ajax/openVideoForm/', name: 'open-video-form', options: ['expose' => true], methods: ['GET'])]
+    public function openVideoForm()
+    {
         $html = $this->renderView('admin/media/_open_video_form.html.twig');
         return $this->json( [
             'code' => 200,
@@ -609,13 +564,7 @@ class MediaController extends MainadminController
             'html' => $html
         ] );
     }
-    /**
-     * @Route("/addVideo/",
-     * name="addVideo",
-     * options= { "expose" = true },
-     * methods={"POST"}
-     * )
-     */
+    #[Route(path: '/addVideo/', name: 'addVideo', options: ['expose' => true], methods: ['POST'])]
     public function addVideo(Request $request){
         
         return $this->json( [

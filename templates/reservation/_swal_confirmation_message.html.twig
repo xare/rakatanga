@@ -47,6 +47,18 @@
             <td>{{ codepromo.fin|date('d/m/Y') }} </td>
           </tr>
         {% endif %}
+       {#  {% if codepromo.nombre != null %} #}
+          <tr>
+            <td><strong> {{ 'Número de uso actual'|trans }} : </strong></td>  
+            <td>{{ codepromo.nombre }} </td>
+          </tr>
+        {# {% endif %} #}
+        {% if codepromo.nombreTotal != null %}
+          <tr>
+            <td><strong> {{ 'Número de usos Total'|trans }} : </strong></td>  
+            <td>{{ codepromo.nombreTotal }} </td>
+          </tr>
+        {% endif %}
       </table>
     {% endif %}
   </p>

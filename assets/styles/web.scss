@@ -621,7 +621,7 @@ img.right {
 .grid-wrapper {
     display: grid;
     gap: 5%;
-    grid-template-columns: minmax(min(100%, 1%), 0.1fr) minmax(min(100%, 30%), 0.6fr) minmax(min(100%, 8%), 0.3fr);
+    grid-template-columns: minmax(min(100%, 35%), 0.5fr) minmax(min(100%, 30%), 0.2fr) minmax(min(100%, 35%), 0.3fr);
     grid-auto-rows: minmax(min-content, max-content);
     justify-content: stretch;
     justify-items: center;

@@ -35,6 +35,7 @@ use App\Service\reservationHelper;
 use App\Service\slugifyHelper;
 use App\Service\UploadHelper;
 use App\Service\invoiceHelper;
+use App\Service\reservationDataHelper;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -87,7 +88,8 @@ class ReservationController extends AbstractController
         localizationHelper $localizationHelper,
         slugifyHelper $slugifyHelper,
         reservationHelper $reservationHelper,
-        breadcrumbsHelper $breadcrumbsHelper
+        breadcrumbsHelper $breadcrumbsHelper,
+        private string $stripePublicKey
     ) {
         $this->em = $em;
         $this->translator = $translator;
@@ -97,27 +99,11 @@ class ReservationController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
-    /**
-     * @Route("/trips/{category}/{travel}/reservation/{date}/",
-     *          name="reservation",
-     *          priority= 10,
-     * )
-     * 
-     * @Route({
-     *          "en" :"{_locale}/trips/{category}/{travel}/reservation/{date}/",
-     *          "es" :"{_locale}/trips/{category}/{travel}/reserva/{date}/",
-     *          "fr" :"{_locale}/trips/{category}/{travel}/reservation/{date}/"
-     *          },
-     *          name="reservation",
-     *          priority= 10,
-     * )
-     * 
-     */
-
+    #[Route(path: '/trips/{category}/{travel}/reservation/{date}/', name: 'reservation', priority: 10)]
+     #[Route(path: ['en' => '{_locale}/trips/{category}/{travel}/reservation/{date}/', 'es' => '{_locale}/trips/{category}/{travel}/reserva/{date}/', 'fr' => '{_locale}/trips/{category}/{travel}/reservation/{date}/'], name: 'reservation', priority: 10)]
      public function index(
                         Request $request,
                         $_locale = null,
-                        Breadcrumbs $breadcrumbs,
                         TravelTranslationRepository $travelTranslationRepository,
                         CategoryTranslationRepository $categoryTranslationRepository,
                         DatesRepository $datesRepository,
@@ -175,20 +161,7 @@ class ReservationController extends AbstractController
         // END SWITCH LOCALE LOADER
 
         // BREADCRUMBS //
-        $this->breadcrumbs->addRouteItem($this->translator->trans("Nuestras rutas en moto") , "destinations");
-        $this->breadcrumbs->addRouteItem(
-             $this->localizationHelper->renderCategoryString($date->getTravel()->getCategory()->getId(),$locale) , "destinations-by-category", [
-                 '_locale' => $locale,
-                 'category'=> $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($date->getTravel()->getCategory()->getId(),$locale))
-         ]);
-         $this->breadcrumbs->addRouteItem(
-                 $this->localizationHelper->renderTravelString($date->getTravel()->getId(),$locale) , "destination", [
-                     '_locale' => $locale,
-                     'category'=> $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($date->getTravel()->getCategory()->getId(),$locale)),
-                     'travel'=> $this->slugifyHelper->slugify($this->localizationHelper->renderTravelString($date->getTravel()->getId(),$locale))
-         ]);
-         $this->breadcrumbs->addItem($this->translator->trans("Reserva")); 
-         $this->breadcrumbs->prependRouteItem($this->translator->trans("Inicio"), "index");
+        $this->breadcrumbsHelper->reservationBreadcrumbs($locale, $date);
          // END BREADCRUMBS //
 
         $renderArray = [
@@ -220,7 +193,7 @@ class ReservationController extends AbstractController
             //$message = $introMessage . ' '. $link; 
             $this->addFlash(
                 'error', 
-                sprintf($introMessage.' <a href="%s">Ver Reserva</a>', $url)
+                $link
                 );
         }
         
@@ -231,30 +204,15 @@ class ReservationController extends AbstractController
      }
 
     
-    /**
-     * @Route("/reservation/{reservation}/payment",
-     * priority=6, 
-     * name="reservation_payment", 
-     * requirements={"reservation":"\d+"}, 
-     * methods={"POST","GET"}, 
-     * options={"expose" = true})
-     * @Route({
-     *      "en": "{_locale}/reservation/{reservation}/payment",
-     *      "es": "{_locale}/reservation/{reservation}/payment",
-     *      "fr": "{_locale}/reservation/{reservation}/payment"
-     *      }, 
-     * priority=10, 
-     * name="reservation_payment", 
-     * requirements={"reservation":"\d+"}, 
-     * methods={"POST","GET"},
-     * options={"expose" = true})
-     */
+    #[Route(path: '/reservation/{reservation}/payment', priority: 6, name: 'reservation_payment', requirements: ['reservation' => '\d+'], methods: ['POST', 'GET'], options: ['expose' => true])]
+    #[Route(path: ['en' => '{_locale}/reservation/{reservation}/payment', 'es' => '{_locale}/reservation/{reservation}/payment', 'fr' => '{_locale}/reservation/{reservation}/payment'], priority: 10, name: 'reservation_payment', requirements: ['reservation' => '\d+'], methods: ['POST', 'GET'], options: ['expose' => true])]
     public function reservationPayment(
         Request $request,
         Reservation $reservation,
         AuthenticationUtils $authenticationUtils,
         LangRepository $langRepository,
         reservationHelper $reservationHelper,
+        reservationDataHelper $reservationDataHelper,
         $stripeSK,
         FormFactoryInterface $formFactory,
         string $_locale = null,
@@ -265,7 +223,7 @@ class ReservationController extends AbstractController
         $reservationData = $request->request->all();
         
         if ( isset($reservationData['userEdit']) && $reservationData['userEdit'] == true ) 
-            $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData);
+            $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData, $locale);
         //LANG MENU
         $otherLangsArray = $langRepository->findOthers($locale);
         $urlArray = [];
@@ -286,7 +244,8 @@ class ReservationController extends AbstractController
         
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $totalAmmount = $reservationHelper->getReservationAmmount($reservation);
+        $totalAmmount = $reservationDataHelper->getReservationDueAmmount($reservation);
+        
         $ammount = $request->request->get('ammount') ? $request->request->get('ammount') : $totalAmmount;
         
         $form = $formFactory
@@ -299,7 +258,7 @@ class ReservationController extends AbstractController
                         'choices' => [
                             $this->translator->trans('Stripe') => 'stripe',
                             $this->translator->trans('Stripe 500€') => 'stripe500',
-                            $this->translator->trans('Bank Transfer') => 'bankTransfer'
+                            $this->translator->trans('Transferencia Bancaria') => 'bankTransfer'
                         ],
                         'expanded' => true,
                         'multiple' => false
@@ -361,13 +320,12 @@ class ReservationController extends AbstractController
                                                 ],
                                                 UrlGeneratorInterface::ABSOLUTE_URL),
                     ]);
-                    return $this->redirect($session->url, 303);
+                    return $this->redirect($session->url, \Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER);
                 } else {
                     return $this->render('reservation/reservationPaymentBank.html.twig',[
                         'langs' => $urlArray
                     ]);
                 }
-                
             }
         }
         $lang = $langRepository->findOneBy([
@@ -376,6 +334,9 @@ class ReservationController extends AbstractController
         $optionsArray = $reservationHelper->getReservationOptions($reservation, $lang);
 
         //LOG PAYMENT
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
         /* $logHelper->logThis(
             'Reserva Creada', 
@@ -395,19 +356,17 @@ class ReservationController extends AbstractController
             'langs' => $urlArray,
             'error' => $error,
             'date' => $date,
-            'discount' => $reservationHelper->getDiscount($reservation),
+            'discount' => $reservationDataHelper->getDiscount($reservation),
             'reservation' => $reservation,
             'form' => $form->createView(),
             'ammount' => $ammount,
             'options' => $optionsArray,
             'optionsJson' => json_encode($optionsArray),
-            'stripe_public_key' => $this->getParameter('stripe_public_key'),
+            'stripe_public_key' => $this->stripePublicKey,
         ]);
     }
 
-    /**
-    * @Route("/{_locale}/reservation/{reservation}/payment/success-url", name= "success_url", requirements={"reservation":"\d+"})
-    */
+    #[Route(path: '/{_locale}/reservation/{reservation}/payment/success-url', name: 'success_url', requirements: ['reservation' => '\d+'])]
     public function successUrl(
         Request $request,
         Reservation $reservation,
@@ -438,7 +397,7 @@ class ReservationController extends AbstractController
         // END LANGS ARRAY
         \Stripe\Stripe::setApiKey($stripeSK);
         $session = \Stripe\Checkout\Session::retrieve($request->query->get('session_id'));
-        dump(count($paymentsRepository->findBy(['stripeId'=>$request->query->get('session_id')])));
+
         if (count($paymentsRepository->findBy(['stripeId'=>$request->query->get('session_id')])) === 0){
             $payment = new Payments;
             $paidAmmount = $request->query->get('ammount');
@@ -447,6 +406,9 @@ class ReservationController extends AbstractController
             $payment->setAmmount($paidAmmount);
             $em->persist($payment);
              //LOG PAYMENT
+            /**
+             * @var User $user
+             */
             $user = $this->getUser();
             $logHelper->logThis(
                 'Payment Received', 
@@ -460,12 +422,17 @@ class ReservationController extends AbstractController
             $mailer->sendReservationPaymentSuccessToSender( $reservation );
         }
         $reservation->setStatus('payment-success');
-        foreach ($reservation->getCodespromos() as $codepromo)
-        {
-            $codepromo->setNombre($codepromo->getNombre() - 1 );
-            $em->persist($codepromo);
+        if($reservation->getCodespromo() != null ) {
+           /*  foreach ($reservation->getCodespromo() as $codepromo)
+            {
+                dump($codepromo); */
+                $codepromo = $reservation->getCodespromo();
+                if($codepromo->getNombre() > 0) {
+                    $codepromo->setNombre($codepromo->getNombre() + 1 );                    
+                    $em->persist($codepromo);
+                }
+            /* } */
         }
-        
         $em->persist($reservation);
         $em->flush();
 
@@ -479,16 +446,9 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    /**
-    * @Route("{_locale}/reservation/{reservation}/payment/cancel-url", name= "cancel_url")
-    * @Route({
-     *      "en": "{_locale}/reservation/{reservation}/payment/cancel-url",
-     *      "es": "{_locale}/reservation/{reservation}/payment/cancel-url",
-     *      "fr": "{_locale}/reservation/{reservation}/payment/cancel-url"
-     *      }, priority=10, name="cancel_url", requirements={"reservation":"\d+"})
-    */
+    #[Route(path: '{_locale}/reservation/{reservation}/payment/cancel-url', name: 'cancel_url')]
+    #[Route(path: ['en' => '{_locale}/reservation/{reservation}/payment/cancel-url', 'es' => '{_locale}/reservation/{reservation}/payment/cancel-url', 'fr' => '{_locale}/reservation/{reservation}/payment/cancel-url'], priority: 10, name: 'cancel_url', requirements: ['reservation' => '\d+'])]
     public function cancelUrl(
-                        Request $request,
                         Reservation $reservation,
                         LangRepository $langRepository,
                         $locale= "es", 
@@ -510,11 +470,7 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/reservation/{reservation}/options",
-     *  options = { "expose" = true },
-     *  name="get_previous_options")
-     */
+    #[Route(path: '/reservation/{reservation}/options', options: ['expose' => true], name: 'get_previous_options')]
     public function getPreviousOptions(
         Request $request,
         Reservation $reservation,

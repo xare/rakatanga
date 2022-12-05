@@ -3,28 +3,34 @@
 	<div class="col-md-4 col-12">
 		{% if( form.insuranceCompany.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.insuranceCompany,{
 									'label': 'Compañía de seguros'|trans,
 									'attr': {
 											'data-type' : form.insuranceCompany.vars.name,
-											'class' : inputIsFull
+											'class' : inputIsFull,
+											'data-filled': inputFilled
 									}
 							})}}
 	</div>
 	<div class="col-md-8 col-12">
 		{% if( form.insuranceContractNumber.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.insuranceContractNumber,{
 									'label': 'Nº del contrato del seguro'|trans,
 									'attr': {
 											'data-type' : form.insuranceContractNumber.vars.name,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							})}}
 	</div>
@@ -33,43 +39,52 @@
 	<div class="col-md-4 col-12">
 		{% if( form.abroadPhoneNumber.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.abroadPhoneNumber,{
 									'label': 'Número de teléfono de contacto'|trans,
 									'attr': {
 											'data-type' : form.abroadPhoneNumber.vars.name,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							})}}
 	</div>
 	<div class="col-md-4 col-12">
 		{% if( form.contactPersonName.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.contactPersonName,{
 									'label': 'Nombre de la persona de contacto'|trans,
 									'attr': {
 											'placeholder' : 'Nombre y apellidos'|trans,
 											'data-type' : form.contactPersonName.vars.name,
-											'class': inputIsFull
+											'class': inputIsFull,
+											'data-filled': inputFilled
 									}
 							})}}
 	</div>
 	<div class="col-md-4 col-12">
 		{% if( form.contactPersonPhone.vars.value != '' ) %}
 			{% set inputIsFull = ' is-valid' %}
+			{% set inputFilled = true %}
 		{% else %}
 			{% set inputIsFull = '' %}
+			{% set inputFilled = false %}
 		{% endif %}
 		{{ form_row(form.contactPersonPhone,{
 									'label': 'Número de teléfono de tu contacto'|trans,
 									'attr': {
 											'data-type' : form.contactPersonPhone.vars.name,
-											'class' : inputIsFull
+											'class' : inputIsFull,
+											'data-filled': inputFilled
 									}
 							})}}
 	</div>

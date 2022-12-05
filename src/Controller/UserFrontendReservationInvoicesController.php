@@ -27,20 +27,7 @@ class UserFrontendReservationInvoicesController extends AbstractController
         $this->translatorInterface = $translatorInterface;
     }
 
-    /* #[Route('/user/frontend/reservation/invoices', name: 'user_frontend_reservation_invoices')]
-    public function index(): Response
-    {
-        return $this->render('user_frontend_reservation_invoices/index.html.twig', [
-            'controller_name' => 'UserFrontendReservationInvoicesController',
-        ]);
-    } */
-    /**
-     * @Route({
-     *      "en": "{_locale}/user/invoices",
-     *      "es": "{_locale}/usuario/facturas",
-     *      "fr": "{_locale}/utilisateur/factures"
-     *      }, name="frontend_user_invoices")
-     */
+    #[Route(path: ['en' => '{_locale}/user/invoices', 'es' => '{_locale}/usuario/facturas', 'fr' => '{_locale}/utilisateur/factures'], name: 'frontend_user_invoices')]
     public function userInvoices(
         Request $request,
         ReservationRepository $reservationsRepository,
@@ -101,17 +88,13 @@ class UserFrontendReservationInvoicesController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/user/download/invoice/{invoice}", 
-     * name="user-download-invoice")
-     */
+    #[Route(path: '/user/download/invoice/{invoice}', name: 'user-download-invoice')]
     public function downloadInvoice(
-        Request $request,
         Invoices $invoice,
         UploadHelper $uploadHelper
-    ) {
-        //dd($invoice->getFilePath());
-        $response = new StreamedResponse(function () use ($invoice, $uploadHelper) {
+    ):Response {
+
+         $response = new StreamedResponse(function () use ($invoice, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');
             $fileStream = $uploadHelper->readStream($invoice->getFilePath(), false);
             stream_copy_to_stream($fileStream, $outputStream);
@@ -122,7 +105,7 @@ class UserFrontendReservationInvoicesController extends AbstractController
             $invoice->getOriginalFilename()
         );
 
-        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Disposition', $disposition); 
         return $response;
     }
 

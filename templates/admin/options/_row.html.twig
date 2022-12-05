@@ -5,14 +5,22 @@
     {{ renderLocalizedTravel(option.travel.id,'es') }}</td>
     <td>{{ option.price }}</td>
     
-    <td><a href="{{ path('options_edit', {'id': option.id}) }}">
-        {% for optionTranslation in option.optionsTranslations %}
-            <span class="badge bg-secondary">
-                {{ optionTranslation.lang.isoCode|upper }}
-            </span> {{ optionTranslation.title }}
-            <br />
-        {% endfor %}
-     </a> 
+    <td>
+        <a href="{{ path('options_edit', {'id': option.id}) }}">
+            {% for optionTranslation in option.optionsTranslations %}
+                <span class="badge bg-secondary">
+                    {{ optionTranslation.lang.isoCode|upper }}
+                </span> {{ optionTranslation.title }}
+                <br />
+            {% endfor %}
+        </a> 
+    </td>
+    <td>
+        {% if option.isExtension == 1 %}
+            <i class="fas fa-check"></i>
+        {% else %}
+            <i class="fa-solid fa-x"></i>
+        {% endif %}
     </td>
     
    {#  <td>

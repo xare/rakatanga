@@ -25,7 +25,7 @@ class TravelTranslationType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
             ])
-            /* ->add('url', TextType::class) */
+            //->add('url')
             ->add('summary', TextType::class)
             ->add('intro', TextType::class)
             ->add('description', TextType::class)

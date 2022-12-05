@@ -1,3 +1,8 @@
+/**
+ *     .addEntry('admin-dates-reservation-data', './assets/admin-dates-reservation-data-manager.js')
+ *     templates\admin\dates\edit.html.twig
+ */
+
 const routes = require('../public/build/fos_js_routes.json');
 import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.js';
 import Swal from 'sweetalert2';
@@ -22,7 +27,7 @@ class adminDatesReservationDataManager {
     showReservationData(event) {
         event.preventDefault();
         const self = this;
-        console.log(self);
+
         const traveller =
             $(event.currentTarget)
             .data('traveller-id');

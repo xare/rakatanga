@@ -24,11 +24,8 @@ class pdfController extends AbstractController
     public function __construct(Mpdf $mpdf){
         $this->mpdf = $mpdf;
     }
-    /**
-     * @Route("/makepdf/", name="makepdf")
-     */
+    #[Route(path: '/makepdf/', name: 'makepdf')]
     function index(
-        Request $request,
         DatesRepository $datesRepository,
         UserRepository $userRepository,
         InvoicesRepository $invoicesRepository,

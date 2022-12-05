@@ -18,14 +18,14 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="form-group grid-wrapper">
-					<div class="grid-cell">
+					{# <div class="grid-cell">
 						<span class="badge bg-secondary fs-6 bg-opacity-75 mx-auto" data-container="nbpilotes">
 						{{nbpilotes}}
 						</span>
-					</div>
+					</div> #}
 					<div class="grid-cell">
 						<label for="nbpilotes">{{'Número de pilotos'|trans}}*</label>
-						<input 
+						{# <input 
 							name="reservation_user[nbPilotes]"
 							value="{{nbpilotes}}"  
 							type="range" min="0" max="10" step="1"
@@ -33,7 +33,14 @@
 							data-action="handle-change-nb-pilotes" 
 							data-bs-toggle="tooltip"
 							title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'pilotos'|trans}}"
-							required>
+							required> #}
+						</div>
+						<div class="grid-cell">
+							<select name="reservation_user[nbPilotes]" class="form-select" data-action="handle-change-nb-pilotes">
+										{% for i in 0..9 %}
+											<option value="{{i}}"{% if reservation is defined and reservation != null and reservation.nbpilotes == i %} selected{% endif%}>{{i}}</option>
+										{% endfor %}
+									</select>
 					</div>
 					<div class="grid-cell">
 						<span class="badge bg-secondary fs-6 bg-opacity-75">
@@ -41,14 +48,15 @@
 						</span>
 					</div>
 					{% if date.prixAccomp > 0%}
-						<div class="grid-cell">
+						{# <div class="grid-cell">
 							<span class="badge bg-secondary fs-6 bg-opacity-75" data-container="nbaccomp">
 							{{nbaccomp}}
 							</span>
-						</div>
+						</div> #}
 						<div class="grid-cell">
 							<label for="nbaccomp">{{'Número de pasajeros'|trans}}*</label>
-								<input 
+							</div>
+								{# <input 
 									id="nbaccomp"
 									type="range" 
 									value="{{nbaccomp}}" 
@@ -60,7 +68,14 @@
 									step="1"
 									data-bs-toggle="tooltip"
 									title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'acompañantes'|trans}}" 
-									required>
+									required> #}
+
+								<div class="grid-cell">
+									<select name="reservation_user[nbaccomp]" class="form-select" data-action="handle-change-nb-accomp">
+										{% for j in 0..9 %}
+											<option value="{{j}}" {% if reservation is defined and reservation != null and reservation.nbaccomp == j %} selected{% endif%}>{{j}}</option>
+										{% endfor %}
+									</select>
 						</div>
 						<div class="grid-cell">
 							<span class="badge bg-secondary fs-6 bg-opacity-75">

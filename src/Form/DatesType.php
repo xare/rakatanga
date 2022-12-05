@@ -46,8 +46,9 @@ class DatesType extends AbstractType
             ->add('statut', ChoiceType::class, [
                 'placeholder' => 'Selecciona el estatus: ',
                 'choices' => [
-                    'open' => 'open',
-                    'full' => 'full',
+                    'open' => 'abierto',
+                    'full' => 'completo',
+                    'private' => 'privado',
                     'closed' => 'closed'
                 ]
             ])

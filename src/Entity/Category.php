@@ -22,8 +22,8 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $status;
 
     /**
@@ -53,15 +53,10 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
+    #[Groups('main')]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("main")
-     */
-    private $type;
 
     /**
      * @ORM\ManyToMany(targetEntity=Media::class, mappedBy="category")
@@ -241,17 +236,6 @@ class Category
        return $this->name;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(?string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Media[]

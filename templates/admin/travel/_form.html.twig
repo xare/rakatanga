@@ -3,7 +3,9 @@
 <fieldset>
     <div class="row">
             <div class="col-md-3 col-12">
-                {{ form_row(form.main_title) }}
+                {{ form_row(form.main_title,{
+                    'label':'Título principal'
+                }) }}
                 {{ form_row(form.category,{
                     'attr':{
                         'class':'form-control form-select'
@@ -14,19 +16,19 @@
             </div>
             <div class="col-md-3 col-12">
                 {{ form_row(form.level,{
+                    'label':'Nivel',
                     'attr':{
                         'class':'form-control form-select'
                     }
                 }) }}
-                {{ form_row(form.km) }}
+                {{ form_row(form.km,{'label':'Kilómetros'}) }}
             </div>
             <div class="col-md-1 col-12">
             </div>
             <div class="col-md-3 col-12">
-                {{ form_row(form.duration) }}
-                {# {{ form_row(form.price_driver) }}
-                {{ form_row(form.price_codriver) }} #}
+                {{ form_row(form.duration,{'label':'Duración'}) }}
                 {{ form_row(form.status,{
+                    'label' : 'Estatus',
                     'attr':{
                         'class':'form-control form-select'
                     }
