@@ -5,15 +5,13 @@ namespace App\Form;
 use App\Entity\Menu;
 use App\Entity\MenuLocation;
 use App\Entity\Pages;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Form\MenuTranslationType;
-use App\Form\PagesType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MenuType extends AbstractType
 {
@@ -21,25 +19,25 @@ class MenuType extends AbstractType
     {
         $langs = ['en'];
         $builder
-            ->add('type', ChoiceType::class,[
+            ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Custom' => 'custom',
-                    'Page' => 'page'
+                    'Page' => 'page',
                 ],
                 'expanded' => true,
-                'multiple' => false
+                'multiple' => false,
             ])
             ->add('title')
             ->add('route_name')
             ->add('position')
             ->add('visibility')
             ->add('page', EntityType::class, [
-                    'class' => Pages::class, 
+                    'class' => Pages::class,
                     'choice_label' => 'default_slug',
                     'placeholder' => 'Elige una opción',
                 ])
             ->add('menuLocations', EntityType::class, [
-                    'class' => MenuLocation::class, 
+                    'class' => MenuLocation::class,
                     'choice_label' => 'name',
                     'placeholder' => 'Elige una Localización',
                     'expanded' => true,
@@ -48,13 +46,13 @@ class MenuType extends AbstractType
             ->add('menuTranslations', CollectionType::class, [
                 'entry_type' => MenuTranslationType::class,
                 'entry_options' => [
-                    'label' => false
+                    'label' => false,
                 ],
                 'by_reference' => false,
                 // this allows the creation of new forms and the prototype too
                 'allow_add' => true,
                 // self explanatory, this one allows the form to be removed
-                'allow_delete' => true
+                'allow_delete' => true,
             ])
        /*  foreach($langs as $lang){
             $builder
@@ -80,7 +78,7 @@ class MenuType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Menu::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 }

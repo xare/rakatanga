@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -8,42 +8,43 @@ use App\Entity\Menu;
 use App\Entity\MenuLocation;
 use App\Entity\MenuTranslation;
 use App\Entity\Texts;
-use App\Entity\Travel;
 use Doctrine\ORM\EntityManagerInterface;
 
-class contentHelper  
+class contentHelper
 {
-
     private $em;
 
-    public function __construct( EntityManagerInterface $em )
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
-    public function renderText(array $parameters){
+    public function renderText(array $parameters)
+    {
         $langRepository = $this->em->getRepository(Lang::class);
         $lang = $langRepository->findOneBy([
-            'iso_code' => $parameters['locale']
+            'iso_code' => $parameters['locale'],
         ]);
         $TextsRepository = $this->em->getRepository(Texts::class);
         $text = $TextsRepository->findOneBy([
-            'section'=> $parameters['section'],
+            'section' => $parameters['section'],
             'acronym' => $parameters['acronym'],
-            'lang' =>$lang
+            'lang' => $lang,
         ]);
+
         return $text->getText();
     }
 
-    public function renderMenu($locale, $location){
+    public function renderMenu($locale, $location)
+    {
         $menuRepository = $this->em->getRepository(Menu::class);
         /* $lang = $this->getLang($locale);
         $menuLocationRepository = $this->em->getRepository(MenuLocation::class);
         $menuLocationObject = $menuLocationRepository->findBy([
             'name' => $location
         ]);
-        
-        
+
+
         $menuItems = $menuRepository->findBy([
             'visibility' => true,
             'menuLocations' => $menuLocationObject[0]
@@ -61,23 +62,26 @@ class contentHelper
             $i++;
         }
         $menuRepository->findMenyByLocation($locale, $location); */
-        //dd($menuElements);
+        // dd($menuElements);
         /* $menuTranslation = $menuTranslationsRepository->findBy([
             'lang' => $lang
         ]); */
         return $menuRepository->findMenyByLocation($locale, $location);
     }
 
-    public function getLang($locale){
+    public function getLang($locale)
+    {
         $langs = $this->em->getRepository(Lang::class);
-        $lang = $langs->findBy(['iso_code'=>$locale]);
+        $lang = $langs->findBy(['iso_code' => $locale]);
+
         return $lang;
     }
 
-    public function renderCategoryList($locale) {
+    public function renderCategoryList($locale)
+    {
         $categoryRepository = $this->em->getRepository(Category::class);
         $categories = $categoryRepository->footerList($locale['locale']);
+
         return $categories;
     }
-
 }

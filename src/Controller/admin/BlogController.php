@@ -4,7 +4,6 @@ namespace App\Controller\admin;
 
 use App\Entity\Blog;
 use App\Form\BlogType;
-use App\Repository\ArticlesRepository;
 use App\Repository\BlogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -22,16 +21,16 @@ class BlogController extends AbstractController
         PaginatorInterface $paginator,
         BlogRepository $blogRepository): Response
     {
-
         $query = $blogRepository->listAll();
         $posts = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
-      return $this->render('admin/blog/index.html.twig', [
-            'blogs' => $posts,
-        ]);
+
+        return $this->render('admin/blog/index.html.twig', [
+              'blogs' => $posts,
+          ]);
     }
 
     #[Route('/new', name: 'blog_new', methods: ['GET', 'POST'])]

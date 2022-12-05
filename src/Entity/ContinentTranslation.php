@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ContinentTranslationRepository;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,7 +19,6 @@ class ContinentTranslation
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
      */
     private $Name;
 
@@ -76,6 +74,7 @@ class ContinentTranslation
 
         return $this;
     }
+
     public function __toString()
     {
         return $this->Name;

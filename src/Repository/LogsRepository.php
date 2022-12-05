@@ -19,11 +19,10 @@ class LogsRepository extends ServiceEntityRepository
         parent::__construct($registry, Logs::class);
     }
 
-
     public function listAll()
     {
         return $this->createQueryBuilder('l')
-            ->orderBy('l.date','DESC')
+            ->orderBy('l.date', 'DESC')
             ->getQuery();
     }
 

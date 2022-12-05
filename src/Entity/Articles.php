@@ -40,9 +40,7 @@ class Articles
     private $media;
 
     /**
-     * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
-     * 
      */
     private \DateTimeInterface $publishedAt;
 
@@ -156,7 +154,6 @@ class Articles
 
         return $this;
     }
-
 
     public function getSlug(): ?string
     {

@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Form\InscriptionsType;
 use App\Repository\InscriptionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Imagine\Image\Palette\Color\RGB;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,8 +72,8 @@ class InscriptionsController extends AbstractController
 
     #[Route('/{id}', name: 'inscriptions_delete', methods: ['POST'])]
     public function delete(
-                        Request $request, 
-                        Inscriptions $inscription, 
+                        Request $request,
+                        Inscriptions $inscription,
                         EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$inscription->getId(), $request->request->get('_token'))) {
@@ -85,23 +84,24 @@ class InscriptionsController extends AbstractController
         return $this->redirectToRoute('inscriptions_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/inscription/preAddUser/{inscription}', name: 'inscriptions_preadd_user', options: ["expose" => true ], methods: ['GET','POST'])]
+    #[Route('/inscription/preAddUser/{inscription}', name: 'inscriptions_preadd_user', options: ['expose' => true], methods: ['GET', 'POST'])]
     public function inscriptionsPreAddUser(
-                        Inscriptions $inscription, 
+                        Inscriptions $inscription,
                         EntityManagerInterface $entityManager,
-                        UserPasswordHasherInterface $userPasswordHasher): Response 
+                        UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $html = $this->renderView('admin/inscriptions/_swal_password.html.twig');
+
         return $this->json([
             'status' => 200,
-            'message' => $html
-        ],200);
+            'message' => $html,
+        ], 200);
     }
 
-    #[Route('/inscription/addUser/{inscription}', name: 'inscriptions_add_user', options: ["expose" => true ], methods: ['GET','POST'])]
+    #[Route('/inscription/addUser/{inscription}', name: 'inscriptions_add_user', options: ['expose' => true], methods: ['GET', 'POST'])]
     public function inscriptionsAddUser(
-                        Request $request, 
-                        Inscriptions $inscription, 
+                        Request $request,
+                        Inscriptions $inscription,
                         EntityManagerInterface $entityManager,
                         UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -112,7 +112,7 @@ class InscriptionsController extends AbstractController
         $user->setPrenom($inscription->getPrenom());
         $user->setEmail($inscription->getEmail());
         $telephone = new \Adamski\Symfony\PhoneNumberBundle\Model\PhoneNumber($inscription->getTelephone());
-        //$telephone = new \libphonenumber\PhoneNumber($inscription->getTelephone());
+        // $telephone = new \libphonenumber\PhoneNumber($inscription->getTelephone());
         $user->setTelephone($telephone);
         $user->setLangue($inscription->getLangue());
         $user->setPosition($inscription->getPosition());
@@ -124,9 +124,10 @@ class InscriptionsController extends AbstractController
         );
         $entityManager->persist($user);
         $entityManager->flush();
+
         return $this->json([
             'status' => 200,
-            'message' => 'User has been created'], 200);
-        //return $this->redirectToRoute('user_edit', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
+            'message' => 'User has been created', ], 200);
+        // return $this->redirectToRoute('user_edit', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
     }
 }

@@ -25,9 +25,10 @@ class CodespromoController extends AbstractController
         $query = $codespromoRepository->listAll();
         $codespromos = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             15
         );
+
         return $this->render('admin/codespromo/index.html.twig', [
             'count' => $count,
             'codespromos' => $codespromos,

@@ -23,7 +23,7 @@ class DocumentRepository extends ServiceEntityRepository
         parent::__construct($registry, Document::class);
     }
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('d')
             ->getQuery();
@@ -57,7 +57,8 @@ class DocumentRepository extends ServiceEntityRepository
     }
     */
 
-    public function getDocumentsByReservationByUser($reservation){
+    public function getDocumentsByReservationByUser($reservation)
+    {
         return $this->createQueryBuilder('d')
         /* ->innerJoin(Reservation::class, 'r' , join::WITH, 'r.id = d.reservation' ) */
         ->andWhere('d.reservation = :reservation')
@@ -67,10 +68,12 @@ class DocumentRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
-    public function getDocumentsByReservationByTraveller($reservation,$traveller){
+
+    public function getDocumentsByReservationByTraveller($reservation, $traveller)
+    {
         return $this->createQueryBuilder('d')
         ->innerJoin(ReservationData::class, 'rd')
-        ->innerJoin(Travellers::class,'tr', join::WITH, 'tr.id = rd.travellers')
+        ->innerJoin(Travellers::class, 'tr', join::WITH, 'tr.id = rd.travellers')
         ->andWhere('rd.reservation = :reservation')
         ->setParameter('reservation', $reservation)
         ->andWhere('tr.id = :traveller')

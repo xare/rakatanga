@@ -2,16 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\MenuTranslationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=MenuTranlationRepository::class)
  */
-class MenuTranslation {
-  /**
+class MenuTranslation
+{
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -44,6 +42,7 @@ class MenuTranslation {
     {
         return $this->id;
     }
+
     public function getMenu(): ?Menu
     {
         return $this->menu;

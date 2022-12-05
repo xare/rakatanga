@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -15,43 +15,49 @@ class logHelper
     {
         $this->entityManager = $entityManager;
     }
-    public function logThis(string $action, string $content, array $data, string $entity ) : bool
+
+    public function logThis(string $action, string $content, array $data, string $entity): bool
     {
         $log = new Logs();
-            $log->setAction($action);
-            $log->setContent($content);
-            $log->setData($data);
-            $log->setEntity($entity);
+        $log->setAction($action);
+        $log->setContent($content);
+        $log->setData($data);
+        $log->setEntity($entity);
         $this->entityManager->persist($log);
         $this->entityManager->flush();
+
         return true;
     }
 
-    public function logNewUser($user){
+    public function logNewUser($user)
+    {
         $this->logThis(
-            'Nuevo usuario ', 
-            'Un nuevo usuario ha sido creado.'.$user->getEmail(), 
+            'Nuevo usuario ',
+            'Un nuevo usuario ha sido creado.'.$user->getEmail(),
             [
                 'Email' => $user->getEmail(),
                 'Name' => $user->getPrenom(),
                 'Surname' => $user->getNom(),
                 'Phone' => $user->getTelephone(),
-            ], 
+            ],
             'user');
+
         return true;
     }
 
-    public function logReservationInitialize(Dates $date, Reservation $reservation){
+    public function logReservationInitialize(Dates $date, Reservation $reservation)
+    {
         $this->logThis(
-            'Reservation Initialized', 
-            'Reservation for <strong>'. $date->getTravel()->getMainTitle() . '</strong> travel on date <strong>' . $date->getDebut()->format('d-m-Y') . '</strong> has been initialized.', 
+            'Reservation Initialized',
+            'Reservation for <strong>'.$date->getTravel()->getMainTitle().'</strong> travel on date <strong>'.$date->getDebut()->format('d-m-Y').'</strong> has been initialized.',
             [
                 'id' => $reservation->getId(),
                 'Viaje' => $reservation->getDate()->getTravel()->getMainTitle(),
-                'Comienzo' => $reservation->getDate()->getDebut()->format('d-m-Y')
-            ], 
+                'Comienzo' => $reservation->getDate()->getDebut()->format('d-m-Y'),
+            ],
             'reservation'
         );
+
         return true;
     }
 }

@@ -54,9 +54,9 @@ class PopupsController extends AbstractController
 
     #[Route('/{id}/edit', name: 'popups_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request, 
-        Popups $popup, 
-        EntityManagerInterface $entityManager, 
+        Request $request,
+        Popups $popup,
+        EntityManagerInterface $entityManager,
         LangRepository $langRepository): Response
     {
         $form = $this->createForm(PopupsType::class, $popup);

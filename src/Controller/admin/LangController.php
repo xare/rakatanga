@@ -15,10 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class LangController extends AbstractController
 {
     private $entityManager;
-    public function __construct (EntityManagerInterface $entityManager)
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'lang_index', methods: ['GET'])]
     public function index(LangRepository $langRepository): Response
     {
@@ -35,7 +37,6 @@ class LangController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $this->entityManager->persist($lang);
             $this->entityManager->flush();
 
@@ -78,7 +79,6 @@ class LangController extends AbstractController
     public function delete(Request $request, Lang $lang): Response
     {
         if ($this->isCsrfTokenValid('delete'.$lang->getId(), $request->request->get('_token'))) {
-            
             $this->entityManager->remove($lang);
             $this->entityManager->flush();
         }

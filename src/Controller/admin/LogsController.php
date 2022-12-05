@@ -2,27 +2,25 @@
 
 namespace App\Controller\admin;
 
-
 use App\Entity\Logs;
 use App\Form\LogsType;
 use App\Repository\LogsRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
-use App\Controller\admin\MainadminController;
-use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/admin/logs')]
 class LogsController extends MainadminController
 {
-
     private $entityManager;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route('/', name: 'logs_index', methods: ['GET'])]
     public function index(
         Request $request,
@@ -36,20 +34,19 @@ class LogsController extends MainadminController
             $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/logs/index.html.twig', [
             'logs' => $items,
         ]);
     }
 
-
-    #[Route('/search/{entity}', name: "logs_by_entity")]
-
+    #[Route('/search/{entity}', name: 'logs_by_entity')]
     public function searchByActivity(
         Request $request,
         LogsRepository $logsRepository,
         string $entity,
         PaginatorInterface $paginator
-    ): \Symfony\Component\HttpFoundation\Response {
+    ): Response {
         $logs = $paginator->paginate(
             $logsRepository->listLogsByEntity($entity),
             $request->query->getInt('page', 1),
@@ -58,11 +55,9 @@ class LogsController extends MainadminController
 
         return $this->render('admin/logs/index.html.twig', [
             'logs' => $logs,
-            'count' => 10
+            'count' => 10,
         ]);
     }
-
-
 
     #[Route('/new', name: 'logs_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
@@ -113,7 +108,7 @@ class LogsController extends MainadminController
     #[Route('/{id}', name: 'logs_delete', methods: ['POST'])]
     public function delete(Request $request, Logs $log): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $log->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$log->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($log);
             $this->entityManager->flush();
         }

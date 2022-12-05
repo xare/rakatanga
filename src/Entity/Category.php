@@ -57,7 +57,6 @@ class Category
     #[Groups('main')]
     private $name;
 
-
     /**
      * @ORM\ManyToMany(targetEntity=Media::class, mappedBy="category")
      */
@@ -233,9 +232,8 @@ class Category
 
     public function __toString()
     {
-       return $this->name;
+        return $this->name;
     }
-
 
     /**
      * @return Collection|Media[]
@@ -287,5 +285,4 @@ class Category
 
         return $this;
     }
-    
 }

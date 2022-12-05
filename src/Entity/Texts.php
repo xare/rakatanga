@@ -77,6 +77,7 @@ class Texts
 
         return $this;
     }
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -100,6 +101,7 @@ class Texts
 
         return $this;
     }
+
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;

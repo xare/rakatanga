@@ -10,7 +10,6 @@ use App\Repository\ReservationRepository;
 use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,22 +23,23 @@ class ReservationController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'reservation_index', methods: ['GET'])]
     public function index(
-        Request $request, 
+        Request $request,
         ReservationRepository $reservationRepository,
         PaginatorInterface $paginator
-        ): Response
-    {
+        ): Response {
         /* if(!$pageNumber = $request->query->get('page')){
             $pageNumber = 0;
         } */
         $query = $reservationRepository->listAll();
         $items = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/reservation/index.html.twig', [
             'reservations' => $items,
             /* 'pageNumber' => $pageNumber */
@@ -71,25 +71,24 @@ class ReservationController extends MainadminController
         Request $request,
         string $categoryName,
         ReservationRepository $reservationRepository,
-        PaginatorInterface $paginator){
-            $reservations = $paginator->paginate(
-                $reservationRepository->listReservationsByCategory($categoryName),
-                $request->query->getInt('page',1),
-                10
-            );
-    
-            return $this->render('admin/reservation/index.html.twig', [
-                'reservations' => $reservations,
-                'count' => 10
-            ]);
-        }
+        PaginatorInterface $paginator)
+    {
+        $reservations = $paginator->paginate(
+            $reservationRepository->listReservationsByCategory($categoryName),
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('admin/reservation/index.html.twig', [
+            'reservations' => $reservations,
+            'count' => 10,
+        ]);
+    }
 
     #[Route(path: '/items', methods: 'GET', name: 'reservation_items')]
     public function getReservationItems(Request $request, ReservationRepository $reservationRepository, OptionsRepository $optionsRepository)
     {
-       
-        if (!$presentPage = $request->query->get('page'))
-        {
+        if (!$presentPage = $request->query->get('page')) {
             $presentPage = 1;
         }
 
@@ -105,21 +104,19 @@ class ReservationController extends MainadminController
             'FechaReserva',
             'FechaPago',
             'status',
-            
         ];
 
-        //GET OPTIONS
-        
+        // GET OPTIONS
+
         $i = 0;
-        foreach ($allItems as $item)
-        {
-            $allItems[$i]['options'] = $optionsRepository->listOptions($item['id'], "es");
-            $i++;
+        foreach ($allItems as $item) {
+            $allItems[$i]['options'] = $optionsRepository->listOptions($item['id'], 'es');
+            ++$i;
         }
-        
+
         $defaultPage = 1;
         $itemsPerPage = 10;
-        
+
         $data = [
             'items' => $allItems,
             'count' => count($allItems),
@@ -129,8 +126,8 @@ class ReservationController extends MainadminController
             'properties' => $properties,
         ];
 
-        //dd($data);
-        return $this->json($data,200,[],['groups'=>'main']);
+        // dd($data);
+        return $this->json($data, 200, [], ['groups' => 'main']);
     }
 
     #[Route(path: '/{id}', name: 'reservation_show', methods: ['GET'])]
@@ -146,7 +143,7 @@ class ReservationController extends MainadminController
     {
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
-        //dd($form);
+        // dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
@@ -157,7 +154,6 @@ class ReservationController extends MainadminController
         return $this->render('admin/reservation/edit.html.twig', [
             'reservation' => $reservation,
             'form' => $form->createView(),
-            
         ]);
     }
 
@@ -168,7 +164,7 @@ class ReservationController extends MainadminController
             $this->entityManager->remove($reservation);
             $this->entityManager->flush();
         }
-        
+
         return $this->redirectToRoute('reservation_index');
     }
 
@@ -178,8 +174,7 @@ class ReservationController extends MainadminController
         Mailer $mailer
     ) {
         $mailer->sendCheckinMessage($reservation);
+
         return new Response('send message');
     }
-
-    
 }

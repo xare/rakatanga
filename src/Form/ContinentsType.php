@@ -19,13 +19,13 @@ class ContinentsType extends AbstractType
             ->add('continentTranslation', CollectionType::class, [
                 'entry_type' => ContinentTranslationType::class,
                 'entry_options' => [
-                    'label' => false
+                    'label' => false,
                 ],
                 'by_reference' => false,
                 // this allows the creation of new forms and the prototype too
                 'allow_add' => true,
                 // self explanatory, this one allows the form to be removed
-                'allow_delete' => true
+                'allow_delete' => true,
             ])
            /*  ->addEventListener(
                 FormEvents::POST_SET_DATA,
@@ -33,10 +33,11 @@ class ContinentsType extends AbstractType
             ) */
         ;
     }
+
     /* public function onPostSetData(FormEvent $event){
         if($event->getData() && $event->getData()->getId()){
             $form = $event->getForm();
-            
+
             $form->add('code')
             ->add('continentTranslation', CollectionType::class, [
                 'entry_type' => ContinentTranslationType::class,
@@ -57,7 +58,7 @@ class ContinentsType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Continents::class,
             'allow_extra_fields' => true,
-            'csrf_field_name' => '_token'
+            'csrf_field_name' => '_token',
         ]);
     }
 }

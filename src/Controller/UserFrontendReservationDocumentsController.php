@@ -13,6 +13,7 @@ use App\Repository\ReservationRepository;
 use App\Repository\TravellersRepository;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class UserFrontendReservationDocumentsController extends AbstractController
 {
@@ -41,7 +41,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $locale = 'es'
     ) {
         $uploadedDocument = $request->files->get('document');
-        
+
         $user = $this->getUser();
         /**
          * @var User $user
@@ -53,7 +53,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $uploadedDocument,
             [
                 new NotBlank([
-                    'message' => 'Please select a file to upload'
+                    'message' => 'Please select a file to upload',
                 ]),
                 new File([
                     'maxSize' => '5M',
@@ -65,9 +65,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                         'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                        'text/plain'
-                    ]
-                ])
+                        'text/plain',
+                    ],
+                ]),
             ]
         );
         if ($violations->count() > 0) {
@@ -76,7 +76,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $filename = $uploadHelper->uploadDocument($uploadedDocument);
         $traveller = null;
         $travellerId = null;
-        if($request->request->get('traveller') != null ){
+        if ($request->request->get('traveller') != null) {
             $travellerId = $request->request->get('traveller');
         }
 
@@ -85,7 +85,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $reservationData = $reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
                 'travellers' => $traveller,
-                'User' => $user
+                'User' => $user,
             ]);
             if ($reservationData === null) {
                 $reservationData = new ReservationData();
@@ -96,7 +96,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         } else {
             $reservationData = $reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
-                'User' => $user
+                'User' => $user,
             ]);
         }
 
@@ -120,15 +120,14 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $em->persist($reservationData);
         $em->persist($document);
         $em->flush();
-        
+
         $documentsArray = [];
         $i = 0;
-        foreach ($reservationData->getDocuments() as $documentItem)
-        {
+        foreach ($reservationData->getDocuments() as $documentItem) {
             $documentsArray[$i] = $documentItem;
-            $i++;
+            ++$i;
         }
-        
+
         $renderArray = [
             'reservation' => $reservation,
             'document' => $document,
@@ -139,21 +138,23 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $dropHtml = $this->renderView(
             'user/_renderFile_in_dropzone.html.twig', $renderArray
         );
-        
+
         $listHtml = $this->renderView('user/_documents_list.html.twig', $renderArray);
+
         return $this->json(
             [
                 'document' => $document,
                 'dropHtml' => $dropHtml,
-                'listHtml' => $listHtml
+                'listHtml' => $listHtml,
             ],
             201,
             [],
             [
-                'groups' => ['main']
+                'groups' => ['main'],
             ]
         );
     }
+
     /**
      * @IsGranted("ROLE_USER", subject="user")
      */
@@ -165,7 +166,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         UploadHelper $uploadHelper,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator,
-        $locale = "es",
+        $locale = 'es',
         string $_locale = null
     ) {
         /** @var UploadedFile $uploadedFile */
@@ -182,8 +183,8 @@ class UserFrontendReservationDocumentsController extends AbstractController
                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                    'text/plain'
-                ]
+                    'text/plain',
+                ],
             ])
         );
         if ($violations->count() > 0) {
@@ -198,12 +199,13 @@ class UserFrontendReservationDocumentsController extends AbstractController
 
         $entityManager->persist($document);
         $entityManager->flush();
+
         return $this->json(
             $document,
             201,
             [],
             [
-                'groups' => ['main']
+                'groups' => ['main'],
             ]
         );
     }
@@ -247,7 +249,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             200,
             [],
             [
-                'groups' => ['main']
+                'groups' => ['main'],
             ]
         );
     }
@@ -260,7 +262,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $reservationData = $reservationDataRepository->findOneBy(
             [
                 'reservation' => $reservation,
-                'User' => $this->getUser()
+                'User' => $this->getUser(),
             ]
         );
 
@@ -272,13 +274,16 @@ class UserFrontendReservationDocumentsController extends AbstractController
         } */
 
         $documents = [];
-        if ($reservationData) $documents = $reservationData->getDocuments();
+        if ($reservationData) {
+            $documents = $reservationData->getDocuments();
+        }
+
         return $this->json(
             $documents,
             200,
             [],
             [
-                'groups' => ['main']
+                'groups' => ['main'],
             ]
         );
     }
@@ -296,10 +301,10 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $user = $this->getUser();
         $type = $document->getDoctype();
         $reservationId = $request->request->get('reservationId');
-        $entityManager->remove( $document );
+        $entityManager->remove($document);
         $entityManager->flush();
-        $uploadHelper->deleteFile( $document->getFilePath(), false );
-        $reservation = $reservationRepository->find( $reservationId );
+        $uploadHelper->deleteFile($document->getFilePath(), false);
+        $reservation = $reservationRepository->find($reservationId);
 
         $dropHtmlRenderArray = [
             'type' => $type,
@@ -308,30 +313,30 @@ class UserFrontendReservationDocumentsController extends AbstractController
         ];
         $listHtmlRenderArray = [
             'reservation' => $reservation,
-            'user' => $user
+            'user' => $user,
         ];
-        if($request->request->get('travellerId') !== null &&  $request->request->get('travellerId') != $user->getId()) {
+        if ($request->request->get('travellerId') !== null && $request->request->get('travellerId') != $user->getId()) {
             $travellerId = $request->request->get('travellerId');
-            $dropHtmlRenderArray['traveller'] = $travellersRepository->find( $travellerId );
+            $dropHtmlRenderArray['traveller'] = $travellersRepository->find($travellerId);
             $listHtmldRenderArray['documents'] = $dropHtmlRenderArray['traveller']->getDocuments();
         }
-        $documents = $documentRepository->getDocumentsByReservationByUser( $reservation );
+        $documents = $documentRepository->getDocumentsByReservationByUser($reservation);
 
         $listHtmlRenderArray['documents'] = $documents;
-        $listHtml = $this->renderView( 'user/_documents_list.html.twig' , $listHtmlRenderArray );
-        $dropHtml = $this->renderView( 'user/_dropzone_input.html.twig' , $dropHtmlRenderArray );
+        $listHtml = $this->renderView('user/_documents_list.html.twig', $listHtmlRenderArray);
+        $dropHtml = $this->renderView('user/_dropzone_input.html.twig', $dropHtmlRenderArray);
+
         return $this->json(
             [
                 'listHtml' => $listHtml,
-                'dropHtml' => $dropHtml
+                'dropHtml' => $dropHtml,
             ],
             200,
             [],
             [
-                'groups' => ['main']
+                'groups' => ['main'],
             ]
         );
-
 
         /* return new Response(null, 204); */
     }
@@ -343,16 +348,15 @@ class UserFrontendReservationDocumentsController extends AbstractController
         ReservationRepository $reservationRepository,
         $locale = 'es'
     ) {
-
         $locale = $_locale ? $_locale : $locale;
-        //Swith Locale Loader
+        // Swith Locale Loader
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
         $user = $this->getUser();
 

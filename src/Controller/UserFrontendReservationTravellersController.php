@@ -15,11 +15,9 @@ use App\Service\reservationHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
-
 
 class UserFrontendReservationTravellersController extends AbstractController
 {
@@ -28,13 +26,15 @@ class UserFrontendReservationTravellersController extends AbstractController
     private $breadcrumbsHelper;
 
     public function __construct(
-            TranslatorInterface $translatorInterface, 
-            Breadcrumbs $breadcrumbs, 
-            breadcrumbsHelper $breadcrumbsHelper){
+            TranslatorInterface $translatorInterface,
+            Breadcrumbs $breadcrumbs,
+            breadcrumbsHelper $breadcrumbsHelper)
+    {
         $this->translatorInterface = $translatorInterface;
         $this->breadcrumbs = $breadcrumbs;
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
+
    #[Route(path: ['/user/reservation/data/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
     #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/{traveller}', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/{traveller}', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
     public function frontendUserReservationDataTraveller(
@@ -47,25 +47,24 @@ class UserFrontendReservationTravellersController extends AbstractController
         DocumentRepository $documentRepository,
         EntityManagerInterface $em,
         Mailer $mailer,
-        $locale = "es"
+        $locale = 'es'
     ) {
-
         $locale = $_locale ?: $locale;
 
-        //Swith Locale Loader
+        // Swith Locale Loader
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
-        //End switch locale loader
-        
+        // End switch locale loader
+
         $reservationData = $reservationDataRepository->findOneBy([
             'reservation' => $reservation,
-            'travellers'=> $traveller
+            'travellers' => $traveller,
         ]);
 
         $form = $this->createForm(ReservationDataType::class, $reservationData);
@@ -81,24 +80,24 @@ class UserFrontendReservationTravellersController extends AbstractController
 
         /* $documents = $documentRepository->getDocumentsByReservationByTraveller($reservation, $traveller); */
         $documents = $documentRepository->findBy([
-            'reservation'=> $reservation,
-            'traveller'=> $traveller
+            'reservation' => $reservation,
+            'traveller' => $traveller,
         ]);
 
         $array = [];
         $i = 0;
-        foreach ($reservation->getReservationData() as $reservationDatum){
+        foreach ($reservation->getReservationData() as $reservationDatum) {
             $array[$i] = $reservationDatum;
-        }        
-        //dd($reservationData);
-        return $this->render("user/user_reservation_data.html.twig", [
+        }
+        // dd($reservationData);
+        return $this->render('user/user_reservation_data.html.twig', [
             'langs' => $urlArray,
             'locale' => $locale,
             'traveller' => $traveller,
             'reservation' => $reservation,
             'reservationData' => $reservationData,
             'documents' => $documents,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -114,10 +113,9 @@ class UserFrontendReservationTravellersController extends AbstractController
     ) {
         $locale = $request->request->get('locale');
         $travellersArray = $request->request->all();
-        
-        
+
         $lang = $langRepository->findOneBy([
-            'iso_code' => $locale
+            'iso_code' => $locale,
         ]);
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
@@ -125,76 +123,77 @@ class UserFrontendReservationTravellersController extends AbstractController
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
-        //End swith locale Loader
+        // End swith locale Loader
 
         $options = $reservationHelper->getReservationOptions($reservation, $lang);
         $this->addFlash('success',
-                            "{$this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente')}  
-                            {$this->translatorInterface->trans('Puedes volver a tu reserva')}"." <a href=".$this->generateUrl('frontend_user_reservations').">{$this->translatorInterface->trans('aquí')}"."</a>" );
-                            dump($travellersArray);
-                            $isTravellerInReservation = false;
-                            foreach($travellersArray['traveller'] as $travellerArrayItem) {
-                                foreach($reservation->getTravellers() as $reservationTravellerObject) {
-                                    if($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()) {
-                                        $isTravellerInReservation = true;
-                                    }
-                                }
-                            }
-                            if($isTravellerInReservation == false) {    
-                                foreach($travellersArray['traveller'] as $travellerArrayItem){
-                                    $now = new \DateTime();
-                                    $traveller = new Travellers();
-                                    $traveller->setPrenom($travellerArrayItem['prenom']);
-                                    $traveller->setNom($travellerArrayItem['nom']);
-                                    $traveller->setEmail($travellerArrayItem['email']);
-                                    $traveller->setTelephone($travellerArrayItem['telephone']);
-                                    $traveller->setPosition($travellerArrayItem['position']);
-                                    $traveller->setUser($this->getUser());
-                                    $traveller->setDateAjout($now);
-                                    $traveller->addReservation($reservation);
-                                    $em->persist($traveller);
-                                }
-                                $em->flush();
-                            }
-                            /* foreach($travellersArray['traveller'] as $travellerArrayItem){
-                                foreach($reservation->getTravellers() as $reservationTravellerObject){
-                                    if($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()){
-                                        
-                                    } elseif($isTravellerInReservation == false) {
-                                        if ($travellerArrayItem['id'] != '') {
-                                            $traveller = $travellersRepository->find($travellerArrayItem['id']);
-                                            if($traveller == null && $travellerArrayItem['email'] == $this->getUser()->getEmail()) {
-                                                $traveller = new Travellers();
-                                            }
-                                        } else {
-                                            $traveller = new Travellers();
-                                        }
-                                        $now = new \DateTime();
-                                        $traveller->setPrenom($travellerArrayItem['prenom']);
-                                        $traveller->setNom($travellerArrayItem['nom']);
-                                        $traveller->setEmail($travellerArrayItem['email']);
-                                        $traveller->setTelephone($travellerArrayItem['telephone']);
-                                        $traveller->setPosition($travellerArrayItem['position']);
-                                        $traveller->setUser($this->getUser());
-                                        $traveller->setDateAjout($now);
-                                        $traveller->addReservation($reservation);
-                                        $em->persist($traveller);
-                                    }
-                                    dump($isTravellerInReservation);
-                                }    
-                            }
-                            $em->flush(); */
+            "{$this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente')}  
+                            {$this->translatorInterface->trans('Puedes volver a tu reserva')}".' <a href='.$this->generateUrl('frontend_user_reservations').">{$this->translatorInterface->trans('aquí')}".'</a>');
+        dump($travellersArray);
+        $isTravellerInReservation = false;
+        foreach ($travellersArray['traveller'] as $travellerArrayItem) {
+            foreach ($reservation->getTravellers() as $reservationTravellerObject) {
+                if ($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()) {
+                    $isTravellerInReservation = true;
+                }
+            }
+        }
+        if ($isTravellerInReservation == false) {
+            foreach ($travellersArray['traveller'] as $travellerArrayItem) {
+                $now = new \DateTime();
+                $traveller = new Travellers();
+                $traveller->setPrenom($travellerArrayItem['prenom']);
+                $traveller->setNom($travellerArrayItem['nom']);
+                $traveller->setEmail($travellerArrayItem['email']);
+                $traveller->setTelephone($travellerArrayItem['telephone']);
+                $traveller->setPosition($travellerArrayItem['position']);
+                $traveller->setUser($this->getUser());
+                $traveller->setDateAjout($now);
+                $traveller->addReservation($reservation);
+                $em->persist($traveller);
+            }
+            $em->flush();
+        }
+        /* foreach($travellersArray['traveller'] as $travellerArrayItem){
+            foreach($reservation->getTravellers() as $reservationTravellerObject){
+                if($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()){
+
+                } elseif($isTravellerInReservation == false) {
+                    if ($travellerArrayItem['id'] != '') {
+                        $traveller = $travellersRepository->find($travellerArrayItem['id']);
+                        if($traveller == null && $travellerArrayItem['email'] == $this->getUser()->getEmail()) {
+                            $traveller = new Travellers();
+                        }
+                    } else {
+                        $traveller = new Travellers();
+                    }
+                    $now = new \DateTime();
+                    $traveller->setPrenom($travellerArrayItem['prenom']);
+                    $traveller->setNom($travellerArrayItem['nom']);
+                    $traveller->setEmail($travellerArrayItem['email']);
+                    $traveller->setTelephone($travellerArrayItem['telephone']);
+                    $traveller->setPosition($travellerArrayItem['position']);
+                    $traveller->setUser($this->getUser());
+                    $traveller->setDateAjout($now);
+                    $traveller->addReservation($reservation);
+                    $em->persist($traveller);
+                }
+                dump($isTravellerInReservation);
+            }
+        }
+        $em->flush(); */
         return $this->render('user/user_reservation_travellers.html.twig', [
             'reservation' => $reservation,
             'nbpilotes' => $reservation->getNbpilotes(),
             'nbaccomp' => $reservation->getNbAccomp(),
             'optionsJson' => json_encode($options),
             'date' => $reservation->getDate(),
-            'langs' => $urlArray
+            'langs' => $urlArray,
         ]);
     }
+
     #[Route(path: '/user/reservation/{reservation}/travellers/', name: 'user_reservation_travellers', methods: ['GET'])]
     #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/travellers/', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/'], name: 'user_reservation_travellers', methods: ['GET'])]
     public function userReservationTravellers(
@@ -204,10 +203,10 @@ class UserFrontendReservationTravellersController extends AbstractController
         string $locale = 'es',
         string $_locale = null
     ) {
-        //Swith Locale Loader
+        // Swith Locale Loader
         $locale = $_locale ?: $locale;
         $lang = $langRepository->findOneBy([
-            'iso_code' => $locale
+            'iso_code' => $locale,
         ]);
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
@@ -215,23 +214,21 @@ class UserFrontendReservationTravellersController extends AbstractController
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
-        //End swith locale Loader
+        // End swith locale Loader
 
         $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($locale);
 
         $options = $reservationHelper->getReservationOptions($reservation, $lang);
-        
+
         return $this->render('user/user_reservation_travellers.html.twig', [
             'reservation' => $reservation,
             'nbpilotes' => $reservation->getNbpilotes(),
             'nbaccomp' => $reservation->getNbAccomp(),
             'optionsJson' => json_encode($options),
             'date' => $reservation->getDate(),
-            'langs' => $urlArray
+            'langs' => $urlArray,
         ]);
     }
-
-    
 }

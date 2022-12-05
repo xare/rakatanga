@@ -4,19 +4,13 @@ namespace App\Controller\admin;
 
 use App\Entity\Pages;
 use App\Form\PagesType;
+use App\Repository\LangRepository;
 use App\Repository\PagesRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Entity\Lang;
-use App\Controller\admin\MainadminController;
-use App\Repository\LangRepository;
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 #[Route(path: '/admin/pages')]
 class PagesController extends MainadminController
@@ -27,21 +21,22 @@ class PagesController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'pages_index', methods: ['GET'])]
     public function index(
-        PagesRepository $pagesRepository, 
+        PagesRepository $pagesRepository,
         Request $request,
         PaginatorInterface $paginator
-        ): Response
-    {
+        ): Response {
         $this->redirectToLogin($request);
-        
+
         $query = $pagesRepository->listAll();
         $pages = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/pages/index.html.twig', [
             'pages' => $pages,
         ]);
@@ -50,18 +45,17 @@ class PagesController extends MainadminController
     #[Route(path: '/new', name: 'pages_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository, PagesRepository $pagesRepository): Response
     {
-        $this->redirectToLogin($request); 
- 
+        $this->redirectToLogin($request);
+
         $langs = $langRepository->findAll();
 
         $page = new Pages();
-        
+
         $form = $this->createForm(PagesType::class, $page);
-        
+
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $now = new \DateTime();
             $page->setDateModified($now);
             $this->entityManager->persist($page);
@@ -69,31 +63,30 @@ class PagesController extends MainadminController
 
             return $this->redirectToRoute('pages_index');
         }
-        
+
         return $this->render('admin/pages/new.html.twig', [
             'page' => $page,
-            'langs' =>$langs,
+            'langs' => $langs,
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/items', methods: 'GET', name: 'pages_items')]
     public function getItems(Request $request, PaginatorInterface $paginator, PagesRepository $pagesRepository)
     {
-
-        if (!$presentPage = $request->query->get('page'))
-        {
+        if (!$presentPage = $request->query->get('page')) {
             $presentPage = 1;
         }
 
         $items = $pagesRepository->findAll();
         $count = count($items);
         $properties = [
-            'id', 
+            'id',
             'type',
             'name',
             'path',
             'filename',
-            'mediaPath'];
+            'mediaPath', ];
 
         $defaultPage = 1;
         $itemsPerPage = 10;
@@ -106,9 +99,11 @@ class PagesController extends MainadminController
             'defaultPage' => $defaultPage,
             'properties' => $properties,
         ];
-        return $this->json($data,200,[],['groups'=>'main']);
+
+        return $this->json($data, 200, [], ['groups' => 'main']);
         /* return $this->json($mediaRepository->findAll()); */
     }
+
     #[Route(path: '/{id}', name: 'pages_show', methods: ['GET'])]
     public function show(Pages $page): Response
     {
@@ -150,6 +145,4 @@ class PagesController extends MainadminController
 
         return $this->redirectToRoute('pages_index');
     }
-
-    
 }

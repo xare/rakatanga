@@ -19,10 +19,10 @@ class BlogRepository extends ServiceEntityRepository
         parent::__construct($registry, Blog::class);
     }
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('b')
-        
+
             ->getQuery();
     }
 }

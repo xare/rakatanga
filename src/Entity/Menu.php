@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Menu
 {
-   /**
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -63,10 +63,12 @@ class Menu
         $this->menuTranslations = new ArrayCollection();
         $this->menuLocations = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
     public function getType(): ?string
     {
         return $this->type;

@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Service\UploadHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -49,7 +48,6 @@ class Media
      */
     #[Groups('main')]
     private $url;
-
 
     /**
      * @ORM\ManyToMany(targetEntity=Travel::class, mappedBy="media")
@@ -210,14 +208,13 @@ class Media
 
     public function getMediaPath()
     {
-        return  UploadHelper::MEDIA_FOLDER . '/' . $this->getFilename();
+        return UploadHelper::MEDIA_FOLDER.'/'.$this->getFilename();
     }
 
     public function getDocumentPath()
     {
-        return  UploadHelper::DOCUMENT . '/' . $this->getFilename();
+        return UploadHelper::DOCUMENT.'/'.$this->getFilename();
     }
-
 
     public function __toString()
     {

@@ -5,20 +5,16 @@ namespace App\Controller\admin;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
-use App\Repository\LangRepository;
-use App\Controller\admin\MainadminController;
-use App\Entity\Continents;
 use App\Repository\ContinentsRepository;
 use App\Repository\ContinentTranslationRepository;
+use App\Repository\LangRepository;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
-// Include paginator interface
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+// Include paginator interface
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/admin/category')]
 class CategoryController extends MainadminController
@@ -28,13 +24,12 @@ class CategoryController extends MainadminController
         Request $request,
         PaginatorInterface $paginator,
         CategoryRepository $categoryRepository
-        ): Response
-    {
+        ): Response {
         $this->redirectToLogin($request);
         $query = $categoryRepository->listAll();
         $categories = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             20
         );
 
@@ -42,6 +37,7 @@ class CategoryController extends MainadminController
             'categories' => $categories,
         ]);
     }
+
     #[Route(path: '/search/{continentCode}', name: 'category_by_continent', methods: ['GET', 'POST'])]
     public function searchByContinent(
                             Request $request,
@@ -49,12 +45,13 @@ class CategoryController extends MainadminController
                             CategoryRepository $categoryRepository,
                             PaginatorInterface $paginator,
                             ContinentsRepository $continentsRepository,
-                            ContinentTranslationRepository $continentTranslationRepository ){
+                            ContinentTranslationRepository $continentTranslationRepository)
+    {
         /* $continentObject = $continentsRepository->findOneBy(['code'=>$continentCode]);
         $continentTranslationRepository->findOneBy(['continent'=>$continentObject]); */
         $categories = $paginator->paginate(
             $categoryRepository->listCategoryByContinent($continentCode),
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
 
@@ -65,27 +62,27 @@ class CategoryController extends MainadminController
 
     #[Route(path: '/new', name: 'category_new', methods: ['GET', 'POST'])]
     public function new(
-        Request $request, 
+        Request $request,
         LangRepository $langRepository,
         EntityManagerInterface $em): Response
     {
-        $this->redirectToLogin($request); 
+        $this->redirectToLogin($request);
         $langs = $langRepository->findAll();
 
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($category);
             $em->flush();
 
-            return $this->redirectToRoute('category_edit',['id' => $category->getId()]);
+            return $this->redirectToRoute('category_edit', ['id' => $category->getId()]);
         }
 
         return $this->render('admin/category/new.html.twig', [
             'category' => $category,
-            'langs' =>$langs,
+            'langs' => $langs,
             'form' => $form->createView(),
         ]);
     }
@@ -97,30 +94,31 @@ class CategoryController extends MainadminController
             'category' => $category,
         ]);
     }
+
     #[Route(path: '/{id}/assign', name: 'assign_main_photo', methods: ['GET'])]
     public function assign(
-                    Request $request, 
+                    Request $request,
                     Category $category,
                     MediaRepository $mediaRepository,
                     EntityManagerInterface $em
-                    ): Response
-    {
+                    ): Response {
         $mediaId = $request->query->get('addPhoto');
         $media = $mediaRepository->find($mediaId);
-        
-            $category->setMainPhoto($media);
-            $em->flush();
-        return new Response($category->getId().', '. $mediaId);
+
+        $category->setMainPhoto($media);
+        $em->flush();
+
+        return new Response($category->getId().', '.$mediaId);
     }
+
     #[Route(path: '/{id}/edit', name: 'category_edit', methods: ['GET', 'POST'])]
     public function edit(
-                    Request $request, 
+                    Request $request,
                     Category $category,
                     EntityManagerInterface $em,
                     LangRepository $langRepository,
                     MediaRepository $mediaRepository
-                    ): Response
-    {
+                    ): Response {
         $langs = $langRepository->findAll();
         $media = $mediaRepository->findAll();
         $form = $this->createForm(CategoryType::class, $category);
@@ -142,15 +140,14 @@ class CategoryController extends MainadminController
 
     #[Route(path: '/{id}', name: 'category_delete', methods: ['POST'])]
     public function delete(
-                        Request $request, 
+                        Request $request,
                         Category $category,
                         EntityManagerInterface $em
-                        ): Response
-    {
+                        ): Response {
         if ($this->isCsrfTokenValid(
-                                'delete'.$category->getId(), 
-                                $request->request->get('_token'))
-                                ) {
+            'delete'.$category->getId(),
+            $request->request->get('_token'))
+        ) {
             $em->remove($category);
             $em->flush();
         }

@@ -2,12 +2,10 @@
 
 namespace App\Form;
 
-use App\Entity\Menu;
 use App\Entity\Pages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,24 +15,24 @@ class PagesType extends AbstractType
     {
         $builder
             ->add('default_slug')
-            ->add('date_created', DateTimeType::class ,[
+            ->add('date_created', DateTimeType::class, [
                 'widget' => 'single_text',
-                'disabled' => true
+                'disabled' => true,
             ])
-            ->add('date_modified',  DateTimeType::class,[
+            ->add('date_modified', DateTimeType::class, [
                 'widget' => 'single_text',
-                'disabled' => true
+                'disabled' => true,
             ])
             ->add('pageTranslations', CollectionType::class, [
                 'entry_type' => PageTranslationType::class,
                 'entry_options' => [
-                    'label' => false
+                    'label' => false,
                 ],
                 'by_reference' => false,
                 // this allows the creation of new forms and the prototype too
                 'allow_add' => true,
                 // self explanatory, this one allows the form to be removed
-                'allow_delete' => true
+                'allow_delete' => true,
             ])
         ;
     }
@@ -43,7 +41,7 @@ class PagesType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Pages::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 }

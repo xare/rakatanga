@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
+use Adamski\Symfony\PhoneNumberBundle\Model\PhoneNumber;
+use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Adamski\Symfony\PhoneNumberBundle\Model\PhoneNumber;
-use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\UserRepository::class)
@@ -18,8 +18,7 @@ use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as Asser
 #[UniqueEntity(fields: ['email'], message: 'This value is already used.')]
 class User implements UserInterface
 {
-
-    const REGISTERED_SUCCESFULLY = 'Se ha registrado exitosamente';
+    public const REGISTERED_SUCCESFULLY = 'Se ha registrado exitosamente';
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -29,7 +28,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     *
      */
     #[Groups('main')]
     #[Assert\NotBlank]
@@ -38,13 +36,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     *
      */
     #[Groups('main')]
     private $roles = [];
 
     /**
      * @var string The hashed password
+     *
      * @ORM\Column(type="string", nullable=true)
      */
     #[Assert\NotBlank]
@@ -72,6 +70,7 @@ class User implements UserInterface
 
     /**
      * @AssertPhoneNumber
+     *
      * @ORM\Column(name="telephone", type="phone_number", nullable=true)
      */
     #[Groups('main')]
@@ -84,7 +83,6 @@ class User implements UserInterface
     private $position;
 
     /**
-     * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
      */
     #[Groups('main')]
@@ -112,14 +110,13 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(
-     *                  targetEntity=Travellers::class, 
+     *                  targetEntity=Travellers::class,
      *                  mappedBy="user",
      *                  fetch="EXTRA_LAZY",
      *                  orphanRemoval=true,
      *                  cascade={"persist"}
      * )
      */
-
     private $travellers;
 
     /**
@@ -207,6 +204,7 @@ class User implements UserInterface
 
         return $this;
     }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -214,12 +212,11 @@ class User implements UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     *
      */
     public function getUsername(): string
     {
@@ -344,7 +341,6 @@ class User implements UserInterface
     {
         return $this->date_ajout;
     }
-
 
     /**
      * @return Collection|Dates[]
@@ -568,7 +564,6 @@ class User implements UserInterface
 
         return $this;
     }
-
 
     /**
      * @return Collection|ReservationData[]

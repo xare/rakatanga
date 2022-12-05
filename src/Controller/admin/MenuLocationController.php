@@ -3,7 +3,6 @@
 namespace App\Controller\admin;
 
 use App\Entity\MenuLocation;
-use App\Entity\Menu;
 use App\Form\MenuLocationType;
 use App\Repository\MenuLocationRepository;
 use Doctrine\ORM\EntityManagerInterface;

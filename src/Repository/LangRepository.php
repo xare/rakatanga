@@ -48,7 +48,8 @@ class LangRepository extends ServiceEntityRepository
     }
     */
 
-    function findOthers($locale){
+    public function findOthers($locale)
+    {
         return $this->createQueryBuilder('l')
             ->andWhere('l.iso_code != :val')
             ->setParameter('val', $locale)

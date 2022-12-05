@@ -2,34 +2,34 @@
 
 namespace App\Controller\admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use App\Api\MediaApiModel;
 use App\Entity\Media;
 use App\Repository\MediaRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MainadminController extends AbstractController
 {
-    public function __construct(private \Symfony\Component\Serializer\Serializer $serializer)
+    public function __construct(private SerializerInterface $serializer)
     {
     }
+
     public function redirectToLogin()
     {
         $user = $this->getUser();
-        if(!$user)
-        {
+        if (!$user) {
             return $this->redirectToRoute('app_login');
-        } else
-        {
+        } else {
             return;
         }
     }
 
     /**
-     * @param mixed $data Usually an object you want to serialize
-     * @param int $statusCode
+     * @param mixed $data       Usually an object you want to serialize
+     * @param int   $statusCode
+     *
      * @return JsonResponse
      */
     protected function createApiResponse($data, $statusCode = 200)
@@ -41,7 +41,7 @@ class MainadminController extends AbstractController
     }
 
     /**
-     * Returns an associative array of validation errors
+     * Returns an associative array of validation errors.
      *
      * {
      *     'firstName': 'This value is required',
@@ -50,7 +50,6 @@ class MainadminController extends AbstractController
      *     }
      * }
      *
-     * @param FormInterface $form
      * @return array|string
      */
     protected function getErrorsFromForm(FormInterface $form)
@@ -62,7 +61,7 @@ class MainadminController extends AbstractController
             return $error->getMessage();
         }
 
-        $errors = array();
+        $errors = [];
         foreach ($form->all() as $childForm) {
             if ($childForm instanceof FormInterface) {
                 if ($childError = $this->getErrorsFromForm($childForm)) {
@@ -80,7 +79,6 @@ class MainadminController extends AbstractController
      * This could be moved into a service if it needed to be
      * re-used elsewhere.
      *
-     * @param Media $media
      * @return MediaApiModel
      */
     protected function createMediaApiModel(Media $media)
@@ -106,7 +104,7 @@ class MainadminController extends AbstractController
      */
     protected function findAllTypeMediaModels(MediaRepository $mediaRepository)
     {
-        $media = $mediaRepository->findBy( ['type' => $this->getType()] );
+        $media = $mediaRepository->findBy(['type' => $this->getType()]);
 
         $models = [];
         foreach ($media as $medium) {

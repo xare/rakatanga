@@ -8,41 +8,34 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ContactSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var Mailer
+     */
+    private $mailer;
 
-  /**
-   * @var Mailer $mailer
-   */
-  private $mailer;
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
 
-  public function __construct(Mailer $mailer ) 
-  {
-    $this->mailer = $mailer;
-  }
-  
-  /**
-   *
-   * @param ContactEvent $contactEvent
-   * @return void
-   */
-  public function onSendContact(ContactEvent $contactEvent)
-  {
-    $contact = $contactEvent->getContact();
-    $travels = $contactEvent->getTravels();
+    /**
+     * @return void
+     */
+    public function onSendContact(ContactEvent $contactEvent)
+    {
+        $contact = $contactEvent->getContact();
+        $travels = $contactEvent->getTravels();
 
-    $this->mailer->sendToContactSender($contact);
-    $this->mailer->sendToContactUs($contact, $travels);
-  }
+        $this->mailer->sendToContactSender($contact);
+        $this->mailer->sendToContactUs($contact, $travels);
+    }
 
-  /**
-   *
-   * @return Array
-   */
-  public static function getSubscribedEvents(): Array
-  {
-    return [
-      ContactEvent::class =>[
-        ['onSendContact', 1]
-      ]
-    ];
-  }
+    public static function getSubscribedEvents(): array
+    {
+        return [
+          ContactEvent::class => [
+            ['onSendContact', 1],
+          ],
+        ];
+    }
 }

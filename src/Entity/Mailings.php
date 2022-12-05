@@ -45,6 +45,7 @@ class Mailings
 
     /**
      * @var \DateTimeInterface
+     *
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $date_sent;
@@ -58,6 +59,7 @@ class Mailings
     {
         $this->date_sent = new \DateTimeImmutable();
     }
+
     public function getId(): ?int
     {
         return $this->id;

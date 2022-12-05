@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Lang;
 use App\Entity\Menu;
-use App\Entity\MenuLocation;
 use App\Entity\MenuTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -23,7 +22,7 @@ class MenuRepository extends ServiceEntityRepository
         parent::__construct($registry, Menu::class);
     }
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('m')
             ->getQuery();
@@ -58,21 +57,21 @@ class MenuRepository extends ServiceEntityRepository
     }
     */
 
-    public function findMenyByLocation($locale, $location) 
+    public function findMenyByLocation($locale, $location)
     {
         return $this->createQueryBuilder('m')
                 ->select(
                     'mt.title as title, 
                     mt.slug as slug,
                     m.routeName as routeName')
-            ->innerJoin( 'm.menuLocations', 'ml', 'm.ml = ml.m' )
-            ->innerJoin( MenuTranslation::class, 'mt', Join::WITH, 'mt.menu = m.id')
-            ->innerJoin( Lang::class, 'l', join::WITH, 'l.id = mt.lang')
+            ->innerJoin('m.menuLocations', 'ml', 'm.ml = ml.m')
+            ->innerJoin(MenuTranslation::class, 'mt', Join::WITH, 'mt.menu = m.id')
+            ->innerJoin(Lang::class, 'l', join::WITH, 'l.id = mt.lang')
             ->andWhere('ml.name = :location')
             ->setParameter('location', $location)
             ->andWhere('l.iso_code = :locale')
             ->setParameter('locale', $locale)
-            ->orderBy('m.position','ASC')
+            ->orderBy('m.position', 'ASC')
             ->getQuery()
             ->getResult();
     }

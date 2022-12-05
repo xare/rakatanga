@@ -27,13 +27,11 @@ class Pages
     #[Groups('main')]
     private $default_slug;
 
-     /**
-     * @var \DateTimeInterface
+    /**
      * @ORM\Column(type="datetime_immutable")
      */
     #[Groups('main')]
     private \DateTimeInterface $date_created;
-
 
     /**
      * @ORM\Column(type="datetime")
@@ -89,7 +87,6 @@ class Pages
     {
         return $this->date_created;
     }
-
 
     public function getDateModified(): ?\DateTimeInterface
     {

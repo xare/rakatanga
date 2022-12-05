@@ -2,14 +2,14 @@
 
 namespace App\Repository;
 
-use App\Entity\MenuTranslation;
-use App\Entity\Menu;
 use App\Entity\Lang;
+use App\Entity\Menu;
+use App\Entity\MenuTranslation;
 use App\Entity\Pages;
 use App\Entity\PageTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method MenuTranslation|null find($id, $lockMode = null, $lockVersion = null)
@@ -52,27 +52,27 @@ class MenuTranslationRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findMenu($slug) {
-        
+    public function findMenu($slug)
+    {
         return $this->createQueryBuilder('m')
                 ->select('menuTable.id as menuItem')
                 ->InnerJoin(
-                    Menu::class, 
-                    'menuTable', 
-                    Join::WITH, 
-                    'menuTable.id = m.menu')     
+                    Menu::class,
+                    'menuTable',
+                    Join::WITH,
+                    'menuTable.id = m.menu')
                 ->andWhere('m.slug = :slug')
                 ->setParameter('slug', $slug)
                 ->getQuery()
                 ->getResult();
     }
+
     public function findCorrespondingSlug($slug, $lang)
     {
-        
         $menu = $this->findMenu($slug);
 
         return $this->createQueryBuilder('m')
-            ->select('m.title as title','m.slug as slug' ,'l.name as name', 'l.iso_code as isocode')
+            ->select('m.title as title', 'm.slug as slug', 'l.name as name', 'l.iso_code as isocode')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = m.lang')
             ->andWhere('m.menu = :menu')
             ->setParameter('menu', $menu)
@@ -84,10 +84,10 @@ class MenuTranslationRepository extends ServiceEntityRepository
 
     public function findCorrespondingRoute($slug, $lang)
     {
-        
         $menu = $this->findMenu($slug);
+
         return $this->createQueryBuilder('m')
-            ->select('m.title as title','m.slug as slug' ,'l.name as name', 'l.iso_code as isocode')
+            ->select('m.title as title', 'm.slug as slug', 'l.name as name', 'l.iso_code as isocode')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = m.lang')
             ->andWhere('m.menu = :menu')
             ->setParameter('menu', $menu[0])
@@ -99,20 +99,17 @@ class MenuTranslationRepository extends ServiceEntityRepository
 
     public function getCorrespondingPage($slug, $lang)
     {
-
         return $this->createQueryBuilder('mt')
             ->select('pt.title as title', 'pt.body as body')
-            ->innerJoin(Menu::class, 'mn', Join::WITH, 'mn.id = mt.menu' )
+            ->innerJoin(Menu::class, 'mn', Join::WITH, 'mn.id = mt.menu')
             ->innerJoin(Pages::class, 'p', Join::WITH, 'p.id = mn.page')
             ->innerJoin(PageTranslation::class, 'pt', Join::WITH, 'p.id = pt')
-            ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id= mt.lang' )
+            ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id= mt.lang')
             ->andWhere('mt.slug = :slug')
-            ->setParameter('slug',$slug)
+            ->setParameter('slug', $slug)
             ->andWhere('mt.lang = :lang')
             ->setParameter('lang', $lang)
             ->getQuery()
             ->getSingleResult();
     }
-
-    
 }

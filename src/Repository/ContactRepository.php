@@ -48,7 +48,7 @@ class ContactRepository extends ServiceEntityRepository
     }
     */
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('c')
             ->getQuery();

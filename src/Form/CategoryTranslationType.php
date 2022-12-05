@@ -4,11 +4,10 @@ namespace App\Form;
 
 use App\Entity\CategoryTranslation;
 use App\Entity\Lang;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CategoryTranslationType extends AbstractType
 {
@@ -19,7 +18,7 @@ class CategoryTranslationType extends AbstractType
             ->add('intro')
             ->add('slug')
             ->add('category')
-            ->add('lang', EntityType::class,[
+            ->add('lang', EntityType::class, [
                 'class' => Lang::class,
                 'choice_label' => 'name',
                 'multiple' => false,

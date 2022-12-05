@@ -2,19 +2,16 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Infodocs;
 use App\Entity\OptionsTranslations;
 use App\Form\OptionsTranslationsType;
+use App\Repository\InfodocsRepository;
 use App\Repository\OptionsTranslationsRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\UploadHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Lang;
-use App\Controller\admin\MainadminController;
-use App\Entity\Infodocs;
-use App\Repository\InfodocsRepository;
-use App\Service\UploadHelper;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -28,6 +25,7 @@ class OptionsTranslationsController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'options_translations_index', methods: ['GET'])]
     public function index(OptionsTranslationsRepository $optionsTranslationsRepository): Response
     {
@@ -44,7 +42,6 @@ class OptionsTranslationsController extends MainadminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $this->entityManager->persist($optionsTranslation);
             $this->entityManager->flush();
 
@@ -87,7 +84,6 @@ class OptionsTranslationsController extends MainadminController
     public function delete(Request $request, OptionsTranslations $optionsTranslation): Response
     {
         if ($this->isCsrfTokenValid('delete'.$optionsTranslation->getId(), $request->request->get('_token'))) {
-            
             $this->entityManager->remove($optionsTranslation);
             $this->entityManager->flush();
         }
@@ -109,19 +105,19 @@ class OptionsTranslationsController extends MainadminController
             $uploadedFile,
             [
                 new NotBlank([
-                    'message' => 'Please select a file to upload'
+                    'message' => 'Please select a file to upload',
                 ]),
                 new File([
                     'maxSize' => '50M',
                     'mimeTypes' => [
                         'image/*',
-                        'application/pdf'
-                    ]
-                ])
+                        'application/pdf',
+                    ],
+                ]),
             ]
         );
         if ($violations->count() > 0) {
-            /** @var ConstraintViolation $violation */
+            /* @var ConstraintViolation $violation */
             /* $violation = $violations[0];
             $this->addFlash('error', $violation->getMessage()); */
 
@@ -139,7 +135,6 @@ class OptionsTranslationsController extends MainadminController
         $this->entityManager->persist($infodoc);
         $this->entityManager->flush();
 
-        return $this->render('admin/options/_display_infodoc.html.twig',['optionTranslation' => $optionTranslation]);
-        
+        return $this->render('admin/options/_display_infodoc.html.twig', ['optionTranslation' => $optionTranslation]);
     }
 }

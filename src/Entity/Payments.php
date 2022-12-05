@@ -23,7 +23,6 @@ class Payments
     private $ammount;
 
     /**
-     * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
      */
     private \DateTimeInterface $date_ajout;
@@ -39,9 +38,11 @@ class Payments
      */
     private $stripeId;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->date_ajout = new \DateTimeImmutable();
     }
+
     public function getId(): ?int
     {
         return $this->id;

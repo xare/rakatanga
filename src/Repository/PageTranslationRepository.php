@@ -47,7 +47,8 @@ class PageTranslationRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findPage($page_id){
+    public function findPage($page_id)
+    {
         return $this->createQueryBuilder('p')
             ->select('p.page as page')
             ->andWhere('p.page_id = :val')
@@ -55,5 +56,4 @@ class PageTranslationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    
 }

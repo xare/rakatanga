@@ -6,7 +6,6 @@ use App\Entity\Invoices;
 use App\Form\InvoicesType;
 use App\Repository\InvoicesRepository;
 use App\Service\invoiceHelper;
-use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +71,7 @@ class InvoicesController extends AbstractController
 
     #[Route('/{id}', name: 'invoices_delete', methods: ['POST'])]
     public function delete(
-                            Request $request, 
+                            Request $request,
                             Invoices $invoice,
                             invoiceHelper $invoiceHelper,
                             EntityManagerInterface $entityManager): Response

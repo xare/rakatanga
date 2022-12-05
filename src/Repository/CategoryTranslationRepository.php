@@ -48,7 +48,8 @@ class CategoryTranslationRepository extends ServiceEntityRepository
     }
     */
 
-    public function findOtherCategoryTranslations($otherLang, $category){
+    public function findOtherCategoryTranslations($otherLang, $category)
+    {
         return $this->createQueryBuilder('c')
             ->andWhere('c.lang = :val1')
             ->setParameter('val1', $otherLang)
@@ -56,6 +57,6 @@ class CategoryTranslationRepository extends ServiceEntityRepository
             ->setParameter('val2', $category)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
     }
 }

@@ -89,7 +89,6 @@ class Lang
      */
     private $blog;
 
-
     public function __construct()
     {
         $this->blogTranslations = new ArrayCollection();
@@ -471,5 +470,4 @@ class Lang
 
         return $this;
     }
-
 }

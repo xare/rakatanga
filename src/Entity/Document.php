@@ -148,9 +148,10 @@ class Document
 
         return $this;
     }
+
     public function getFilePath(): string
     {
-        return UploadHelper::DOCUMENT . '/' . $this->getFilename();
+        return UploadHelper::DOCUMENT.'/'.$this->getFilename();
     }
 
     public function getTraveller(): ?travellers

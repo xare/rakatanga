@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Media;
 use App\Entity\Travel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -50,13 +49,14 @@ class MediaRepository extends ServiceEntityRepository
     }
     */
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('m')
             ->getQuery();
     }
 
-    public function listIndex(){
+    public function listIndex()
+    {
         return $this->createQueryBuilder('m')
                     ->select(
                         'm.id as id, 
@@ -65,12 +65,13 @@ class MediaRepository extends ServiceEntityRepository
                         m.path as path,
                         m.filename as filename,
                         t.main_title as travel_title')
-                        ->leftJoin('m.travel','t')
+                        ->leftJoin('m.travel', 't')
             ->getQuery()
             ->getResult();
     }
 
-    public function listTravelMedia($travelId){
+    public function listTravelMedia($travelId)
+    {
         return $this->createQueryBuilder('m')
                     ->select(
                         'm.id as id, 
@@ -79,7 +80,7 @@ class MediaRepository extends ServiceEntityRepository
                         m.path as path,
                         m.filename as filename,
                         t.main_title as travel_title')
-                    ->innerJoin(Travel::class,'t')
+                    ->innerJoin(Travel::class, 't')
                     ->andWhere('t.id = :travel_id')
                     ->setParameter('travel_id', $travelId)
             ->getQuery()

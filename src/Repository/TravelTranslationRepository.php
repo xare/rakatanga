@@ -48,10 +48,10 @@ class TravelTranslationRepository extends ServiceEntityRepository
     }
     */
 
-    public function listAll2() 
+    public function listAll2()
     {
         return $this->createQueryBuilder('tt')
-        ->orderBy('tt.title','ASC')
+        ->orderBy('tt.title', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -65,7 +65,7 @@ class TravelTranslationRepository extends ServiceEntityRepository
         ->andWhere('l.iso_code = :locale')
         ->setParameter('locale', $locale)
         ->andWhere('tt.travel = :travel')
-        ->setParameter('travel',$travel)
+        ->setParameter('travel', $travel)
         ->getQuery()
         ->getResult();
     }

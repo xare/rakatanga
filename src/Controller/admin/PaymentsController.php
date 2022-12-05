@@ -2,13 +2,11 @@
 
 namespace App\Controller\admin;
 
-use App\Controller\admin\MainadminController;
 use App\Entity\Payments;
 use App\Form\PaymentsType;
 use App\Repository\PaymentsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/payments')]
 class PaymentsController extends MainadminController
 {
-    #[Route('/{id}/edit/', name: 'payments_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], priority:10)]
+    #[Route('/{id}/edit/', name: 'payments_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], priority: 10)]
     public function edit(Request $request, Payments $payment, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PaymentsType::class, $payment);
@@ -33,18 +31,19 @@ class PaymentsController extends MainadminController
             'form' => $form,
         ]);
     }
+
     #[Route('/', name: 'payments_index', methods: ['GET'])]
     public function index(
         Request $request,
         PaymentsRepository $paymentsRepository,
         PaginatorInterface $paginator): Response
     {
-    
         $payments = $paginator->paginate(
             $paymentsRepository->listAll(),
             $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/payments/index.html.twig', [
             'payments' => $payments,
         ]);
@@ -70,8 +69,6 @@ class PaymentsController extends MainadminController
         ]);
     }
 
-    
-
     #[Route('/{id}', name: 'payments_show', methods: ['GET'])]
     public function show(Payments $payment): Response
     {
@@ -79,8 +76,6 @@ class PaymentsController extends MainadminController
             'payment' => $payment,
         ]);
     }
-
-    
 
     #[Route('/{id}', name: 'payments_delete', methods: ['POST'])]
     public function delete(Request $request, Payments $payment, EntityManagerInterface $entityManager): Response

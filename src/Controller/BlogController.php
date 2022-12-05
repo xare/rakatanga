@@ -6,7 +6,6 @@ use App\Repository\ArticlesRepository;
 use App\Repository\BlogRepository;
 use App\Repository\LangRepository;
 use App\Service\breadcrumbsHelper;
-use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,18 +17,12 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 class BlogController extends AbstractController
 {
 
-    private $langRepository;
-    private $breadcrumbsHelper;
-    private $blogRepository;
-    private $paginator;
-    private $articlesRepository;
-
-    public function __construct (
-        LangRepository $langRepository, 
-        breadcrumbsHelper $breadcrumbsHelper, 
-        BlogRepository $blogRepository,
-        PaginatorInterface $paginator,
-        ArticlesRepository $articlesRepository)
+    public function __construct(
+        private LangRepository $langRepository,
+        private breadcrumbsHelper $breadcrumbsHelper,
+        private BlogRepository $blogRepository,
+        private PaginatorInterface $paginator,
+        private ArticlesRepository $articlesRepository)
     {
         $this->langRepository = $langRepository;
         $this->blogRepository = $blogRepository;
@@ -37,23 +30,23 @@ class BlogController extends AbstractController
         $this->paginator = $paginator;
         $this->articlesRepository = $articlesRepository;
     }
+
     #[Route(path: ['en' => '{_locale}/blog/', 'fr' => '{_locale}/blog/', 'es' => '{_locale}/blog/'], name: 'blog', requirements: ['_locale' => '^[a-z]{2}$'])]
     public function index(
         Request $request,
-        string $locale = "es",
+        string $locale = 'es',
         string $_locale = null
-    ): Response
-    {
+    ): Response {
         $locale = $_locale ? $_locale : $locale;
         $this->breadcrumbsHelper->blogBreacrumbs();
-        //LANG MENU
+        // LANG MENU
         $otherLangsArray = $this->langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
         // END LANG MENU
 
@@ -65,39 +58,40 @@ class BlogController extends AbstractController
 
         return $this->render('blog/index.html.twig', [
             'langs' => $urlArray,
-            'articles' => $articles
+            'articles' => $articles,
         ]);
     }
+
     #[Route(path: ['en' => '/{_locale}/blog/{slug}', 'es' => '/{_locale}/blog/{slug}', 'fr' => '/{_locale}/blog/{slug}'], name: 'blog-article', requirements: ['_locale' => '^[a-z]{2}$'])]
     public function blogArticle(
                 string $slug,
-                string $_locale = null, 
-                $locale = 'es'){
-            
+                string $_locale = null,
+                $locale = 'es')
+    {
         $locale = $_locale ? $_locale : $locale;
-        
-        //OTHER LANG MENU
+
+        // OTHER LANG MENU
         $otherLangsArray = $this->langRepository->findOthers($locale);
         $urlArray = [];
         $i = 0;
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
-        //END OTHER LANG MENU
+        // END OTHER LANG MENU
         $article = $this->articlesRepository->showArticleFromSlug($slug);
-        //BREADCRUMBS
-        
-        //$breadcrumbs->addItem($this->translatorInterface->trans("Inicio"), $this->generateUrl("index"));
-        //END BREADCRUMBS
+        // BREADCRUMBS
+
+        // $breadcrumbs->addItem($this->translatorInterface->trans("Inicio"), $this->generateUrl("index"));
+        // END BREADCRUMBS
         $articleObject = $this->articlesRepository->find($article['id']);
         $this->breadcrumbsHelper->blogArticleBreadcrumbs($articleObject, $slug);
-        return $this->render('blog/article.html.twig',[
+
+        return $this->render('blog/article.html.twig', [
             'locale' => $locale,
             'article' => $articleObject,
-            'langs'=> $urlArray
+            'langs' => $urlArray,
         ]);
-
     }
 }

@@ -2,32 +2,28 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Lang;
 use App\Entity\Options;
+use App\Entity\OptionsTranslations;
 use App\Form\Options1Type;
+use App\Repository\LangRepository;
 use App\Repository\OptionsRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\Lang;
-use App\Controller\admin\MainadminController;
-use App\Entity\OptionsTranslations;
-use App\Repository\LangRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\Paginator;
-use Knp\Component\Pager\PaginatorInterface;
-
 #[Route(path: '/admin/options')]
 class OptionsController extends MainadminController
 {
-
     private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'options_index', methods: ['GET'])]
     public function index(
         Request $request,
@@ -36,9 +32,10 @@ class OptionsController extends MainadminController
     {
         $options = $paginator->paginate(
             $optionsRepository->listAll(),
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/options/index.html.twig', [
             'options' => $options,
         ]);
@@ -49,18 +46,20 @@ class OptionsController extends MainadminController
         Request $request,
         string $categoryName,
         OptionsRepository $optionsRepository,
-        PaginatorInterface $paginator){
-            $options = $paginator->paginate(
-                $optionsRepository->listOptionsByCategory($categoryName),
-                $request->query->getInt('page',1),
-                10
-            );
-    
-            return $this->render('admin/options/index.html.twig', [
-                'options' => $options,
-                'count' => 10
-            ]);
-        }
+        PaginatorInterface $paginator)
+    {
+        $options = $paginator->paginate(
+            $optionsRepository->listOptionsByCategory($categoryName),
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('admin/options/index.html.twig', [
+            'options' => $options,
+            'count' => 10,
+        ]);
+    }
+
     #[Route(path: '/new', name: 'options_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository): Response
     {
@@ -70,7 +69,6 @@ class OptionsController extends MainadminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-           
             $this->entityManager->persist($option);
             $this->entityManager->flush();
 
@@ -79,7 +77,7 @@ class OptionsController extends MainadminController
 
         return $this->render('admin/options/new.html.twig', [
             'option' => $option,
-            'langs' =>$langs,
+            'langs' => $langs,
             'form' => $form->createView(),
         ]);
     }
@@ -97,9 +95,9 @@ class OptionsController extends MainadminController
     {
         $langs = $this->entityManager->getRepository(Lang::class)->findAll();
         $form = $this->createForm(Options1Type::class, $option);
-        
+
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($option);
             $this->entityManager->flush();
@@ -109,7 +107,7 @@ class OptionsController extends MainadminController
 
         return $this->render('admin/options/edit.html.twig', [
             'option' => $option,
-            'langs' =>$langs,
+            'langs' => $langs,
             'form' => $form->createView(),
         ]);
     }
@@ -124,25 +122,26 @@ class OptionsController extends MainadminController
 
         return $this->redirectToRoute('options_index');
     }
+
     #[Route(path: '/duplicate/{id}', name: 'options_duplicate', methods: ['GET', 'POST'])]
     public function duplicate(Options $option): Response
     {
-
         $newOption = new Options();
         $newOption->setPrice($option->getPrice());
         $newOption->setTravel($option->getTravel());
-        foreach ($option->getOptionsTranslations() as $optionTranslation){
+        foreach ($option->getOptionsTranslations() as $optionTranslation) {
             $newOptionTranslation = new OptionsTranslations();
             $newOptionTranslation->setLang($optionTranslation->getLang());
             $newOptionTranslation->setTitle($optionTranslation->getTitle());
             $newOptionTranslation->setIntro($optionTranslation->getIntro());
-            
+
             $newOption->addOptionsTranslation($newOptionTranslation);
             $this->entityManager->persist($newOptionTranslation);
         }
-        
+
         $this->entityManager->persist($newOption);
         $this->entityManager->flush();
+
         return $this->redirectToRoute('options_index');
     }
 }

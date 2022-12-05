@@ -17,7 +17,7 @@ class MailingsController extends AbstractController
 {
     #[Route('/', name: 'mailings_index', methods: ['GET'])]
     public function index(
-        Request $request, MailingsRepository $mailingsRepository, PaginatorInterface $paginator ): Response
+        Request $request, MailingsRepository $mailingsRepository, PaginatorInterface $paginator): Response
     {
         $count = count($mailingsRepository->findAll());
         $query = $mailingsRepository->listAll();
@@ -26,11 +26,13 @@ class MailingsController extends AbstractController
             $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/mailings/index.html.twig', [
             'mailings' => $mailings,
-            'count'=>$count
+            'count' => $count,
         ]);
     }
+
     #[Route(path: '/search/{categoryName}', name: 'mailings_by_category', methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
@@ -46,9 +48,10 @@ class MailingsController extends AbstractController
 
         return $this->render('admin/mailings/index.html.twig', [
             'mailings' => $mailings,
-            'count' => 10
+            'count' => 10,
         ]);
     }
+
     #[Route('/new', name: 'mailings_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

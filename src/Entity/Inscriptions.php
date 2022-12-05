@@ -2,12 +2,11 @@
 
 namespace App\Entity;
 
+use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use App\Repository\InscriptionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Adamski\Symfony\PhoneNumberBundle\Model\PhoneNumber;
-use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 /**
  * @ORM\Entity(repositoryClass=InscriptionsRepository::class)
@@ -33,6 +32,7 @@ class Inscriptions
 
     /**
      * @ORM\Column(type="string", name="telephone", length=25, nullable=true)
+     *
      * @AssertPhoneNumber
      */
     private $telephone;
@@ -290,6 +290,6 @@ class Inscriptions
 
     public function __toString(): string
     {
-        return $this->getPrenom() . ' ' . $this->getNom() . ' - ' . $this->getEmail();
+        return $this->getPrenom().' '.$this->getNom().' - '.$this->getEmail();
     }
 }

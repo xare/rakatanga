@@ -6,8 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -33,7 +33,6 @@ class Travel
      * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="travel", cascade={"persist"})
      */
     private $media;
-
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -89,7 +88,6 @@ class Travel
 
     /**
      * @ORM\OneToMany(targetEntity=Options::class, mappedBy="travel")
-     * 
      */
     private $options;
 
@@ -263,9 +261,9 @@ class Travel
     }
 
     public function __toString()
-   {
-       return $this->getCategory() .' '. $this->main_title;
-   } 
+    {
+        return $this->getCategory().' '.$this->main_title;
+    }
 
     /**
      * @return Collection|Dates[]
@@ -422,5 +420,4 @@ class Travel
 
         return $this;
     }
-
 }

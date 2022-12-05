@@ -72,22 +72,21 @@ class ArticlesRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function listByLang($locale) 
+    public function listByLang($locale)
     {
         return $this->createQueryBuilder('a')
             ->innerJoin(Blog::class, 'b', Join::WITH, 'b.id = a.blog')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = b.lang')
             ->andWhere('l.iso_code = :locale')
             ->setParameter('locale', $locale)
-            ->orderBy('a.publishedAt','DESC')
+            ->orderBy('a.publishedAt', 'DESC')
             ->getQuery();
     }
-    public function listAll() 
+
+    public function listAll()
     {
         return $this->createQueryBuilder('a')
-            ->orderBy('a.publishedAt','DESC')
+            ->orderBy('a.publishedAt', 'DESC')
             ->getQuery();
     }
-   
-
 }

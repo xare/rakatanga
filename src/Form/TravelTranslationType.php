@@ -19,13 +19,13 @@ class TravelTranslationType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('content', TextType::class)
-            ->add('lang', EntityType::class,[
+            ->add('lang', EntityType::class, [
                 'class' => Lang::class,
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => false,
             ])
-            //->add('url')
+            // ->add('url')
             ->add('summary', TextType::class)
             ->add('intro', TextType::class)
             ->add('description', TextType::class)
@@ -41,7 +41,7 @@ class TravelTranslationType extends AbstractType
     /* public function onPostSetData(FormEvent $event){
         if($event->getData() && $event->getData()->getId()){
             $form = $event->getForm();
-            
+
             return $form->getData();
         }
     } */
@@ -49,7 +49,7 @@ class TravelTranslationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TravelTranslation::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 }

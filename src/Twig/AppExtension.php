@@ -5,8 +5,8 @@ namespace App\Twig;
 use App\Entity\Reservation;
 use App\Service\contentHelper;
 use App\Service\localizationHelper;
-use App\Service\reservationHelper;
 use App\Service\reservationDataHelper;
+use App\Service\reservationHelper;
 use App\Service\slugifyHelper;
 use App\Service\UploadHelper;
 use Psr\Container\ContainerInterface;
@@ -35,7 +35,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('slugify', [$this, 'slugifyThis']),
             new TwigFilter('cast_to_array', [$this, 'castToArray']),
-            new TwigFilter('negativify',[$this, 'negativify'])
+            new TwigFilter('negativify', [$this, 'negativify']),
         ];
     }
 
@@ -44,7 +44,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return [
             new TwigFunction('upload_asset', [$this, 'getUploadedAssetPath']),
             new TwigFunction('show_text', [$this, 'showText']),
-            //new TwigFunction('show_menu', [$this, 'showMenu']),
+            // new TwigFunction('show_menu', [$this, 'showMenu']),
             new TwigFunction('renderLocalized', [$this, 'getLocalizedTranslation']),
             new TwigFunction('renderLocalizedTravel', [$this, 'getLocalizedTravelTranslation']),
             new TwigFunction('renderLocalizedTravelUrl', [$this, 'getLocalizedTravelTranslationUrl']),
@@ -55,8 +55,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('render_category_list', [$this, 'renderCategoryList']),
             new TwigFunction('encore_entry_css_source', [$this, 'getEncoreEntryCssSource']),
             new TwigFunction('class', [$this, 'getClass']),
-            new TwigFunction('renderReservationAmmount',[$this,'getReservationAmmount']),
-            new TwigFunction('renderReservationDuePayment',[$this,'getReservationDuePayment'])
+            new TwigFunction('renderReservationAmmount', [$this, 'getReservationAmmount']),
+            new TwigFunction('renderReservationDuePayment', [$this, 'getReservationDuePayment']),
         ];
     }
 
@@ -66,6 +66,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         foreach ($stdClassObject as $key => $value) {
             $response[] = [$key, $value];
         }
+
         return $response;
         /* return ["Hello!"]; */
     }
@@ -76,12 +77,14 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->get(UploadHelper::class)
             ->getPublicPath($path);
     }
+
     public function showText($parameters): string
     {
         return $this->container
             ->get(contentHelper::class)
             ->renderText($parameters);
     }
+
     public function showMenu($locale): array
     {
         return $this->container
@@ -102,42 +105,49 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->get(localizationHelper::class)
             ->renderTravelString($id, $locale);
     }
+
     public function getLocalizedTravelTranslationUrl($id, $locale)
     {
         return $this->container
             ->get(localizationHelper::class)
             ->renderTravelUrl($id, $locale);
     }
+
     public function getLocalizedOptionTranslation($id, $locale)
     {
         return $this->container
             ->get(localizationHelper::class)
             ->renderOptionString($id, $locale);
     }
+
     public function getLocalizedOptionTranslationIntro($id, $locale)
     {
         return $this->container
             ->get(localizationHelper::class)
             ->renderOptionIntro($id, $locale);
     }
+
     public function getLocalizedOptionTranslationInfodoc($id, $locale)
     {
         return $this->container
             ->get(localizationHelper::class)
             ->renderOptionInfodoc($id, $locale);
     }
+
     public function getLocalizedCategoryTranslation($id, $locale)
     {
         return $this->container
             ->get(localizationHelper::class)
             ->renderCategoryString($id, $locale);
     }
+
     public function renderCategoryList($locale)
     {
         return $this->container
             ->get(contentHelper::class)
             ->renderCategoryList($locale);
     }
+
     public function slugifyThis($value)
     {
         return $this->container
@@ -145,8 +155,10 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->slugify($value);
     }
 
-    public function negativify($value){
-        $newValue = -($value);
+    public function negativify($value)
+    {
+        $newValue = -$value;
+
         return $newValue;
     }
 
@@ -158,26 +170,31 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         $source = '';
 
         foreach ($files as $file) {
-            $source .= file_get_contents($this->publicDir . '/' . $file);
+            $source .= file_get_contents($this->publicDir.'/'.$file);
         }
+
         return $source;
     }
+
     public function getClass($object)
     {
         return (new \ReflectionClass($object))->getShortName();
     }
+
     public function getReservationAmmount(Reservation $reservation)
     {
         return $this->container
         ->get(reservationDataHelper::class)
         ->getReservationAmmount($reservation);
     }
+
     public function getReservationDuePayment(Reservation $reservation)
     {
         return $this->container
             ->get(reservationDataHelper::class)
             ->getReservationDueAmmount($reservation);
     }
+
     public static function getSubscribedServices()
     {
         return [
@@ -187,7 +204,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             contentHelper::class,
             localizationHelper::class,
             slugifyHelper::class,
-            EntrypointLookupInterface::class
+            EntrypointLookupInterface::class,
         ];
     }
 }

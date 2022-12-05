@@ -6,10 +6,10 @@ use App\Entity\Dates;
 use App\Entity\Travel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class DatesType extends AbstractType
 {
@@ -19,29 +19,29 @@ class DatesType extends AbstractType
             ->add('travel', EntityType::class, [
                 'class' => Travel::class,
                 'placeholder' => 'Elige Viaje: ',
-                'choice_label' => 'main_title'
-            ] )
-            ->add('debut', null,[
+                'choice_label' => 'main_title',
+            ])
+            ->add('debut', null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'datepicker'
+                    'class' => 'datepicker',
                 ],
             ])
-            ->add('fin', null,[
+            ->add('fin', null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'datepicker'
+                    'class' => 'datepicker',
                 ],
             ])
-            ->add('prixPilote', MoneyType::class,[
+            ->add('prixPilote', MoneyType::class, [
                 'currency' => 'EUR',
-                'html5'=> true
+                'html5' => true,
             ])
             ->add('prixAccomp', MoneyType::class, [
                 'currency' => 'EUR',
-                'html5'=> true
+                'html5' => true,
             ])
             ->add('statut', ChoiceType::class, [
                 'placeholder' => 'Selecciona el estatus: ',
@@ -49,18 +49,18 @@ class DatesType extends AbstractType
                     'open' => 'abierto',
                     'full' => 'completo',
                     'private' => 'privado',
-                    'closed' => 'closed'
-                ]
+                    'closed' => 'closed',
+                ],
             ])
             ->add('requestedDocs', ChoiceType::class, [
                 'placeholder' => 'Selecciona los documentos requeridos: ',
                 'choices' => [
                     'Passport' => 'passport',
-                    'Drivers Licence' =>'drivers_license',
-                    'Insurance' => 'insurance'
+                    'Drivers Licence' => 'drivers_license',
+                    'Insurance' => 'insurance',
                 ],
                 'expanded' => true,
-                'multiple' => true
+                'multiple' => true,
             ])
         ;
     }

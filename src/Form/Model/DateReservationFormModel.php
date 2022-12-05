@@ -2,7 +2,7 @@
 
 namespace App\Form\Model;
 
-class DateReservationFormModel 
+class DateReservationFormModel
 {
     public $email;
     public $nom;
@@ -19,5 +19,4 @@ class DateReservationFormModel
     public $password;
     public $travellers;
     public $csrf_token;
-
 }

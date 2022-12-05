@@ -19,8 +19,8 @@ class ReservationOptions
 
     /**
      * @ORM\ManyToOne(
-     *                  targetEntity=Reservation::class, 
-     *                  inversedBy="reservationOptions", 
+     *                  targetEntity=Reservation::class,
+     *                  inversedBy="reservationOptions",
      *                  cascade={"persist"}
      * )
      * @ORM\JoinColumn(nullable=false)
@@ -29,8 +29,8 @@ class ReservationOptions
 
     /**
      * @ORM\ManyToOne(
-     *                  targetEntity=Options::class, 
-     *                  inversedBy="reservationOptions", 
+     *                  targetEntity=Options::class,
+     *                  inversedBy="reservationOptions",
      *                  cascade={"persist"}
      * )
      * @ORM\JoinColumn(nullable=false)

@@ -47,5 +47,4 @@ class TravellersRepository extends ServiceEntityRepository
         ;
     }
     */
-
 }

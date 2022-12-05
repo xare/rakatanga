@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\InfodocsRepository;
+use App\Service\UploadHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Service\UploadHelper;
 
 /**
  * @ORM\Entity(repositoryClass=InfodocsRepository::class)
@@ -125,14 +125,17 @@ class Infodocs
 
         return $this;
     }
+
     public function getPath()
     {
-        return  UploadHelper::INFODOCS . '/' . $this->getFilename();
+        return UploadHelper::INFODOCS.'/'.$this->getFilename();
     }
+
     public function getInfodocsPath()
     {
-        return  '/uploads/' . UploadHelper::INFODOCS . '/' . $this->getFilename();
+        return '/uploads/'.UploadHelper::INFODOCS.'/'.$this->getFilename();
     }
+
     /**
      * @return Collection|Travel[]
      */

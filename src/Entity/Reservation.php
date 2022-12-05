@@ -48,15 +48,14 @@ class Reservation
     /**
      * @ORM\ManyToMany(targetEntity=Travellers::class, inversedBy="reservations")
      * @ORM\JoinTable(name="reservation_travellers",
-     *          joinColumns={@ORM\JoinColumn(name="reservation_id", 
+     *          joinColumns={@ORM\JoinColumn(name="reservation_id",
      *          referencedColumnName="id")},
      *          inverseJoinColumns={@ORM\JoinColumn(name="travellers_id",
      *          referencedColumnName="id")})
      */
     private $travellers;
 
-     /**
-     * @var \DateTimeInterface
+    /**
      * @ORM\Column(type="datetime_immutable")
      */
     #[Groups('main')]
@@ -96,7 +95,7 @@ class Reservation
     private $reservationData;
 
     /**
-     * @ORM\OneToMany(targetEntity=Payments::class, 
+     * @ORM\OneToMany(targetEntity=Payments::class,
      * mappedBy="reservation",
      * orphanRemoval=true,
      * cascade={"persist","remove"})
@@ -104,7 +103,7 @@ class Reservation
     private $payments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Document::class, 
+     * @ORM\OneToMany(targetEntity=Document::class,
      * mappedBy="reservation",
      * orphanRemoval=true)
      */
@@ -129,7 +128,6 @@ class Reservation
      * @ORM\ManyToOne(targetEntity=Codespromo::class, inversedBy="reservations")
      */
     private $codespromo;
-
 
     public function __construct()
     {
@@ -224,7 +222,6 @@ class Reservation
         return $this->date_ajout;
     }
 
-
     public function getDatePaiement(): ?\DateTimeInterface
     {
         return $this->date_paiement;
@@ -249,7 +246,6 @@ class Reservation
         return $this;
     }
 
-    
     /**
      * @return Collection|ReservationOptions[]
      */
@@ -408,18 +404,14 @@ class Reservation
     }
 
     /**
-     * setInvoice
-     *
-     * @param Invoices|null $invoice
-     * @return self
+     * setInvoice.
      */
     public function setInvoice(?Invoices $invoice): self
     {
         $this->invoice = $invoice;
+
         return $this;
     }
-
-
 
     public function getCode(): ?string
     {
@@ -474,5 +466,4 @@ class Reservation
 
         return $this;
     }
-
 }

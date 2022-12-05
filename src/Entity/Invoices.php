@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\InvoicesRepository;
-use App\Service\pdfHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -65,7 +64,6 @@ class Invoices
     private $originalFilename;
 
     /**
-     * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
      */
     private \DateTimeInterface $date_created;
@@ -176,7 +174,7 @@ class Invoices
 
     public function getFilePath(): ?string
     {
-        return UploadHelper::INVOICES . '/'.$this->getFilename();
+        return UploadHelper::INVOICES.'/'.$this->getFilename();
     }
 
     public function getFilename(): ?string
@@ -226,10 +224,9 @@ class Invoices
 
         return $this;
     }
+
     /**
-     * getReservation function
-     *
-     * @return Reservation|null
+     * getReservation function.
      */
     public function getReservation(): ?Reservation
     {

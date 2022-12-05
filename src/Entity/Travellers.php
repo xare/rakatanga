@@ -214,7 +214,7 @@ class Travellers
     /* public function setDateAjout(\DateTimeInterface $date_ajout): self */
     public function setDateAjout(?\DateTimeInterface $date_ajout): self
     {
-        //$date_ajout = new \DateTime();
+        // $date_ajout = new \DateTime();
         $this->date_ajout = $date_ajout;
 
         return $this;
@@ -302,9 +302,9 @@ class Travellers
     }
 
     public function __toString()
-   {
-       return $this->nom;
-   }
+    {
+        return $this->nom;
+    }
 
     /**
      * @return Collection|ReservationData[]

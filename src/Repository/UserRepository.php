@@ -65,20 +65,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
     */
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('u')
             ->getQuery();
     }
 
-    public function searchUser($term, $field){
+    public function searchUser($term, $field)
+    {
         return $this->createQueryBuilder('u')
             ->andWhere('u.'.$field.' LIKE :term')
-            ->setParameter('term','%'.$term.'%')
+            ->setParameter('term', '%'.$term.'%')
             ->getQuery()
             ->getResult();
     }
-    public function listIndex(){
+
+    public function listIndex()
+    {
         return $this->createQueryBuilder('u')
                     ->select(
                         'u.id as id, 
@@ -89,5 +92,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
-
 }

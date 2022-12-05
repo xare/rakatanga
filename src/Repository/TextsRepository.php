@@ -19,7 +19,8 @@ class TextsRepository extends ServiceEntityRepository
         parent::__construct($registry, Texts::class);
     }
 
-    public function listIndex(){
+    public function listIndex()
+    {
         return $this->createQueryBuilder('t')
                     ->select(
                         't.id as id,
@@ -29,7 +30,7 @@ class TextsRepository extends ServiceEntityRepository
                         t.text as text,
                         t.date as date,
                         l.name as lang')
-                        ->leftJoin('t.lang','l')
+                        ->leftJoin('t.lang', 'l')
             ->getQuery()
             ->getResult();
     }

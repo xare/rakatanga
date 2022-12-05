@@ -25,7 +25,7 @@ services:
         bind:
             $publicUploadsFilesystem: "@oneup_flysystem.public_uploads_filesystem_filesystem"
             $privateUploadsFilesystem: "@oneup_flysystem.private_uploads_filesystem_filesystem"  
-            $stripeSK: "%env(STRIPE_SECRET_KEY_TEST)%"
+            string $stripeSK: "%env(STRIPE_SECRET_KEY_TEST)%"
             $uploadedAssetsBaseUrl: "%uploads_base_url%"
             $formLoginAuthenticator: "@security.authenticator.form_login.main"
             $jsonLoginAuthenticator: "@security.authenticator.json_login.main"
@@ -58,6 +58,13 @@ services:
         arguments:
             $targetDirectory: "%csv_directory%"
 
+    App\Controller\ReservationController:
+        arguments:
+            $stripePublicKey: "%stripe_public_key%"
+
+    App\Controller\admin\MediaController:
+        arguments:
+            $kernelProjectDir: "%kernel.project_dir%"
 
     App\Client\StripeClient:
         arguments:

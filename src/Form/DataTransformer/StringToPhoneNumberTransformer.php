@@ -6,44 +6,45 @@ use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use Symfony\Component\Form\DataTransformerInterface;
 
-class StringToPhoneNumberTransformer implements DataTransformerInterface 
+class StringToPhoneNumberTransformer implements DataTransformerInterface
 {
+    // The 'libphonenumber.phone_number_util' service
+    private $phoneNumberUtil;
 
-    // The 'libphonenumber.phone_number_util' service 
-    private $phoneNumberUtil; 
-    
     public function __construct($util)
     {
-        $this->phoneNumberUtil = $util; 
+        $this->phoneNumberUtil = $util;
     }
 
     /**
-     * Transforms a string (number) to an object (PhoneNumber)
+     * Transforms a string (number) to an object (PhoneNumber).
      *
-     * @param  string $phoneNumberString
+     * @param string $phoneNumberString
+     *
      * @return PhoneNumber
      */
     public function transform($phoneNumberString)
     {
-        if ($phoneNumberString != "")
-        {
-            return $this->phoneNumberUtil->parse($phoneNumberString, "US");
+        if ($phoneNumberString != '') {
+            return $this->phoneNumberUtil->parse($phoneNumberString, 'US');
         }
-        return new PhoneNumber;
+
+        return new PhoneNumber();
     }
 
     /**
      * Transforms a string (number) to an object (issue).
      *
-     * @param  PhoneNumber $phoneNumberObject
+     * @param PhoneNumber $phoneNumberObject
+     *
      * @return string
      */
     public function reverseTransform($phoneNumberObject)
     {
-        if ($phoneNumberObject != null)
-        {
+        if ($phoneNumberObject != null) {
             return $this->phoneNumberUtil->format($phoneNumberObject, PhoneNumberFormat::NATIONAL);
         }
+
         return '';
     }
 }

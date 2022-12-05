@@ -50,12 +50,12 @@ class InvoicesRepository extends ServiceEntityRepository
     }
     */
 
-    public function findByUser($user){
+    public function findByUser($user)
+    {
         return $this->createQueryBuilder('i')
-        ->innerJoin(Reservation::class,'r', Join::WITH, 'r.id = i.reservation')
+        ->innerJoin(Reservation::class, 'r', Join::WITH, 'r.id = i.reservation')
         ->andWhere('r.user = :user')
-        ->setParameter('user',$user)
+        ->setParameter('user', $user)
         ->getQuery();
     }
-
 }

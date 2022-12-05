@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Codespromo;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CodespromoType extends AbstractType
 {
@@ -20,45 +20,45 @@ class CodespromoType extends AbstractType
             ->add('commentaire')
             ->add('montant')
             ->add('pourcentage')
-            ->add('type', ChoiceType::class,[
+            ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Número de utilizaciones' => 'uses',
-                    'Periodo de utilizaciones' => 'period'
+                    'Periodo de utilizaciones' => 'period',
                 ],
                 'multiple' => false,
-                'expanded' => true
+                'expanded' => true,
             ])
             ->add('nombre')
             ->add('nombreTotal')
-            ->add('debut', null,[
+            ->add('debut', null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'datepicker'
+                    'class' => 'datepicker',
                 ],
             ])
-            ->add('fin', null,[
+            ->add('fin', null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'datepicker'
+                    'class' => 'datepicker',
                 ],
             ])
             ->add('email')
             ->add('statut', ChoiceType::class, [
                 'choices' => [
                     'actif' => 'actif',
-                    'inactif' => 'inactif'
-                ]
-            ] )
+                    'inactif' => 'inactif',
+                ],
+            ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' =>  function(User $user) {
-                    return sprintf('%s [%s]', $user->getEmail(), $user->getNom() . ' '. $user->getPrenom());
+                'choice_label' => function (User $user) {
+                    return sprintf('%s [%s]', $user->getEmail(), $user->getNom().' '.$user->getPrenom());
                 },
                 'required' => false,
-                'placeholder' => 'Elegir un valor'
-            ] )
+                'placeholder' => 'Elegir un valor',
+            ])
         ;
     }
 

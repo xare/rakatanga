@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -15,19 +15,19 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UploadHelper
 {
-    const MEDIA_FOLDER = 'media';
-    const USER_FILE = 'user_file';
-    const DOCUMENT = 'document';
-    const TRAVEL = 'travel';
-    const INVOICES = 'invoices';
-    const INFODOCS = 'infodocs';
+    public const MEDIA_FOLDER = 'media';
+    public const USER_FILE = 'user_file';
+    public const DOCUMENT = 'document';
+    public const TRAVEL = 'travel';
+    public const INVOICES = 'invoices';
+    public const INFODOCS = 'infodocs';
     private $requestStackContext;
     private $slugger;
     private $filesystem;
     private $logger;
     private $uploadedAssetsBaseUrl;
     protected $parameterBag;
-    
+
     public function __construct(
         FilesystemOperator $publicUploadsFilesystem,
         FileSystemOperator $privateUploadsFilesystem,
@@ -37,8 +37,7 @@ class UploadHelper
         LoggerInterface $logger,
         string $uploadedAssetsBaseUrl,
         ParameterBagInterface $parameterBag
-        )
-    {
+        ) {
         $this->filesystem = $publicUploadsFilesystem;
         $this->privateFilesystem = $privateUploadsFilesystem;
         $this->requestStackContext = $requestStackContext;
@@ -48,10 +47,11 @@ class UploadHelper
         $this->publicAssetBaseUrl = $uploadedAssetsBaseUrl;
         $this->parameterBag = $parameterBag;
     }
+
     public function upload(UploadedFile $file)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        
+
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->getClientOriginalExtension();
 
@@ -63,35 +63,35 @@ class UploadHelper
 
         return $fileName;
     }
-    
+
     public function uploadMedia(File $file, ?string $existingFilename): string
     {
+        $newFilename = $this->uploadFile($file, self::MEDIA_FOLDER, true);
 
-       $newFilename = $this->uploadFile($file, self::MEDIA_FOLDER, true);
-        
-        if($existingFilename){
+        if ($existingFilename) {
             try {
                 $result = $this->filesystem->delete(self::MEDIA_FOLDER.'/'.$existingFilename);
-                if ($result === false){
+                if ($result === false) {
                     throw new \Exception(sprintf('Could not delete old uploaded file "%s"', $existingFilename));
                 }
             } catch (FileNotFoundException $e) {
                 $this->logger->alert(sprintf('Old uploaded file "%s" was missing when trying to delete', $existingFilename));
             }
         }
+
         return $newFilename;
     }
 
-    public function uploadYoutubeThumb(string $ytCode){
+    public function uploadYoutubeThumb(string $ytCode)
+    {
         $ytThumb = file_get_contents('https://img.youtube.com/vi/'.$ytCode.'/sddefault.jpg');
-        
-        $destination =  str_replace('\\','/', $this->parameterBag->get('kernel.project_dir').'/public'.$this->publicAssetBaseUrl);
-        
+
+        $destination = str_replace('\\', '/', $this->parameterBag->get('kernel.project_dir').'/public'.$this->publicAssetBaseUrl);
+
         $fullPath = $destination.'/'.self::MEDIA_FOLDER.'/'.$ytCode.'-'.uniqid().'.jpg';
         file_put_contents($fullPath, $ytThumb);
-        return $fullPath;
-        
 
+        return $fullPath;
     }
 
     public function getPublicPath(string $path): string
@@ -102,11 +102,7 @@ class UploadHelper
     }
 
     /**
-     * Undocumented deleteFile
-     *
-     * @param string $path
-     * @param boolean $isPublic
-     * @return boolean
+     * Undocumented deleteFile.
      */
     public function deleteFile(string $path, bool $isPublic): bool
     {
@@ -121,7 +117,7 @@ class UploadHelper
         }
     }
 
-    function getTargetDirectory()
+    public function getTargetDirectory()
     {
         return $this->targetDirectory;
     }
@@ -130,7 +126,6 @@ class UploadHelper
     {
         return $this->uploadFile($file, self::DOCUMENT, false);
     }
-
 
     public function uploadTravelImage(File $file): string
     {
@@ -144,46 +139,42 @@ class UploadHelper
 
     private function uploadFile(File $file, string $directory, bool $isPublic)
     {
-        
-        if ($file instanceof UploadedFile)
-        {
+        if ($file instanceof UploadedFile) {
             $originalFilename = $file->getClientOriginalName();
         } else {
             $originalFilename = $file->getFilename();
         }
-        
 
-        $newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)).'-'.uniqid().'.'.$file->guessExtension(); 
-        
-        $filesystem = $isPublic? $this->filesystem : $this->privateFilesystem;
-        
-        $stream = fopen($file->getPathname(),'r');
+        $newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)).'-'.uniqid().'.'.$file->guessExtension();
+
+        $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
+
+        $stream = fopen($file->getPathname(), 'r');
 
         $result = $filesystem->writeStream(
             $directory.'/'.$newFilename,
             $stream
         );
-        
-        if(is_resource($stream)) {
+
+        if (is_resource($stream)) {
             fclose($stream);
         }
-        
+
         return $newFilename;
     }
-     
-    /**
-    * @return resource
-    */
 
+    /**
+     * @return resource
+     */
     public function readStream(string $path, bool $isPublic)
     {
-        
         $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
         $resource = $filesystem->readStream($path);
-        
+
         if ($resource === false) {
             throw new \Exception(sprintf('Error opening stream for "%s"', $path));
         }
+
         return $resource;
     }
 }

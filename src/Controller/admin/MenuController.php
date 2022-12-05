@@ -3,13 +3,9 @@
 namespace App\Controller\admin;
 
 use App\Entity\Menu;
-use App\Entity\Lang;
-use App\Entity\Pages;
 use App\Form\MenuType;
-use App\Repository\MenuRepository;
-use App\Controller\admin\MainadminController;
-use App\Entity\MenuTranslation;
 use App\Repository\LangRepository;
+use App\Repository\MenuRepository;
 use App\Repository\PagesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,51 +24,49 @@ class MenuController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'menu_index', methods: ['GET'])]
     public function index(
-        MenuRepository $menuRepository, 
+        MenuRepository $menuRepository,
         Request $request,
         PaginatorInterface $paginator
-        ): Response
-    {
-        
+        ): Response {
         $query = $menuRepository->listAll();
-        
-       $menus = $paginator->paginate(
+
+        $menus = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
 
         return $this->render('admin/menu/index.html.twig', [
-            'menus' => $menus
+            'menus' => $menus,
         ]);
     }
 
     #[Route(path: '/new', name: 'menu_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository, PagesRepository $pagesRepository): Response
     {
-       // $this->redirectToLogin($request); 
+        // $this->redirectToLogin($request);
 
-        
         $langs = $langRepository->findAll();
         $pages = $pagesRepository->findAll();
         $menu = new Menu();
 
-       /*  $originalMenuTranslations = new ArrayCollection();
-        foreach ($menu->getMenuTranslations() as $menuTranslation) {
-            $originalMenuTranslations->add($menuTranslation);
-        } */
+        /*  $originalMenuTranslations = new ArrayCollection();
+         foreach ($menu->getMenuTranslations() as $menuTranslation) {
+             $originalMenuTranslations->add($menuTranslation);
+         } */
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-           /*  foreach($originalMenuTranslations as $menuTranslation){
-                if($menu->getMenuTranslation->contains($menuTranslation) === false){
-                    $entityManager->remove($menuTranslation);
-                }
-            } */
-            
+            /*  foreach($originalMenuTranslations as $menuTranslation){
+                 if($menu->getMenuTranslation->contains($menuTranslation) === false){
+                     $entityManager->remove($menuTranslation);
+                 }
+             } */
+
             $this->entityManager->persist($menu);
             $this->entityManager->flush();
 
@@ -81,8 +75,8 @@ class MenuController extends AbstractController
 
         return $this->render('admin/menu/new.html.twig', [
             'menu' => $menu,
-            'langs' =>$langs,
-            'pages' =>$pages,
+            'langs' => $langs,
+            'pages' => $pages,
             'form' => $form->createView(),
         ]);
     }
@@ -107,7 +101,7 @@ class MenuController extends AbstractController
         $form = $this->createForm(MenuType::class, $menu);
 
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($menu);
             $this->entityManager->flush();
@@ -124,7 +118,6 @@ class MenuController extends AbstractController
     #[Route(path: '/{id}', name: 'menu_delete', methods: ['POST'])]
     public function delete(Request $request, Menu $menu): Response
     {
-        
         if ($this->isCsrfTokenValid('delete'.$menu->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($menu);
             $this->entityManager->flush();

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Dates
+ * Dates.
  *
  * @ORM\Entity(repositoryClass="App\Repository\DatesRepository")
  */
@@ -42,7 +42,7 @@ class Dates
     /**
      * @var string
      *
-     * @ORM\Column(name="prix_pilote", type="decimal", precision=10, scale=2, nullable=false)     
+     * @ORM\Column(name="prix_pilote", type="decimal", precision=10, scale=2, nullable=false)
      */
     #[Groups('main')]
     private $prixPilote;
@@ -91,7 +91,7 @@ class Dates
 
     /**
      * @ORM\OneToMany(
-     *              targetEntity=Reservation::class, 
+     *              targetEntity=Reservation::class,
      *              mappedBy="date",
      *              cascade={"persist","remove"})
      */
@@ -217,7 +217,7 @@ class Dates
 
     public function __toString(): string
     {
-        return  $this->getTravel() . ' - ' . date_format($this->getDebut(),"d/m/Y").' - '.date_format($this->getFin(),"d/m/Y");
+        return $this->getTravel().' - '.date_format($this->getDebut(), 'd/m/Y').' - '.date_format($this->getFin(), 'd/m/Y');
     }
 
     public function getRequestedDocs(): ?array

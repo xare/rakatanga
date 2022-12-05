@@ -32,34 +32,31 @@ class ContinentsController extends AbstractController
 
     #[Route('/new', name: 'continents_new', methods: ['GET', 'POST'])]
     public function new(
-                        Request $request, 
+                        Request $request,
                         LangRepository $langRepository
-                        ): Response
-    {
+                        ): Response {
         $continent = new Continents();
         $form = $this->createForm(ContinentsType::class, $continent);
         $form->handleRequest($request);
-        if(null != $request->request->get('continents')){
+        if (null != $request->request->get('continents')) {
             $token = $request->request->get('continents')['_token'];
             if (!$this->isCsrfTokenValid('continents__token', $token)) {
-               
             }
         }
 
-        
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($continent);
             $this->em->flush();
 
-            return $this->redirectToRoute('continents_edit',[
-                'id' => $continent->getId()
+            return $this->redirectToRoute('continents_edit', [
+                'id' => $continent->getId(),
             ]);
         }
 
         return $this->render('admin/continents/new.html.twig', [
             'continent' => $continent,
             'form' => $form->createView(),
-            'langs' => $langRepository->findAll()
+            'langs' => $langRepository->findAll(),
         ]);
     }
 
@@ -73,15 +70,15 @@ class ContinentsController extends AbstractController
 
     #[Route('/{id}/edit', name: 'continents_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request, 
-        Continents $continent, 
+        Request $request,
+        Continents $continent,
         LangRepository $langRepository): Response
     {
         $form = $this->createForm(ContinentsType::class, $continent);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //dd($form);
+            // dd($form);
             $this->em->flush();
 
             return $this->redirectToRoute('continents_index');

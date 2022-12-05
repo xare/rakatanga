@@ -9,7 +9,6 @@ use App\Repository\ReservationRepository;
 use App\Service\UploadHelper;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,10 +19,10 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class UserFrontendReservationInvoicesController extends AbstractController
 {
-
     private $translatorInterface;
 
-    public function __construct(TranslatorInterface $translatorInterface){
+    public function __construct(TranslatorInterface $translatorInterface)
+    {
         $this->translatorInterface = $translatorInterface;
     }
 
@@ -35,41 +34,41 @@ class UserFrontendReservationInvoicesController extends AbstractController
         LangRepository $langRepository,
         PaginatorInterface $paginator,
         Breadcrumbs $breadcrumbs,
-        string $locale = "es"
+        string $locale = 'es'
     ) {
         $locale = ($request->attributes->get('_locale')) ? $request->attributes->get('_locale') : $locale;
-        //Swith Locale Loader
+        // Swith Locale Loader
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
         // En switch locale loader
-         //BREADCRUMBS
-         $breadcrumbs->addRouteItem(
-            $this->translatorInterface->trans("Usuario"), 
-            "frontend_user",
+        // BREADCRUMBS
+        $breadcrumbs->addRouteItem(
+            $this->translatorInterface->trans('Usuario'),
+            'frontend_user',
             [
-                '_locale' => $locale
+                '_locale' => $locale,
             ]
         );
         $breadcrumbs->addRouteItem(
-            $this->translatorInterface->trans("Facturas del usuario"), 
-            "frontend_user_invoices",
+            $this->translatorInterface->trans('Facturas del usuario'),
+            'frontend_user_invoices',
             [
-                '_locale' => $locale
+                '_locale' => $locale,
             ]
         );
         $breadcrumbs->prependRouteItem(
             $this
                 ->translatorInterface
-                ->trans("Inicio"),
-            "index"
+                ->trans('Inicio'),
+            'index'
         );
-        //END BREADCRUMBS
+        // END BREADCRUMBS
 
         $user = $this->getUser();
 
@@ -77,14 +76,14 @@ class UserFrontendReservationInvoicesController extends AbstractController
 
         $invoices = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             15
         );
 
         return $this->render('user/user_invoices.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
-            'invoices' => $invoices
+            'invoices' => $invoices,
         ]);
     }
 
@@ -92,9 +91,8 @@ class UserFrontendReservationInvoicesController extends AbstractController
     public function downloadInvoice(
         Invoices $invoice,
         UploadHelper $uploadHelper
-    ):Response {
-
-         $response = new StreamedResponse(function () use ($invoice, $uploadHelper) {
+    ): Response {
+        $response = new StreamedResponse(function () use ($invoice, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');
             $fileStream = $uploadHelper->readStream($invoice->getFilePath(), false);
             stream_copy_to_stream($fileStream, $outputStream);
@@ -105,8 +103,8 @@ class UserFrontendReservationInvoicesController extends AbstractController
             $invoice->getOriginalFilename()
         );
 
-        $response->headers->set('Content-Disposition', $disposition); 
+        $response->headers->set('Content-Disposition', $disposition);
+
         return $response;
     }
-
 }

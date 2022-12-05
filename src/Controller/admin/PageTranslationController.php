@@ -20,6 +20,7 @@ class PageTranslationController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'page_translation_index', methods: ['GET'])]
     public function index(PageTranslationRepository $pageTranslationRepository): Response
     {
@@ -36,7 +37,6 @@ class PageTranslationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $this->entityManager->persist($pageTranslation);
             $this->entityManager->flush();
 

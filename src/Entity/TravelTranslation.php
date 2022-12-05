@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TravelTranslationRepository;
-use App\Service\slugifyHelper;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,7 +32,6 @@ class TravelTranslation
      * @ORM\JoinColumn(nullable=false)
      */
     private $lang;
-
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -71,7 +69,6 @@ class TravelTranslation
      */
     private $travel;
 
-   
     public function getId(): ?int
     {
         return $this->id;
@@ -112,8 +109,6 @@ class TravelTranslation
 
         return $this;
     }
-
-
 
     public function getUrl(): ?string
     {
@@ -199,7 +194,8 @@ class TravelTranslation
         return $this;
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->getTitle();
     }
 }

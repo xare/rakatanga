@@ -5,10 +5,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Dates;
 use App\Entity\Lang;
-use App\Entity\Options;
-use App\Entity\OptionsTranslations;
 use App\Entity\Reservation;
-use App\Entity\ReservationOptions;
 use App\Entity\Travel;
 use App\Entity\TravelTranslation;
 use App\Entity\User;
@@ -57,7 +54,7 @@ class ReservationRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function showReservation($date,$user): ?Reservation
+    public function showReservation($date, $user): ?Reservation
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.date = :val1')
@@ -69,12 +66,14 @@ class ReservationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function listAll() 
+    public function listAll()
     {
         return $this->createQueryBuilder('r')
             ->getQuery();
     }
-    public function listIndex(){
+
+    public function listIndex()
+    {
         return $this->createQueryBuilder('r')
                     ->select(
                         'r.id as id,
@@ -88,14 +87,14 @@ class ReservationRepository extends ServiceEntityRepository
                         r.nbpilotes as Pilotos,
                         r.nbAccomp as Acompanantes
                         ')
-                    ->innerJoin(Dates::class,'d', Join::WITH,'d.id = r.date')
-                    ->innerJoin(Travel::class,'t', Join::WITH, 't.id = d.travel')
+                    ->innerJoin(Dates::class, 'd', Join::WITH, 'd.id = r.date')
+                    ->innerJoin(Travel::class, 't', Join::WITH, 't.id = d.travel')
                     ->leftJoin(User::class, 'u', Join::WITH, 'u.id = r.user')
             ->getQuery()
             ->getResult();
     }
 
-    public function listMyReservations($user,$locale)
+    public function listMyReservations($user, $locale)
     {
         return $this->createQueryBuilder('r')
         ->select('tt.title as title')
@@ -107,19 +106,19 @@ class ReservationRepository extends ServiceEntityRepository
         ->andWhere('user = :user')
         ->setParameter('user', $user)
         ->andWhere('l.iso_code = :locale')
-        ->setParameter('locale',$locale)
+        ->setParameter('locale', $locale)
         ->getQuery()
         ->getResult();
-
     }
 
-    public function listReservationsByCategory($categoryName){
+    public function listReservationsByCategory($categoryName)
+    {
         return $this->createQueryBuilder('r')
-                ->innerJoin(Dates::class,'d', Join::WITH,'d.id = r.date' )
+                ->innerJoin(Dates::class, 'd', Join::WITH, 'd.id = r.date')
                 ->innerJoin(Travel::class, 't', Join::WITH, 't.id = d.travel')
-                ->innerJoin(Category::class , 'c', Join::WITH, 'c.id= t.category')
+                ->innerJoin(Category::class, 'c', Join::WITH, 'c.id= t.category')
                 ->andWhere('c.name = :categoryName')
-                ->setParameter('categoryName',$categoryName)
+                ->setParameter('categoryName', $categoryName)
                 ->getQuery();
     }
 }

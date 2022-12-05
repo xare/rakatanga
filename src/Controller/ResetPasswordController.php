@@ -31,7 +31,7 @@ class ResetPasswordController extends AbstractController
     private TranslatorInterface $translator;
 
     public function __construct(
-        ResetPasswordHelperInterface $resetPasswordHelper, 
+        ResetPasswordHelperInterface $resetPasswordHelper,
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator)
     {
@@ -43,14 +43,14 @@ class ResetPasswordController extends AbstractController
     /**
      * Display & process form to request a password reset.
      */
-    #[Route('/', name:'app_forgot_password_request')]
+    #[Route('/', name: 'app_forgot_password_request')]
     #[Route(path: [
-        'es' => '/{_locale}', 
+        'es' => '/{_locale}',
         'en' => '/{_locale}',
-        'fr' => '/{_locale}'
+        'fr' => '/{_locale}',
     ], name: 'app_forgot_password_request')]
     public function request(
-                        Request $request, 
+                        Request $request,
                         MailerInterface $mailer,
                         LangRepository $langRepository,
                         string $locale = 'es',
@@ -59,14 +59,14 @@ class ResetPasswordController extends AbstractController
         $locale = $_locale ? $_locale : $locale;
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
-        //Lang switch array
+        // Lang switch array
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
-        foreach($otherLangsArray as $otherLangArray){
+        foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -79,7 +79,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
             'locale' => $locale,
-            'langs' => $urlArray
+            'langs' => $urlArray,
         ]);
     }
 
@@ -91,17 +91,16 @@ class ResetPasswordController extends AbstractController
         LangRepository $langRepository,
         string $locale = 'es',
         string $_locale = null,
-    ): Response
-    {
+    ): Response {
         $locale = $_locale ? $_locale : $locale;
-        //Lang switch array
+        // Lang switch array
         $otherLangsArray = $langRepository->findOthers($locale);
-        $i=0;
+        $i = 0;
         $urlArray = [];
-        foreach($otherLangsArray as $otherLangArray){
+        foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
 
         // Generate a fake token if the user does not exist or someone hit this page directly.
@@ -113,7 +112,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
             'locale' => $locale,
-            'langs' => $urlArray
+            'langs' => $urlArray,
         ]);
     }
 
@@ -122,14 +121,13 @@ class ResetPasswordController extends AbstractController
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
     public function reset(
-                        Request $request, 
-                        UserPasswordHasherInterface $userPasswordHasher, 
+                        Request $request,
+                        UserPasswordHasherInterface $userPasswordHasher,
                         LangRepository $langRepository,
                         string $token = null,
                         string $locale = 'es',
                         string $_locale = null
-                        ): Response
-    {
+                        ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
@@ -176,19 +174,20 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
-        //Lang switch array
+        // Lang switch array
         $otherLangsArray = $langRepository->findOthers($locale);
-        $i=0;
+        $i = 0;
         $urlArray = [];
-        foreach($otherLangsArray as $otherLangArray){
+        foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
+
         return $this->render('reset_password/reset.html.twig', [
             'resetForm' => $form->createView(),
             'locale' => $locale,
-            'langs' => $urlArray
+            'langs' => $urlArray,
         ]);
     }
 
@@ -206,14 +205,14 @@ class ResetPasswordController extends AbstractController
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
-            //If you want to tell the user why a reset email was not sent, uncomment
+            // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
             $this->addFlash('reset_password_error', sprintf(
-                 'There was a problem handling your password reset request - %s',
-                 $e->getReason()
-             ));
+                'There was a problem handling your password reset request - %s',
+                $e->getReason()
+            ));
 
             return $this->redirectToRoute('app_forgot_password_request');
         }

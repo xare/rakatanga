@@ -3,7 +3,6 @@
 namespace App\Controller\admin;
 
 use App\Entity\Oldreservations;
-use App\Entity\Travel;
 use App\Form\OldreservationsType;
 use App\Repository\OldreservationsRepository;
 use App\Repository\TravelRepository;
@@ -18,9 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class OldreservationsController extends AbstractController
 {
     private $travelRepository;
-    public function __construct(TravelRepository $travelRepository) {
+
+    public function __construct(TravelRepository $travelRepository)
+    {
         $this->travelRepository = $travelRepository;
-    } 
+    }
+
     #[Route('/', name: 'oldreservations_index', methods: ['GET'])]
     public function index(
         Request $request,
@@ -30,9 +32,10 @@ class OldreservationsController extends AbstractController
         $count = count($oldreservationsRepository->findAll());
         $oldreservations = $paginator->paginate(
             $oldreservationsRepository->listIndex(),
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             15
         );
+
         return $this->render('admin/oldreservations/index.html.twig', [
             'count' => $count,
             'oldreservations' => $oldreservations,
@@ -76,7 +79,7 @@ class OldreservationsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            //return $this->redirectToRoute('oldreservations_index', [], Response::HTTP_SEE_OTHER);
+            // return $this->redirectToRoute('oldreservations_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/oldreservations/edit.html.twig', [
@@ -104,14 +107,14 @@ class OldreservationsController extends AbstractController
         $oldReservation->setTravel($this->travelRepository->find($travelId));
         $form = $this->createForm(OldreservationsType::class, $oldReservation);
 
-        //no field? Return an empty response
+        // no field? Return an empty response
 
-        if(!$form->has('dates')) {
+        if (!$form->has('dates')) {
             return new Response(null, \Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
         }
-        return $this->render('admin/oldreservations/_form_dates_field.html.twig',[
-            'oldReservationForm' => $form->createView()
+
+        return $this->render('admin/oldreservations/_form_dates_field.html.twig', [
+            'oldReservationForm' => $form->createView(),
         ]);
     }
-
 }

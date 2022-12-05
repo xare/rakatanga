@@ -19,16 +19,16 @@ class PaymentsType extends AbstractType
             ->add('stripeId')
             ->add('reservation', EntityType::class, [
                 'class' => Reservation::class,
-                'choice_label' => 'code'
+                'choice_label' => 'code',
             ])
-            ->add('date_ajout',null,[
+            ->add('date_ajout', null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'datepicker'
-                    ]
+                    'class' => 'datepicker',
+                    ],
             ])
-            //->add('reservation')
+            // ->add('reservation')
         ;
     }
 

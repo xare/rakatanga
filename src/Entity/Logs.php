@@ -30,7 +30,6 @@ class Logs
     private $content;
 
     /**
-     * @var \DateTimeInterface
      * @ORM\Column(type="datetime_immutable")
      */
     private \DateTimeInterface $date;

@@ -20,6 +20,7 @@ class MenuTranslationController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'menu_translation_index', methods: ['GET'])]
     public function index(MenuTranslationRepository $menuTranslationRepository): Response
     {

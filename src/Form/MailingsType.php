@@ -17,12 +17,12 @@ class MailingsType extends AbstractType
             ->add('content')
             ->add('ToAddresses')
             ->add('attachment')
-            ->add('category', ChoiceType::class,[
+            ->add('category', ChoiceType::class, [
                 'choices' => [
                     'reservation' => 'reservation',
                     'user' => 'user',
-                    'contact' => 'contact'
-                ]
+                    'contact' => 'contact',
+                ],
             ])
         ;
     }

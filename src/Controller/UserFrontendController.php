@@ -2,56 +2,34 @@
 
 namespace App\Controller;
 
-use App\Controller\MainController;
 use App\Entity\Document;
-use App\Entity\Invoices;
 use App\Entity\Reservation;
-use App\Entity\ReservationData;
 use App\Entity\ReservationOptions;
-use App\Entity\Travellers;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\User;
-use App\Form\ReservationDataType;
 use App\Form\UserType;
 use App\Repository\DatesRepository;
-use App\Repository\InvoicesRepository;
 use App\Repository\LangRepository;
 use App\Repository\OptionsRepository;
-use App\Repository\ReservationDataRepository;
 use App\Repository\ReservationOptionsRepository;
 use App\Repository\ReservationRepository;
-use App\Repository\TravellersRepository;
-use App\Service\localizationHelper;
-use App\Service\Mailer;
-use App\Service\reservationHelper;
 use App\Service\UploadHelper;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
-use Stripe\Checkout\Session as CheckoutSession;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 class UserFrontendController extends AbstractController
 {
-
-    public function __construct(private TranslatorInterface $translatorInterface, private EntityManagerInterface $entityManager){
+    public function __construct(private TranslatorInterface $translatorInterface, private EntityManagerInterface $entityManager)
+    {
         $this->translator = $translatorInterface;
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/user', name: 'frontend_user')]
     #[Route(path: ['en' => '{_locale}/user', 'es' => '{_locale}/usuario', 'fr' => '{_locale}/utilisateur'], name: 'frontend_user', priority: 2)]
     public function frontend_user(
@@ -60,34 +38,34 @@ class UserFrontendController extends AbstractController
         string $_locale = null,
         $locale = 'es'
     ) {
-
         $locale = $_locale ? $_locale : $locale;
         /**
          * @var User $user
          */
         $user = $this->getUser();
 
-        //Swith Locale Loader
+        // Swith Locale Loader
         $otherLangsArray = $langRepository->findOthers($locale);
         $urlArray = [];
         $i = 0;
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
 
         $dates = $datesRepository->listNextDates();
         $reservations = $user->getReservations();
-        
+
         return $this->render('user/index.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
             'dates' => $dates,
             'reservations' => $reservations,
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
         ]);
     }
+
     #[Route(path: '/user/reservations/', name: 'frontend_user_reservations')]
     #[Route(path: ['en' => '{_locale}/user/reservations/', 'es' => '{_locale}/usuario/reservas/', 'fr' => '{_locale}/utilisateur/reservations/'], name: 'frontend_user_reservations', priority: 2)]
     public function frontend_user_reservations(
@@ -95,48 +73,48 @@ class UserFrontendController extends AbstractController
         $_locale = null,
         Breadcrumbs $breadcrumbs,
         ReservationRepository $reservationRepository,
-        $locale = "es",
+        $locale = 'es',
     ) {
-        $locale = $_locale ? $_locale: $locale;
+        $locale = $_locale ? $_locale : $locale;
         $user = $this->getUser();
 
-        //Swith Locale Loader
+        // Swith Locale Loader
         $otherLangsArray = $langRepository->findOthers($locale);
         $urlArray = [];
         $i = 0;
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
-        //End switch Locale loader
+        // End switch Locale loader
 
-        //BREADCRUMBS
-       
-         $breadcrumbs->addRouteItem(
-            $this->translator->trans("Tus Reservas"), 
-            "frontend_user_reservations",
+        // BREADCRUMBS
+
+        $breadcrumbs->addRouteItem(
+            $this->translator->trans('Tus Reservas'),
+            'frontend_user_reservations',
             [
-                '_locale' => $locale
+                '_locale' => $locale,
             ]
         );
         $breadcrumbs->prependRouteItem(
             $this
                 ->translator
-                ->trans("Inicio"),
-            "index"
+                ->trans('Inicio'),
+            'index'
         );
-        //END BREADCRUMBS
+        // END BREADCRUMBS
 
-       
-        $reservations = $reservationRepository->findBy(['user' => $user], ['date_ajout'=>'DESC']);
+        $reservations = $reservationRepository->findBy(['user' => $user], ['date_ajout' => 'DESC']);
 
         return $this->render('/user/user_reservations.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
-            'reservations' => $reservations
+            'reservations' => $reservations,
         ]);
     }
+
     #[Route(path: ['en' => '{_locale}/user/settings', 'es' => '{_locale}/usuario/datos', 'fr' => '{_locale}/utilisateur/donnees'], name: 'frontend_user_settings')]
     public function frontend_user_settings(
         Request $request,
@@ -145,75 +123,70 @@ class UserFrontendController extends AbstractController
         Breadcrumbs $breadcrumbs,
         $locale = 'es'
     ) {
-        
         $locale = $_locale ?: $locale;
 
-        //Swith Locale Loader
+        // Swith Locale Loader
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
 
-        //End swith locale Loader
+        // End swith locale Loader
 
-        //BREADCRUMBS
+        // BREADCRUMBS
         $breadcrumbs->addRouteItem(
-            $this->translator->trans("Usuario"), 
-            "frontend_user",
+            $this->translator->trans('Usuario'),
+            'frontend_user',
             [
-                '_locale' => $locale
+                '_locale' => $locale,
             ]
         );
         $breadcrumbs->addRouteItem(
-            $this->translator->trans("Datos del usuario"), 
-            "frontend_user_settings",
+            $this->translator->trans('Datos del usuario'),
+            'frontend_user_settings',
             [
-                '_locale' => $locale
+                '_locale' => $locale,
             ]
         );
         $breadcrumbs->prependRouteItem(
             $this
                 ->translator
-                ->trans("Inicio"),
-            "index"
+                ->trans('Inicio'),
+            'index'
         );
-        //END BREADCRUMBS
+        // END BREADCRUMBS
 
-
-
-        //Create User Form
+        // Create User Form
         $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        //dd($form);
+        // dd($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            //dd($user);
+            // dd($user);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
             $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente.'));
 
-            //return $this->redirectToRoute('user_index');
+            // return $this->redirectToRoute('user_index');
         }
+
         return $this->render('user/user_settings.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
-    
 
     #[Route(path: '/user/download/document/{document}', name: 'user-download-document2')]
     public function downloadDocument2(
         Document $document,
         UploadHelper $uploadHelper
     ) {
-
         $response = new StreamedResponse(function () use ($document, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');
             $fileStream = $uploadHelper->readStream($document->getFilePath(), false);
@@ -222,10 +195,11 @@ class UserFrontendController extends AbstractController
         $response->headers->set('Content-Type', 'application/pdf');
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
-            'FACTURA-' . $invoice->getInvoiceNumber() . '.pdf'
+            'FACTURA-'.$invoice->getInvoiceNumber().'.pdf'
         );
 
         $response->headers->set('Content-Disposition', $disposition);
+
         return $response;
     }
 
@@ -241,31 +215,32 @@ class UserFrontendController extends AbstractController
         $reservation = $reservationRepository->find($reservationId);
         $nb = 0;
 
-        if ($operationArray[1] == "pilote") {
+        if ($operationArray[1] == 'pilote') {
             $nb = $reservation->getNbpilotes();
-            if ($operationArray[0] == "remove") {
-                $nb--;
+            if ($operationArray[0] == 'remove') {
+                --$nb;
             }
-            if ($operationArray[0] == "add") {
-                $nb++;
+            if ($operationArray[0] == 'add') {
+                ++$nb;
             }
             $reservation->setNbpilotes($nb);
         }
-        if ($operationArray[1] == "passager") {
+        if ($operationArray[1] == 'passager') {
             $nb = $reservation->getNbAccomp();
-            if ($operationArray[0] == "remove") {
-                $nb--;
+            if ($operationArray[0] == 'remove') {
+                --$nb;
             }
-            if ($operationArray[0] == "add") {
-                $nb++;
+            if ($operationArray[0] == 'add') {
+                ++$nb;
             }
             $reservation->setNbAccomp($nb);
         }
 
         $em->persist($reservation);
         $em->flush();
+
         return $this->json([
-            'nb' => $nb
+            'nb' => $nb,
         ], 200);
     }
 
@@ -285,23 +260,23 @@ class UserFrontendController extends AbstractController
         $option = $optionsRepository->find($optionId);
         $reservationOption = $reservationOptionsRepository->findOneBy([
             'reservation' => $reservation,
-            'options' => $option
+            'options' => $option,
         ]);
         $ammount = $request->request->get('ammount');
 
-        if ($operationArray[0] == "remove") {
-            $ammount--;
+        if ($operationArray[0] == 'remove') {
+            --$ammount;
         }
-        if ($operationArray[0] == "add") {
-            $ammount++;
+        if ($operationArray[0] == 'add') {
+            ++$ammount;
         }
         $reservationOption->setAmmount($ammount);
 
-
         $em->persist($reservationOption);
         $em->flush();
+
         return $this->json([
-            'ammount' => $ammount
+            'ammount' => $ammount,
         ], 200);
     }
 
@@ -318,7 +293,7 @@ class UserFrontendController extends AbstractController
         $reservation->setNbpilotes($pilotes);
         $reservation->setNbAccomp($Accomp);
 
-        $options = $request->request->get("options");
+        $options = $request->request->get('options');
         if (count($options) > 0) {
             foreach ($options as $optionItem) {
                 $optionId = $optionItem['option']['id'];
@@ -326,7 +301,7 @@ class UserFrontendController extends AbstractController
                 $option = $optionsRepository->find($optionId);
                 $reservationOptions = $reservationOptionsRepository->findOneBy([
                     'reservation' => $reservation,
-                    'options' => $option
+                    'options' => $option,
                 ]);
                 if (null !== $reservationOptions) {
                     $reservationOptions->setAmmount($nb);
@@ -343,10 +318,10 @@ class UserFrontendController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute(
-            "frontend_user_reservation",
+            'frontend_user_reservation',
             [
                 '_locale' => 'es',
-                'reservation' => $reservation->getId()
+                'reservation' => $reservation->getId(),
             ]
         );
         /* return $this->json(

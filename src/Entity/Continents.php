@@ -4,18 +4,17 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Continents
+ * Continents.
  *
  * @ORM\Table(name="continents")
  * @ORM\Entity(repositoryClass="App\Repository\ContinentsRepository")
  */
 class Continents
 {
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -30,7 +29,6 @@ class Continents
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $code;
-
 
     /**
      * @ORM\OneToMany(targetEntity=ContinentTranslation::class, mappedBy="continents", orphanRemoval=true, cascade={"persist"})
@@ -130,6 +128,4 @@ class Continents
 
         return $this;
     }
-
-
 }

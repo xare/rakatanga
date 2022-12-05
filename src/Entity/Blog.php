@@ -24,7 +24,6 @@ class Blog
      */
     private $category;
 
-
     /**
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="blog")
      */
@@ -55,14 +54,6 @@ class Blog
     {
         return $this->id;
     }
-
-    
-
-    
-
-    
-
-    
 
     public function getState(): ?string
     {
@@ -154,7 +145,7 @@ class Blog
         return $this;
     }
 
-    public function __toString() 
+    public function __toString()
     {
         return $this->getName();
     }

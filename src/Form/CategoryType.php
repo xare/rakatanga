@@ -18,28 +18,28 @@ class CategoryType extends AbstractType
         $builder
             ->add('name')
             ->add('status', ChoiceType::class, [
-                'placeholder'=>"Qué pongo aquí??",
+                'placeholder' => 'Qué pongo aquí??',
                 'choices' => [
                     'Yes' => 'yes',
-                    'No' => 'no'
-                ]
+                    'No' => 'no',
+                ],
             ])
             ->add('Continents', EntityType::class, [
                 'class' => Continents::class,
                 'placeholder' => 'Elige Continente: ',
-                'choice_label' => 'code'
-            ] )
+                'choice_label' => 'code',
+            ])
             ->add('blogs')
             ->add('categoryTranslations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,
                 'entry_options' => [
-                    'label' => false
+                    'label' => false,
                 ],
                 'by_reference' => false,
                 // this allows the creation of new forms and the prototype too
                 'allow_add' => true,
                 // self explanatory, this one allows the form to be removed
-                'allow_delete' => true
+                'allow_delete' => true,
             ])
         ;
     }
@@ -48,7 +48,7 @@ class CategoryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Category::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 }

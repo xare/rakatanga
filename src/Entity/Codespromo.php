@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use App\Entity\Reservation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Codespromo
+ * Codespromo.
  *
  * @ORM\Table(name="codespromo")
  * @ORM\Entity(repositoryClass="App\Repository\CodespromoRepository")
@@ -295,9 +294,6 @@ class Codespromo
         return $this->getCode();
     }
 
-  
-
-
     public function getNombreTotal(): ?int
     {
         return $this->nombreTotal;
@@ -339,5 +335,4 @@ class Codespromo
 
         return $this;
     }
-
 }

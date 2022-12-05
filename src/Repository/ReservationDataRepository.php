@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Document;
 use App\Entity\ReservationData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -50,23 +49,25 @@ class ReservationDataRepository extends ServiceEntityRepository
     }
     */
 
-    public function getReservationDataByUser( $reservation ) {
+    public function getReservationDataByUser($reservation)
+    {
         return $this->createQueryBuilder('rd')
         ->andWhere('rd.reservation = :reservation')
         ->setParameter('reservation', $reservation)
         ->andWhere('rd.User = :user')
-        ->setParameter('user',$reservation->getUser())
+        ->setParameter('user', $reservation->getUser())
         ->getQuery()
         ->getResult();
     }
 
-    public function getReservationDataByTraveller( $reservation, $traveller) {
+    public function getReservationDataByTraveller($reservation, $traveller)
+    {
         return $this->createQueryBuilder('rd')
         ->innerJoin(Document::class, 'd', 'd.rd=rd.d')
         ->andWhere('rd.reservation = :reservation')
         ->setParameter('reservation', $reservation)
         ->andWhere('rd.travellers = :traveller')
-        ->setParameter('traveller',$traveller)
+        ->setParameter('traveller', $traveller)
         ->getQuery()
         ->getResult();
     }

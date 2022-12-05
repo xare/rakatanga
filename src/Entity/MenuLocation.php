@@ -10,8 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=MenuLocationRepository::class)
  */
-class MenuLocation {
-  /**
+class MenuLocation
+{
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -32,10 +33,12 @@ class MenuLocation {
     {
         $this->menus = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
     /**
      * @return Collection|Menu[]
      */
@@ -74,5 +77,4 @@ class MenuLocation {
 
         return $this;
     }
-  
 }

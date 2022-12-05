@@ -18,7 +18,7 @@ class ContinentTranslationType extends AbstractType
         $builder
             ->add('Name')
             ->add('continents')
-            ->add('lang', EntityType::class,[
+            ->add('lang', EntityType::class, [
                 'class' => Lang::class,
                 'choice_label' => 'name',
                 'multiple' => false,
@@ -30,11 +30,11 @@ class ContinentTranslationType extends AbstractType
             ) */
         ;
     }
-/* 
+/*
     public function onPostSetData(FormEvent $event){
         if($event->getData() && $event->getData()->getId()){
             $form = $event->getForm();
-            
+
             return $form->getData();
         }
 
@@ -44,7 +44,7 @@ class ContinentTranslationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ContinentTranslation::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 }

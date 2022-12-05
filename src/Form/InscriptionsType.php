@@ -23,11 +23,11 @@ class InscriptionsType extends AbstractType
             ->add('vols')
             ->add('statut')
             ->add('remarque')
-            ->add('date_ajout', null,[
+            ->add('date_ajout', null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'datepicker'
+                    'class' => 'datepicker',
                 ],
             ])
             ->add('langue')

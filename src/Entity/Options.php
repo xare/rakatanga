@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Options
+ * Options.
  *
  * @ORM\Table(name="options")
  * @ORM\Entity(repositoryClass="App\Repository\OptionsRepository")
@@ -115,7 +115,8 @@ class Options
 
         return $this;
     }
-    public function __toString():string
+
+    public function __toString(): string
     {
         return $this->travel->getMainTitle();
     }
@@ -161,5 +162,4 @@ class Options
 
         return $this;
     }
-
 }

@@ -12,11 +12,11 @@ use App\Repository\PopupsRepository;
 use App\Repository\TravelRepository;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Asset\Context\RequestStackContext;
 
 class FileBrowserController extends AbstractController
 {
@@ -26,6 +26,7 @@ class FileBrowserController extends AbstractController
     {
         $this->requestStackContext = $requestStackContext;
     }
+
     #[Route(path: '/filebrowser/{entity}/{id}', name: 'file-browser')]
     public function index(
         Request $request,
@@ -38,22 +39,22 @@ class FileBrowserController extends AbstractController
         ArticlesRepository $articlesRepository
     ) {
         $fieldName = $request->query->get('CKEditor');
-        $array = explode("_", $fieldName);
+        $array = explode('_', $fieldName);
         $section = end($array);
-        $size = "travel_thumbnail_" . $section;
-        if ($array[0] == "pages") {
+        $size = 'travel_thumbnail_'.$section;
+        if ($array[0] == 'pages') {
             $repository = $pagesRepository;
         }
-        if ($array[0] == "travel") {
+        if ($array[0] == 'travel') {
             $repository = $travelRepository;
         }
-        if ($array[0] == "category") {
+        if ($array[0] == 'category') {
             $repository = $categoryRepository;
         }
-        if ($array[0] == "articles") {
+        if ($array[0] == 'articles') {
             $repository = $articlesRepository;
         }
-        if ($array[0] == "popups") {
+        if ($array[0] == 'popups') {
             $repository = $popupsRepository;
         }
         $element = $repository->find($id);
@@ -61,7 +62,7 @@ class FileBrowserController extends AbstractController
         return $this->render('admin/filebrowser/index.html.twig', [
             'element' => $element,
             'type' => $array[0],
-            'size' => $size
+            'size' => $size,
         ]);
     }
 
@@ -74,15 +75,15 @@ class FileBrowserController extends AbstractController
         $entity,
         Travel $travel
     ) {
-        //dd($request);
+        // dd($request);
         $uploadedFile = $request->files->get('upload');
         $filename = $uploadHelper->uploadTravelImage($uploadedFile);
         $function_number = $request->query->get('CKEditorFuncNum');
 
-        $url = $request->getSchemeAndHttpHost() . '/uploads/travel/' . $filename;
+        $url = $request->getSchemeAndHttpHost().'/uploads/travel/'.$filename;
 
         $medium = new Media();
-        $medium->setType("travel");
+        $medium->setType('travel');
         $medium->setName(pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME));
         $medium->setPath($filename);
         $medium->setFilename($filename);
@@ -90,7 +91,7 @@ class FileBrowserController extends AbstractController
         $em->persist($medium);
         $em->flush();
 
-        $message = "error?";
+        $message = 'error?';
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
 
@@ -103,7 +104,7 @@ class FileBrowserController extends AbstractController
         $content = $this->renderView('admin/filebrowser/upload.html.twig', [
             'function_number' => $number,
             'url' => $url,
-            'message' => ""
+            'message' => '',
         ]);
 
         $response->setContent($content);

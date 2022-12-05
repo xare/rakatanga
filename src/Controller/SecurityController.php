@@ -4,22 +4,19 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Security\LoginFormAuthenticator;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use App\Controller\MainController;
-use App\Entity\Logs;
 use App\Repository\LangRepository;
+use App\Security\LoginFormAuthenticator;
 use App\Service\breadcrumbsHelper;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use App\Service\logHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
@@ -31,6 +28,7 @@ class SecurityController extends AbstractController
         $this->entityManager = $entityManager;
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
+
     #[Route(path: '/login', options: ['expose' => true], name: 'app_login')]
     #[Route(path: ['en' => '{_locale}/login/', 'es' => '{_locale}/login/', 'fr' => '{_locale}/login/'], priority: 10, name: 'app_login')]
     public function login(
@@ -38,9 +36,7 @@ class SecurityController extends AbstractController
         string $_locale = null,
         LangRepository $langRepository,
         $locale = 'es'
-        ): Response
-    {
-
+        ): Response {
         /* if ($this->getUser()) {
 
              return $this->redirectToRoute('target_path');
@@ -50,10 +46,10 @@ class SecurityController extends AbstractController
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];
-        foreach($otherLangsArray as $otherLangArray){
+        foreach ($otherLangsArray as $otherLangArray) {
             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $i++;
+            ++$i;
         }
 
         // get the login error if there is one
@@ -62,12 +58,11 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-
-        return $this->render('user/user_login.html.twig',[
+        return $this->render('user/user_login.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
-            'last_username' => $lastUsername, 
-            'error' => $error
+            'last_username' => $lastUsername,
+            'error' => $error,
         ]);
     }
 
@@ -77,7 +72,7 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    /**
+    /*
      * @Route({
      *      "en": "{_locale}/register/",
      *      "es": "{_locale}/register/",
@@ -86,7 +81,7 @@ class SecurityController extends AbstractController
      */
 
     /* public function register(
-        Request $request, 
+        Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         LoginFormAuthenticator $formAuthenticator,
         MailerInterface $mailer,
@@ -98,7 +93,7 @@ class SecurityController extends AbstractController
         $locale = $_locale ? $_locale : $locale;
 
        /*  $langArray = $this->langMenu($request, $locale);
-        $navMenu = $this->showMenu($locale, $request); 
+        $navMenu = $this->showMenu($locale, $request);
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -138,12 +133,10 @@ class SecurityController extends AbstractController
 
         }
         return $this->render('security/register.html.twig',[
-           /*  'menu'=>$navMenu, 
+           /*  'menu'=>$navMenu,
             'locale'=>$locale,
-            /* 'langs' => $langArray, 
+            /* 'langs' => $langArray,
             'form' => $form->createView()
         ]);
     } */
-
-    
 }

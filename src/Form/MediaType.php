@@ -16,24 +16,24 @@ class MediaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', ChoiceType::class,[
-                'choices'=> [
-                    'travel'=>'travel',
-                    'country'=>'country',
-                    'news'=>'news'
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'travel' => 'travel',
+                    'country' => 'country',
+                    'news' => 'news',
                 ],
             ])
             ->add('name')
-            ->add('path', TextType::class,[
-                'disabled' => true
+            ->add('path', TextType::class, [
+                'disabled' => true,
             ])
-            ->add('url', TextType::class,[
-                'disabled' => true
+            ->add('url', TextType::class, [
+                'disabled' => true,
             ]);
         $imageConstraints = [
             new Image([
-                'maxSize' => '5M'
-            ])
+                'maxSize' => '5M',
+            ]),
         ];
         /* if (!$isEdit || !$media->getFilename()) {
             $imageConstraints[] = new NotNull([
@@ -44,7 +44,7 @@ class MediaType extends AbstractType
             ->add('file', FileType::class, [
                 'mapped' => false,
                 'required' => false,
-                'constraints' => $imageConstraints
+                'constraints' => $imageConstraints,
             ])
         ;
     }

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
@@ -26,7 +27,7 @@ class IconExtension extends AbstractTypeExtension
         $resolver->setDefaults([
             'fa' => null,
             'icon_before' => null,
-            'icon_after' => null
+            'icon_after' => null,
         ]);
     }
 }

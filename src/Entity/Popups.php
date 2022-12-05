@@ -24,7 +24,6 @@ class Popups
      */
     private $title;
 
-
     /**
      * @ORM\OneToMany(targetEntity=PopupsTranslation::class, mappedBy="popup", orphanRemoval=true, cascade={"persist"})
      */

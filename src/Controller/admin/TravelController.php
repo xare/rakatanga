@@ -2,45 +2,41 @@
 
 namespace App\Controller\admin;
 
-use App\Entity\Travel;
 use App\Entity\Infodocs;
-use App\Form\TravelType;
-use App\Repository\TravelRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\admin\MainadminController;
-use App\Entity\Category;
-use App\Entity\Lang;
-use App\Entity\Media;
+use App\Entity\Travel;
 use App\Entity\TravelTranslation;
 use App\Form\LoadTravelCsvType;
+use App\Form\TravelType;
 use App\Repository\CategoryRepository;
 use App\Repository\InfodocsRepository;
 use App\Repository\LangRepository;
 use App\Repository\MediaRepository;
+use App\Repository\TravelRepository;
 use App\Service\slugifyHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
 use Knp\Component\Pager\PaginatorInterface;
 use League\Csv\Reader;
-use Symfony\Component\Form\FileUploadError;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route(path: '/admin/travel')]
 class TravelController extends MainadminController
 {
     private EntityManagerInterface $entityManager;
     private TravelRepository $travelRepository;
-    public function __construct(EntityManagerInterface $entityManager, TravelRepository $travelRepository, private string $csvDirectory )
+
+    public function __construct(EntityManagerInterface $entityManager, TravelRepository $travelRepository)
     {
         $this->entityManager = $entityManager;
         $this->travelRepository = $travelRepository;
     }
+
     #[Route(path: '/', name: 'travel_index', methods: ['GET'])]
     public function index(
         Request $request,
@@ -58,8 +54,7 @@ class TravelController extends MainadminController
 
         return $this->render('admin/travel/index.html.twig', [
             'travels' => $travels,
-            'count' => $count
-
+            'count' => $count,
         ]);
     }
 
@@ -78,15 +73,16 @@ class TravelController extends MainadminController
 
         return $this->render('admin/travel/index.html.twig', [
             'travels' => $travels,
-            'count' => 10
+            'count' => 10,
         ]);
     }
 
     #[Route(path: '/new', name: 'travel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LangRepository $langRepository, MediaRepository $mediaRepository): Response
     {
-        $plantilla = $this->travelRepository->findBy(['main_title' => "PLANTILLA"]);
-        return $this->redirectToRoute('travel_new_from_template',['travel' => $plantilla[0]->getId()]);
+        $plantilla = $this->travelRepository->findBy(['main_title' => 'PLANTILLA']);
+
+        return $this->redirectToRoute('travel_new_from_template', ['travel' => $plantilla[0]->getId()]);
         $this->redirectToLogin($request);
         $langs = $langRepository->findAll();
         $media = $mediaRepository->findAll();
@@ -114,39 +110,40 @@ class TravelController extends MainadminController
     #[Route(path: '/new_from_template/{travel}', name: 'travel_new_from_template', methods: ['GET', 'POST'])]
      public function newFromTemplate(
         Travel $travel,
-        TravelRepository $travelRepository, 
-        slugifyHelper $slugifyHelper, 
+        TravelRepository $travelRepository,
+        slugifyHelper $slugifyHelper,
         LangRepository $langRepository,
-        CategoryRepository $categoryRepository ){
-        $langs = $langRepository->findAll();
-        $travelData = $travelRepository->findBy(['main_title' => "PLANTILLA"]);
+        CategoryRepository $categoryRepository)
+     {
+         $langs = $langRepository->findAll();
+         $travelData = $travelRepository->findBy(['main_title' => 'PLANTILLA']);
 
-        $newTravel = new Travel();
-        $newTravel->setMainTitle("NUEVO VIAJE DESDE PLANTILLA");
-        $newTravel->setStatus($travel->getStatus());
-        $now = new \DateTime();
-        $newTravel->setDate($now);
-        $newTravel->setDuration($travel->getDuration());
-        $newTravel->setCategory($travel->getCategory());
-        foreach ($travel->getTravelTranslation() as $travelTranslation){
-            $newTravelTranslation = new TravelTranslation();
-            $newTravelTranslation->setLang($travelTranslation->getLang());
-            $newTravelTranslation->setTitle("Nuevo viaje desde Plantilla");
-            $newTravelTranslation->setIntro($travelTranslation->getIntro());
-            $newTravelTranslation->setDescription($travelTranslation->getDescription());
-            $newTravelTranslation->setUrl($slugifyHelper->slugify($travelTranslation->getTitle()));
-            $newTravel->addTravelTranslation($newTravelTranslation);
-            $this->entityManager->persist($newTravelTranslation);
-        }
-        $this->entityManager->persist($newTravel);
-        $this->entityManager->flush();
-        return $this->redirectToRoute('travel_edit', [ 'id' => $newTravel->getId() ]);
+         $newTravel = new Travel();
+         $newTravel->setMainTitle('NUEVO VIAJE DESDE PLANTILLA');
+         $newTravel->setStatus($travel->getStatus());
+         $now = new \DateTime();
+         $newTravel->setDate($now);
+         $newTravel->setDuration($travel->getDuration());
+         $newTravel->setCategory($travel->getCategory());
+         foreach ($travel->getTravelTranslation() as $travelTranslation) {
+             $newTravelTranslation = new TravelTranslation();
+             $newTravelTranslation->setLang($travelTranslation->getLang());
+             $newTravelTranslation->setTitle('Nuevo viaje desde Plantilla');
+             $newTravelTranslation->setIntro($travelTranslation->getIntro());
+             $newTravelTranslation->setDescription($travelTranslation->getDescription());
+             $newTravelTranslation->setUrl($slugifyHelper->slugify($travelTranslation->getTitle()));
+             $newTravel->addTravelTranslation($newTravelTranslation);
+             $this->entityManager->persist($newTravelTranslation);
+         }
+         $this->entityManager->persist($newTravel);
+         $this->entityManager->flush();
+
+         return $this->redirectToRoute('travel_edit', ['id' => $newTravel->getId()]);
      }
 
     #[Route(path: '/items', methods: 'GET', name: 'travel_items')]
     public function getItems(Request $request, PaginatorInterface $paginator, TravelRepository $travelRepository)
     {
-
         if (!$presentPage = $request->query->get('page')) {
             $presentPage = 1;
         }
@@ -160,7 +157,7 @@ class TravelController extends MainadminController
             'name',
             'path',
             'filename',
-            'mediaPath'
+            'mediaPath',
         ];
         /* $query = $mediaRepository->listAll(); */
         $defaultPage = 1;
@@ -178,6 +175,7 @@ class TravelController extends MainadminController
             'defaultPage' => $defaultPage,
             'properties' => $properties,
         ];
+
         return $this->json($data, 200, [], ['groups' => 'main']);
         /* return $this->json($mediaRepository->findAll()); */
     }
@@ -192,49 +190,48 @@ class TravelController extends MainadminController
             $csvFile = $form->get('csvFile')->getData();
             if ($csvFile) {
                 $csvUploadedFile = $uploadHelper->upload($csvFile);
-                $reader = Reader::createFromPath($this->csvDirectory . '/' . $csvUploadedFile, 'r');
+                $reader = Reader::createFromPath($this->csvDirectory.'/'.$csvUploadedFile, 'r');
                 $reader->setHeaderOffset(0);
                 $records = $reader->getRecords();
 
                 $langArray = $langRepository->findAll();
                 foreach ($records as $record) {
                     $travel = new Travel();
-                    $travel->setDuration($record["duree"]);
-                    $travel->setLevel($record["niveau"]);
-                    $travel->setStatus($record["statut"]);
-                    $travel->setDuration($record["duree"]);
+                    $travel->setDuration($record['duree']);
+                    $travel->setLevel($record['niveau']);
+                    $travel->setStatus($record['statut']);
+                    $travel->setDuration($record['duree']);
                     $travel->setDate(new \DateTime());
-                    $travel->setMainTitle($record["titre_en"]);
+                    $travel->setMainTitle($record['titre_en']);
                     foreach ($langArray as $lang) {
                         $travelTranslation = new TravelTranslation();
                         $travelTranslation->setLang($lang);
 
-                        $travelTranslation->setTitle($record['titre_' . $lang->getIsoCode()]);
+                        $travelTranslation->setTitle($record['titre_'.$lang->getIsoCode()]);
 
-                        $travelTranslation->setUrl($record["url_" . $lang->getIsoCode()]);
-                        $travelTranslation->setSummary($record["resume_" . $lang->getIsoCode()]);
-                        $travelTranslation->setIntro($record["intro_" . $lang->getIsoCode()]);
-                        $travelTranslation->setDescription($record["description_" . $lang->getIsoCode()]);
-                        $travelTranslation->setItinerary($record["itineraire_" . $lang->getIsoCode()]);
-                        $travelTranslation->setPracticalInfo($record["pratique_" . $lang->getIsoCode()]);
+                        $travelTranslation->setUrl($record['url_'.$lang->getIsoCode()]);
+                        $travelTranslation->setSummary($record['resume_'.$lang->getIsoCode()]);
+                        $travelTranslation->setIntro($record['intro_'.$lang->getIsoCode()]);
+                        $travelTranslation->setDescription($record['description_'.$lang->getIsoCode()]);
+                        $travelTranslation->setItinerary($record['itineraire_'.$lang->getIsoCode()]);
+                        $travelTranslation->setPracticalInfo($record['pratique_'.$lang->getIsoCode()]);
                         $travel->addTravelTranslation($travelTranslation);
                     }
-
 
                     $this->entityManager->persist($travel);
                     $this->entityManager->flush();
                 }
             }
-            //return $this->redirectToRoute('travel_index');
+            // return $this->redirectToRoute('travel_index');
         }
         // 1. If no file has been submitted show form.
         return $this->render('admin/travel/_form_add_from_csv.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
-
 
         // 2. When a file has been submitted process it.
     }
+
     #[Route(path: '/{id}', name: 'travel_show', methods: ['GET'])]
     public function show(Travel $travel): Response
     {
@@ -249,14 +246,14 @@ class TravelController extends MainadminController
         Travel $travel,
         MediaRepository $mediaRepository,
     ): Response {
-
         $mediaId = $request->request->get('mediaId');
         $media = $mediaRepository->find($mediaId);
-        
+
         $travel->setMainPhoto($media);
         $this->entityManager->persist($travel);
         $this->entityManager->flush();
-        return new Response($travel->getId() . ', ' . $mediaId);
+
+        return new Response($travel->getId().', '.$mediaId);
     }
 
     #[Route(path: '/{id}/edit', name: 'travel_edit', methods: ['GET', 'POST'])]
@@ -266,7 +263,6 @@ class TravelController extends MainadminController
         LangRepository $langRepository,
         slugifyHelper $slugifyHelper
     ): Response {
-
         $langs = $langRepository->findAll();
         $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
@@ -282,21 +278,21 @@ class TravelController extends MainadminController
             $this->entityManager->persist($travel);
             $this->entityManager->flush();
 
-            //return $this->redirectToRoute('travel_index');
+            // return $this->redirectToRoute('travel_index');
         }
 
         return $this->render('admin/travel/edit.html.twig', [
             'langs' => $langs,
             'travel' => $travel,
             'media' => $travel->getMedia(),
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route(path: '/{id}', name: 'travel_delete', methods: ['POST'])]
     public function delete(Request $request, Travel $travel): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $travel->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$travel->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($travel);
             $this->entityManager->flush();
         }
@@ -318,19 +314,19 @@ class TravelController extends MainadminController
             $uploadedFile,
             [
                 new NotBlank([
-                    'message' => 'Please select a file to upload'
+                    'message' => 'Please select a file to upload',
                 ]),
                 new File([
                     'maxSize' => '50M',
                     'mimeTypes' => [
                         'image/*',
-                        'application/pdf'
-                    ]
-                ])
+                        'application/pdf',
+                    ],
+                ]),
             ]
         );
         if ($violations->count() > 0) {
-            /** @var ConstraintViolation $violation */
+            /* @var ConstraintViolation $violation */
             /* $violation = $violations[0];
             $this->addFlash('error', $violation->getMessage()); */
 
@@ -348,21 +344,20 @@ class TravelController extends MainadminController
         $this->entityManager->persist($infodoc);
         $this->entityManager->flush();
 
-        return $this->render('admin/travel/_list_infodocs.html.twig',['travel' => $travel]);
-        
+        return $this->render('admin/travel/_list_infodocs.html.twig', ['travel' => $travel]);
     }
 
     #[Route(path: '/ajax/removeInfoDocs/{travel}/{infodoc}', options: ['expose' => true], name: 'ajax-remove-infodocs', methods: 'GET')]
     public function removeInfodocs(
-        Travel $travel, 
+        Travel $travel,
         Infodocs $infodoc,
         UploadHelper $uploadHelper
-        ){
-            $uploadHelper->deleteFile($infodoc->getPath(), true);
-            $travel->removeInfodoc($infodoc);
-            $this->entityManager->remove($infodoc);
-            $this->entityManager->flush();
-            
-            return $this->render('admin/travel/_list_infodocs.html.twig',['travel' => $travel]);
+        ) {
+        $uploadHelper->deleteFile($infodoc->getPath(), true);
+        $travel->removeInfodoc($infodoc);
+        $this->entityManager->remove($infodoc);
+        $this->entityManager->flush();
+
+        return $this->render('admin/travel/_list_infodocs.html.twig', ['travel' => $travel]);
     }
 }

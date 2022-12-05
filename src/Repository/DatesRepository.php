@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use App\Entity\Dates;
-use App\Entity\Travel;
-use App\Entity\Lang;
-use App\Entity\TravelTranslation;
 use App\Entity\Category;
 use App\Entity\CategoryTranslation;
+use App\Entity\Dates;
+use App\Entity\Lang;
+use App\Entity\Travel;
+use App\Entity\TravelTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,7 +31,6 @@ class DatesRepository extends ServiceEntityRepository
             ->orderBy('d.debut', 'DESC')
             ->getQuery();
     }
-    
 
     public function showNextDates($travel)
     {
@@ -52,8 +51,10 @@ class DatesRepository extends ServiceEntityRepository
             ->setParameter('travel', $travel['id'])
             ->orderBy('d.debut', 'ASC')
             ->getQuery();
+
         return $q->getResult();
     }
+
     public function showNextDate($travel)
     {
         $qb = $this->createQueryBuilder('d');
@@ -67,8 +68,10 @@ class DatesRepository extends ServiceEntityRepository
             ->setParameter('travel', $travel['id'])
             ->orderBy('d.debut', 'DESC')
             ->getQuery();
+
         return $q->getSingleResult();
     }
+
     public function listNextDates()
     {
         $qb = $this->createQueryBuilder('d');
@@ -77,6 +80,7 @@ class DatesRepository extends ServiceEntityRepository
         )
             ->orderBy('d.debut', 'DESC')
             ->getQuery();
+
         return $q->getResult();
     }
 
@@ -105,6 +109,7 @@ class DatesRepository extends ServiceEntityRepository
             /* ->groupBy('yearDebut, monthDebut') */
             ->orderBy('d.debut', 'ASC')
             ->getQuery();
+
         return $q->getResult();
     }
 
@@ -130,6 +135,7 @@ class DatesRepository extends ServiceEntityRepository
                 $qb->expr()->gt('d.debut', 'NOW()')
             )
             ->getQuery();
+
         return $q->getResult();
     }
 
@@ -143,8 +149,10 @@ class DatesRepository extends ServiceEntityRepository
             )
             ->groupBy('year')
             ->getQuery();
+
         return $q->getResult();
     }
+
     public function getMonthedDates($year)
     {
         $qb = $this->createQueryBuilder('d');
@@ -159,6 +167,7 @@ class DatesRepository extends ServiceEntityRepository
             ->groupBy('monthname')
             ->orderBy('MONTH(d.debut)', 'ASC')
             ->getQuery();
+
         return $q->getResult();
     }
 

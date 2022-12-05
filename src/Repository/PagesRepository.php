@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Pages;
 use App\Entity\Media;
+use App\Entity\Pages;
 use App\Entity\PageTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -50,15 +50,15 @@ class PagesRepository extends ServiceEntityRepository
         ;
     }
     */
-    
-    
-    public function listAll() 
+
+    public function listAll()
     {
         return $this->createQueryBuilder('p')
             ->getQuery();
     }
 
-    public function showPageFromTranslationSlug($url){
+    public function showPageFromTranslationSlug($url)
+    {
         return $this->createQueryBuilder('p')
         ->select('
             p.id,
@@ -74,6 +74,6 @@ class PagesRepository extends ServiceEntityRepository
         ->orderBy('p.id', 'ASC')
         ->setMaxResults(1)
         ->getQuery()
-        ->getOneOrNullResult(); 
+        ->getOneOrNullResult();
     }
 }

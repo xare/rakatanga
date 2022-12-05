@@ -3,12 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use App\Entity\Lang;
-use App\Entity\Travel;
-use App\Entity\TravelTranslation;
 use App\Entity\CategoryTranslation;
 use App\Entity\Dates;
+use App\Entity\Lang;
 use App\Entity\Media;
+use App\Entity\Travel;
+use App\Entity\TravelTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -58,7 +58,6 @@ class TravelRepository extends ServiceEntityRepository
     /**
      * @return Travel[] Returns an array of Travel objects
      */
-
     public function findTravelsForIndex($value = 'es')
     {
         return $this->createQueryBuilder('t')
@@ -81,11 +80,13 @@ class TravelRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function listAll()
     {
         return $this->createQueryBuilder('t')
             ->getQuery();
     }
+
     public function listAll2()
     {
         return $this->createQueryBuilder('t')
@@ -115,7 +116,7 @@ class TravelRepository extends ServiceEntityRepository
             ->andWhere('tt.url = :url')
             ->setParameter('url', $url)
             ->orderBy('t.id', 'ASC')
-            //->setMaxResults(1)
+            // ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -159,7 +160,7 @@ class TravelRepository extends ServiceEntityRepository
         $travelArray = [];
         foreach ($travels as $travel) {
             $id = $travel->getId();
-            //$travelArray[$id] = $travel;
+            // $travelArray[$id] = $travel;
             $travelArray[$id]['translations'] =
                 $this->getEntityManager()
                 ->createQueryBuilder()
@@ -168,8 +169,9 @@ class TravelRepository extends ServiceEntityRepository
                 ->where('tt.travel = :travel')
                 ->setParameter('travel', $travelArray[$id])
                 ->getQuery()
-                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);;
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
+
         return $travelArray;
     }
 

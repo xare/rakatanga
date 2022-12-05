@@ -21,13 +21,13 @@ class ArticlesController extends AbstractController
         ArticlesRepository $articlesRepository,
         PaginatorInterface $paginator): Response
     {
-        
         $query = $articlesRepository->listAll();
         $items = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/articles/index.html.twig', [
             'articles' => $items,
         ]);
@@ -41,7 +41,6 @@ class ArticlesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $entityManager->persist($article);
             $entityManager->flush();
 

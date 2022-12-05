@@ -4,27 +4,25 @@ namespace App\Controller\admin;
 
 use App\Entity\Contact;
 use App\Form\ContactType;
-use App\Repository\ContactRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\admin\MainadminController;
-use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 #[Route(path: '/admin/contact')]
 class ContactController extends MainadminController
 {
     private $entityManager;
 
-    public function __construct (EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route(path: '/', name: 'contact_index', methods: ['GET'])]
     public function index(
-        Request $request, 
+        Request $request,
         PaginatorInterface $paginator): Response
     {
         $repository = $this->entityManager->getRepository(Contact::class);
@@ -32,12 +30,13 @@ class ContactController extends MainadminController
         $query = $repository->listAll();
         $contacts = $paginator->paginate(
             $query,
-            $request->query->getInt('page',1),
+            $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('admin/contact/index.html.twig', [
             'contacts' => $contacts,
-            'count' => $count
+            'count' => $count,
         ]);
     }
 
@@ -49,7 +48,6 @@ class ContactController extends MainadminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $this->entityManager->persist($contact);
             $this->entityManager->flush();
 
@@ -73,7 +71,6 @@ class ContactController extends MainadminController
     #[Route(path: '/{id}/edit', name: 'contact_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Contact $contact): Response
     {
-        
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 

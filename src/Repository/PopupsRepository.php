@@ -71,6 +71,7 @@ class PopupsRepository extends ServiceEntityRepository
             ->setParameter('locale', $locale)
             ->orderBy('p.id', 'DESC')
             ->getQuery();
-            return $q->getOneOrNullResult();
+
+        return $q->getOneOrNullResult();
     }
 }

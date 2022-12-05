@@ -13,7 +13,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OldreservationsType extends AbstractType
@@ -38,30 +37,27 @@ class OldreservationsType extends AbstractType
             ->add('statut')
             ->add('origine_ajout')
             ->add('date_ajout', null, [
-                'widget' => 'single_text' ,
+                'widget' => 'single_text',
                 'html5' => false,
-                'attr' =>
-                    [ 'class' => 'datepicker' ]
+                'attr' => ['class' => 'datepicker'],
                 ])
             ->add('date_paiement_1', null, [
                 'widget' => 'single_text',
                 'html5' => false,
-                'attr' => 
-                    [ 'class' => 'datepicker' ]
+                'attr' => ['class' => 'datepicker'],
             ])
             ->add('date_paiement_2', null, [
                 'widget' => 'single_text',
-                'html5'=> false,
-                'attr' =>
-                    [ 'class' => 'datepicker' ]
+                'html5' => false,
+                'attr' => ['class' => 'datepicker'],
             ])
-            ->add('Inscriptions', EntityType::class,[
+            ->add('Inscriptions', EntityType::class, [
                 'class' => Inscriptions::class,
                 'placeholder' => 'Elige Inscrito',
                 'multiple' => false,
                 'expanded' => false,
             ])
-            ->add('Travel', EntityType::class,[
+            ->add('Travel', EntityType::class, [
                 'class' => Travel::class,
                 'placeholder' => 'Elige Viaje',
                 'multiple' => false,
@@ -78,7 +74,7 @@ class OldreservationsType extends AbstractType
                 'expanded' => false,
             ]) */
         ;
-        
+
         /* if ($travel) {
             $builder->add('dates', EntityType::class, [
                 'class' => Dates::class,
@@ -88,16 +84,16 @@ class OldreservationsType extends AbstractType
                     return $er->createQueryBuilder('d')
                         ->orderBy('d.debut', 'ASC');
                 }, */
-                /* 'multiple' => false,
-                'expanded' => false, */
-           /* ]);
+        /* 'multiple' => false,
+        'expanded' => false, */
+        /* ]);
         } */
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
                 /** @var OldReservation|null $data */
                 $data = $event->getData();
-                if(!$data) {
+                if (!$data) {
                     return;
                 }
                 $this->setupDateNameField(
@@ -108,7 +104,7 @@ class OldreservationsType extends AbstractType
         );
         $builder->get('Travel')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function(FormEvent $event){
+            function (FormEvent $event) {
                 $form = $event->getForm();
                 $this->setupDateNameField(
                     $form->getParent(),
@@ -120,13 +116,15 @@ class OldreservationsType extends AbstractType
 
     private function setupDateNameField(FormInterface $form, ?Travel $Travel)
     {
-        if(null === $Travel){
+        if (null === $Travel) {
             $form->remove('dates');
+
             return;
         }
         $dates = $Travel->getDates();
-        if(null === $dates) {
+        if (null === $dates) {
             $form->remove('dates');
+
             return;
         }
         $form->add('dates', EntityType::class, [
@@ -141,6 +139,7 @@ class OldreservationsType extends AbstractType
             'expanded' => false,
         ]);
     }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -3,12 +3,10 @@
 namespace App\Controller\admin;
 
 use App\Entity\Texts;
-use App\Entity\Lang;
 use App\Form\TextsType;
 use App\Repository\LangRepository;
 use App\Repository\TextsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,15 +20,17 @@ class TextsController extends MainadminController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route('/', name: 'texts_index', methods: ['GET'])]
     public function index(Request $request, TextsRepository $textsRepository): Response
     {
-        if(!$pageNumber = $request->query->get('page')){
+        if (!$pageNumber = $request->query->get('page')) {
             $pageNumber = 0;
         }
+
         return $this->render('admin/texts/index.html.twig', [
             'texts' => $textsRepository->findAll(),
-            'pageNumber' => $pageNumber
+            'pageNumber' => $pageNumber,
         ]);
     }
 
@@ -57,13 +57,11 @@ class TextsController extends MainadminController
             'form' => $form->createView(),
         ]);
     }
-    
-    #[Route("/items", methods: ['GET'], name: "texts_items")]
-    public function getTextsItems(Request $request, TextsRepository $textsRepository): \Symfony\Component\HttpFoundation\Response
+
+    #[Route('/items', methods: ['GET'], name: 'texts_items')]
+    public function getTextsItems(Request $request, TextsRepository $textsRepository): Response
     {
-       
-        if (!$presentPage = $request->query->get('page'))
-        {
+        if (!$presentPage = $request->query->get('page')) {
             $presentPage = 1;
         }
 
@@ -74,12 +72,12 @@ class TextsController extends MainadminController
             'acronym',
             'title',
             'text',
-            'date'
+            'date',
         ];
-        
+
         $defaultPage = 1;
         $itemsPerPage = 10;
-        
+
         $data = [
             'items' => $allItems,
             'count' => count($allItems),
@@ -89,8 +87,8 @@ class TextsController extends MainadminController
             'properties' => $properties,
         ];
 
-        //dd($data);
-        return $this->json($data,200,[],['groups'=>'main']);
+        // dd($data);
+        return $this->json($data, 200, [], ['groups' => 'main']);
     }
 
     #[Route('/{id}', name: 'texts_show', methods: ['GET'])]
@@ -100,8 +98,6 @@ class TextsController extends MainadminController
             'text' => $text,
         ]);
     }
-     
-    
 
     #[Route('/{id}/edit', name: 'texts_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Texts $text): Response
