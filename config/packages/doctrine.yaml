@@ -1,6 +1,6 @@
 doctrine:
     dbal:
-        override_url: true
+        # override_url: true
         url: '%env(resolve:DATABASE_URL)%'
         types:
             phone_number: Adamski\Symfony\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType

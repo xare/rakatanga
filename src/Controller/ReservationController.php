@@ -61,12 +61,12 @@ class ReservationController extends AbstractController
      #[Route(path: ['en' => '{_locale}/trips/{category}/{travel}/reservation/{date}/', 'es' => '{_locale}/trips/{category}/{travel}/reserva/{date}/', 'fr' => '{_locale}/trips/{category}/{travel}/reservation/{date}/'], name: 'reservation', priority: 10)]
      public function index(
                         Request $request,
-                        $_locale = null,
+                        string $_locale = null,
                         TravelTranslationRepository $travelTranslationRepository,
                         CategoryTranslationRepository $categoryTranslationRepository,
                         DatesRepository $datesRepository,
                         LangRepository $langRepository,
-                        $locale = 'es'
+                        string $locale = 'es'
      ) {
          // ROUTE ELEMENTS
          $locale = $locale ? $_locale : $locale;
