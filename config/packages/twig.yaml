@@ -9,3 +9,8 @@ twig:
     paths:
       'assets/images': images
       'assets/styles': styles
+
+
+when@test:
+    twig:
+        strict_variables: true
