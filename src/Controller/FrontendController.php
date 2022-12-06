@@ -90,12 +90,12 @@ class FrontendController extends AbstractController
         }
 
         $travels = $this->travelRepository->findTravelsForIndex($locale);
-        $continent = $this->continentsRepository->findBy(
+        $continent = $this->continentsRepository->findOneBy(
             ['code' => 'as']
         );
 
-        $categories = $this->categoryRepository->findCategoriesForIndex($locale, $continent);
-        $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex($locale, $continent);
+        $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale );
+        $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex($continent, $locale);
 
         $years = $this->datesRepository->getDatesByYear();
 
@@ -255,8 +255,8 @@ class FrontendController extends AbstractController
         // 3. Get the travels for that category
         $travels = $this->travelRepository
             ->showByCategory(
-                $categoryTranslation->getCategory()->getId(),
-                $locale
+                $locale,
+                $categoryTranslation->getCategory()->getId()
             );
 
         $items = [];

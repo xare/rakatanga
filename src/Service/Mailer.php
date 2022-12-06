@@ -7,7 +7,6 @@ use App\Entity\Mailings;
 use App\Entity\Reservation;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -21,57 +20,16 @@ class Mailer
     public const MAIL_TITLE = 'Rakatanga-tour';
 
     /**
-     * @var MailerInterface
-     */
-    private $mailer;
-
-    /**
-     * @var pdfHelper
-     */
-    private $pdfHelper;
-
-    /**
-     * @var KernelInterface
-     */
-    private $appKernel;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var localizationHelper
-     */
-    private $localizationHelper;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var Environment
-     */
-    private $twig;
-
-    /**
      * MailerService constructor.
      */
     public function __construct(
-        MailerInterface $mailer,
-        pdfHelper $pdfHelper,
-        KernelInterface $appKernel,
-        TranslatorInterface $translator,
-        localizationHelper $localizationHelper,
-        EntityManagerInterface $entityManager,
-        ContainerInterface $container,
-        Environment $twig
+        private MailerInterface $mailer,
+        private pdfHelper $pdfHelper,
+        private KernelInterface $appKernel,
+        private TranslatorInterface $translator,
+        private localizationHelper $localizationHelper,
+        private EntityManagerInterface $entityManager,
+        private Environment $twig
     ) {
         $this->mailer = $mailer;
         $this->pdfHelper = $pdfHelper;
@@ -79,7 +37,6 @@ class Mailer
         $this->translator = $translator;
         $this->localizationHelper = $localizationHelper;
         $this->entityManager = $entityManager;
-        $this->container = $container;
         $this->twig = $twig;
     }
 

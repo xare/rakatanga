@@ -33,7 +33,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery();
     }
 
-    public function showByCategory($category, $locale)
+    public function showByCategory(string $locale, Category $category)
     {
         return $this->createQueryBuilder('c')
             ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id = ct.category')
@@ -43,7 +43,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findCountriesByContinent($continent, $locale)
+    public function findCountriesByContinent(string $locale, Continents $continent)
     {
         return $this->createQueryBuilder('c')
             ->select(
@@ -64,7 +64,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findCategoriesForIndex($locale = 'es', $continent)
+    public function findCategoriesForIndex(Continents $continent, string $locale = 'es')
     {
         return $this->createQueryBuilder('c')
              ->select('
@@ -94,7 +94,7 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findOtherCategoriesForIndex($locale = 'es', $continent)
+    public function findOtherCategoriesForIndex(Continents $continent, string $locale = 'es')
     {
         return $this->createQueryBuilder('c')
              ->select('
@@ -123,7 +123,7 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findAsiaCategoriesForIndex($locale = 'es')
+    public function findAsiaCategoriesForIndex(string $locale = 'es')
     {
         return $this->createQueryBuilder('c')
              ->select('
@@ -150,7 +150,7 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
 
-    public function footerList($locale)
+    public function footerList(string $locale)
     {
         return $this->createQueryBuilder('c')
                 ->select('ct.title as title')
@@ -162,7 +162,7 @@ class CategoryRepository extends ServiceEntityRepository
                 ->getResult();
     }
 
-    public function listCategoryByContinent($continentCode)
+    public function listCategoryByContinent(string $continentCode)
     {
         return $this->createQueryBuilder('c')
                 ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id = ct.category')
