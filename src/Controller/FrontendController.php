@@ -26,34 +26,20 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class FrontendController extends AbstractController
 {
-    private $travelRepository;
-    private $datesRepository;
-    private $categoryRepository;
-    private $categoryTranslationRepository;
-    private $textsRepository;
-    private $langRepository;
-    private $menuRepository;
-    private $menuTranslationRepository;
-    private $pageTranslationRepository;
-    private $continentsRepository;
-    private $translatorInterface;
-    private $pagesRepository;
-    private $breadcrumbsHelper;
-
     public function __construct(
-        TravelRepository $travelRepository,
-        DatesRepository $datesRepository,
-        CategoryRepository $categoryRepository,
-        CategoryTranslationRepository $categoryTranslationRepository,
-        TextsRepository $textsRepository,
-        LangRepository $langRepository,
-        MenuTranslationRepository $menuTranslationRepository,
-        PageTranslationRepository $pageTranslationRepository,
-        ContinentsRepository $continentsRepository,
-        MenuRepository $menuRepository,
-        TranslatorInterface $translatorInterface,
-        PagesRepository $pagesRepository,
-        breadcrumbsHelper $breadcrumbsHelper
+        private TravelRepository $travelRepository,
+        private DatesRepository $datesRepository,
+        private CategoryRepository $categoryRepository,
+        private CategoryTranslationRepository $categoryTranslationRepository,
+        private TextsRepository $textsRepository,
+        private LangRepository $langRepository,
+        private MenuTranslationRepository $menuTranslationRepository,
+        private PageTranslationRepository $pageTranslationRepository,
+        private ContinentsRepository $continentsRepository,
+        private MenuRepository $menuRepository,
+        private TranslatorInterface $translatorInterface,
+        private PagesRepository $pagesRepository,
+        private breadcrumbsHelper $breadcrumbsHelper
     ) {
         $this->travelRepository = $travelRepository;
         $this->categoryTranslationRepository = $categoryTranslationRepository;

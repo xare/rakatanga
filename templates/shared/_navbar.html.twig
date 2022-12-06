@@ -1,6 +1,6 @@
 
 <nav class="navbar navbar-expand-lg navbar-light fixed-top"
-{{ is_granted('ROLE_PREVIOUS_ADMIN') ? 'style="background-color: #f4d38b !important"' }}>
+{{ is_granted('IS_IMPERSONATOR') ? 'style="background-color: #f4d38b !important"' }}>
   <div class="container">
       <a class="navbar-brand" href="{{path('index',{'_locale':app.request.getLocale()})}}">
         <img src="{{asset('images/rakatanga-tour.png')}}" width="230" height="" alt="Rakatanga Tour">
