@@ -12,6 +12,7 @@ use App\Repository\LangRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\ReservationOptionsRepository;
 use App\Repository\ReservationRepository;
+use App\Service\breadcrumbsHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,10 +25,14 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class UserFrontendController extends AbstractController
 {
-    public function __construct(private TranslatorInterface $translatorInterface, private EntityManagerInterface $entityManager)
+    public function __construct(
+                        private TranslatorInterface $translatorInterface, 
+                        private EntityManagerInterface $entityManager, 
+                        private breadcrumbsHelper $breadcrumbsHelper)
     {
         $this->translator = $translatorInterface;
         $this->entityManager = $entityManager;
+        $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
 
     #[Route(path: '/user', name: 'frontend_user')]
@@ -36,7 +41,7 @@ class UserFrontendController extends AbstractController
         DatesRepository $datesRepository,
         LangRepository $langRepository,
         string $_locale = null,
-        $locale = 'es'
+        string $locale = 'es'
     ) {
         $locale = $_locale ? $_locale : $locale;
         /**
@@ -70,9 +75,8 @@ class UserFrontendController extends AbstractController
     #[Route(path: ['en' => '{_locale}/user/reservations/', 'es' => '{_locale}/usuario/reservas/', 'fr' => '{_locale}/utilisateur/reservations/'], name: 'frontend_user_reservations', priority: 2)]
     public function frontend_user_reservations(
         LangRepository $langRepository,
-        $_locale = null,
-        Breadcrumbs $breadcrumbs,
         ReservationRepository $reservationRepository,
+        $_locale = null,
         $locale = 'es',
     ) {
         $locale = $_locale ? $_locale : $locale;
@@ -90,20 +94,8 @@ class UserFrontendController extends AbstractController
         // End switch Locale loader
 
         // BREADCRUMBS
-
-        $breadcrumbs->addRouteItem(
-            $this->translator->trans('Tus Reservas'),
-            'frontend_user_reservations',
-            [
-                '_locale' => $locale,
-            ]
-        );
-        $breadcrumbs->prependRouteItem(
-            $this
-                ->translator
-                ->trans('Inicio'),
-            'index'
-        );
+        $this->breadcrumbsHelper->userFrontendReservationsBreadcrumbs($locale);
+        
         // END BREADCRUMBS
 
         $reservations = $reservationRepository->findBy(['user' => $user], ['date_ajout' => 'DESC']);
@@ -119,8 +111,8 @@ class UserFrontendController extends AbstractController
     public function frontend_user_settings(
         Request $request,
         LangRepository $langRepository,
-        string $_locale = null,
         Breadcrumbs $breadcrumbs,
+        string $_locale = null,
         $locale = 'es'
     ) {
         $locale = $_locale ?: $locale;
@@ -137,30 +129,12 @@ class UserFrontendController extends AbstractController
 
         // End swith locale Loader
 
-        // BREADCRUMBS
-        $breadcrumbs->addRouteItem(
-            $this->translator->trans('Usuario'),
-            'frontend_user',
-            [
-                '_locale' => $locale,
-            ]
-        );
-        $breadcrumbs->addRouteItem(
-            $this->translator->trans('Datos del usuario'),
-            'frontend_user_settings',
-            [
-                '_locale' => $locale,
-            ]
-        );
-        $breadcrumbs->prependRouteItem(
-            $this
-                ->translator
-                ->trans('Inicio'),
-            'index'
-        );
-        // END BREADCRUMBS
+        $this->breadcrumbsHelper->frontendUserSettingsBreadcrumbs($locale);
 
         // Create User Form
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -206,8 +180,7 @@ class UserFrontendController extends AbstractController
     #[Route(path: '/user/ajax/reservation-manager/changeNb/', name: 'user-ajax-reservation-manager-add-pilote')]
     public function reservationManagerChangeNb(
         Request $request,
-        ReservationRepository $reservationRepository,
-        EntityManagerInterface $em
+        ReservationRepository $reservationRepository
     ) {
         $reservationId = $request->request->get('reservationId');
         $operation = $request->request->get('operation');
@@ -236,8 +209,8 @@ class UserFrontendController extends AbstractController
             $reservation->setNbAccomp($nb);
         }
 
-        $em->persist($reservation);
-        $em->flush();
+        $this->entityManager->persist($reservation);
+        $this->entityManager->flush();
 
         return $this->json([
             'nb' => $nb,
@@ -249,8 +222,7 @@ class UserFrontendController extends AbstractController
         Request $request,
         ReservationRepository $reservationRepository,
         OptionsRepository $optionsRepository,
-        ReservationOptionsRepository $reservationOptionsRepository,
-        EntityManagerInterface $em
+        ReservationOptionsRepository $reservationOptionsRepository
     ) {
         $reservationId = $request->request->get('reservationId');
         $optionId = $request->request->get('optionId');
@@ -272,8 +244,8 @@ class UserFrontendController extends AbstractController
         }
         $reservationOption->setAmmount($ammount);
 
-        $em->persist($reservationOption);
-        $em->flush();
+        $this->entityManager->persist($reservationOption);
+        $this->entityManager->flush();
 
         return $this->json([
             'ammount' => $ammount,
@@ -285,8 +257,7 @@ class UserFrontendController extends AbstractController
         Request $request,
         Reservation $reservation,
         OptionsRepository $optionsRepository,
-        ReservationOptionsRepository $reservationOptionsRepository,
-        EntityManagerInterface $em
+        ReservationOptionsRepository $reservationOptionsRepository
     ) {
         $pilotes = $request->request->get('pilotes');
         $Accomp = $request->request->get('Accomp');
@@ -305,17 +276,17 @@ class UserFrontendController extends AbstractController
                 ]);
                 if (null !== $reservationOptions) {
                     $reservationOptions->setAmmount($nb);
-                    $em->persist($reservationOptions);
+                    $this->entityManager->persist($reservationOptions);
                 } else {
                     $reservationOptions = new ReservationOptions();
                     $reservationOptions->setOptions($option);
                     $reservationOptions->setAmmount($nb);
                     $reservation->addReservationOption($reservationOptions);
-                    $em->persist($reservation);
+                    $this->entityManager->persist($reservation);
                 }
             }
         }
-        $em->flush();
+        $this->entityManager->flush();
 
         return $this->redirectToRoute(
             'frontend_user_reservation',
@@ -324,13 +295,5 @@ class UserFrontendController extends AbstractController
                 'reservation' => $reservation->getId(),
             ]
         );
-        /* return $this->json(
-                    $reservation,
-                    201,
-                    [],
-                    [
-                        'groups' => ['main']
-                    ]
-                ); */
     }
 }

@@ -17,27 +17,27 @@ class Articles
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $intro;
+    private ?string $intro;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $body;
+    private ?string $body;
 
     /**
      * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="articles")
      */
-    private $media;
+    private ?Media $media;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -48,17 +48,17 @@ class Articles
      * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="articles")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $blog;
+    private Blog $blog;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\OneToOne(targetEntity=Media::class, inversedBy="article", cascade={"persist", "remove"})
      */
-    private $mainPhoto;
+    private Media $mainPhoto;
 
     public function __construct()
     {

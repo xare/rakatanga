@@ -72,10 +72,10 @@ services:
     acme.security.authentication_handler:
         class: App\Security\AuthenticationHandler
         public: false
-        arguments: ["@router", "@session"]
+        arguments: ["@router", "@requestHandler"]
 
     app.rememberme.services:
-        class: Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface
+        class: Symfony\Component\Security\Http\RememberMe\RememberMeHandlerInterface
         public: true
 
     app.contentHelper.custom:

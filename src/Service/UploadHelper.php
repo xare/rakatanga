@@ -21,22 +21,16 @@ class UploadHelper
     public const TRAVEL = 'travel';
     public const INVOICES = 'invoices';
     public const INFODOCS = 'infodocs';
-    private $requestStackContext;
-    private $slugger;
-    private $filesystem;
-    private $logger;
-    private $uploadedAssetsBaseUrl;
-    protected $parameterBag;
 
     public function __construct(
-        FilesystemOperator $publicUploadsFilesystem,
-        FileSystemOperator $privateUploadsFilesystem,
-        string $targetDirectory,
-        RequestStackContext $requestStackContext,
-        SluggerInterface $slugger,
-        LoggerInterface $logger,
-        string $uploadedAssetsBaseUrl,
-        ParameterBagInterface $parameterBag
+        private FilesystemOperator $publicUploadsFilesystem,
+        private FileSystemOperator $privateUploadsFilesystem,
+        private string $targetDirectory,
+        private RequestStackContext $requestStackContext,
+        private SluggerInterface $slugger,
+        private LoggerInterface $logger,
+        private string $uploadedAssetsBaseUrl,
+        protected ParameterBagInterface $parameterBag
         ) {
         $this->filesystem = $publicUploadsFilesystem;
         $this->privateFilesystem = $privateUploadsFilesystem;
@@ -57,7 +51,7 @@ class UploadHelper
 
         try {
             $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
+        } catch (FileException) {
             // ... handle exception if something happens during file upload
         }
 
@@ -74,7 +68,7 @@ class UploadHelper
                 if ($result === false) {
                     throw new \Exception(sprintf('Could not delete old uploaded file "%s"', $existingFilename));
                 }
-            } catch (FileNotFoundException $e) {
+            } catch (FileNotFoundException) {
                 $this->logger->alert(sprintf('Old uploaded file "%s" was missing when trying to delete', $existingFilename));
             }
         }

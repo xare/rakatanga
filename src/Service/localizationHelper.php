@@ -10,37 +10,42 @@ use App\Entity\Pages;
 use App\Entity\PageTranslation;
 use App\Entity\Travel;
 use App\Entity\TravelTranslation;
+use App\Repository\CategoryRepository;
+use App\Repository\CategoryTranslationRepository;
+use App\Repository\LangRepository;
 use App\Repository\OptionsRepository;
+use App\Repository\OptionsTranslationsRepository;
+use App\Repository\PagesRepository;
+use App\Repository\PageTranslationRepository;
 use App\Repository\ReservationOptionsRepository;
+use App\Repository\TravelRepository;
+use App\Repository\TravelTranslationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class localizationHelper
 {
-    private $em;
-    private $optionsRepository;
-    private $translator;
-    private $reservationOptionsRepository;
 
     public function __construct(
-        EntityManagerInterface $em,
-        OptionsRepository $optionsRepository,
-        ReservationOptionsRepository $reservationOptionsRepository,
-        TranslatorInterface $translator
+        private CategoryRepository $categoryRepository,
+        private CategoryTranslationRepository $categoryTranslationRepository,
+        private LangRepository $langRepository,
+        private OptionsRepository $optionsRepository,
+        private OptionsTranslationsRepository $optionsTranslationsRepository,
+        private PagesRepository $pagesRepository,
+        private PageTranslationRepository $pageTranslationRepository,
+        private ReservationOptionsRepository $reservationOptionsRepository,
+        private TranslatorInterface $translator,
+        private TravelTranslationRepository $travelTranslationRepository,
+        private TravelRepository $travelRepository
          ) {
-        $this->em = $em;
-        $this->optionsRepository = $optionsRepository;
-        $this->reservationOptionsRepository = $reservationOptionsRepository;
-        $this->translator = $translator;
     }
 
     public function renderTravelString($id, $locale)
     {
-        $travel = $this->em->getRepository(Travel::class)->find($id);
+        $travel = $this->travelTranslationRepository->find($id);
         $lang = $this->_getLang($locale);
-        $travelObject = $this->em
-        ->getRepository(TravelTranslation::class)
-        ->findOneBy(['travel' => $travel, 'lang' => $lang]);
+        $travelObject = $this->travelTranslationRepository->findOneBy(['travel' => $travel, 'lang' => $lang]);
 
         if (null === $travelObject) {
             return '';
@@ -51,11 +56,11 @@ class localizationHelper
 
     public function renderTravelUrl($id, $locale)
     {
-        $travel = $this->em->getRepository(Travel::class)->find($id);
+        $travel = $this->travelRepository->find($id);
         $lang = $this->_getLang($locale);
-        $travelObject = $this->em
-        ->getRepository(TravelTranslation::class)
-        ->findOneBy(['travel' => $travel, 'lang' => $lang]);
+        $travelObject = $this->travelTranslationRepository->findOneBy(
+                            ['travel' => $travel, 
+                            'lang' => $lang]);
         if (null === $travelObject) {
             return '';
         } else {
@@ -69,9 +74,7 @@ class localizationHelper
 
         $lang = $this->_getLang($locale);
 
-        $Object = $this->em
-        ->getRepository(OptionsTranslations::class)
-        ->findOneBy(
+        $Object = $this->optionsTranslationsRepository->findOneBy(
             [
                 'options' => $option,
                 'lang' => $lang,
@@ -88,9 +91,7 @@ class localizationHelper
     {
         $option = $this->optionsRepository->find($id);
         $lang = $this->_getLang($locale);
-        $Object = $this->em
-        ->getRepository(OptionsTranslations::class)
-        ->findOneBy(
+        $Object = $this->optionsTranslationsRepository->findOneBy(
             [
                 'options' => $option,
                 'lang' => $lang,
@@ -106,9 +107,7 @@ class localizationHelper
     {
         $option = $this->optionsRepository->find($id);
         $lang = $this->_getLang($locale);
-        $Object = $this->em
-        ->getRepository(OptionsTranslations::class)
-        ->findOneBy(
+        $Object = $this->optionsTranslationsRepository->findOneBy(
             [
                 'options' => $option,
                 'lang' => $lang,
@@ -122,12 +121,10 @@ class localizationHelper
 
     public function renderCategoryString($id, $locale)
     {
-        $category = $this->em->getRepository(Category::class)->find($id);
+        $category = $this->categoryRepository->find($id);
 
         $lang = $this->_getLang($locale);
-        $Object = $this->em
-        ->getRepository(CategoryTranslation::class)
-        ->findOneBy(
+        $Object = $this->categoryTranslationRepository->findOneBy(
             [
                 'category' => $category,
                 'lang' => $lang,
@@ -141,11 +138,9 @@ class localizationHelper
 
     public function renderPageString($id, $locale)
     {
-        $page = $this->em->getRepository(Pages::class)->find($id);
+        $page = $this->pagesRepository->find($id);
         $lang = $this->_getLang($locale);
-        $Object = $this->em
-        ->getRepository(PageTranslation::class)
-        ->findOneBy(
+        $Object = $this->pageTranslationRepository->findOneBy(
             [
                 'Page' => $page,
                 'lang' => $lang,
@@ -159,7 +154,7 @@ class localizationHelper
 
     private function _getLang($locale)
     {
-        return $this->em->getRepository(Lang::class)->findBy(
+        return $this->langRepository->findBy(
             ['iso_code' => $locale]
         );
     }

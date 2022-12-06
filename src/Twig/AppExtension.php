@@ -18,10 +18,7 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    private $container;
-    private $publicDir;
-
-    public function __construct(ContainerInterface $container, string $publicDir)
+    public function __construct(private ContainerInterface $container, private string $publicDir)
     {
         $this->container = $container;
         $this->publicDir = $publicDir;

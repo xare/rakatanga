@@ -15,38 +15,38 @@ class BlogTranslation
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $intro;
+    private string $intro;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $body;
+    private string $body;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\ManyToOne(targetEntity=Lang::class, inversedBy="blogTranslations")
      */
-    private $lang;
+    private Lang $lang;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="blogTranslations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     public function getId(): ?int
     {

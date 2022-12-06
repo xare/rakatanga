@@ -75,13 +75,13 @@ class Mailer
             ->to(new Address('webmaster@rakatanga-tour.com', 'Rakatanga Tours'));
     }
 
-    private function sendToUser($user)
+    private function sendToUser(User $user)
     {
         return $email = (new TemplatedEmail())
             ->to(new Address($user->getEmail(), $user->getPrenom().' '.$user->getNom()));
     }
 
-    public function sendTravelUrlTo($emailAddress, $url)
+    public function sendTravelUrlTo(string $emailAddress, string $url)
     {
         $subject = $this->translator->trans('[Rakatanga Tour] Trip URL', [], 'email');
         $email = (new TemplatedEmail())
@@ -132,7 +132,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendToContactUs($contact, $travels)
+    public function sendToContactUs(Contact $contact, $travels)
     {
         $subject = '['.\App\Service\Mailer::MAIL_TITLE." - CONTACTO] Mensaje enviado por {$contact->getFirstname()} {$contact->getLastname()}";
         $email = $this->sendToUs(
@@ -164,7 +164,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendRegistrationToUser($user, $verificationUrl)
+    public function sendRegistrationToUser(User $user, string $verificationUrl)
     {
         $email = $this->sendToSender();
         $email->to(new Address($user->getEmail(), $user->getPrenom().' '.$user->getNom()))
@@ -189,7 +189,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendRegistrationVerificationToUser($user, $verificationUrl)
+    public function sendRegistrationVerificationToUser(User $user, string $verificationUrl)
     {
         $email = $this->sendToSender();
         $email->to(
@@ -207,7 +207,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendReservationPaymentSuccessToUs(Reservation $reservation, $locale)
+    public function sendReservationPaymentSuccessToUs(Reservation $reservation, string $locale)
     {
         $user = $reservation->getUser();
         $email = $this->sendToUs(
@@ -226,9 +226,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendReservationPaymentSuccessToSender(
-        $reservation
-    ) {
+    public function sendReservationPaymentSuccessToSender(Reservation $reservation) {
         $email = $this->sendToSender();
         $user = $reservation->getUser();
         $to = new Address($user->getEmail(), $user->getPrenom().' '.$user->getNom());
@@ -257,7 +255,7 @@ class Mailer
         $this->entityManager->flush();
     }
 
-    public function sendReservationToUs(Reservation $reservation, $locale)
+    public function sendReservationToUs(Reservation $reservation, string $locale)
     {
         $user = $reservation->getUser();
         $email = $this->sendToUs(
@@ -277,9 +275,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendReservationToSender(
-        $reservation
-    ) {
+    public function sendReservationToSender(Reservation $reservation) {
         $email = $this->sendToSender();
         $user = $reservation->getUser();
         $subject = '['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('RESERVA REALIZADA', [], 'email')}]  {$this->translator->trans('Has realizado una reserva para el viaje', [], 'email')} {$reservation->getDate()->getTravel()->getMainTitle()} {$this->translator->trans('del ')} {$reservation->getDate()->getDebut()->format('d/m/Y')}";

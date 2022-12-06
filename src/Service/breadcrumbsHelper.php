@@ -9,17 +9,13 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class breadcrumbsHelper
 {
-    private Breadcrumbs $breadcrumbs;
-    private TranslatorInterface $translator;
-    private localizationHelper $localizationHelper;
-    private slugifyHelper $slugifyHelper;
 
-    public function __construct(Breadcrumbs $breadcrumbs, TranslatorInterface $translator, localizationHelper $localizationHelper, slugifyHelper $slugifyHelper)
+    public function __construct(
+        private Breadcrumbs $breadcrumbs, 
+        private TranslatorInterface $translator, 
+        private localizationHelper $localizationHelper, 
+        private slugifyHelper $slugifyHelper)
     {
-        $this->breadcrumbs = $breadcrumbs;
-        $this->translator = $translator;
-        $this->localizationHelper = $localizationHelper;
-        $this->slugifyHelper = $slugifyHelper;
     }
 
     public function destinationsBreadcrumbs()
@@ -184,5 +180,44 @@ class breadcrumbsHelper
 
     public function reservationDataBreadcrumbs(string $locale)
     {
+    }
+
+    public function userFrontendReservationsBreadcrumbs(string $locale){
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Tus Reservas'),
+            'frontend_user_reservations',
+            [
+                '_locale' => $locale,
+            ]
+        );
+        $this->breadcrumbs->prependRouteItem(
+            $this
+                ->translator
+                ->trans('Inicio'),
+            'index'
+        );
+    }
+
+    public function frontendUserSettingsBreadcrumbs(string $locale){
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Usuario'),
+            'frontend_user',
+            [
+                '_locale' => $locale,
+            ]
+        );
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Datos del usuario'),
+            'frontend_user_settings',
+            [
+                '_locale' => $locale,
+            ]
+        );
+        $this->breadcrumbs->prependRouteItem(
+            $this
+                ->translator
+                ->trans('Inicio'),
+            'index'
+        );
     }
 }

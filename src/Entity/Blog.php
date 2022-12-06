@@ -17,32 +17,32 @@ class Blog
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="blogs")
      */
-    private $category;
+    private Category $category;
 
     /**
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="blog")
      */
-    private $articles;
+    private Articles $articles;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\OneToOne(targetEntity=Lang::class, inversedBy="blog", cascade={"persist", "remove"})
      */
-    private $lang;
+    private string $lang;
 
     public function __construct()
     {

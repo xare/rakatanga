@@ -12,16 +12,11 @@ class pdfHelper
     public const INVOICES_FOLDER = '/var/uploads/invoices/';
     public const INVOICE_TITLE = 'FACTURA_WEB';
 
-    private $twig;
-    private $mPdf;
-    private $appKernel;
-    private $uploadHelper;
-
     public function __construct(
-        Environment $twig,
-        Mpdf $mPdf,
-        KernelInterface $appKernel,
-        UploadHelper $uploadHelper)
+        private Environment $twig,
+        private Mpdf $mPdf,
+        private KernelInterface $appKernel,
+        private UploadHelper $uploadHelper)
     {
         $this->twig = $twig;
         $this->mPdf = $mPdf;

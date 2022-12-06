@@ -18,24 +18,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class reservationHelper
 {
-    private $entityManager;
-    private $optionsRepository;
-    private $optionsTranslationsRepository;
-    private $paymentsRepository;
-    private $reservationRepository;
-    private $codespromoRepository;
-    private $localizationHelper;
-    private invoiceHelper $invoiceHelper;
 
     public function __construct(
-                        EntityManagerInterface $entityManager,
-                        OptionsRepository $optionsRepository,
-                        OptionsTranslationsRepository $optionsTranslationsRepository,
-                        PaymentsRepository $paymentsRepository,
-                        ReservationRepository $reservationRepository,
-                        CodespromoRepository $codespromoRepository,
-                        localizationHelper $localizationHelper,
-                        invoiceHelper $invoiceHelper)
+        private EntityManagerInterface $entityManager,
+        private OptionsRepository $optionsRepository,
+        private OptionsTranslationsRepository $optionsTranslationsRepository,
+        private PaymentsRepository $paymentsRepository,
+        private ReservationRepository $reservationRepository,
+        private CodespromoRepository $codespromoRepository,
+        private localizationHelper $localizationHelper,
+        private invoiceHelper $invoiceHelper)
     {
         $this->entityManager = $entityManager;
         $this->optionsRepository = $optionsRepository;

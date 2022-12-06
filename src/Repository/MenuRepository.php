@@ -57,7 +57,7 @@ class MenuRepository extends ServiceEntityRepository
     }
     */
 
-    public function findMenyByLocation($locale, $location)
+    public function findMenuByLocation($locale, $location)
     {
         return $this->createQueryBuilder('m')
                 ->select(

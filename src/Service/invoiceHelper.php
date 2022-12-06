@@ -11,30 +11,15 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class invoiceHelper
 {
-    private EntityManagerInterface $entityManager;
-    private InvoicesRepository $invoicesRepository;
-    private pdfHelper $pdfHelper;
-    private UploadHelper $uploadHelper;
-    private reservationDataHelper $reservationDataHelper;
-    private ReservationOptionsRepository $reservationOptionsRepository;
-
-    /**
-     * constructor function.
-     */
     public function __construct(
-        EntityManagerInterface $entityManager,
-        InvoicesRepository $invoicesRepository,
-        pdfHelper $pdfHelper,
-        UploadHelper $uploadHelper,
-        reservationDataHelper $reservationDataHelper,
-        ReservationOptionsRepository $reservationOptionsRepository
+        private EntityManagerInterface $entityManager,
+        private InvoicesRepository $invoicesRepository,
+        private pdfHelper $pdfHelper,
+        private UploadHelper $uploadHelper,
+        private reservationDataHelper $reservationDataHelper,
+        private ReservationOptionsRepository $reservationOptionsRepository
     ) {
-        $this->entityManager = $entityManager;
-        $this->invoicesRepository = $invoicesRepository;
-        $this->pdfHelper = $pdfHelper;
-        $this->uploadHelper = $uploadHelper;
-        $this->reservationDataHelper = $reservationDataHelper;
-        $this->reservationOptionsRepository = $reservationOptionsRepository;
+
     }
 
     /**
@@ -44,8 +29,8 @@ class invoiceHelper
      */
     public function newInvoice(
         Reservation $reservation,
-        array $customerBillingData = [],
-        string $locale
+        string $locale,
+        array $customerBillingData = []
     ): Invoices {
         return $this->_createInvoice($reservation, $customerBillingData, 'new', $locale);
     }
@@ -56,8 +41,8 @@ class invoiceHelper
      */
     public function cancelInvoice(
         Reservation $reservation,
+        string $locale,
         array $customerBillingData,
-        string $locale
     ): bool {
         try {
             $this->_deleteInvoice($reservation->getInvoice);
@@ -66,7 +51,7 @@ class invoiceHelper
             throw $exception;
         }
         try {
-            $this->_createInvoice($reservation, $customerBillingData, 'cancelled', $locale);
+            $this->_createInvoice($reservation, $locale, $customerBillingData, 'cancelled' );
         } catch (\Exception $exception) {
             error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
             throw $exception;
@@ -92,9 +77,9 @@ class invoiceHelper
      */
     public function updateInvoiceBillingData(
         Reservation $reservation,
+        string $locale,
         array $customerBillingData = [],
-        string $invoiceStatus = 'updated Billing Data',
-        string $locale
+        string $invoiceStatus = 'updated Billing Data'
     ): bool {
         return true;
     }
@@ -107,8 +92,8 @@ class invoiceHelper
      */
     public function updateReservationInvoice(
         Reservation $reservation,
-        array $customerData,
-        string $locale
+        string $locale,
+        array $customerData
     ): bool {
         /*
          * \Exception $exception
@@ -121,7 +106,7 @@ class invoiceHelper
             error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
         }
         try {
-            $this->_createInvoice($reservation, $customerData, 'updated', $locale);
+            $this->_createInvoice($reservation, $locale, $customerData, 'updated' );
         } catch (\Exception $exception) {
             error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
             throw $exception;
@@ -135,9 +120,9 @@ class invoiceHelper
      */
     private function _createInvoice(
         Reservation $reservation,
+        string $locale,
         array $customerData,
-        string $status,
-        string $locale
+        string $status
     ): Invoices {
         /**
          * @var Invoices $invoice;
@@ -157,7 +142,7 @@ class invoiceHelper
         $invoice->setInvoiceNumber("{$dateTime->format('Y')}-{$invoiceNumber}");
         $invoice->setReservation($reservation);
 
-        $this->_assignCustomerDataToInvoiceObject($invoice, $customerData, $locale);
+        $this->_assignCustomerDataToInvoiceObject($invoice, $locale, $customerData );
 
         /**
          * @var string $invoiceFileName
@@ -175,7 +160,10 @@ class invoiceHelper
     /**
      * _assignCustomerDataToInvoice function.
      */
-    private function _assignCustomerDataToInvoiceObject(Invoices $invoice, array $customerData, $locale): mixed
+    private function _assignCustomerDataToInvoiceObject(
+                        Invoices $invoice, 
+                        string $locale, 
+                        array $customerData): mixed
     {
         if (empty($customerData)) {
             return false;

@@ -9,9 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class logHelper
 {
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }

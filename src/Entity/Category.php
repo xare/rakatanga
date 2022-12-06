@@ -18,59 +18,59 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     #[Groups('main')]
-    private $status;
+    private string $status;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="categories")
      */
-    private $Category;
+    private Category $Category;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Category")
      */
-    private $categories;
+    private Category $categories;
 
     /**
      * @ORM\ManyToMany(targetEntity=Blog::class, mappedBy="category")
      */
-    private $blogs;
+    private Blog $blogs;
 
     /**
      * @ORM\OneToMany(targetEntity=CategoryTranslation::class, mappedBy="category", orphanRemoval=true, cascade={"persist"})
      */
-    private $categoryTranslations;
+    private CategoryTranslation $categoryTranslations;
 
     /**
      * @ORM\OneToMany(targetEntity=Travel::class, mappedBy="category")
      */
-    private $travel;
+    private Travel $travel;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     #[Groups('main')]
-    private $name;
+    private string $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Media::class, mappedBy="category")
      */
-    private $media;
+    private Media $media;
 
     /**
      * @ORM\OneToOne(targetEntity=Media::class, inversedBy="mainCategoryPhoto", cascade={"persist", "remove"})
      */
-    private $mainPhoto;
+    private Media $mainPhoto;
 
     /**
      * @ORM\ManyToOne(targetEntity=Continents::class, inversedBy="category")
      */
-    private $continents;
+    private Continents $continents;
 
     public function __construct()
     {

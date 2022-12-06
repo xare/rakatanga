@@ -56,17 +56,4 @@ class TravelTranslationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findLocalization($travel, $result)
-    {
-        return $this->createQueryBuilder('tt')
-        ->select('tt.title')
-        ->innerJoin(Travel::class, 't', Join::WITH, 't.id = tt.travel')
-        ->innerJoin(Travel::class, 'l', Join::WITH, 'l.id = tt.lang')
-        ->andWhere('l.iso_code = :locale')
-        ->setParameter('locale', $locale)
-        ->andWhere('tt.travel = :travel')
-        ->setParameter('travel', $travel)
-        ->getQuery()
-        ->getResult();
-    }
 }
