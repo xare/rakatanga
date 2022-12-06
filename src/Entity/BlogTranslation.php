@@ -5,47 +5,31 @@ namespace App\Entity;
 use App\Repository\BlogTranslationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=BlogTranslationRepository::class)
- */
+#[ORM\Entity(repositoryClass: BlogTranslationRepository::class)]
 class BlogTranslation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private string $intro;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private string $body;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(type: 'string', length: 100)]
     private string $slug;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Lang::class, inversedBy="blogTranslations")
-     */
+    #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'blogTranslations')]
     private Lang $lang;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="blogTranslations")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'blogTranslations')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): ?int

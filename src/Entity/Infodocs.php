@@ -8,51 +8,33 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=InfodocsRepository::class)
- */
+#[ORM\Entity(repositoryClass: InfodocsRepository::class)]
 class Infodocs
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $filename;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $original_filename;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $mime_type;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $content;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Travel::class, inversedBy="infodocs")
-     */
+    #[ORM\ManyToMany(targetEntity: Travel::class, inversedBy: 'infodocs')]
     private $travel;
 
-    /**
-     * @ORM\OneToMany(targetEntity=OptionsTranslations::class, mappedBy="infodocs")
-     */
+    #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'infodocs')]
     private $optionsTranslations;
 
     public function __construct()

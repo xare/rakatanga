@@ -9,46 +9,38 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Options.
  *
- * @ORM\Table(name="options")
- * @ORM\Entity(repositoryClass="App\Repository\OptionsRepository")
  */
+#[ORM\Table(name: 'options')]
+#[ORM\Entity(repositoryClass: 'App\Repository\OptionsRepository')]
 class Options
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prix", type="decimal", precision=10, scale=2, nullable=false)
      */
+    #[ORM\Column(name: 'prix', type: 'decimal', precision: 10, scale: 2, nullable: false)]
     private $price;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Travel::class, inversedBy="options")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'options')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private $travel;
 
-    /**
-     * @ORM\OneToMany(targetEntity=OptionsTranslations::class, mappedBy="options", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'options', orphanRemoval: true, cascade: ['persist'])]
     private $optionsTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ReservationOptions::class, mappedBy="options", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: ReservationOptions::class, mappedBy: 'options', orphanRemoval: true, cascade: ['persist'])]
     private $reservationOptions;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $isExtension;
 
     public function __construct()

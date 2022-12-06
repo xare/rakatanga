@@ -155,11 +155,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
         );
     }
 
-    /**
-     * @IsGranted("ROLE_USER", subject="user")
-     */
     #[Route(path: '/user/{id}/documents', name: 'user_add_documents')]
     #[Route(path: ['en' => '{_locale}/user/{id}/documents', 'es' => '{_locale}/usuario/{id}/documentos', 'fr' => '{_locale}/utilisateur/{id}/documentation'], name: 'user_add_documents')]
+    #[IsGranted('ROLE_USER', subject: 'user')]
     public function uploadDocument(
         User $user,
         Request $request,
@@ -238,10 +236,8 @@ class UserFrontendReservationDocumentsController extends AbstractController
         return $response;
     }
 
-    /**
-     * @IsGranted("ROLE_USER", subject="user")
-     */
     #[Route(path: '/user/settings/{id}/documents', methods: 'GET', name: 'frontend_user_list_documents')]
+    #[IsGranted('ROLE_USER', subject: 'user')]
     public function getDocuments(User $user)
     {
         return $this->json(

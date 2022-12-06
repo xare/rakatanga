@@ -5,41 +5,23 @@ namespace App\Entity;
 use App\Repository\ReservationOptionsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ReservationOptionsRepository::class)
- */
+#[ORM\Entity(repositoryClass: ReservationOptionsRepository::class)]
 class ReservationOptions
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(
-     *                  targetEntity=Reservation::class,
-     *                  inversedBy="reservationOptions",
-     *                  cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'reservationOptions', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
     private $reservation;
 
-    /**
-     * @ORM\ManyToOne(
-     *                  targetEntity=Options::class,
-     *                  inversedBy="reservationOptions",
-     *                  cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Options::class, inversedBy: 'reservationOptions', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
     private $options;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $ammount;
 
     public function getId(): ?int

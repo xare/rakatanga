@@ -8,123 +8,76 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=ReservationRepository::class)
- */
+#[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     #[Groups('main')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Dates::class, inversedBy="reservations")
-     */
+    #[ORM\ManyToOne(targetEntity: Dates::class, inversedBy: 'reservations')]
     private $date;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservation")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private $user;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private $comment;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $log;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Travellers::class, inversedBy="reservations")
-     * @ORM\JoinTable(name="reservation_travellers",
-     *          joinColumns={@ORM\JoinColumn(name="reservation_id",
-     *          referencedColumnName="id")},
-     *          inverseJoinColumns={@ORM\JoinColumn(name="travellers_id",
-     *          referencedColumnName="id")})
-     */
+    #[ORM\JoinTable(name: 'reservation_travellers')]
+    #[ORM\JoinColumn(name: 'reservation_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'travellers_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Travellers::class, inversedBy: 'reservations')]
     private $travellers;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeInterface $date_ajout;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $date_paiement;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $status;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ReservationOptions::class, mappedBy="reservation", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: ReservationOptions::class, mappedBy: 'reservation', orphanRemoval: true, cascade: ['persist'])]
     private $reservationOptions;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $nbpilotes;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $nbaccomp;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ReservationData::class, mappedBy="reservation", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'reservation', orphanRemoval: true)]
     private $reservationData;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Payments::class,
-     * mappedBy="reservation",
-     * orphanRemoval=true,
-     * cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Payments::class, mappedBy: 'reservation', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private $payments;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Document::class,
-     * mappedBy="reservation",
-     * orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'reservation', orphanRemoval: true)]
     private $documents;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Invoices::class, mappedBy="reservation", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Invoices::class, mappedBy: 'reservation', cascade: ['persist', 'remove'])]
     private $invoice;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $code;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Mailings::class, mappedBy="reservation")
-     */
+    #[ORM\OneToMany(targetEntity: Mailings::class, mappedBy: 'reservation')]
     private $mailings;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Codespromo::class, inversedBy="reservations")
-     */
+    #[ORM\ManyToOne(targetEntity: Codespromo::class, inversedBy: 'reservations')]
     private $codespromo;
 
     public function __construct()

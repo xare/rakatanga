@@ -8,100 +8,66 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=App\Repository\TravelRepository::class)
- */
+#[ORM\Entity(repositoryClass: App\Repository\TravelRepository::class)]
 class Travel
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     #[Groups('main')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $km;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="travel", cascade={"persist"})
-     */
+    #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'travel', cascade: ['persist'])]
     private $media;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $status;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $duration;
 
-    /**
-     * @ORM\Column(type="string", length=3, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 3, nullable: true)]
     private $level;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'datetime')]
     private $date;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="travel")
-     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'travel')]
     private $category;
 
-    /**
-     * @ORM\OneToMany(targetEntity=TravelTranslation::class, mappedBy="travel", orphanRemoval=true, cascade={"persist"})
-     */
     #[Groups('main')]
     #[Assert\Valid]
+    #[ORM\OneToMany(targetEntity: TravelTranslation::class, mappedBy: 'travel', orphanRemoval: true, cascade: ['persist'])]
     private $travelTranslation;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $main_title;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Dates::class, mappedBy="travel", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Dates::class, mappedBy: 'travel', orphanRemoval: true)]
     private $dates;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Media::class, cascade: ['persist', 'remove'])]
     private $mainPhoto;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Options::class, mappedBy="travel")
-     */
+    #[ORM\OneToMany(targetEntity: Options::class, mappedBy: 'travel')]
     private $options;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Hotels::class, mappedBy="travel")
-     */
+    #[ORM\ManyToMany(targetEntity: Hotels::class, mappedBy: 'travel')]
     private $hotels;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Infodocs::class, mappedBy="travel")
-     */
+    #[ORM\ManyToMany(targetEntity: Infodocs::class, mappedBy: 'travel')]
     private $infodocs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Oldreservations::class, mappedBy="Travel")
-     */
+    #[ORM\OneToMany(targetEntity: Oldreservations::class, mappedBy: 'Travel')]
     private $oldreservations;
 
     public function __construct()

@@ -5,43 +5,29 @@ namespace App\Entity;
 use App\Repository\OptionsTranslationsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=OptionsTranslationsRepository::class)
- */
+#[ORM\Entity(repositoryClass: OptionsTranslationsRepository::class)]
 class OptionsTranslations
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $intro;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Lang::class, inversedBy="optionsTranslations")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'optionsTranslations')]
+    #[ORM\JoinColumn(nullable: false)]
     private $lang;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Options::class, inversedBy="optionsTranslations")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Options::class, inversedBy: 'optionsTranslations')]
+    #[ORM\JoinColumn(nullable: false)]
     private $options;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Infodocs::class, inversedBy="optionsTranslations")
-     */
+    #[ORM\ManyToOne(targetEntity: Infodocs::class, inversedBy: 'optionsTranslations')]
     private $infodocs;
 
     public function getId(): ?int

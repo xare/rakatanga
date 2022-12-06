@@ -4,38 +4,26 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=MenuTranlationRepository::class)
- */
+#[ORM\Entity(repositoryClass: MenuTranlationRepository::class)]
 class MenuTranslation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="menuTranslations")
-     * @ORM\JoinColumn(name="menu_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuTranslations')]
+    #[ORM\JoinColumn(name: 'menu_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private $menu;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $slug;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Lang::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Lang::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $lang;
 
     public function getId(): ?int

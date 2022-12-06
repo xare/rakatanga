@@ -8,68 +8,44 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
- */
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=10, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
     private string $status;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="categories")
-     */
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'categories')]
     private Category $Category;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Category")
-     */
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'Category')]
     private Category $categories;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Blog::class, mappedBy="category")
-     */
+    #[ORM\ManyToMany(targetEntity: Blog::class, mappedBy: 'category')]
     private Blog $blogs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=CategoryTranslation::class, mappedBy="category", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: CategoryTranslation::class, mappedBy: 'category', orphanRemoval: true, cascade: ['persist'])]
     private CategoryTranslation $categoryTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Travel::class, mappedBy="category")
-     */
+    #[ORM\OneToMany(targetEntity: Travel::class, mappedBy: 'category')]
     private Travel $travel;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Media::class, mappedBy="category")
-     */
+    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'category')]
     private Media $media;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Media::class, inversedBy="mainCategoryPhoto", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'mainCategoryPhoto', cascade: ['persist', 'remove'])]
     private Media $mainPhoto;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Continents::class, inversedBy="category")
-     */
+    #[ORM\ManyToOne(targetEntity: Continents::class, inversedBy: 'category')]
     private Continents $continents;
 
     public function __construct()

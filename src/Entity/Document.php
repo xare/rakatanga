@@ -9,82 +9,54 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=DocumentRepository::class)
- */
+#[ORM\Entity(repositoryClass: DocumentRepository::class)]
 class Document
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     #[Groups('main')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="documents")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'documents')]
+    #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $filename;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $originalFilename;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $mimeType;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Travellers::class, inversedBy="documents")
-     */
+    #[ORM\ManyToOne(targetEntity: Travellers::class, inversedBy: 'documents')]
     private $traveller;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private $date_from;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private $date_until;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Dates::class, inversedBy="documents")
-     */
+    #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'documents')]
     private $date;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $doctype;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $docnumber;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=ReservationData::class, mappedBy="documents")
-     */
+    #[ORM\ManyToMany(targetEntity: ReservationData::class, mappedBy: 'documents')]
     private $reservationData;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="documents")
-     */
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'documents')]
     private $reservation;
 
     public function __construct(User $user)

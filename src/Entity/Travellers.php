@@ -8,91 +8,59 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=TravellersRepository::class)
- */
+#[ORM\Entity(repositoryClass: TravellersRepository::class)]
 class Travellers
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="travellers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'travellers')]
+    #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    /**
-     * @ORM\Column(type="string", length=2, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 2, nullable: true)]
     private $langue;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $nom;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $prenom;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $telephone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $position;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $assurance;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $vols;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $date_ajout;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="traveller")
-     */
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'traveller')]
     private $documents;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Dates::class, inversedBy="travellers")
-     */
+    #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'travellers')]
     private $date;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Reservation::class, mappedBy="travellers")
-     */
+    #[ORM\ManyToMany(targetEntity: Reservation::class, mappedBy: 'travellers')]
     private $reservations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ReservationData::class, mappedBy="travellers")
-     */
+    #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'travellers')]
     private $reservationData;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
     public function __construct()

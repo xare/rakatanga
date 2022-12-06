@@ -12,166 +12,110 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=App\Repository\UserRepository::class)
- */
 #[UniqueEntity(fields: ['email'], message: 'This value is already used.')]
+#[ORM\Entity(repositoryClass: App\Repository\UserRepository::class)]
 class User implements UserInterface
 {
     public const REGISTERED_SUCCESFULLY = 'Se ha registrado exitosamente';
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
     #[Groups('main')]
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'json')]
     private $roles = [];
 
     /**
      * @var string The hashed password
      *
-     * @ORM\Column(type="string", nullable=true)
      */
     #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=2, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 2, nullable: true)]
     private $langue;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
     #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $nom;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
     #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $prenom;
 
     /**
      * @AssertPhoneNumber
      *
-     * @ORM\Column(name="telephone", type="phone_number", nullable=true)
      */
     #[Groups('main')]
+    #[ORM\Column(name: 'telephone', type: 'phone_number', nullable: true)]
     private $telephone;
 
-    /**
-     * @ORM\Column(type="string", length=15, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 15, nullable: true)]
     private $position;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeInterface $date_ajout;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Dates::class, inversedBy="users")
-     */
+    #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'users')]
     private $date;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="user", cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private $reservation;
 
-    /**
-     * @ORM\OneToMany(targetEntity=BlogTranslation::class, mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: BlogTranslation::class, mappedBy: 'user', orphanRemoval: true)]
     private $blogTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="user")
-     */
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'user')]
     private $documents;
 
-    /**
-     * @ORM\OneToMany(
-     *                  targetEntity=Travellers::class,
-     *                  mappedBy="user",
-     *                  fetch="EXTRA_LAZY",
-     *                  orphanRemoval=true,
-     *                  cascade={"persist"}
-     * )
-     */
+    #[ORM\OneToMany(targetEntity: Travellers::class, mappedBy: 'user', fetch: 'EXTRA_LAZY', orphanRemoval: true, cascade: ['persist'])]
     private $travellers;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $address;
 
-    /**
-     * @ORM\Column(type="string", length=6, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 6, nullable: true)]
     private $postcode;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $city;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $country;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $nationality;
 
-    /**
-     * @ORM\Column(type="string", length=3, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 3, nullable: true)]
     private $sizes;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ReservationData::class, mappedBy="User", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'User', orphanRemoval: true)]
     private $reservationData;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Codespromo::class, mappedBy="user", cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Codespromo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private $codespromos;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $idcard;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $agreedTermsAt;
 
     public function __construct()

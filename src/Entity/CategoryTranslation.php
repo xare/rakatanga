@@ -5,43 +5,29 @@ namespace App\Entity;
 use App\Repository\CategoryTranslationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CategoryTranslationRepository::class)
- */
+#[ORM\Entity(repositoryClass: CategoryTranslationRepository::class)]
 class CategoryTranslation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $intro;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(type: 'string', length: 100)]
     private $slug;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="categoryTranslations", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'categoryTranslations', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $category;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Lang::class, inversedBy="categoryTranslations")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'categoryTranslations')]
+    #[ORM\JoinColumn(nullable: false)]
     private $lang;
 
     public function getId(): ?int

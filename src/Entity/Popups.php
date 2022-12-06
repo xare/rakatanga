@@ -7,46 +7,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=PopupsRepository::class)
- */
+#[ORM\Entity(repositoryClass: PopupsRepository::class)]
 class Popups
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PopupsTranslation::class, mappedBy="popup", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: PopupsTranslation::class, mappedBy: 'popup', orphanRemoval: true, cascade: ['persist'])]
     private $popupsTranslations;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private $date_start;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private $date_end;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="popups")
-     */
+    #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'popups')]
     private $media;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Media::class, cascade: ['persist', 'remove'])]
     private $mainPhoto;
 
     public function __construct()

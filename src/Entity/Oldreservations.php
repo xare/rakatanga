@@ -5,106 +5,66 @@ namespace App\Entity;
 use App\Repository\OldreservationsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=OldreservationsRepository::class)
- */
+#[ORM\Entity(repositoryClass: OldreservationsRepository::class)]
 class Oldreservations
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=2)
-     */
+    #[ORM\Column(type: 'string', length: 2)]
     private $langue;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $nbpilotes;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $nbAccomp;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $commentaire;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $log;
 
-    /**
-     * @ORM\Column(type="string", length=10, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
     private $codepromo;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private $montant;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private $reduction;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private $totalttc;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $notes;
 
-    /**
-     * @ORM\Column(type="string", length=15)
-     */
+    #[ORM\Column(type: 'string', length: 15)]
     private $statut;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: 'string', length: 50)]
     private $origine_ajout;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $date_ajout;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $date_paiement_1;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $date_paiement_2;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Inscriptions::class, inversedBy="oldreservations")
-     */
+    #[ORM\ManyToOne(targetEntity: Inscriptions::class, inversedBy: 'oldreservations')]
     private $inscriptions;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Travel::class, inversedBy="oldreservations")
-     */
+    #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'oldreservations')]
     private $Travel;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Dates::class, inversedBy="oldreservations")
-     */
+    #[ORM\ManyToOne(targetEntity: Dates::class, inversedBy: 'oldreservations')]
     private $dates;
 
     public function getId(): ?int

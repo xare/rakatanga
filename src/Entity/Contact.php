@@ -8,63 +8,59 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ContactRepository::class)
- */
+#[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
 {
     use TimestampableEntity;
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
      *
      * @var string|null
      */
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 20)]
+    #[ORM\Column(type: 'string', length: 255)]
     private $firstname;
 
     /**
-     * @ORM\Column(type="string", length=255)
      *
      * @var string|null
      */
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 40)]
+    #[ORM\Column(type: 'string', length: 255)]
     private $lastname;
 
     /**
-     * @ORM\Column(type="phone_number", nullable=true)
      *
      * @var string|null
      *
      * @AssertPhoneNumber
      */
     #[Assert\NotBlank]
+    #[ORM\Column(type: 'phone_number', nullable: true)]
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=255)
      *
      * @var string|null
      */
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
     /**
-     * @ORM\Column(type="text")
      *
      * @var string|null
      */
     #[Assert\NotBlank]
     #[Assert\Length(min: 10, max: 1000)]
+    #[ORM\Column(type: 'text')]
     private $message;
 
     public function getId(): ?int

@@ -7,57 +7,37 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ArticlesRepository::class)
- */
+#[ORM\Entity(repositoryClass: ArticlesRepository::class)]
 class Articles
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $intro;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $body;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="articles")
-     */
+    #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'articles')]
     private ?Media $media;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeInterface $publishedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="articles")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Blog::class, inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
     private Blog $blog;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $slug;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Media::class, inversedBy="article", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'article', cascade: ['persist', 'remove'])]
     private Media $mainPhoto;
 
     public function __construct()

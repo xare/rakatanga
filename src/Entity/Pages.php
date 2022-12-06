@@ -8,55 +8,37 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=PagesRepository::class)
- */
+#[ORM\Entity(repositoryClass: PagesRepository::class)]
 class Pages
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     #[Groups('main')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 100)]
     private $default_slug;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeInterface $date_created;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'datetime')]
     private $date_modified;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PageTranslation::class, mappedBy="Page", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: PageTranslation::class, mappedBy: 'Page', orphanRemoval: true, cascade: ['persist'])]
     private $pageTranslations;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Menu::class, mappedBy="page", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Menu::class, mappedBy: 'page', cascade: ['persist', 'remove'])]
     private $menu;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="pages")
-     */
+    #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'pages')]
     private $media;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Media::class, inversedBy="page", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'page', cascade: ['persist', 'remove'])]
     private $mainPhoto;
 
     public function __construct()

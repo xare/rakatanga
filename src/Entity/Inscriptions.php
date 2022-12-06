@@ -8,88 +8,58 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=InscriptionsRepository::class)
- */
+#[ORM\Entity(repositoryClass: InscriptionsRepository::class)]
 class Inscriptions
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $nom;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", name="telephone", length=25, nullable=true)
      *
      * @AssertPhoneNumber
      */
+    #[ORM\Column(type: 'string', name: 'telephone', length: 25, nullable: true)]
     private $telephone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
-    /**
-     * @ORM\Column(type="string", length=15)
-     */
+    #[ORM\Column(type: 'string', length: 15)]
     private $position;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $arrhes;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $solde;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     */
+    #[ORM\Column(type: 'string', length: 3)]
     private $assurance;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     */
+    #[ORM\Column(type: 'string', length: 3)]
     private $vols;
 
-    /**
-     * @ORM\Column(type="string", length=15)
-     */
+    #[ORM\Column(type: 'string', length: 15)]
     private $statut;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $remarque;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $date_ajout;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     */
+    #[ORM\Column(type: 'string', length: 3)]
     private $langue;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Oldreservations::class, mappedBy="inscriptions")
-     */
+    #[ORM\OneToMany(targetEntity: Oldreservations::class, mappedBy: 'inscriptions')]
     private $oldreservations;
 
     public function __construct()

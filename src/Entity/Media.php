@@ -9,98 +9,64 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
- */
+#[ORM\Entity(repositoryClass: 'App\Repository\MediaRepository')]
 class Media
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     #[Groups('main')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $type;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Assert\NotBlank]
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $path;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $url;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Travel::class, mappedBy="media")
-     */
+    #[ORM\ManyToMany(targetEntity: Travel::class, mappedBy: 'media')]
     private $travel;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Groups('main')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $filename;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="media")
-     */
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'media')]
     private $category;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Category::class, mappedBy="mainPhoto", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Category::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
     private $mainCategoryPhoto;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Pages::class, mappedBy="media")
-     */
+    #[ORM\ManyToMany(targetEntity: Pages::class, mappedBy: 'media')]
     private $pages;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Pages::class, mappedBy="mainPhoto", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Pages::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
     private $page;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isGallery;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Articles::class, mappedBy="media")
-     */
+    #[ORM\ManyToMany(targetEntity: Articles::class, mappedBy: 'media')]
     private $articles;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Articles::class, mappedBy="mainPhoto", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Articles::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
     private $article;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isYTVideo;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Popups::class, mappedBy="media")
-     */
+    #[ORM\ManyToMany(targetEntity: Popups::class, mappedBy: 'media')]
     private $popups;
 
     public function __construct()

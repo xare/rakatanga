@@ -5,37 +5,25 @@ namespace App\Entity;
 use App\Repository\PaymentsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=PaymentsRepository::class)
- */
+#[ORM\Entity(repositoryClass: PaymentsRepository::class)]
 class Payments
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private $ammount;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeInterface $date_ajout;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="payments", cascade={"persist","remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'payments', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private $reservation;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $stripeId;
 
     public function __construct()

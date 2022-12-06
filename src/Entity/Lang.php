@@ -7,86 +7,54 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=LangRepository::class)
- */
+#[ORM\Entity(repositoryClass: LangRepository::class)]
 class Lang
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=7)
-     */
+    #[ORM\Column(type: 'string', length: 7)]
     private $iso_code;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $charset;
 
-    /**
-     * @ORM\OneToMany(targetEntity=BlogTranslation::class, mappedBy="lang")
-     */
+    #[ORM\OneToMany(targetEntity: BlogTranslation::class, mappedBy: 'lang')]
     private $blogTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=CategoryTranslation::class, mappedBy="lang", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: CategoryTranslation::class, mappedBy: 'lang', orphanRemoval: true)]
     private $categoryTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PageTranslation::class, mappedBy="lang")
-     */
+    #[ORM\OneToMany(targetEntity: PageTranslation::class, mappedBy: 'lang')]
     private $pageTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=MenuTranslation::class, mappedBy="lang")
-     */
+    #[ORM\OneToMany(targetEntity: MenuTranslation::class, mappedBy: 'lang')]
     private $menuTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=TravelTranslation::class, mappedBy="lang", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: TravelTranslation::class, mappedBy: 'lang', orphanRemoval: true)]
     private $travelTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=OptionsTranslations::class, mappedBy="lang", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'lang', orphanRemoval: true)]
     private $optionsTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Texts::class, mappedBy="lang")
-     */
+    #[ORM\OneToMany(targetEntity: Texts::class, mappedBy: 'lang')]
     private $texts;
 
-    /**
-     * @ORM\OneToMany(targetEntity=TextTranslations::class, mappedBy="Lang")
-     */
+    #[ORM\OneToMany(targetEntity: TextTranslations::class, mappedBy: 'Lang')]
     private $textTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ContinentTranslation::class, mappedBy="lang")
-     */
+    #[ORM\OneToMany(targetEntity: ContinentTranslation::class, mappedBy: 'lang')]
     private $continentTranslations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PopupsTranslation::class, mappedBy="lang", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: PopupsTranslation::class, mappedBy: 'lang', orphanRemoval: true)]
     private $popupsTranslations;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Blog::class, mappedBy="lang", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Blog::class, mappedBy: 'lang', cascade: ['persist', 'remove'])]
     private $blog;
 
     public function __construct()

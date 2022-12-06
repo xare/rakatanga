@@ -10,35 +10,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Continents.
  *
- * @ORM\Table(name="continents")
- * @ORM\Entity(repositoryClass="App\Repository\ContinentsRepository")
  */
+#[ORM\Table(name: 'continents')]
+#[ORM\Entity(repositoryClass: 'App\Repository\ContinentsRepository')]
 class Continents
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=2, nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'code', type: 'string', length: 2, nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $code;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ContinentTranslation::class, mappedBy="continents", orphanRemoval=true, cascade={"persist"})
-     */
     #[Assert\Valid]
+    #[ORM\OneToMany(targetEntity: ContinentTranslation::class, mappedBy: 'continents', orphanRemoval: true, cascade: ['persist'])]
     private $continentTranslation;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="continents")
-     */
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'continents')]
     private $category;
 
     public function __construct()

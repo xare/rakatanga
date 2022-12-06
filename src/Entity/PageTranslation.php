@@ -5,48 +5,32 @@ namespace App\Entity;
 use App\Repository\PageTranslationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=PageTranslationRepository::class)
- */
+#[ORM\Entity(repositoryClass: PageTranslationRepository::class)]
 class PageTranslation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $slug;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $intro;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $body;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Lang::class, inversedBy="pageTranslations")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'pageTranslations')]
+    #[ORM\JoinColumn(nullable: false)]
     private $lang;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Pages::class, inversedBy="pageTranslations", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Pages::class, inversedBy: 'pageTranslations', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $Page;
 
     public function getId(): ?int

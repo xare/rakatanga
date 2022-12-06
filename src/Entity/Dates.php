@@ -10,96 +10,79 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Dates.
  *
- * @ORM\Entity(repositoryClass="App\Repository\DatesRepository")
  */
+#[ORM\Entity(repositoryClass: 'App\Repository\DatesRepository')]
 class Dates
 {
     /**
      * @var int
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
     private $id;
 
     /**
      * @var \Date
      *
-     * @ORM\Column(name="debut", type="date", nullable=false)
      */
     #[Groups('main')]
+    #[ORM\Column(name: 'debut', type: 'date', nullable: false)]
     private $debut;
 
     /**
      * @var \Date
      *
-     * @ORM\Column(name="fin", type="date", nullable=false)
      */
     #[Groups('main')]
+    #[ORM\Column(name: 'fin', type: 'date', nullable: false)]
     private $fin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prix_pilote", type="decimal", precision=10, scale=2, nullable=false)
      */
     #[Groups('main')]
+    #[ORM\Column(name: 'prix_pilote', type: 'decimal', precision: 10, scale: 2, nullable: false)]
     private $prixPilote;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prix_accomp", type="decimal", precision=10, scale=2, nullable=false)
      */
     #[Groups('main')]
+    #[ORM\Column(name: 'prix_accomp', type: 'decimal', precision: 10, scale: 2, nullable: false)]
     private $prixAccomp;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="statut", type="string", length=15, nullable=false)
      */
     #[Groups('main')]
+    #[ORM\Column(name: 'statut', type: 'string', length: 15, nullable: false)]
     private $statut;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="date")
-     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'date')]
     private $users;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Travel::class, inversedBy="dates")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'dates')]
+    #[ORM\JoinColumn(nullable: false)]
     private $travel;
 
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
     private $requestedDocs = [];
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Document::class, mappedBy="date")
-     */
+    #[ORM\ManyToMany(targetEntity: Document::class, mappedBy: 'date')]
     private $documents;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Travellers::class, mappedBy="date")
-     */
+    #[ORM\ManyToMany(targetEntity: Travellers::class, mappedBy: 'date')]
     private $travellers;
 
-    /**
-     * @ORM\OneToMany(
-     *              targetEntity=Reservation::class,
-     *              mappedBy="date",
-     *              cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'date', cascade: ['persist', 'remove'])]
     private $reservations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Oldreservations::class, mappedBy="dates")
-     */
+    #[ORM\OneToMany(targetEntity: Oldreservations::class, mappedBy: 'dates')]
     private $oldreservations;
 
     public function __construct()
