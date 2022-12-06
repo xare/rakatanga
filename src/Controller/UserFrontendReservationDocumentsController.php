@@ -340,9 +340,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
     #[Route(path: ['en' => '{_locale}/user/documents', 'es' => '{_locale}/usuario/documentos', 'fr' => '{_locale}/utilisateur/documents'], name: 'frontend_user_documents')]
     public function userDocuments(
         LangRepository $langRepository,
-        $_locale = null,
         ReservationRepository $reservationRepository,
-        $locale = 'es'
+        string $_locale = null,
+        string $locale = 'es'
     ) {
         $locale = $_locale ? $_locale : $locale;
         // Swith Locale Loader

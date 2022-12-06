@@ -12,23 +12,23 @@ class Blog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'blogs')]
-    private Category $category;
+    private Collection $category;
 
     #[ORM\OneToMany(targetEntity: Articles::class, mappedBy: 'blog')]
-    private Articles $articles;
+    private Collection $articles;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $name;
+    #[ORM\Column()]
+    private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $slug;
+    #[ORM\Column()]
+    private ?string $slug = null;
 
     #[ORM\OneToOne(targetEntity: Lang::class, inversedBy: 'blog', cascade: ['persist', 'remove'])]
-    private string $lang;
+    private ?Lang $lang = null;
 
     public function __construct()
     {

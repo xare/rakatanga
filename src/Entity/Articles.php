@@ -12,11 +12,11 @@ class Articles
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $title;
+    #[ORM\Column()]
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $intro;
@@ -27,18 +27,18 @@ class Articles
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'articles')]
     private ?Media $media;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $publishedAt;
+    #[ORM\Column()]
+    private \DateTimeImmutable $publishedAt;
 
     #[ORM\ManyToOne(targetEntity: Blog::class, inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
     private Blog $blog;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $slug;
+    private ?string $slug = null;
 
     #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'article', cascade: ['persist', 'remove'])]
-    private Media $mainPhoto;
+    private Collection $mainPhoto;
 
     public function __construct()
     {

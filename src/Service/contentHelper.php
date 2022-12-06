@@ -31,7 +31,7 @@ class contentHelper
         $lang = $this->langRepository->findOneBy([
             'iso_code' => $parameters['locale'],
         ]);
-        $text = $this->TextsRepository->findOneBy([
+        $text = $this->textsRepository->findOneBy([
             'section' => $parameters['section'],
             'acronym' => $parameters['acronym'],
             'lang' => $lang,
