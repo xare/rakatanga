@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+/* use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator; */
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\SymfonyLevelSetList;
 
-return static function (RectorConfig $rectorConfig): void { */
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/config',
         __DIR__ . '/migrations',
