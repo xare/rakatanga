@@ -14,16 +14,18 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/public',
         __DIR__ . '/src',
         __DIR__ . '/tests', */
-        __DIR__ . '/vendor/m-adamski',
     ]);
 
     // register a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
 
     // define sets of rules
-       $rectorConfig->sets([
-           LevelSetList::UP_TO_PHP_80
-       ]);
+    $rectorConfig->sets([
+        DoctrineSetList ::ANNOTATIONS_TO_ATTRIBUTES,
+        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        NetteSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        SensiolabsSetList::FRAMEWORK_EXTRA_61,
+    ]);
  };
 
 
