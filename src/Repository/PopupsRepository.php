@@ -50,12 +50,26 @@ class PopupsRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function showPopup(){
+        $qb = $this->createQueryBuilder('p');
+        $q = $qb
+            ->where(
+                $qb->expr()->lt('p.date_start', 'NOW()')
+            )
+            ->andWhere(
+                $qb->expr()->gt('p.date_end', 'NOW()')
+            )
+            ->orderBy('p.id', 'DESC')
+            ->getQuery();
 
-    public function showPopup($locale)
+        return $q->getOneOrNullResult();
+    }
+    /* public function showPopup($locale)
     {
         $qb = $this->createQueryBuilder('p');
         $q = $qb
             ->select('
+                p.id as id,
                 pt.title as title,
                 pt.content as content
                 ')
@@ -73,5 +87,5 @@ class PopupsRepository extends ServiceEntityRepository
             ->getQuery();
 
         return $q->getOneOrNullResult();
-    }
+    } */
 }

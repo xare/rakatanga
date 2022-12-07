@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Adamski\Symfony\PhoneNumberBundle\Model\PhoneNumber;
 use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueEntity(fields: ['email'], message: 'This value is already used.')]
-#[ORM\Entity(repositoryClass: App\Repository\UserRepository::class)]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface
 {
     public const REGISTERED_SUCCESFULLY = 'Se ha registrado exitosamente';

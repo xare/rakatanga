@@ -189,7 +189,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendRegistrationVerificationToUser(User $user, string $verificationUrl)
+    public function sendRegistrationVerificationToUser(User $user, string $verificationUrl, string $locale)
     {
         $email = $this->sendToSender();
         $email->to(
@@ -201,6 +201,7 @@ class Mailer
             ->subject('['.\App\Service\Mailer::MAIL_TITLE."] {$this->translator->trans('Tu vínculo de verificación', [], 'email')}")
             ->htmlTemplate('email/registration/new-user-verification-sender.html.twig')
             ->context([
+                'locale' =>$locale,
                 'user' => $user,
                 'verificationUrl' => $verificationUrl,
             ]);

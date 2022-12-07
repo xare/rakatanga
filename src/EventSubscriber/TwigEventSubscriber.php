@@ -9,18 +9,13 @@ use Twig\Environment;
 
 class TwigEventSubscriber implements EventSubscriberInterface
 {
-    private $twig;
-    private $contentHelper;
-    private $defaultLocale;
+
 
     public function __construct(
-                            Environment $twig,
-                            contentHelper $contentHelper,
-                            string $defaultLocale = 'es'
+        private Environment $twig,
+        private contentHelper $contentHelper,
+        private string $defaultLocale = 'es'
                              ) {
-        $this->twig = $twig;
-        $this->contentHelper = $contentHelper;
-        $this->defaultLocale = $defaultLocale;
     }
 
     public function onKernelController(ControllerEvent $event)
@@ -37,7 +32,7 @@ class TwigEventSubscriber implements EventSubscriberInterface
         $this->twig->addGlobal('menuFooter', $this->contentHelper->renderMenu($request->getLocale(), 'Footer'));
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents() :array
     {
         return [
             'kernel.controller' => 'onKernelController',

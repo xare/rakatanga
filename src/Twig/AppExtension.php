@@ -49,6 +49,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('renderLocalizedOptionIntro', [$this, 'getLocalizedOptionTranslationIntro']),
             new TwigFunction('renderLocalizedCategory', [$this, 'getLocalizedCategoryTranslation']),
             new TwigFunction('renderLocalizedOptionInfodoc', [$this, 'getLocalizedOptionTranslationInfodoc']),
+            new TwigFunction('renderLocalizedPopupTitle', [$this, 'getLocalizedPopupTitleTranslation']),
+            new TwigFunction('renderLocalizedPopupContent', [$this, 'getLocalizedPopupContentTranslation']),
             new TwigFunction('render_category_list', [$this, 'renderCategoryList']),
             new TwigFunction('encore_entry_css_source', [$this, 'getEncoreEntryCssSource']),
             new TwigFunction('class', [$this, 'getClass']),
@@ -136,6 +138,19 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $this->container
             ->get(localizationHelper::class)
             ->renderCategoryString($id, $locale);
+    }
+
+    public function getLocalizedPopupTitleTranslation($id, $locale)
+    {
+        return $this->container
+            ->get(localizationHelper::class)
+            ->renderPopupTitle($id, $locale);
+    }
+    public function getLocalizedPopupContentTranslation($id, $locale)
+    {
+        return $this->container
+            ->get(localizationHelper::class)
+            ->renderPopupContent($id, $locale);
     }
 
     public function renderCategoryList($locale)

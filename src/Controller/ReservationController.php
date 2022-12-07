@@ -45,16 +45,10 @@ class ReservationController extends AbstractController
         private slugifyHelper $slugifyHelper,
         private reservationHelper $reservationHelper,
         private breadcrumbsHelper $breadcrumbsHelper,
-        private $stripePublicKey
+        private string $stripePublicKey,
+        private string $stripeSecretKey
     ) {
-        $this->em = $em;
-        $this->translator = $translator;
-        $this->breadcrumbs = $breadcrumbs;
-        $this->localizationHelper = $localizationHelper;
-        $this->slugifyHelper = $slugifyHelper;
-        $this->reservationHelper = $reservationHelper;
-        $this->breadcrumbsHelper = $breadcrumbsHelper;
-        $this->stripePublicKey = $stripePublicKey;
+
     }
 
     #[Route(path: '/trips/{category}/{travel}/reservation/{date}/', name: 'reservation', priority: 10)]
@@ -168,7 +162,6 @@ class ReservationController extends AbstractController
         LangRepository $langRepository,
         reservationHelper $reservationHelper,
         reservationDataHelper $reservationDataHelper,
-        $stripeSK,
         FormFactoryInterface $formFactory,
         string $_locale = null,
         string $locale = 'es')
@@ -237,7 +230,7 @@ class ReservationController extends AbstractController
                         $ammount = 500;
                     }
 
-                    \Stripe\Stripe::setApiKey($stripeSK);
+                    \Stripe\Stripe::setApiKey($this->stripeSecretKey);
 
                     $session = CheckoutSession::create([
                         'payment_method_types' => ['card'],
@@ -334,7 +327,6 @@ class ReservationController extends AbstractController
         EntityManagerInterface $em,
         reservationHelper $reservationHelper,
         PaymentsRepository $paymentsRepository,
-        $stripeSK,
         $locale = 'es'): Response
     {
         $locale = $_locale ? $_locale : $locale;
@@ -350,7 +342,7 @@ class ReservationController extends AbstractController
             ++$i;
         }
         // END LANGS ARRAY
-        \Stripe\Stripe::setApiKey($stripeSK);
+        \Stripe\Stripe::setApiKey($this->stripeSecretKey);
         $session = \Stripe\Checkout\Session::retrieve($request->query->get('session_id'));
 
         if (count($paymentsRepository->findBy(['stripeId' => $request->query->get('session_id')])) === 0) {

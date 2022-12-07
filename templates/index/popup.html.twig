@@ -1,2 +1,2 @@
-<h1>{{popup.title}}</h1>
-{{popup.content|raw}}
+<h1>{{renderLocalizedPopupTitle(popup, app.request.locale)|raw}}</h1>
+{{renderLocalizedPopupContent(popup, app.request.locale)|raw}}

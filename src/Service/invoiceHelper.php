@@ -32,7 +32,7 @@ class invoiceHelper
         string $locale,
         array $customerBillingData = []
     ): Invoices {
-        return $this->_createInvoice($reservation, $customerBillingData, 'new', $locale);
+        return $this->_createInvoice($reservation, $locale, $customerBillingData, 'new');
     }
 
     /**

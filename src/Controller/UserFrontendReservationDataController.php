@@ -17,14 +17,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserFrontendReservationDataController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private Mailer $mailer, private breadcrumbsHelper $breadcrumbsHelper)
+    public function __construct(private EntityManagerInterface $entityManager, private Mailer $mailer, private breadcrumbsHelper $breadcrumbsHelper, private TranslatorInterface $translator)
     {
-        $this->breadcrumbsHelper = $breadcrumbsHelper;
-        $this->entityManager = $entityManager;
-        $this->mailer = $mailer;
     }
 
     #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}', 'es' => '{_locale}/usuario/reserva/datos/{reservation}', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}'], name: 'frontend_user_reservation_data')]
@@ -41,6 +39,7 @@ class UserFrontendReservationDataController extends AbstractController
       $locale = 'es'
   ) {
           $locale = $_locale ?: $locale;
+          
           /**
            * @var User $user
            */
@@ -85,9 +84,9 @@ class UserFrontendReservationDataController extends AbstractController
                   [],
                   'reservation');
               $mailer->sendEmailonDataCompletionToUs($reservation);
-              $this->addFlash('success', $this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente'));
+              $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
           }
-
+          
           return $this->render('user/user_reservation_data.html.twig', [
               'langs' => $urlArray,
               'locale' => $locale,

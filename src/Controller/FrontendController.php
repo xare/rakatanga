@@ -241,8 +241,8 @@ class FrontendController extends AbstractController
         // 3. Get the travels for that category
         $travels = $this->travelRepository
             ->showByCategory(
-                $locale,
-                $categoryTranslation->getCategory()->getId()
+                $categoryTranslation->getCategory()->getId(),
+                $locale
             );
 
         $items = [];
@@ -285,8 +285,10 @@ class FrontendController extends AbstractController
 
         // Get the category for that translation
         $continent = $continentsRepository->findOneBy(['code' => 'as']);
-        $categories = $this->categoryRepository->findCategoriesForIndex($locale, $continent);
-        $otherDestinations = $this->categoryRepository->findOtherCategoriesForIndex($locale, $continent);
+
+
+        $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale);
+        $otherDestinations = $this->categoryRepository->findOtherCategoriesForIndex($continent, $locale);
 
         $slug = $this->menuTranslationRepository->findCorrespondingRoute($route, $locale);
 

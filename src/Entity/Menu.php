@@ -29,7 +29,7 @@ class Menu
     #[ORM\OneToMany(targetEntity: MenuTranslation::class, mappedBy: 'menu', cascade: ['persist', 'remove'])]
     private $menuTranslations;
 
-    #[ORM\OneToOne(targetEntity: Pages::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Pages::class, inversedBy:'menu', cascade: ['persist', 'remove'])]
     private $page;
 
     #[ORM\Column(type: 'boolean')]

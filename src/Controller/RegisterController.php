@@ -43,7 +43,7 @@ class RegisterController extends AbstractController
     EntityManagerInterface $em,
     LangRepository $langRepository,
     VerifyEmailHelperInterface $verifyEmailHelper,
-    $_locale = null,
+    string $_locale = null,
     string $locale = 'es'
   ): Response {
         $locale = $_locale ? $_locale : $locale;
@@ -96,15 +96,15 @@ class RegisterController extends AbstractController
                     ['id' => $user->getId()]
                 );
                 $verificationUrl = $signatureComponents->getSignedUrl();
-                $mailer->sendRegistrationVerificationToUser($user, $verificationUrl);
+                $mailer->sendRegistrationVerificationToUser($user, $verificationUrl, $locale);
                 $mailer->sendRegistrationToUs($user);
 
                 $formVerification = $this->createFormBuilder()
-                  ->add('userId', HiddenType::class, [
-                    'data' => $user->getId(),
-                  ])
-                  ->add('send', SubmitType::class)
-                  ->getForm();
+                    ->add('userId', HiddenType::class, [
+                        'data' => $user->getId(),
+                    ])
+                    ->add('send', SubmitType::class)
+                    ->getForm();
                 $formVerification->handleRequest($request);
 
                 if ($request->isXmlHttpRequest()) {

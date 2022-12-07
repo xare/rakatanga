@@ -21,26 +21,26 @@ class Category
     private string $status;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'categories')]
-    private Category $Category;
+    private Collection $Category;
 
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'Category')]
-    private Category $categories;
+    private Collection $categories;
 
     #[ORM\ManyToMany(targetEntity: Blog::class, mappedBy: 'category')]
-    private Blog $blogs;
+    private Collection $blogs;
 
     #[ORM\OneToMany(targetEntity: CategoryTranslation::class, mappedBy: 'category', orphanRemoval: true, cascade: ['persist'])]
-    private CategoryTranslation $categoryTranslations;
+    private Collection $categoryTranslations;
 
     #[ORM\OneToMany(targetEntity: Travel::class, mappedBy: 'category')]
-    private Travel $travel;
+    private Collection $travel;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column()]
     private string $name;
 
     #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'category')]
-    private Media $media;
+    private Collection $media;
 
     #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'mainCategoryPhoto', cascade: ['persist', 'remove'])]
     private Media $mainPhoto;

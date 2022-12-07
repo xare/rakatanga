@@ -3,8 +3,6 @@ import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/publi
 import Dropzone from 'dropzone';
 Routing.setRoutingData(routes);
 
-Dropzone.autoDiscover = false;
-
 class DocumentsList {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
@@ -50,6 +48,7 @@ class DocumentsList {
 
     initializeDropzone(type, travellerId) {
         const self = this;
+
         $(`#js-${type}-dropzone`).dropzone({
             paramName: 'document',
             params: {

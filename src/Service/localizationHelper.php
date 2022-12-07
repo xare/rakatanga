@@ -8,6 +8,7 @@ use App\Entity\Lang;
 use App\Entity\OptionsTranslations;
 use App\Entity\Pages;
 use App\Entity\PageTranslation;
+use App\Entity\Popups;
 use App\Entity\Travel;
 use App\Entity\TravelTranslation;
 use App\Repository\CategoryRepository;
@@ -17,6 +18,7 @@ use App\Repository\OptionsRepository;
 use App\Repository\OptionsTranslationsRepository;
 use App\Repository\PagesRepository;
 use App\Repository\PageTranslationRepository;
+use App\Repository\PopupsTranslationRepository;
 use App\Repository\ReservationOptionsRepository;
 use App\Repository\TravelRepository;
 use App\Repository\TravelTranslationRepository;
@@ -37,7 +39,8 @@ class localizationHelper
         private ReservationOptionsRepository $reservationOptionsRepository,
         private TranslatorInterface $translator,
         private TravelTranslationRepository $travelTranslationRepository,
-        private TravelRepository $travelRepository
+        private TravelRepository $travelRepository,
+        private PopupsTranslationRepository $popupsTranslationRepository
          ) {
     }
 
@@ -157,5 +160,24 @@ class localizationHelper
         return $this->langRepository->findBy(
             ['iso_code' => $locale]
         );
+    }
+
+    public function renderPopupTitle(Popups $popup, string $locale) :mixed{
+        $lang = $this->_getLang($locale);
+        $popupObject = $this->popupsTranslationRepository->findOneBy(
+            [
+                'popup' => $popup,
+                'lang' => $lang
+            ]);
+        return $popupObject == null ? null:$popupObject->getTitle();
+    }
+    public function renderPopupContent(Popups $popup, string $locale) :mixed{
+        $lang = $this->_getLang($locale);
+        $popupObject = $this->popupsTranslationRepository->findOneBy(
+            [
+                'popup' => $popup,
+                'lang' => $lang
+            ]);
+        return $popupObject == null ? null:$popupObject->getContent();
     }
 }

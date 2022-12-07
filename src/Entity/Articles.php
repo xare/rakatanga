@@ -25,7 +25,7 @@ class Articles
     private ?string $body;
 
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'articles')]
-    private ?Media $media;
+    private Collection $media;
 
     #[ORM\Column()]
     private \DateTimeImmutable $publishedAt;
@@ -38,7 +38,7 @@ class Articles
     private ?string $slug = null;
 
     #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'article', cascade: ['persist', 'remove'])]
-    private Collection $mainPhoto;
+    private ?Media $mainPhoto = null;
 
     public function __construct()
     {

@@ -31,7 +31,6 @@
 	
 	
 	{% if reservationData is defined and reservationData != null %}
-		{% set reservation = reservationData.reservation %}
 		{% if reservationData.documents != null %}
 			{% set documents = reservationData.documents %}
 		{% endif %}
@@ -43,7 +42,6 @@
 
 
 {% for document in documents %}
-
 		{% if document.doctype == "passport" %}
 			{% set hasPassport = true %}
 			{% set passportDocument = document %}
@@ -70,7 +68,7 @@
 	{% endblock %}
 
 	{% block body %}
-	
+
 {# {{ dump(reservation.reservationData) }}
 		{{ parent() }}
 {% if reservationData is defined %}

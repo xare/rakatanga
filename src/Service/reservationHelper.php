@@ -87,14 +87,14 @@ class reservationHelper
             /**
              * @var Invoices $invoice
              */
-            $invoice = $this->invoiceHelper->newInvoice($reservation, [
+            $invoice = $this->invoiceHelper->newInvoice($reservation, $locale, [
                 'name' => $user->getPrenom().' '.$user->getNom(),
                 'address' => $user->getAddress(),
                 'nif' => $user->getIdCard(),
                 'postalcode' => $user->getPostcode(),
                 'city' => $user->getCity(),
                 'country' => $user->getCountry(),
-            ], $locale);
+            ]);
             $reservation->setInvoice($invoice);
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();

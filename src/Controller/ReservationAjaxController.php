@@ -681,7 +681,7 @@ class ReservationAjaxController extends AbstractController
          $this->entityManager->persist($reservation);
          $this->entityManager->flush();
 
-         $this->invoiceHelper->updateReservationInvoice($reservation, $customerData, $request->getLocale());
+         $this->invoiceHelper->updateReservationInvoice($reservation, $request->getLocale(), $customerData);
 
          $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', ['reservation' => $reservation]);
 

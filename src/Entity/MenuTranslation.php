@@ -22,7 +22,7 @@ class MenuTranslation
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $slug;
 
-    #[ORM\ManyToOne(targetEntity: Lang::class)]
+    #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy:"menuTranslations")]
     #[ORM\JoinColumn(nullable: false)]
     private $lang;
 
