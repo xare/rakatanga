@@ -18,7 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class reservationHelper
 {
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private OptionsRepository $optionsRepository,

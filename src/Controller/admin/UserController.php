@@ -20,7 +20,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 #[Route(path: '/admin/user')]
 class UserController extends MainadminController
 {
-
     public function __construct(
         private EntityManagerInterface $entityManager)
     {

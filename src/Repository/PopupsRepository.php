@@ -50,7 +50,8 @@ class PopupsRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function showPopup(){
+    public function showPopup()
+    {
         $qb = $this->createQueryBuilder('p');
         $q = $qb
             ->where(

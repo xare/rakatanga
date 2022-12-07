@@ -31,7 +31,6 @@ class Mailings
 
     /**
      * @var \DateTimeInterface
-     *
      */
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $date_sent;

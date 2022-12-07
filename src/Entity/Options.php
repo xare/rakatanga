@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Options.
- *
  */
 #[ORM\Table(name: 'options')]
 #[ORM\Entity(repositoryClass: 'App\Repository\OptionsRepository')]
@@ -16,7 +15,6 @@ class Options
 {
     /**
      * @var int
-     *
      */
     #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
     #[ORM\Id]
@@ -25,7 +23,6 @@ class Options
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'prix', type: 'decimal', precision: 10, scale: 2, nullable: false)]
     private $price;

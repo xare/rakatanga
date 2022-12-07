@@ -26,7 +26,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegisterController extends AbstractController
 {
-
     public function __construct(private EntityManagerInterface $entityManager, private breadcrumbsHelper $breadcrumbsHelper)
     {
         $this->entityManager = $entityManager;

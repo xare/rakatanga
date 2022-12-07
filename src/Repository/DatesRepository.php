@@ -32,7 +32,7 @@ class DatesRepository extends ServiceEntityRepository
             ->getQuery();
     }
 
-    public function showNextDates($travel):array
+    public function showNextDates($travel): array
     {
         $qb = $this->createQueryBuilder('d');
         $q = $qb
@@ -139,7 +139,7 @@ class DatesRepository extends ServiceEntityRepository
         return $q->getResult();
     }
 
-    public function getDatesByYear():array
+    public function getDatesByYear(): array
     {
         $qb = $this->createQueryBuilder('d');
         $q = $qb
@@ -153,7 +153,7 @@ class DatesRepository extends ServiceEntityRepository
         return $q->getResult();
     }
 
-    public function getMonthedDates($year):array
+    public function getMonthedDates($year): array
     {
         $qb = $this->createQueryBuilder('d');
         $q = $qb

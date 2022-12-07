@@ -35,7 +35,6 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     *
      */
     #[Assert\NotBlank]
     #[ORM\Column(type: 'string', nullable: true)]
@@ -57,7 +56,6 @@ class User implements UserInterface
 
     /**
      * @AssertPhoneNumber
-     *
      */
     #[Groups('main')]
     #[ORM\Column(name: 'telephone', type: 'phone_number', nullable: true)]

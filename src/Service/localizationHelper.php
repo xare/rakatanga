@@ -2,15 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\Category;
-use App\Entity\CategoryTranslation;
-use App\Entity\Lang;
-use App\Entity\OptionsTranslations;
-use App\Entity\Pages;
-use App\Entity\PageTranslation;
 use App\Entity\Popups;
-use App\Entity\Travel;
-use App\Entity\TravelTranslation;
 use App\Repository\CategoryRepository;
 use App\Repository\CategoryTranslationRepository;
 use App\Repository\LangRepository;
@@ -22,12 +14,10 @@ use App\Repository\PopupsTranslationRepository;
 use App\Repository\ReservationOptionsRepository;
 use App\Repository\TravelRepository;
 use App\Repository\TravelTranslationRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class localizationHelper
 {
-
     public function __construct(
         private CategoryRepository $categoryRepository,
         private CategoryTranslationRepository $categoryTranslationRepository,
@@ -62,8 +52,8 @@ class localizationHelper
         $travel = $this->travelRepository->find($id);
         $lang = $this->_getLang($locale);
         $travelObject = $this->travelTranslationRepository->findOneBy(
-                            ['travel' => $travel, 
-                            'lang' => $lang]);
+            ['travel' => $travel,
+            'lang' => $lang, ]);
         if (null === $travelObject) {
             return '';
         } else {
@@ -162,22 +152,27 @@ class localizationHelper
         );
     }
 
-    public function renderPopupTitle(Popups $popup, string $locale) :mixed{
+    public function renderPopupTitle(Popups $popup, string $locale): mixed
+    {
         $lang = $this->_getLang($locale);
         $popupObject = $this->popupsTranslationRepository->findOneBy(
             [
                 'popup' => $popup,
-                'lang' => $lang
+                'lang' => $lang,
             ]);
-        return $popupObject == null ? null:$popupObject->getTitle();
+
+        return $popupObject == null ? null : $popupObject->getTitle();
     }
-    public function renderPopupContent(Popups $popup, string $locale) :mixed{
+
+    public function renderPopupContent(Popups $popup, string $locale): mixed
+    {
         $lang = $this->_getLang($locale);
         $popupObject = $this->popupsTranslationRepository->findOneBy(
             [
                 'popup' => $popup,
-                'lang' => $lang
+                'lang' => $lang,
             ]);
-        return $popupObject == null ? null:$popupObject->getContent();
+
+        return $popupObject == null ? null : $popupObject->getContent();
     }
 }

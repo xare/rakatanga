@@ -9,14 +9,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Dates.
- *
  */
 #[ORM\Entity(repositoryClass: 'App\Repository\DatesRepository')]
 class Dates
 {
     /**
      * @var int
-     *
      */
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -25,7 +23,6 @@ class Dates
 
     /**
      * @var \Date
-     *
      */
     #[Groups('main')]
     #[ORM\Column(name: 'debut', type: 'date', nullable: false)]
@@ -33,7 +30,6 @@ class Dates
 
     /**
      * @var \Date
-     *
      */
     #[Groups('main')]
     #[ORM\Column(name: 'fin', type: 'date', nullable: false)]
@@ -41,7 +37,6 @@ class Dates
 
     /**
      * @var string
-     *
      */
     #[Groups('main')]
     #[ORM\Column(name: 'prix_pilote', type: 'decimal', precision: 10, scale: 2, nullable: false)]
@@ -49,7 +44,6 @@ class Dates
 
     /**
      * @var string
-     *
      */
     #[Groups('main')]
     #[ORM\Column(name: 'prix_accomp', type: 'decimal', precision: 10, scale: 2, nullable: false)]
@@ -57,7 +51,6 @@ class Dates
 
     /**
      * @var string
-     *
      */
     #[Groups('main')]
     #[ORM\Column(name: 'statut', type: 'string', length: 15, nullable: false)]

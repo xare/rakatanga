@@ -23,7 +23,6 @@ class Inscriptions
     private $prenom;
 
     /**
-     *
      * @AssertPhoneNumber
      */
     #[ORM\Column(type: 'string', name: 'telephone', length: 25, nullable: true)]

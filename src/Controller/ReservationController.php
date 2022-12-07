@@ -36,7 +36,6 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class ReservationController extends AbstractController
 {
-
     public function __construct(
         private EntityManagerInterface $em,
         private TranslatorInterface $translator,
@@ -48,7 +47,6 @@ class ReservationController extends AbstractController
         private string $stripePublicKey,
         private string $stripeSecretKey
     ) {
-
     }
 
     #[Route(path: '/trips/{category}/{travel}/reservation/{date}/', name: 'reservation', priority: 10)]

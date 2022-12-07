@@ -201,7 +201,7 @@ class Mailer
             ->subject('['.\App\Service\Mailer::MAIL_TITLE."] {$this->translator->trans('Tu vínculo de verificación', [], 'email')}")
             ->htmlTemplate('email/registration/new-user-verification-sender.html.twig')
             ->context([
-                'locale' =>$locale,
+                'locale' => $locale,
                 'user' => $user,
                 'verificationUrl' => $verificationUrl,
             ]);
@@ -227,7 +227,8 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendReservationPaymentSuccessToSender(Reservation $reservation) {
+    public function sendReservationPaymentSuccessToSender(Reservation $reservation)
+    {
         $email = $this->sendToSender();
         $user = $reservation->getUser();
         $to = new Address($user->getEmail(), $user->getPrenom().' '.$user->getNom());
@@ -276,7 +277,8 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendReservationToSender(Reservation $reservation) {
+    public function sendReservationToSender(Reservation $reservation)
+    {
         $email = $this->sendToSender();
         $user = $reservation->getUser();
         $subject = '['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('RESERVA REALIZADA', [], 'email')}]  {$this->translator->trans('Has realizado una reserva para el viaje', [], 'email')} {$reservation->getDate()->getTravel()->getMainTitle()} {$this->translator->trans('del ')} {$reservation->getDate()->getDebut()->format('d/m/Y')}";

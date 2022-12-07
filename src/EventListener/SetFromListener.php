@@ -9,7 +9,7 @@ use Symfony\Component\Mime\Email;
 
 class SetFromListener implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents():array
+    public static function getSubscribedEvents(): array
     {
         return [
           MessageEvent::class => 'onMessage',

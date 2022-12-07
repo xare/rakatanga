@@ -146,6 +146,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->get(localizationHelper::class)
             ->renderPopupTitle($id, $locale);
     }
+
     public function getLocalizedPopupContentTranslation($id, $locale)
     {
         return $this->container

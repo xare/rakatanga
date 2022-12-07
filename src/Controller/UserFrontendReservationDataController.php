@@ -39,7 +39,7 @@ class UserFrontendReservationDataController extends AbstractController
       $locale = 'es'
   ) {
           $locale = $_locale ?: $locale;
-          
+
           /**
            * @var User $user
            */
@@ -86,7 +86,7 @@ class UserFrontendReservationDataController extends AbstractController
               $mailer->sendEmailonDataCompletionToUs($reservation);
               $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
           }
-          
+
           return $this->render('user/user_reservation_data.html.twig', [
               'langs' => $urlArray,
               'locale' => $locale,

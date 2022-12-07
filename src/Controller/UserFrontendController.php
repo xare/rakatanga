@@ -26,8 +26,8 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 class UserFrontendController extends AbstractController
 {
     public function __construct(
-                        private TranslatorInterface $translatorInterface, 
-                        private EntityManagerInterface $entityManager, 
+                        private TranslatorInterface $translatorInterface,
+                        private EntityManagerInterface $entityManager,
                         private breadcrumbsHelper $breadcrumbsHelper)
     {
         $this->translator = $translatorInterface;
@@ -95,7 +95,7 @@ class UserFrontendController extends AbstractController
 
         // BREADCRUMBS
         $this->breadcrumbsHelper->userFrontendReservationsBreadcrumbs($locale);
-        
+
         // END BREADCRUMBS
 
         $reservations = $reservationRepository->findBy(['user' => $user], ['date_ajout' => 'DESC']);

@@ -55,5 +55,4 @@ class TravelTranslationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }

@@ -9,8 +9,6 @@ use Twig\Environment;
 
 class TwigEventSubscriber implements EventSubscriberInterface
 {
-
-
     public function __construct(
         private Environment $twig,
         private contentHelper $contentHelper,
@@ -32,7 +30,7 @@ class TwigEventSubscriber implements EventSubscriberInterface
         $this->twig->addGlobal('menuFooter', $this->contentHelper->renderMenu($request->getLocale(), 'Footer'));
     }
 
-    public static function getSubscribedEvents() :array
+    public static function getSubscribedEvents(): array
     {
         return [
             'kernel.controller' => 'onKernelController',

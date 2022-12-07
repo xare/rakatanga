@@ -9,11 +9,10 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class breadcrumbsHelper
 {
-
     public function __construct(
-        private Breadcrumbs $breadcrumbs, 
-        private TranslatorInterface $translator, 
-        private localizationHelper $localizationHelper, 
+        private Breadcrumbs $breadcrumbs,
+        private TranslatorInterface $translator,
+        private localizationHelper $localizationHelper,
         private slugifyHelper $slugifyHelper)
     {
     }
@@ -182,7 +181,8 @@ class breadcrumbsHelper
     {
     }
 
-    public function userFrontendReservationsBreadcrumbs(string $locale){
+    public function userFrontendReservationsBreadcrumbs(string $locale)
+    {
         $this->breadcrumbs->addRouteItem(
             $this->translator->trans('Tus Reservas'),
             'frontend_user_reservations',
@@ -198,7 +198,8 @@ class breadcrumbsHelper
         );
     }
 
-    public function frontendUserSettingsBreadcrumbs(string $locale){
+    public function frontendUserSettingsBreadcrumbs(string $locale)
+    {
         $this->breadcrumbs->addRouteItem(
             $this->translator->trans('Usuario'),
             'frontend_user',

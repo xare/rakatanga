@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Codespromo.
- *
  */
 #[ORM\Table(name: 'codespromo')]
 #[ORM\Entity(repositoryClass: 'App\Repository\CodespromoRepository')]
@@ -16,7 +15,6 @@ class Codespromo
 {
     /**
      * @var int
-     *
      */
     #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
     #[ORM\Id]
@@ -25,84 +23,72 @@ class Codespromo
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'code', type: 'string', length: 10, nullable: false)]
     private $code;
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'libelle', type: 'string', length: 100, nullable: false)]
     private $libelle;
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'commentaire', type: 'string', length: 255, nullable: false)]
     private $commentaire;
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'montant', type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private $montant;
 
     /**
      * @var int
-     *
      */
     #[ORM\Column(name: 'pourcentage', type: 'integer', nullable: true, options: ['unsigned' => true])]
     private $pourcentage;
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'type', type: 'string', length: 15, nullable: false)]
     private $type;
 
     /**
      * @var int
-     *
      */
     #[ORM\Column(name: 'nombre', type: 'integer', nullable: true, options: ['unsigned' => true])]
     private $nombre;
 
     /**
      * @var \DateTime
-     *
      */
     #[ORM\Column(name: 'debut', type: 'date', nullable: true)]
     private $debut;
 
     /**
      * @var \DateTime
-     *
      */
     #[ORM\Column(name: 'fin', type: 'date', nullable: true)]
     private $fin;
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: true)]
     private $email;
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'statut', type: 'string', length: 255, nullable: false)]
     private $statut;
 
     /**
      * @var \DateTime
-     *
      */
     #[ORM\Column(name: 'date_ajout', type: 'datetime', nullable: true)]
     private $dateAjout;

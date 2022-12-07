@@ -18,7 +18,6 @@ class Contact
     private $id;
 
     /**
-     *
      * @var string|null
      */
     #[Assert\NotBlank]
@@ -27,7 +26,6 @@ class Contact
     private $firstname;
 
     /**
-     *
      * @var string|null
      */
     #[Assert\NotBlank]
@@ -36,7 +34,6 @@ class Contact
     private $lastname;
 
     /**
-     *
      * @var string|null
      *
      * @AssertPhoneNumber
@@ -46,7 +43,6 @@ class Contact
     private $phone;
 
     /**
-     *
      * @var string|null
      */
     #[Assert\NotBlank]
@@ -55,7 +51,6 @@ class Contact
     private $email;
 
     /**
-     *
      * @var string|null
      */
     #[Assert\NotBlank]

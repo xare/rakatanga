@@ -2,12 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Category;
-use App\Entity\Lang;
-use App\Entity\Menu;
-use App\Entity\MenuLocation;
-use App\Entity\MenuTranslation;
-use App\Entity\Texts;
 use App\Repository\CategoryRepository;
 use App\Repository\LangRepository;
 use App\Repository\MenuRepository;
@@ -16,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class contentHelper
 {
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private MenuRepository $menuRepository,

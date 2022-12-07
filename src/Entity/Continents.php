@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Continents.
- *
  */
 #[ORM\Table(name: 'continents')]
 #[ORM\Entity(repositoryClass: 'App\Repository\ContinentsRepository')]
@@ -22,7 +21,6 @@ class Continents
 
     /**
      * @var string
-     *
      */
     #[ORM\Column(name: 'code', type: 'string', length: 2, nullable: false)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]

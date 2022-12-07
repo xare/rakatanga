@@ -62,6 +62,7 @@ class ReservationAjaxController extends AbstractController
         $this->reservationHelper = $reservationHelper;
         $this->invoiceHelper = $invoiceHelper;
     }
+
    #[Route('/reservation/ajax', name: 'reservation_ajax')]
       /**
        * @Route("/ajax/initialize/reservation/logged",
@@ -659,19 +660,18 @@ class ReservationAjaxController extends AbstractController
              foreach ($requestData['options'] as $optionArray) {
                  $option = $optionsRepository->find($optionArray['id']);
                  $reservationOptions = $reservationOptionsRepository->findBy(['options' => $optionArray['id']]);
-                 $reservationOptions;
-                 $option;
+
                  if (count($reservationOptions) == 0) {
                      $reservationOption = new ReservationOptions();
                      $reservationOption->setAmmount($optionArray['ammount']);
                      $reservationOption->setOptions($option);
-                     $reservationOption;
+
                      $reservation->addReservationOption($reservationOption);
                  } else {
                      foreach ($reservationOptions as $reservationOption) {
                          $reservationOption->setAmmount($optionArray['ammount']);
                          $reservationOption->setOptions($option);
-                         $reservationOption;
+
                          $reservation->addReservationOption($reservationOption);
                      }
                  }

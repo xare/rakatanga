@@ -19,7 +19,6 @@ class invoiceHelper
         private reservationDataHelper $reservationDataHelper,
         private ReservationOptionsRepository $reservationOptionsRepository
     ) {
-
     }
 
     /**
@@ -51,7 +50,7 @@ class invoiceHelper
             throw $exception;
         }
         try {
-            $this->_createInvoice($reservation, $locale, $customerBillingData, 'cancelled' );
+            $this->_createInvoice($reservation, $locale, $customerBillingData, 'cancelled');
         } catch (\Exception $exception) {
             error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
             throw $exception;
@@ -106,7 +105,7 @@ class invoiceHelper
             error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
         }
         try {
-            $this->_createInvoice($reservation, $locale, $customerData, 'updated' );
+            $this->_createInvoice($reservation, $locale, $customerData, 'updated');
         } catch (\Exception $exception) {
             error_log("{$exception->getFile()}: ln {{$exception->getLine()}} throw error message '{$exception->getMessage()}'");
             throw $exception;
@@ -142,7 +141,7 @@ class invoiceHelper
         $invoice->setInvoiceNumber("{$dateTime->format('Y')}-{$invoiceNumber}");
         $invoice->setReservation($reservation);
 
-        $this->_assignCustomerDataToInvoiceObject($invoice, $locale, $customerData );
+        $this->_assignCustomerDataToInvoiceObject($invoice, $locale, $customerData);
 
         /**
          * @var string $invoiceFileName
@@ -161,8 +160,8 @@ class invoiceHelper
      * _assignCustomerDataToInvoice function.
      */
     private function _assignCustomerDataToInvoiceObject(
-                        Invoices $invoice, 
-                        string $locale, 
+                        Invoices $invoice,
+                        string $locale,
                         array $customerData): mixed
     {
         if (empty($customerData)) {

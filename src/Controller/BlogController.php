@@ -16,7 +16,6 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class BlogController extends AbstractController
 {
-
     public function __construct(
         private LangRepository $langRepository,
         private breadcrumbsHelper $breadcrumbsHelper,

@@ -80,7 +80,7 @@ class FrontendController extends AbstractController
             ['code' => 'as']
         );
 
-        $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale );
+        $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale);
         $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex($continent, $locale);
 
         $years = $this->datesRepository->getDatesByYear();
@@ -285,7 +285,6 @@ class FrontendController extends AbstractController
 
         // Get the category for that translation
         $continent = $continentsRepository->findOneBy(['code' => 'as']);
-
 
         $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale);
         $otherDestinations = $this->categoryRepository->findOtherCategoriesForIndex($continent, $locale);

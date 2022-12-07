@@ -7,7 +7,6 @@ use App\Repository\PaymentsRepository;
 
 class reservationDataHelper
 {
-
     public function __construct(private PaymentsRepository $paymentsRepository)
     {
         $this->paymentsRepository = $paymentsRepository;
