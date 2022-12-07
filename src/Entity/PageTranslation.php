@@ -10,28 +10,28 @@ class PageTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column()]
+    private ?string $title = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $slug;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $intro;
+    #[ORM\Column()]
+    private ?string $slug = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $body;
+    private ?string $intro = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $body = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'pageTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private ?Lang $lang = null;
 
     #[ORM\ManyToOne(targetEntity: Pages::class, inversedBy: 'pageTranslations', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private $Page;
+    private Pages $Page;
 
     public function getId(): ?int
     {

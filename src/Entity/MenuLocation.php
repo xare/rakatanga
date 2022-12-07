@@ -12,8 +12,8 @@ class MenuLocation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'menuLocations')]
     private $menus;

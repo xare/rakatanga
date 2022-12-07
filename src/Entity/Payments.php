@@ -10,21 +10,21 @@ class Payments
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private $ammount;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $date_ajout;
+    private \DateTimeImmutable $date_ajout;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'payments', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $reservation;
+    private Reservation $reservation;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $stripeId;
+    #[ORM\Column(nullable: true)]
+    private ?string $stripeId = null;
 
     public function __construct()
     {

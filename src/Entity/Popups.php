@@ -12,26 +12,26 @@ class Popups
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column()]
+    private ?string $title = null;
 
     #[ORM\OneToMany(targetEntity: PopupsTranslation::class, mappedBy: 'popup', orphanRemoval: true, cascade: ['persist'])]
-    private $popupsTranslations;
+    private Collection $popupsTranslations;
 
     #[ORM\Column(type: 'date')]
-    private $date_start;
+    private ?\DateTime $date_start = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $date_end;
+    private ?\DateTime $date_end = null;
 
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'popups')]
-    private $media;
+    private Collection $media;
 
     #[ORM\OneToOne(targetEntity: Media::class, cascade: ['persist', 'remove'])]
-    private $mainPhoto;
+    private ?Media $mainPhoto = null;
 
     public function __construct()
     {

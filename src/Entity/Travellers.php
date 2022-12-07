@@ -13,55 +13,55 @@ class Travellers
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'travellers')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user;
+    private ?User $user = null;
 
-    #[ORM\Column(type: 'string', length: 2, nullable: true)]
-    private $langue;
-
-    #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $nom;
+    #[ORM\Column(length: 2, nullable: true)]
+    private ?string $langue = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $prenom;
+    #[ORM\Column()]
+    private ?string $nom = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $telephone;
+    #[ORM\Column()]
+    private ?string $prenom = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $position;
+    #[ORM\Column(nullable: true)]
+    private ?string $telephone = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $assurance;
+    #[Groups('main')]
+    #[ORM\Column()]
+    private ?string $position = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $vols;
+    private ?string $assurance = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private $date_ajout;
+    #[ORM\Column(nullable: true)]
+    private ?string $vols = null;
+
+    #[ORM\Column()]
+    private ?\DateTime $date_ajout = null;
 
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'traveller')]
-    private $documents;
+    private Collection $documents;
 
     #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'travellers')]
-    private $date;
+    private Collection $date;
 
     #[ORM\ManyToMany(targetEntity: Reservation::class, mappedBy: 'travellers')]
-    private $reservations;
+    private Collection $reservations;
 
     #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'travellers')]
-    private $reservationData;
+    private Collection $reservationData;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $email;
+    private ?string $email = null;
 
     public function __construct()
     {

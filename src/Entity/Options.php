@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\OptionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Options.
  */
 #[ORM\Table(name: 'options')]
-#[ORM\Entity(repositoryClass: 'App\Repository\OptionsRepository')]
+#[ORM\Entity(repositoryClass: OptionsRepository::class)]
 class Options
 {
     /**
@@ -19,7 +20,7 @@ class Options
     #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string

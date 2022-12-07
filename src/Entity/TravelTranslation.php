@@ -10,40 +10,40 @@ class TravelTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column()]
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $content;
+    private ?string $content = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'travelTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private ?Lang $lang;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $url;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $summary;
+    #[ORM\Column(nullable: true)]
+    private ?string $url = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $intro;
+    private ?string $summary = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    private ?string $intro = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $itinerary;
+    private ?string $description = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $practical_info;
+    private ?string $itinerary = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $practical_info = null;
 
     #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'travelTranslation', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private $travel;
+    private ?Travel $travel;
 
     public function getId(): ?int
     {

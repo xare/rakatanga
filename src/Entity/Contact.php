@@ -14,8 +14,8 @@ class Contact
     use TimestampableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     /**
      * @var string|null

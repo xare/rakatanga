@@ -13,8 +13,8 @@ class Infodocs
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $filename;

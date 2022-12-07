@@ -15,8 +15,8 @@ class Document
     #[Groups('main')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'documents')]
     #[ORM\JoinColumn(nullable: false)]

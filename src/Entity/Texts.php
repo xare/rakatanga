@@ -10,26 +10,27 @@ class Texts
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private $section;
+    #[ORM\Column(length: 100)]
+    private ?string $section = null;
 
-    #[ORM\Column(type: 'string', length: 15)]
-    private $acronym;
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column(length: 15)]
+    private ?string $acronym = null;
+
+    #[ORM\Column()]
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
-    private $text;
+    private ?string $text = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $date;
+    private ?\DateTime $date = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'texts')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private Lang $lang;
 
     public function getId(): ?int
     {

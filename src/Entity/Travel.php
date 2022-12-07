@@ -2,73 +2,74 @@
 
 namespace App\Entity;
 
+use App\Repository\TravelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: App\Repository\TravelRepository::class)]
+#[ORM\Entity(repositoryClass: TravelRepository::class)]
 class Travel
 {
     #[Groups('main')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $km;
+    #[ORM\Column(nullable: true)]
+    private ?int $km = null;
 
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'travel', cascade: ['persist'])]
-    private $media;
+    private Collection $media;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $status;
+    #[ORM\Column(nullable: true)]
+    private ?string $status = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $duration;
+    private ?int $duration = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 3, nullable: true)]
-    private $level;
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $level = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'datetime')]
-    private $date;
+    #[ORM\Column()]
+    private \DateTime $date;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'travel')]
-    private $category;
+    private ?Category $category = null;
 
     #[Groups('main')]
     #[Assert\Valid]
     #[ORM\OneToMany(targetEntity: TravelTranslation::class, mappedBy: 'travel', orphanRemoval: true, cascade: ['persist'])]
-    private $travelTranslation;
+    private Collection $travelTranslation;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $main_title;
+    #[ORM\Column()]
+    private ?string $main_title = null;
 
     #[ORM\OneToMany(targetEntity: Dates::class, mappedBy: 'travel', orphanRemoval: true)]
-    private $dates;
+    private Collection $dates;
 
     #[ORM\OneToOne(targetEntity: Media::class, cascade: ['persist', 'remove'])]
-    private $mainPhoto;
+    private ?Media $mainPhoto = null;
 
     #[ORM\OneToMany(targetEntity: Options::class, mappedBy: 'travel')]
-    private $options;
+    private Collection $options;
 
     #[ORM\ManyToMany(targetEntity: Hotels::class, mappedBy: 'travel')]
-    private $hotels;
+    private Collection $hotels;
 
     #[ORM\ManyToMany(targetEntity: Infodocs::class, mappedBy: 'travel')]
-    private $infodocs;
+    private Collection $infodocs;
 
     #[ORM\OneToMany(targetEntity: Oldreservations::class, mappedBy: 'Travel')]
-    private $oldreservations;
+    private Collection $oldreservations;
 
     public function __construct()
     {

@@ -13,8 +13,8 @@ class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 10, nullable: true)]

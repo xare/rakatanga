@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\CodespromoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Codespromo.
  */
 #[ORM\Table(name: 'codespromo')]
-#[ORM\Entity(repositoryClass: 'App\Repository\CodespromoRepository')]
+#[ORM\Entity(repositoryClass: 'CodespromoRepository')]
 class Codespromo
 {
     /**
@@ -19,25 +20,22 @@ class Codespromo
     #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $id;
+    private int $id;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'code', type: 'string', length: 10, nullable: false)]
-    private $code;
+    #[ORM\Column(length: 10, nullable: false)]
+    private string $code;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'libelle', type: 'string', length: 100, nullable: false)]
-    private $libelle;
+    #[ORM\Column(length: 100, nullable: false)]
+    private string $libelle;
 
-    /**
-     * @var string
-     */
-    #[ORM\Column(name: 'commentaire', type: 'string', length: 255, nullable: false)]
-    private $commentaire;
+    #[ORM\Column(nullable: false)]
+    private string $commentaire;
 
     /**
      * @var string
@@ -49,59 +47,48 @@ class Codespromo
      * @var int
      */
     #[ORM\Column(name: 'pourcentage', type: 'integer', nullable: true, options: ['unsigned' => true])]
-    private $pourcentage;
+    private ?int $pourcentage = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'type', type: 'string', length: 15, nullable: false)]
-    private $type;
+    #[ORM\Column(length: 15, nullable: false)]
+    private string $type;
 
     /**
      * @var int
      */
-    #[ORM\Column(name: 'nombre', type: 'integer', nullable: true, options: ['unsigned' => true])]
-    private $nombre;
+    #[ORM\Column(nullable: true, options: ['unsigned' => true])]
+    private ?int $nombre = null;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTime $debut = null;
 
     /**
      * @var \DateTime
      */
-    #[ORM\Column(name: 'debut', type: 'date', nullable: true)]
-    private $debut;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTime $fin = null;
 
-    /**
-     * @var \DateTime
-     */
-    #[ORM\Column(name: 'fin', type: 'date', nullable: true)]
-    private $fin;
+    #[ORM\Column(nullable: true)]
+    private ?string $email = null;
 
-    /**
-     * @var string
-     */
-    #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: true)]
-    private $email;
+    #[ORM\Column(nullable: false)]
+    private string $statut;
 
-    /**
-     * @var string
-     */
-    #[ORM\Column(name: 'statut', type: 'string', length: 255, nullable: false)]
-    private $statut;
-
-    /**
-     * @var \DateTime
-     */
-    #[ORM\Column(name: 'date_ajout', type: 'datetime', nullable: true)]
-    private $dateAjout;
+  
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $dateAjout = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'codespromos')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private $user;
+    private ?User $user = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $nombreTotal;
+    private ?int $nombreTotal = null;
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'codespromo')]
-    private $reservations;
+    private Collection $reservations;
 
     public function __construct()
     {

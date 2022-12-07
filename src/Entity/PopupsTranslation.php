@@ -10,22 +10,22 @@ class PopupsTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column()]
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $content;
+    private ?string $content = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'popupsTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private Lang $lang;
 
     #[ORM\ManyToOne(targetEntity: Popups::class, inversedBy: 'popupsTranslations', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private $popup;
+    private Popups $popup;
 
     public function getId(): ?int
     {

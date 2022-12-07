@@ -10,19 +10,19 @@ class ReservationOptions
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'reservationOptions', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $reservation;
+    private Reservation $reservation;
 
     #[ORM\ManyToOne(targetEntity: Options::class, inversedBy: 'reservationOptions', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $options;
+    private Options $options;
 
     #[ORM\Column(type: 'integer')]
-    private $ammount;
+    private ?int $ammount = null;
 
     public function getId(): ?int
     {

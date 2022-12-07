@@ -9,8 +9,8 @@ class MenuTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuTranslations')]
     #[ORM\JoinColumn(name: 'menu_id', referencedColumnName: 'id', onDelete: 'CASCADE')]

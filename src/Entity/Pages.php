@@ -14,12 +14,12 @@ class Pages
     #[Groups('main')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 100)]
-    private $default_slug;
+    private ?string $default_slug = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'datetime_immutable')]
@@ -27,19 +27,19 @@ class Pages
 
     #[Groups('main')]
     #[ORM\Column(type: 'datetime')]
-    private $date_modified;
+    private ?\DateTime $date_modified = null;
 
     #[ORM\OneToMany(targetEntity: PageTranslation::class, mappedBy: 'Page', orphanRemoval: true, cascade: ['persist'])]
-    private $pageTranslations;
+    private Collection $pageTranslations;
 
     #[ORM\OneToOne(targetEntity: Menu::class, mappedBy: 'page', cascade: ['persist', 'remove'])]
-    private $menu;
+    private ?Menu $menu = null;
 
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'pages')]
-    private $media;
+    private Collection $media;
 
     #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'page', cascade: ['persist', 'remove'])]
-    private $mainPhoto;
+    private ?Media $mainPhoto = null;
 
     public function __construct()
     {

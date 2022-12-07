@@ -14,88 +14,88 @@ class ReservationData
     #[Groups('main')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $passportNo;
-
-    #[ORM\Column(type: 'date', nullable: true)]
-    private $passportIssueDate;
+    #[ORM\Column(nullable: true)]
+    private ?string $passportNo = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $passportExpirationDate;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $visaNumber;
+    private ?\DateTime $passportIssueDate = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $visaIssueDate;
+    private ?\DateTime $passportExpirationDate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $visaNumber = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $visaExpirationDate;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $driversNumber;
+    private ?\DateTime $visaIssueDate = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $driversIssueDate;
+    private ?\DateTime $visaExpirationDate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $driversNumber = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $driversExpirationDate;
+    private ?\DateTime $driversIssueDate = null;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTime $driversExpirationDate = null;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'reservationData')]
     #[ORM\JoinColumn(nullable: false)]
-    private $reservation;
+    private Reservation $reservation;
 
     #[ORM\ManyToMany(targetEntity: Document::class, inversedBy: 'reservationData', fetch: 'EXTRA_LAZY')]
-    private $documents;
+    private Collection $documents;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservationData')]
     #[ORM\JoinColumn(nullable: false)]
-    private $User;
+    private User $User;
 
     #[ORM\ManyToOne(targetEntity: Travellers::class, inversedBy: 'reservationData')]
-    private $travellers;
+    private ?Travellers $travellers = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $insuranceCompany;
+    #[ORM\Column(nullable: true)]
+    private ?string $insuranceCompany = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $insuranceContractNumber;
+    #[ORM\Column(nullable: true)]
+    private ?string $insuranceContractNumber = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $abroadPhoneNumber;
+    #[ORM\Column(nullable: true)]
+    private ?string $abroadPhoneNumber = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $contactPersonName;
+    #[ORM\Column(nullable: true)]
+    private ?string $contactPersonName = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $contactPersonPhone;
+    #[ORM\Column(nullable: true)]
+    private ?string $contactPersonPhone = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $flightNumber;
-
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private $flightArrival;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $flightArrivalAirport;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $ArrivalHotel;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $flightDepartureNumber;
+    #[ORM\Column(nullable: true)]
+    private ?string $flightNumber = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $flightDeparture;
+    private ?\DateTime $flightArrival = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $flightDepartureAirport;
+    #[ORM\Column(nullable: true)]
+    private ?string $flightArrivalAirport = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $DepartureHotel;
+    #[ORM\Column(nullable: true)]
+    private ?string $ArrivalHotel = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $flightDepartureNumber = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $flightDeparture = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $flightDepartureAirport = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $DepartureHotel = null;
 
     public function __construct()
     {

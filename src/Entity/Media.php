@@ -9,14 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: 'App\Repository\MediaRepository')]
+#[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
 {
     #[Groups('main')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

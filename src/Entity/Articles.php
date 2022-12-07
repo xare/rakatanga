@@ -19,10 +19,10 @@ class Articles
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $intro;
+    private ?string $intro = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $body;
+    private ?string $body = null;
 
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'articles')]
     private Collection $media;
@@ -34,7 +34,7 @@ class Articles
     #[ORM\JoinColumn(nullable: false)]
     private Blog $blog;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column()]
     private ?string $slug = null;
 
     #[ORM\OneToOne(targetEntity: Media::class, inversedBy: 'article', cascade: ['persist', 'remove'])]

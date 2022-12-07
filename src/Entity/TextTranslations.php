@@ -10,17 +10,17 @@ class TextTranslations
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $Title;
+    #[ORM\Column()]
+    private ?string $Title = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $Text;
+    #[ORM\Column()]
+    private ?string $Text = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'textTranslations')]
-    private $Lang;
+    private ?Lang $Lang;
 
     public function getId(): ?int
     {

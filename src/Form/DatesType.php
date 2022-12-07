@@ -10,9 +10,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DatesType extends AbstractType
 {
+    public function __construct(private TranslatorInterface $translator)
+    {}
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -55,9 +59,9 @@ class DatesType extends AbstractType
             ->add('requestedDocs', ChoiceType::class, [
                 'placeholder' => 'Selecciona los documentos requeridos: ',
                 'choices' => [
-                    'Passport' => 'passport',
-                    'Drivers Licence' => 'drivers_license',
-                    'Insurance' => 'insurance',
+                    $this->translator->trans('Pasaporte') => 'passport',
+                    $this->translator->trans('Permiso de conducir') => 'drivers_license',
+                    $this->translator->trans('Seguro') => 'insurance',
                 ],
                 'expanded' => true,
                 'multiple' => true,

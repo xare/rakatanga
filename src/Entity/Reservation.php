@@ -14,71 +14,72 @@ class Reservation
     #[Groups('main')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Dates::class, inversedBy: 'reservations')]
-    private $date;
+    private ?Dates $date = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private $user;
+    private ?User $user = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'text', nullable: true)]
-    private $comment;
+    private ?string $comment = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $log;
+    private ?string $log = null;
 
     #[ORM\JoinTable(name: 'reservation_travellers')]
     #[ORM\JoinColumn(name: 'reservation_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'travellers_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Travellers::class, inversedBy: 'reservations')]
-    private $travellers;
+    private Collection $travellers;
 
     #[Groups('main')]
     #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $date_ajout;
+    private \DateTimeImmutable $date_ajout;
+
     #[Groups('main')]
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $date_paiement;
+    private ?\DateTime $date_paiement = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $status;
+    #[ORM\Column(nullable: true)]
+    private ?string $status = null;
 
     #[ORM\OneToMany(targetEntity: ReservationOptions::class, mappedBy: 'reservation', orphanRemoval: true, cascade: ['persist'])]
-    private $reservationOptions;
+    private Collection $reservationOptions;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $nbpilotes;
+    #[ORM\Column(nullable: true)]
+    private ?int $nbpilotes = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $nbaccomp;
+    #[ORM\Column(nullable: true)]
+    private ?int $nbaccomp = null;
 
     #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'reservation', orphanRemoval: true)]
-    private $reservationData;
+    private Collection $reservationData;
 
     #[ORM\OneToMany(targetEntity: Payments::class, mappedBy: 'reservation', orphanRemoval: true, cascade: ['persist', 'remove'])]
-    private $payments;
+    private Collection $payments;
 
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'reservation', orphanRemoval: true)]
-    private $documents;
+    private Collection $documents;
 
     #[ORM\OneToOne(targetEntity: Invoices::class, mappedBy: 'reservation', cascade: ['persist', 'remove'])]
-    private $invoice;
+    private ?Invoices $invoice = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $code;
+    #[ORM\Column(nullable: true)]
+    private ?string $code = null;
 
     #[ORM\OneToMany(targetEntity: Mailings::class, mappedBy: 'reservation')]
-    private $mailings;
+    private Collection $mailings;
 
     #[ORM\ManyToOne(targetEntity: Codespromo::class, inversedBy: 'reservations')]
-    private $codespromo;
+    private ?Codespromo $codespromo = null;
 
     public function __construct()
     {

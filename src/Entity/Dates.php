@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\DatesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,16 +11,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Dates.
  */
-#[ORM\Entity(repositoryClass: 'App\Repository\DatesRepository')]
+#[ORM\Entity(repositoryClass: DatesRepository::class)]
 class Dates
 {
     /**
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     /**
      * @var \Date

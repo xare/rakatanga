@@ -12,110 +12,112 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Json;
 
 #[UniqueEntity(fields: ['email'], message: 'This value is already used.')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface
 {
     public const REGISTERED_SUCCESFULLY = 'Se ha registrado exitosamente';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[Groups('main')]
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    #[ORM\Column(unique: true)]
+    private ?string $email = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private mixed $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[Assert\NotBlank]
     #[ORM\Column(type: 'string', nullable: true)]
-    private $password;
+    private ?string $password = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 2, nullable: true)]
-    private $langue;
+    private ?string $langue = null;
 
     #[Groups('main')]
     #[Assert\NotBlank]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $nom;
+    private ?string $nom = null;
 
     #[Groups('main')]
     #[Assert\NotBlank]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $prenom;
+    private ?string $prenom = null;
 
     /**
      * @AssertPhoneNumber
      */
     #[Groups('main')]
     #[ORM\Column(name: 'telephone', type: 'phone_number', nullable: true)]
-    private $telephone;
+    private ?PhoneNumber $telephone = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
-    private $position;
+    private ?string $position = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $date_ajout;
+    private \DateTimeImmutable $date_ajout;
 
     #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'users')]
-    private $date;
+    private Collection $date;
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private $reservation;
+    private Collection $reservation;
 
     #[ORM\OneToMany(targetEntity: BlogTranslation::class, mappedBy: 'user', orphanRemoval: true)]
-    private $blogTranslations;
+    private Collection $blogTranslations;
 
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'user')]
-    private $documents;
+    private Collection $documents;
 
     #[ORM\OneToMany(targetEntity: Travellers::class, mappedBy: 'user', fetch: 'EXTRA_LAZY', orphanRemoval: true, cascade: ['persist'])]
-    private $travellers;
+    private Collection $travellers;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $address;
+    private ?string $address = null;
 
     #[ORM\Column(type: 'string', length: 6, nullable: true)]
-    private $postcode;
+    private ?string $postcode = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $city;
+    private ?string $city = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $country;
+    private ?string $country = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $nationality;
+    private ?string $nationality = null;
 
     #[ORM\Column(type: 'string', length: 3, nullable: true)]
-    private $sizes;
+    private ?string $sizes = null;
 
     #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'User', orphanRemoval: true)]
-    private $reservationData;
+    private Collection $reservationData;
 
     #[ORM\OneToMany(targetEntity: Codespromo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private $codespromos;
+    private Collection $codespromos;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $idcard;
+    #[ORM\Column(nullable: true)]
+    private ?string $idcard = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $agreedTermsAt;
+    private \DateTimeImmutable $agreedTermsAt;
 
     public function __construct()
     {
