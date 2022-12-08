@@ -48,6 +48,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
          */
         $userId = $user->getId();
         $type = $request->request->get('type');
+        dump($type);
 
         $violations = $validator->validate(
             $uploadedDocument,

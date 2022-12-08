@@ -22,6 +22,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 class UserFrontendController extends AbstractController
 {
@@ -144,7 +146,7 @@ class UserFrontendController extends AbstractController
             // dd($user);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-            $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente.'));
+            $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
 
             // return $this->redirectToRoute('user_index');
         }

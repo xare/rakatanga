@@ -64,7 +64,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findCategoriesForIndex(string $continent, string $locale = 'es')
+    public function findCategoriesForIndex(Continents $continent, string $locale = 'es')
     {
         return $this->createQueryBuilder('c')
              ->select('
@@ -94,7 +94,7 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findOtherCategoriesForIndex(string $continent, string $locale = 'es')
+    public function findOtherCategoriesForIndex(Continents $continent, string $locale = 'es')
     {
         return $this->createQueryBuilder('c')
              ->select('

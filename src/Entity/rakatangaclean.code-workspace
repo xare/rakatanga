@@ -1,0 +1,23 @@
+{
+    "folders": [
+		{
+			"name": "rakatangaclean",
+			"path": "../.."
+		},
+		{
+			"name": "RAKATANGA TOURS",
+			"path": "../../../../../datos/Documentos/WORK/KATAKRAK/11. KATAKRAK TICS/PROYECTOS/RAKATANGA TOURS"
+		},
+		{
+			"name": "rakatanga",
+			"path": "../../../../sources/rakatanga"
+		},
+		{
+			"name": "logs",
+			"path": "C:/xampp/apache/logs"
+		}
+	],
+    "settings": {
+        "lando-ui.workspaceFolder.default": "f:\\www\\localhost\\rakatangaclean"
+    }
+}

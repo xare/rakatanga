@@ -68,7 +68,7 @@ Dirección: Address
 Código postal: Postal Code
 Ciudad: City
 País: Country
-Guardar cambios: Guardar cambios
+Guardar cambios: Save changes
 Posición: Position
 Tamaños de camiseta: T-shirt sizes
 Registrar usuario: Register user
@@ -177,7 +177,7 @@ Carnet de conducir: Drivers' license
 Nº del carnet de conducir: Drivers' license number
 Transferencia: Transfer
 Llegada: Arrival
-Nº de vuelo de llegada: Arival flight number
+Nº de vuelo de llegada: Arrival flight number
 Fecha de llegada: Arrival date
 Fecha de regreso: Return date
 Aeropuerto de llegada: Arrival airport
@@ -185,7 +185,7 @@ Hotel de llegada: Hotel at arrival
 Hotel en el destino: Hotel in the destination
 Fecha de salida: Departure date
 Nº de vuelo de regreso: Return flight number
-Aeropuerto de salida: Departure airpor for return
+Aeropuerto de salida: Departure airport for return
 Hotel de salida: Hotel before returning
 Guardar: Save
 Seguro: Insurance
@@ -355,3 +355,24 @@ Tu vínculo de verificación: Your verification link
 Por favor entra a tu email y verifica tu cuenta para luego poder acceder, gracias: Please, enter your email address and verify your account in order to be able to enter, thank you
 Email Verificado: Email verified
 Tu dirección de correo electrónico ha sido verificada: Your email address has been verified
+visa: Visa
+passport: Passport
+drivers: Driver's license
+Número del vuelo: Flight number
+Vuelo de regreso: Return flight
+Visa - Caducidad: Visa - Expiration
+Nº carnet de conducir: Driver's license number
+Estoy de acuerdo con los términos: I agree with the terms of use
+A continuación añade los viajeros que participarán en este viaje: You may add the travellers' data that may come with you.
+Asignarme este puesto: Assign that post to me
+Si, lo que deseas es añadir más viajeros a tu reserva, entonces tienes que hacer es acudir a la página de reserva haciendo: If what you want is to change the NUMBER of travellers in your reservation then you have to go to the reservation page by 
+click aquí: clicking here
+Lista de viajeros: Travellers' list
+Configuración de Viajeros: Travellers' configuration
+Todavía no hemos iniciado nuestro blog pero puedes visitar el blog en español en: We still have not initiated our blog in english but you can have a look at our spanish blog here 
+Este viaje, de momento, no tiene fechas programadas: This travel has no programmed dates yet
+Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pago total de su viaje. El resto del pago deberá hacerse como muy tarde 30 días antes de la fecha de salida: This reservation will be settled once an minimal payment of 500€ is realizaed, or if you prefer, the full ammount of it. The rest of the payment should be made 30 days before the departure
+Por favor envíenos via email el justificante de la transferencia para validación de su reserva: Please send us via email the receipt of your payment in order to validate your reservation
+Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje: Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje
+
+

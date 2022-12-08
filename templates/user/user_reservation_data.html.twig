@@ -92,22 +92,26 @@
 				class="row" 
 				id="js-reservation-wrapper" 
 				{# data-reservation-id="{{reservation.id}}"  #}
-				{% if reservationData is defined and reservationData.traveller != null %}
-					data-traveller-id="{{ reservationData.traveller.id }}"
-				{% else %}
-					data-user-id="{{app.user.id}}"
+				{% if reservationData is defined and reservationData != null %} 
+					{% if reservationData.traveller != null %}
+						data-traveller-id="{{ reservationData.traveller.id }}"
+					{% else %}
+						data-user-id="{{app.user.id}}"
+					{% endif %}
 				{% endif %}
 				data-locale="{{ app.request.getLocale() }}">
 				<div class="col-md-8 col-12">
 					<h1>
 						{{ 'Tu reserva'|trans }}:
-						{% if reservationData is defined and reservationData.traveller != null %}
-							{{ reservationData.traveller.prenom }}
-							{{ reservationData.traveller.nom }}
-						{% else %}
-							{{ app.user.prenom }}
-							{{ app.user.nom }}
-						{% endif %}
+						{% if reservationData is defined and reservationData != null %} 
+							{% if reservationData.traveller != null %}
+									{{ reservationData.traveller.prenom }}
+									{{ reservationData.traveller.nom }}
+								{% else %}
+									{{ app.user.prenom }}
+									{{ app.user.nom }}
+								{% endif %}
+							{% endif %}
 					</h1>
 
 					<p>{{ 'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.</p>

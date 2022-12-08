@@ -72,23 +72,25 @@
       {% for traveller in reservation.travellers %}
         {% if traveller.email != reservation.user.email %}
           <div class="reservationTraveller-item">
-            <a href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
-            title="{{'Añadir datos del usuario'|trans}}"
-            data-bs-toggle="tooltip">
+            
               <div class="tags has-addons">
                 <span class="tag is-link">
                   <i class="fas fa-passport" style="margin:2px"></i>
                 </span>
                 <span class="tag is-info is-light">
-                  {{ traveller.prenom }} {{ traveller.nom }}
+                  <a 
+                  href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
+                  title="{{'Añadir datos del usuario'|trans}}"
+                  data-bs-toggle="tooltip">
+                    {{ traveller.prenom }} {{ traveller.nom }}
+                  </a>
                 </span>
               </div>
-            </a>
          </div>
         {% endif %}
-      {% else %}
+      {% endfor %}
         {{'No hay datos de los viajeros añadidos a este viaje'|trans}}.<br />
-        {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %}
+        {# {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %} #}
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
           <a 
             class="btn btn-lg btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
@@ -98,8 +100,7 @@
             <i class="fa fa-motorcycle"></i> 
           </a>
         </div> 
-        {% endif %}
-		  {% endfor %}
+        {# {% endif %} #}
       <h5 class="mt-3">{{'Mensajes enviados'|trans}}</h5>
       
       {% for mailing in reservation.mailings %}

@@ -656,7 +656,8 @@ class ReservationAjaxController extends AbstractController
          $reservation->setNbpilotes($requestData['nbPilotes']);
          $reservation->setNbAccomp($requestData['nbAccomp']);
 
-         if (count($requestData['options']) > 0) {
+         if ($requestData['options'] != null){
+            if(count($requestData['options']) > 0) {
              foreach ($requestData['options'] as $optionArray) {
                  $option = $optionsRepository->find($optionArray['id']);
                  $reservationOptions = $reservationOptionsRepository->findBy(['options' => $optionArray['id']]);
@@ -676,8 +677,8 @@ class ReservationAjaxController extends AbstractController
                      }
                  }
              }
-         }
-
+            }
+        }
          $this->entityManager->persist($reservation);
          $this->entityManager->flush();
 

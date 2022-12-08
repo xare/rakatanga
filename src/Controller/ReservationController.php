@@ -205,6 +205,7 @@ class ReservationController extends AbstractController
                             $this->translator->trans('Stripe') => 'stripe',
                             $this->translator->trans('Stripe 500€') => 'stripe500',
                             $this->translator->trans('Transferencia Bancaria') => 'bankTransfer',
+                            $this->translator->trans('Pagar más adelante') => 'payLater',
                         ],
                         'expanded' => true,
                         'multiple' => false,
@@ -271,6 +272,8 @@ class ReservationController extends AbstractController
                     return $this->redirect($session->url, \Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER);
                 } else {
                     return $this->render('reservation/reservationPaymentBank.html.twig', [
+                        'locale'=>$locale,
+                        'reservation'=> $reservation,
                         'langs' => $urlArray,
                     ]);
                 }

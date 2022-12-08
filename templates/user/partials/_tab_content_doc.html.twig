@@ -14,13 +14,13 @@
 				{% set traveller = app.user %}
 			{% endif %}
 				{{ include('user/_renderFile_in_dropzone.html.twig',{
-													'type': 'Passport',
+													'type': 'passport',
 													'document': passportDocument,
 													'reservation': reservation,
 													'traveller': traveller
 													}) }}
 			{% else %}
-				{{ include('user/_dropzone_input.html.twig',{'type':'Passport'}) }}
+				{{ include('user/_dropzone_input.html.twig',{'type':'passport'}) }}
 			{% endif %}
 		</div>
 	</div>
@@ -88,9 +88,9 @@
 	<div class="col-md-7 col-12">
 		<div class="js-dropzone-container" id="js-dropzone-visa-container">
 			{% if hasVisa is defined and hasVisa == true %}
-				{{ include('user/_renderFile_in_dropzone.html.twig',{'type':'Visa','document':visaDocument}) }}
+				{{ include('user/_renderFile_in_dropzone.html.twig',{'type':'visa','document':visaDocument}) }}
 			{% else %}
-				{{ include('user/_dropzone_input.html.twig',{'type':'Visa'}) }}
+				{{ include('user/_dropzone_input.html.twig',{'type':'visa'}) }}
 			{% endif %}
 		</div>
 	</div>
@@ -164,11 +164,11 @@
 		<div class="js-dropzone-container" id="js-dropzone-drivers-container">
 			{% if hasDrivers is defined and hasDrivers == true %}
 				{{ include('user/_renderFile_in_dropzone.html.twig', {             
-																	'type':'Drivers license',
+																	'type':'drivers',
 																	'document':driversDocument
 											}) }}
 			{% else %}
-				{{ include('user/_dropzone_input.html.twig',{'type':'Drivers license'}) }}
+				{{ include('user/_dropzone_input.html.twig',{'type':'drivers'}) }}
 			{% endif %}
 		</div>
 	</div>

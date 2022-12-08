@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ parent() }} - {{ 'Pago de la reserva'|trans }} - {{ 'Transferencia bancaria'|trans }} {% endblock %}
-
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('reservations')  }}
+{% endblock %}
 {% block body %}
 
 <div class="container">
@@ -23,9 +26,12 @@
 
             <p>{{'Por favor envíenos via email el justificante de la transferencia para validación de su reserva'|trans}}.</p>
 
-            <p>{{'Nota: Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje'|trans}}.</p>
+            <p>{{'Nota'|trans}}: {{'Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje'|trans}}.</p>
 
             <p>{{'La reserva implica la aceptación total de nuestras condiciones generales de venta'|trans}}.</p>
+            {{ include ('user/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
+            <a href="{{path('frontend_user_reservations')}}" class="btn btn-primary btn-lg">{{'Mis reservas'|trans}}</a>
+            <a href="{{path('frontend_user_settings')}}" class="btn btn-info btn-lg">{{'Mis datos'|trans}}</a>
         </div>
     </div>
 </div>

@@ -21,18 +21,15 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class UserFrontendReservationTravellersController extends AbstractController
 {
-    private $translatorInterface;
-    private $breadcrumbs;
-    private $breadcrumbsHelper;
+
 
     public function __construct(
-            TranslatorInterface $translatorInterface,
-            Breadcrumbs $breadcrumbs,
-            breadcrumbsHelper $breadcrumbsHelper)
+            private TranslatorInterface $translatorInterface,
+            private Breadcrumbs $breadcrumbs,
+            private breadcrumbsHelper $breadcrumbsHelper,
+            private TravellersRepository $travellersRepository)
     {
-        $this->translatorInterface = $translatorInterface;
-        $this->breadcrumbs = $breadcrumbs;
-        $this->breadcrumbsHelper = $breadcrumbsHelper;
+
     }
 
    #[Route(path: ['/user/reservation/data/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
@@ -133,57 +130,42 @@ class UserFrontendReservationTravellersController extends AbstractController
                             {$this->translatorInterface->trans('Puedes volver a tu reserva')}".' <a href='.$this->generateUrl('frontend_user_reservations').">{$this->translatorInterface->trans('aquí')}".'</a>');
         dump($travellersArray);
         $isTravellerInReservation = false;
-        foreach ($travellersArray['traveller'] as $travellerArrayItem) {
+        /* foreach ($travellersArray['traveller'] as $travellerArrayItem) {
             foreach ($reservation->getTravellers() as $reservationTravellerObject) {
+                dump($travellerArrayItem['email']);
+                dump($reservationTravellerObject->getEmail());
                 if ($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()) {
+                    dump("is already a user");
                     $isTravellerInReservation = true;
+                } else {
+                    $isTravellerInReservation = false;
+                    dump("is already NOT a user");
                 }
             }
-        }
-        if ($isTravellerInReservation == false) {
-            foreach ($travellersArray['traveller'] as $travellerArrayItem) {
-                $now = new \DateTime();
-                $traveller = new Travellers();
+            dump($isTravellerInReservation);
+            if ($isTravellerInReservation == false) {
+                dump($travellerArrayItem['id']);
+                if($travellerArrayItem['id'] == null) {   
+                    $traveller = new Travellers();
+                } else {
+                    dump($travellerArrayItem['id']);
+                    $traveller = $this->travellersRepository->find($travellerArrayItem['id']);
+                }
+                dump($traveller);
                 $traveller->setPrenom($travellerArrayItem['prenom']);
                 $traveller->setNom($travellerArrayItem['nom']);
                 $traveller->setEmail($travellerArrayItem['email']);
                 $traveller->setTelephone($travellerArrayItem['telephone']);
                 $traveller->setPosition($travellerArrayItem['position']);
                 $traveller->setUser($this->getUser());
+                $now = new \DateTime();
                 $traveller->setDateAjout($now);
                 $traveller->addReservation($reservation);
                 $em->persist($traveller);
             }
-            $em->flush();
-        }
-        /* foreach($travellersArray['traveller'] as $travellerArrayItem){
-            foreach($reservation->getTravellers() as $reservationTravellerObject){
-                if($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()){
-
-                } elseif($isTravellerInReservation == false) {
-                    if ($travellerArrayItem['id'] != '') {
-                        $traveller = $travellersRepository->find($travellerArrayItem['id']);
-                        if($traveller == null && $travellerArrayItem['email'] == $this->getUser()->getEmail()) {
-                            $traveller = new Travellers();
-                        }
-                    } else {
-                        $traveller = new Travellers();
-                    }
-                    $now = new \DateTime();
-                    $traveller->setPrenom($travellerArrayItem['prenom']);
-                    $traveller->setNom($travellerArrayItem['nom']);
-                    $traveller->setEmail($travellerArrayItem['email']);
-                    $traveller->setTelephone($travellerArrayItem['telephone']);
-                    $traveller->setPosition($travellerArrayItem['position']);
-                    $traveller->setUser($this->getUser());
-                    $traveller->setDateAjout($now);
-                    $traveller->addReservation($reservation);
-                    $em->persist($traveller);
-                }
-                dump($isTravellerInReservation);
-            }
-        }
+        }  
         $em->flush(); */
+       
         return $this->render('user/user_reservation_travellers.html.twig', [
             'reservation' => $reservation,
             'nbpilotes' => $reservation->getNbpilotes(),

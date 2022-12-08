@@ -208,7 +208,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->getReservationDueAmmount($reservation);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices():array
     {
         return [
             UploadHelper::class,

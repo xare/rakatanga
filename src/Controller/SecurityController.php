@@ -37,12 +37,10 @@ class SecurityController extends AbstractController
         LangRepository $langRepository,
         $locale = 'es'
         ): Response {
-        /* if ($this->getUser()) {
-
-             return $this->redirectToRoute('target_path');
-        } */
         $locale = $_locale ? $_locale : $locale;
+
         $this->breadcrumbsHelper->loginBreadcrumbs();
+
         $otherLangsArray = $langRepository->findOthers($locale);
         $i = 0;
         $urlArray = [];

@@ -48,15 +48,18 @@ class DocumentsList {
 
     initializeDropzone(type, travellerId) {
         const self = this;
-
         $(`#js-${type}-dropzone`).dropzone({
             paramName: 'document',
-            params: {
+            /* params: {
                 type: type,
                 traveller: travellerId
-            },
+            }, */
             maxFiles: 1,
             init: function() {
+                this.on('sending', (file, xhr, data) => {
+                    data.append('type', type);
+                    data.append('traveller', travellerId);
+                });
                 this.on('success', (file, response) => {
                     $(`#js-${type}-dropzone`).parent().html(response.dropHtml);
                     $('.js-documents-list').html(response.listHtml);

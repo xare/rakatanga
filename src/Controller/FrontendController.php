@@ -81,6 +81,7 @@ class FrontendController extends AbstractController
         );
 
         $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale);
+
         $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex($continent, $locale);
 
         $years = $this->datesRepository->getDatesByYear();
@@ -383,7 +384,7 @@ class FrontendController extends AbstractController
             'slug' => $slug,
             'lang' => $lang,
         ]);
-
+        dump($menuTranslation);
         // 3. Get the menu for that menu
         $menu = $this->menuRepository->find($menuTranslation->getMenu()->getId());
 

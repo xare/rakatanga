@@ -32,7 +32,7 @@ class Travellers
     private ?string $prenom = null;
 
     #[Groups('main')]
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column()]
     private ?string $telephone = null;
 
     #[Groups('main')]
@@ -46,7 +46,7 @@ class Travellers
     private ?string $vols = null;
 
     #[ORM\Column()]
-    private ?\DateTime $date_ajout = null;
+    private \DateTimeImmutable $date_ajout;
 
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'traveller')]
     private Collection $documents;
@@ -65,6 +65,7 @@ class Travellers
 
     public function __construct()
     {
+        $this->date_ajout = new \DateTimeImmutable();
         $this->documents = new ArrayCollection();
         $this->date = new ArrayCollection();
         $this->reservations = new ArrayCollection();

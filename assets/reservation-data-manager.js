@@ -12,7 +12,6 @@ $(document).ready(function() {
 
 
     var documentsList = new DocumentsList($wrapper);
-    console.info(documentsList);
     var types = [
         'passport', 'visa', 'drivers'
     ];

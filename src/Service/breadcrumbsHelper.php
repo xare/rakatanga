@@ -145,12 +145,13 @@ class breadcrumbsHelper
                 'category' => $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
                 'travel' => $this->slugifyHelper->slugify($this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale)),
          ]);
-        $this->breadcrumbs->addRouteItem($this->translator->trans('Reserva'), 'reservation', [
+        /* $this->breadcrumbs->addRouteItem($this->translator->trans('Reserva'), 'reservation', [
            '_locale' => $locale,
            'category' => $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
            'travel' => $this->slugifyHelper->slugify($this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale)),
            'date' => $reservation->getDate()->getId(),
-        ]);
+        ]); */
+        $this->breadcrumbs->addRouteItem($this->translator->trans('Reservas'), 'frontend_user_reservations', ['_locale' => $locale,]);
         $this->breadcrumbs->addItem($this->translator->trans('Revisión y pago'));
         $this->breadcrumbs->prependRouteItem($this->translator->trans('Inicio'), 'index');
     }

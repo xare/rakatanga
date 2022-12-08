@@ -6,7 +6,7 @@
                                 'id': document.id}
                                 )}}"
                                 >
-          <strong>{{document.doctype}}</strong>:
+          <strong>{{document.doctype|trans}}</strong>:
           {{document.originalFilename}}
           <span>
           {% if document.mimetype == 'image/jpeg' or document.mimetype == 'image/jpg' or document.mimetype == 'image/png' %} 

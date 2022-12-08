@@ -81,6 +81,7 @@ class reservationDataHelper
 
     public function getReservationDueAmmount(Reservation $reservation)
     {
+        dump($this->getReservationAmmount($reservation));
         $totalAmmount = $this->getReservationAmmount($reservation);
         $totalPayments = $this->getReservationTotalPayments($reservation);
 
