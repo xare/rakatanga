@@ -13,22 +13,22 @@ class OptionsTranslations
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column()]
+    private ?string $title = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $intro;
+    #[ORM\Column(type:'text', nullable: true)]
+    private ?string $intro = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'optionsTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private Lang $lang;
 
     #[ORM\ManyToOne(targetEntity: Options::class, inversedBy: 'optionsTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $options;
+    private Options $options;
 
     #[ORM\ManyToOne(targetEntity: Infodocs::class, inversedBy: 'optionsTranslations')]
-    private $infodocs;
+    private ?Infodocs $infodocs = null;
 
     public function getId(): ?int
     {

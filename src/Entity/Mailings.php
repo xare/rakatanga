@@ -13,30 +13,30 @@ class Mailings
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $subject;
+    #[ORM\Column(nullable: true)]
+    private ?string $subject = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $content;
+    private ?string $content = null;
 
     #[ORM\Column(type: 'text')]
-    private $ToAddresses;
+    private ?string $ToAddresses = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $attachment;
+    private ?string $attachment = null;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'mailings')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    private $reservation;
+    private ?Reservation $reservation = null;
 
     /**
      * @var \DateTimeInterface
      */
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $date_sent;
+    #[ORM\Column(nullable: true)]
+    private \DateTimeImmutable $date_sent;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $category;
+    private ?string $category = null;
 
     public function __construct()
     {

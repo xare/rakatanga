@@ -13,59 +13,59 @@ class Oldreservations
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 2)]
-    private $langue;
+    #[ORM\Column(length: 2)]
+    private ?string $langue = null;
 
-    #[ORM\Column(type: 'integer')]
-    private $nbpilotes;
+    #[ORM\Column()]
+    private ?int $nbpilotes = null;
 
-    #[ORM\Column(type: 'integer')]
-    private $nbAccomp;
+    #[ORM\Column()]
+    private ?int $nbAccomp = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $commentaire;
+    private ?string $commentaire = null;
 
     #[ORM\Column(type: 'text')]
-    private $log;
+    private ?string $log = null;
 
     #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    private $codepromo;
+    private ?string $codepromo = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private $montant;
+    private ?float $montant = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private $reduction;
+    private ?float $reduction = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private $totalttc;
+    private ?float $totalttc = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $notes;
+    private ?string $notes;
 
     #[ORM\Column(type: 'string', length: 15)]
-    private $statut;
+    private ?string $statut = null;
 
     #[ORM\Column(type: 'string', length: 50)]
-    private $origine_ajout;
+    private ?string $origine_ajout = null;
 
     #[ORM\Column(type: 'datetime')]
-    private $date_ajout;
+    private ?\DateTime $date_ajout = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $date_paiement_1;
+    private ?\DateTime $date_paiement_1 = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $date_paiement_2;
+    private ?\DateTime $date_paiement_2 = null;
 
     #[ORM\ManyToOne(targetEntity: Inscriptions::class, inversedBy: 'oldreservations')]
-    private $inscriptions;
+    private ?Inscriptions $inscriptions = null;
 
     #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'oldreservations')]
-    private $Travel;
+    private ?Travel $Travel = null;
 
     #[ORM\ManyToOne(targetEntity: Dates::class, inversedBy: 'oldreservations')]
-    private $dates;
+    private ?Dates $dates = null;
 
     public function getId(): ?int
     {

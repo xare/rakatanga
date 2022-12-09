@@ -16,28 +16,28 @@ class Menu
     private ?int $id = null;
     
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $type;
+    private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $position;
+    private ?string $position = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $routeName;
+    private ?string $routeName = null;
 
     #[ORM\OneToMany(targetEntity: MenuTranslation::class, mappedBy: 'menu', cascade: ['persist', 'remove'])]
-    private $menuTranslations;
+    private Collection $menuTranslations;
 
     #[ORM\OneToOne(targetEntity: Pages::class, inversedBy: 'menu', cascade: ['persist', 'remove'])]
-    private $page;
+    private ?Pages $page = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $visibility;
+    private bool $visibility;
 
     #[ORM\ManyToMany(targetEntity: MenuLocation::class, inversedBy: 'menus')]
-    private $menuLocations;
+    private Collection $menuLocations;
 
     public function __construct()
     {

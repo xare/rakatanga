@@ -20,54 +20,54 @@ class Media
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $type;
+    private ?string $type;
 
     #[Assert\NotBlank]
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    #[ORM\Column()]
+    private ?string $name = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $path;
+    #[ORM\Column(nullable: true)]
+    private ?string $path = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $url;
+    #[ORM\Column(nullable: true)]
+    private ?string $url = null;
 
     #[ORM\ManyToMany(targetEntity: Travel::class, mappedBy: 'media')]
-    private $travel;
+    private Collection $travel;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filename;
+    #[ORM\Column()]
+    private ?string $filename = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'media')]
-    private $category;
+    private Collection $category;
 
     #[ORM\OneToOne(targetEntity: Category::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
-    private $mainCategoryPhoto;
+    private ?Category $mainCategoryPhoto = null;
 
     #[ORM\ManyToMany(targetEntity: Pages::class, mappedBy: 'media')]
-    private $pages;
+    private Collection $pages;
 
     #[ORM\OneToOne(targetEntity: Pages::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
-    private $page;
+    private ?Pages $page = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $isGallery;
+    private bool $isGallery;
 
     #[ORM\ManyToMany(targetEntity: Articles::class, mappedBy: 'media')]
-    private $articles;
+    private Collection $articles;
 
     #[ORM\OneToOne(targetEntity: Articles::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
-    private $article;
+    private Collection $article;
 
     #[ORM\Column(type: 'boolean')]
-    private $isYTVideo;
+    private bool $isYTVideo;
 
     #[ORM\ManyToMany(targetEntity: Popups::class, mappedBy: 'media')]
-    private $popups;
+    private Collection $popups;
 
     public function __construct()
     {

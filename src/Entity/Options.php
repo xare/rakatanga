@@ -26,17 +26,17 @@ class Options
      * @var string
      */
     #[ORM\Column(name: 'prix', type: 'decimal', precision: 10, scale: 2, nullable: false)]
-    private $price;
+    private float $price;
 
     #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'options')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    private $travel;
+    private ?Travel $travel = null;
 
     #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'options', orphanRemoval: true, cascade: ['persist'])]
-    private $optionsTranslations;
+    private Collection $optionsTranslations;
 
     #[ORM\OneToMany(targetEntity: ReservationOptions::class, mappedBy: 'options', orphanRemoval: true, cascade: ['persist'])]
-    private $reservationOptions;
+    private Collection $reservationOptions;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $isExtension;

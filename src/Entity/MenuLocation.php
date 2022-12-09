@@ -16,10 +16,10 @@ class MenuLocation
     private ?int $id = null;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'menuLocations')]
-    private $menus;
+    private Collection $menus;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $name;
+    #[ORM\Column(nullable: true)]
+    private ?string $name = null;
 
     public function __construct()
     {

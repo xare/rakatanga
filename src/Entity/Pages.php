@@ -18,12 +18,12 @@ class Pages
     private ?int $id = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 100)]
+    #[ORM\Column(length: 100)]
     private ?string $default_slug = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $date_created;
+    #[ORM\Column()]
+    private \DateTimeImmutable $date_created;
 
     #[Groups('main')]
     #[ORM\Column(type: 'datetime')]

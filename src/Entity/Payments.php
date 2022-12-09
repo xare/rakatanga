@@ -14,9 +14,9 @@ class Payments
     private ?int $id = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private $ammount;
+    private float $ammount;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column()]
     private \DateTimeImmutable $date_ajout;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'payments', cascade: ['persist', 'remove'])]

@@ -14,17 +14,17 @@ class MenuTranslation
 
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuTranslations')]
     #[ORM\JoinColumn(name: 'menu_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private $menu;
+    private ?Menu $menu = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $slug;
+    #[ORM\Column(nullable: true)]
+    private ?string $slug = null;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'menuTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private Lang $lang;
 
     public function getId(): ?int
     {
