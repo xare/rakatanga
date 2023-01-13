@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Lang;
 use App\Entity\Payments;
 use App\Entity\Reservation;
 use App\Entity\User;
@@ -10,17 +9,17 @@ use App\Form\UserType;
 use App\Repository\CategoryTranslationRepository;
 use App\Repository\DatesRepository;
 use App\Repository\LangRepository;
-use App\Repository\PaymentsRepository;
 use App\Repository\TravelTranslationRepository;
 use App\Service\breadcrumbsHelper;
+use App\Service\languageMenuHelper;
 use App\Service\localizationHelper;
 use App\Service\logHelper;
 use App\Service\Mailer;
+use App\Service\paymentHelper;
 use App\Service\reservationDataHelper;
 use App\Service\reservationHelper;
 use App\Service\slugifyHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Stripe\Checkout\Session as CheckoutSession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -29,7 +28,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
@@ -37,81 +35,65 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 class ReservationController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $em,
+        private EntityManagerInterface $entityManager,
+        private TravelTranslationRepository $travelTranslationRepository,
+        private CategoryTranslationRepository $categoryTranslationRepository,
+        private DatesRepository $datesRepository,
+        private LangRepository $langRepository,
         private TranslatorInterface $translator,
         private Breadcrumbs $breadcrumbs,
         private localizationHelper $localizationHelper,
         private slugifyHelper $slugifyHelper,
         private reservationHelper $reservationHelper,
         private breadcrumbsHelper $breadcrumbsHelper,
+        private paymentHelper $paymentHelper,
+        private logHelper $logHelper,
+        private languageMenuHelper $languageMenuHelper,
+        private reservationDataHelper $reservationDataHelper,
         private string $stripePublicKey,
         private string $stripeSecretKey
     ) {
     }
 
-    #[Route(path: '/trips/{category}/{travel}/reservation/{date}/', name: 'reservation', priority: 10)]
-     #[Route(path: ['en' => '{_locale}/trips/{category}/{travel}/reservation/{date}/', 'es' => '{_locale}/trips/{category}/{travel}/reserva/{date}/', 'fr' => '{_locale}/trips/{category}/{travel}/reservation/{date}/'], name: 'reservation', priority: 10)]
+    #[Route(
+        path: '/trips/{category}/{travel}/reservation/{date}/',
+        name: 'reservation',
+        priority: 10)]
+     #[Route(
+        path: [
+            'en' => '{_locale}/trips/{category}/{travel}/reservation/{date}/',
+            'es' => '{_locale}/trips/{category}/{travel}/reserva/{date}/',
+            'fr' => '{_locale}/trips/{category}/{travel}/reservation/{date}/'],
+        name: 'reservation',
+        priority: 10)]
      public function index(
                         Request $request,
                         string $_locale = null,
-                        TravelTranslationRepository $travelTranslationRepository,
-                        CategoryTranslationRepository $categoryTranslationRepository,
-                        DatesRepository $datesRepository,
-                        LangRepository $langRepository,
                         string $locale = 'es'
-     ) {
-         // ROUTE ELEMENTS
-         $locale = $locale ? $_locale : $locale;
+     ):Response {
 
-         $travelTranslation = $travelTranslationRepository->findOneBy([
+         $locale = $locale ? $_locale : $locale;
+         $travelTranslation = $this->travelTranslationRepository->findOneBy([
              'url' => $request->attributes->get('travel'),
          ]);
-
-         $categoryTranslation = $categoryTranslationRepository->findOneBy([
+         $categoryTranslation = $this->categoryTranslationRepository->findOneBy([
              'slug' => $request->attributes->get('category'),
          ]);
-
          $dateString = $request->attributes->get('date');
 
          $dateString = substr($dateString, 0, 4).'-'.
                          substr($dateString, 4, 2).'-'.
                          substr($dateString, 6, 2);
 
-         $date = $datesRepository->findDate($dateString, $travelTranslation->getTravel());
-         // END ROUTE RESOLVER
+         $date = $this->datesRepository->findDate($dateString, $travelTranslation->getTravel());
 
-         // SWITCH LOCALE LOADER
-         $otherLangsArray = $langRepository->findOthers($locale);
+         $urlArray = $this->languageMenuHelper->reservationMenuLanguage(
+            $locale,
+            $travelTranslation,
+            $categoryTranslation,
+            $date);
 
-         $i = 0;
-         $urlArray = [];
-         /* $dateUrl = $date[0]->getDebut()->format('Ymd');
-         if (is_array($date)){
-                 $dateUrl = $dateUrl."_".$date[0]->getFin()->format('Ymd');
-         } */
-         foreach ($otherLangsArray as $otherLangArray) {
-             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-             $otherCategoryTranslation = $categoryTranslationRepository->findOneBy(
-                 [
-                     'category' => $categoryTranslation->getCategory(),
-                     'lang' => $otherLangArray,
-                 ]);
-             $urlArray[$i]['category'] = $otherCategoryTranslation->getSlug();
-             $otherTravelTranslation = $travelTranslationRepository->findOneBy(
-                 [
-                     'travel' => $travelTranslation->getTravel(),
-                     'lang' => $otherLangArray,
-                 ]);
-             $urlArray[$i]['travel'] = $otherTravelTranslation->getUrl();
-             $urlArray[$i]['date'] = $date->getDebut()->format('Ymd');
-             ++$i;
-         }
-         // END SWITCH LOCALE LOADER
-
-         // BREADCRUMBS //
          $this->breadcrumbsHelper->reservationBreadcrumbs($locale, $date);
-         // END BREADCRUMBS //
 
          $renderArray = [
              'locale' => $locale,
@@ -119,7 +101,9 @@ class ReservationController extends AbstractController
              'date' => $date,
              'form' => '',
          ];
-
+         /**
+          * @var $user
+          */
          $user = $this->getUser();
          $renderArray['user'] = $user;
          if ($user == null) {
@@ -139,30 +123,39 @@ class ReservationController extends AbstractController
                  'Ya has comenzado tu reserva para este viaje').'.';
              $linkMessage = $this->translator->trans('Ver reserva');
              $link = sprintf('<a href="%s">'.$linkMessage.'</a>', $url);
-             // $message = $introMessage . ' '. $link;
              $this->addFlash(
                  'error',
                  $link
              );
          }
 
-         // RENDER TEMPLATE
-
          return $this->render('reservation/index.html.twig', $renderArray);
      }
 
-    #[Route(path: '/reservation/{reservation}/payment', priority: 6, name: 'reservation_payment', requirements: ['reservation' => '\d+'], methods: ['POST', 'GET'], options: ['expose' => true])]
-    #[Route(path: ['en' => '{_locale}/reservation/{reservation}/payment', 'es' => '{_locale}/reservation/{reservation}/payment', 'fr' => '{_locale}/reservation/{reservation}/payment'], priority: 10, name: 'reservation_payment', requirements: ['reservation' => '\d+'], methods: ['POST', 'GET'], options: ['expose' => true])]
+    #[Route(
+        path: '/reservation/{reservation}/payment',
+        priority: 6,
+        name: 'reservation_payment',
+        requirements: ['reservation' => '\d+'],
+        methods: ['POST', 'GET'],
+        options: ['expose' => true])]
+    #[Route(
+        path: [
+            'en' => '{_locale}/reservation/{reservation}/payment',
+            'es' => '{_locale}/reserva/{reservation}/pago',
+            'fr' => '{_locale}/reservation/{reservation}/paiement'],
+        priority: 10,
+        name: 'reservation_payment',
+        requirements: ['reservation' => '\d+'],
+        methods: ['POST', 'GET'],
+        options: ['expose' => true])]
     public function reservationPayment(
         Request $request,
         Reservation $reservation,
         AuthenticationUtils $authenticationUtils,
-        LangRepository $langRepository,
-        reservationHelper $reservationHelper,
-        reservationDataHelper $reservationDataHelper,
         FormFactoryInterface $formFactory,
         string $_locale = null,
-        string $locale = 'es')
+        string $locale = 'es'):Response
     {
         $locale = $_locale ? $_locale : $locale;
         $reservationData = $request->request->all();
@@ -171,26 +164,16 @@ class ReservationController extends AbstractController
             $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData, $locale);
         }
         // LANG MENU
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $urlArray = [];
-        $i = 0;
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $urlArray[$i]['reservation'] = $reservation->getId();
-            ++$i;
-        }
-        // END LANG MENU
-        // BREADCRUMBS //
+        $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale, $reservation);
+
         $this->breadcrumbsHelper->reservationPaymentBreadcrumbs($locale, $reservation);
-        // END BREADCRUMBS //
 
         $date = $reservation->getDate();
         $travelTitle = $date->getTravel()->getMainTitle();
 
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $totalAmmount = $reservationDataHelper->getReservationDueAmmount($reservation);
+        $totalAmmount = $this->reservationDataHelper->getReservationDueAmmount($reservation);
 
         $ammount = $request->request->get('ammount') ? $request->request->get('ammount') : $totalAmmount;
 
@@ -229,46 +212,7 @@ class ReservationController extends AbstractController
                         $ammount = 500;
                     }
 
-                    \Stripe\Stripe::setApiKey($this->stripeSecretKey);
-
-                    $session = CheckoutSession::create([
-                        'payment_method_types' => ['card'],
-                        'mode' => 'payment',
-                        'locale' => $locale,
-                        'line_items' => [
-                            [
-                                'price_data' => [
-                                    'currency' => 'eur',
-                                    'product_data' => [
-                                        'name' => $travelTitle,
-                                        'metadata' => [
-                                            'paymentType' => $formData['paymentMethod'],
-                                        ],
-                                    ],
-                                    'unit_amount' => $ammount * 100,
-                                ],
-                                'quantity' => 1,
-                            ],
-                        ],
-
-                        'success_url' => $this->generateUrl(
-                            'success_url',
-                            [
-                                'reservation' => $reservation->getId(),
-                                'ammount' => $ammount,
-                                '_locale' => $locale,
-                                // 'session_id'=>'{CHECKOUT_SESSION_ID}'
-                            ],
-                            UrlGeneratorInterface::ABSOLUTE_URL).'&session_id={CHECKOUT_SESSION_ID}',
-                        'cancel_url' => $this->generateUrl(
-                            'cancel_url',
-                            [
-                                'reservation' => $reservation->getId(),
-                                '_locale' => $locale,
-                            ],
-                            UrlGeneratorInterface::ABSOLUTE_URL),
-                    ]);
-
+                    $session = $this->paymentHelper->createStripeCheckout($reservation, $locale, $formData, $ammount);
                     return $this->redirect($session->url, \Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER);
                 } else {
                     return $this->render('reservation/reservationPaymentBank.html.twig', [
@@ -279,35 +223,17 @@ class ReservationController extends AbstractController
                 }
             }
         }
-        $lang = $langRepository->findOneBy([
+        $lang = $this->langRepository->findOneBy([
                 'iso_code' => $locale,
             ]);
-        $optionsArray = $reservationHelper->getReservationOptions($reservation, $lang);
-
-        // LOG PAYMENT
-        /**
-         * @var User $user
-         */
-        $user = $this->getUser();
-        /* $logHelper->logThis(
-            'Reserva Creada',
-            "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] ha creado una reserva para el viaje
-            {$reservation->getDate()->getTravel()->getMainTitle()} en
-            {$reservation->getDate()->getDebut()->format('d/m/Y')} with reference
-            {$reservation->getId()} " . strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(),0,3))."",
-            [],
-            'reservation'); */
-
-        // SEND EMAIL
-        /* $mailer->sendReservationToUs($reservation,$locale);
-        $mailer->sendReservationToSender($reservation); */
+        $optionsArray = $this->reservationHelper->getReservationOptions($reservation, $lang);
 
         return $this->render('reservation/reservationPayment.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
             'error' => $error,
             'date' => $date,
-            'discount' => $reservationDataHelper->getDiscount($reservation),
+            'discount' => $this->reservationDataHelper->getDiscount($reservation),
             'reservation' => $reservation,
             'form' => $form->createView(),
             'ammount' => $ammount,
@@ -317,48 +243,44 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/{_locale}/reservation/{reservation}/payment/success-url', name: 'success_url', requirements: ['reservation' => '\d+'])]
+    #[Route(
+        path: '/{_locale}/reservation/{reservation}/payment/success',
+        name: 'success_url',
+        requirements: ['reservation' => '\d+'])]
+    #[Route(
+        path: [
+            'en' => '{_locale}/reservation/{reservation}/payment/success',
+            'es' => '{_locale}/reserva/{reservation}/pago/realizado',
+            'fr' => '{_locale}/reservation/{reservation}/paiement/success'],
+        priority: 10,
+        name: 'success_url',
+        requirements: ['reservation' => '\d+'])]
     public function successUrl(
         Request $request,
         Reservation $reservation,
-        string $_locale = null,
-        logHelper $logHelper,
         Mailer $mailer,
-        LangRepository $langRepository,
-        EntityManagerInterface $em,
-        reservationHelper $reservationHelper,
-        PaymentsRepository $paymentsRepository,
-        $locale = 'es'): Response
+        string $_locale = null,
+        string $locale = 'es'):Response
     {
         $locale = $_locale ? $_locale : $locale;
 
-        // LANGS ARRAY
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $urlArray = [];
-        $i = 0;
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $urlArray[$i]['reservation'] = $reservation->getId();
-            ++$i;
-        }
-        // END LANGS ARRAY
+        $urlArray = $this->languageMenuHelper->paymentSuccessReservationMenuLanguage($locale, $reservation);
+
         \Stripe\Stripe::setApiKey($this->stripeSecretKey);
         $session = \Stripe\Checkout\Session::retrieve($request->query->get('session_id'));
 
-        if (count($paymentsRepository->findBy(['stripeId' => $request->query->get('session_id')])) === 0) {
+        if (count($this->paymentsRepository->findBy(['stripeId' => $request->query->get('session_id')])) === 0) {
             $payment = new Payments();
             $paidAmmount = $request->query->get('ammount');
             $payment->setReservation($reservation);
             $payment->setStripeId($request->query->get('session_id'));
             $payment->setAmmount($paidAmmount);
-            $em->persist($payment);
-            // LOG PAYMENT
+            $this->entityManager->persist($payment);
             /**
              * @var User $user
              */
             $user = $this->getUser();
-            $logHelper->logThis(
+            $this->logHelper->logThis(
                 'Payment Received',
                 "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] has made a payment for
                 {$reservation->getDate()->getTravel()->getMainTitle()} on {$reservation->getDate()->getDebut()->format('d/m/Y')}",
@@ -371,18 +293,14 @@ class ReservationController extends AbstractController
         }
         $reservation->setStatus('payment-success');
         if ($reservation->getCodespromo() != null) {
-            /*  foreach ($reservation->getCodespromo() as $codepromo)
-             {
-                 dump($codepromo); */
             $codepromo = $reservation->getCodespromo();
             if ($codepromo->getNombre() > 0) {
                 $codepromo->setNombre($codepromo->getNombre() + 1);
-                $em->persist($codepromo);
+                $this->entityManager->persist($codepromo);
             }
-            /* } */
         }
-        $em->persist($reservation);
-        $em->flush();
+        $this->entityManager->persist($reservation);
+        $this->entityManager->flush();
 
         return $this->render('reservation/reservationPaymentSuccess.html.twig', [
             'locale' => $locale,
@@ -391,24 +309,24 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route(path: '{_locale}/reservation/{reservation}/payment/cancel-url', name: 'cancel_url')]
-    #[Route(path: ['en' => '{_locale}/reservation/{reservation}/payment/cancel-url', 'es' => '{_locale}/reservation/{reservation}/payment/cancel-url', 'fr' => '{_locale}/reservation/{reservation}/payment/cancel-url'], priority: 10, name: 'cancel_url', requirements: ['reservation' => '\d+'])]
+    #[Route(
+        path: '{_locale}/reservation/{reservation}/payment/cancelled',
+        name: 'cancel_url')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/reservation/{reservation}/payment/cancelled',
+            'es' => '{_locale}/reserva/{reservation}/pago/cancelado',
+            'fr' => '{_locale}/reservation/{reservation}/paiement/annule'],
+        priority: 10,
+        name: 'cancel_url',
+        requirements: ['reservation' => '\d+'])]
     public function cancelUrl(
                         Reservation $reservation,
-                        LangRepository $langRepository,
-                        $locale = 'es',
-                        $_locale = null): Response
+                        string $locale = 'es',
+                        string $_locale = null): Response
     {
         $locale = $_locale ? $_locale : $locale;
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $urlArray = [];
-        $i = 0;
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $urlArray[$i]['reservation'] = $reservation->getId();
-            ++$i;
-        }
+        $urlArray = $this->languageMenuHelper->cancelledPaymentReservationMenuLanguage($locale, $reservation);
 
         return $this->render('reservation/reservationPaymentCancel.html.twig', [
             'locale' => $locale,
@@ -416,17 +334,18 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/reservation/{reservation}/options', options: ['expose' => true], name: 'get_previous_options')]
+    #[Route(
+        path: '/reservation/{reservation}/options',
+        options: ['expose' => true],
+        name: 'get_previous_options')]
     public function getPreviousOptions(
         Request $request,
-        Reservation $reservation,
-        LangRepository $langRepository,
-        reservationHelper $reservationHelper)
+        Reservation $reservation): Response
     {
-        $lang = $langRepository->findOneBy([
+        $lang = $this->langRepository->findOneBy([
             'iso_code' => $request->getLocale(),
         ]);
-        $options = $reservationHelper->getReservationOptions($reservation, $lang);
+        $options = $this->reservationHelper->getReservationOptions($reservation, $lang);
 
         return $this->json([
             'options' => $options,

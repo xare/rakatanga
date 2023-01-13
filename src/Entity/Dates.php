@@ -14,70 +14,53 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: DatesRepository::class)]
 class Dates
 {
-    /**
-     * @var int
-     */
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
     private ?int $id = null;
 
-    /**
-     * @var \Date
-     */
     #[Groups('main')]
-    #[ORM\Column(name: 'debut', type: 'date', nullable: false)]
-    private $debut;
+    #[ORM\Column(type: 'date', nullable: false)]
+    private \DateTime $debut;
 
-    /**
-     * @var \Date
-     */
     #[Groups('main')]
-    #[ORM\Column(name: 'fin', type: 'date', nullable: false)]
-    private $fin;
+    #[ORM\Column(type: 'date', nullable: false)]
+    private \DateTime $fin;
 
-    /**
-     * @var string
-     */
     #[Groups('main')]
     #[ORM\Column(name: 'prix_pilote', type: 'decimal', precision: 10, scale: 2, nullable: false)]
-    private $prixPilote;
+    private float $prixPilote;
 
-    /**
-     * @var string
-     */
     #[Groups('main')]
     #[ORM\Column(name: 'prix_accomp', type: 'decimal', precision: 10, scale: 2, nullable: false)]
-    private $prixAccomp;
+    private float $prixAccomp;
 
-    /**
-     * @var string
-     */
     #[Groups('main')]
-    #[ORM\Column(name: 'statut', type: 'string', length: 15, nullable: false)]
-    private $statut;
+    #[ORM\Column(length: 15, nullable: false)]
+    private ?string $statut;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'date')]
-    private $users;
+    private Collection $users;
 
     #[ORM\ManyToOne(targetEntity: Travel::class, inversedBy: 'dates')]
     #[ORM\JoinColumn(nullable: false)]
-    private $travel;
+    private ?Travel $travel = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    private $requestedDocs = [];
+    private mixed $requestedDocs = [];
 
     #[ORM\ManyToMany(targetEntity: Document::class, mappedBy: 'date')]
-    private $documents;
+    private Collection $documents;
 
     #[ORM\ManyToMany(targetEntity: Travellers::class, mappedBy: 'date')]
-    private $travellers;
+    private Collection $travellers;
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'date', cascade: ['persist', 'remove'])]
-    private $reservations;
+    private Collection $reservations;
 
     #[ORM\OneToMany(targetEntity: Oldreservations::class, mappedBy: 'dates')]
-    private $oldreservations;
+    private Collection $oldreservations;
 
     public function __construct()
     {

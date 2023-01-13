@@ -13,16 +13,16 @@ class ContinentTranslation
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $Name;
+    #[ORM\Column()]
+    private ?string $Name = null;
 
     #[ORM\ManyToOne(targetEntity: Continents::class, inversedBy: 'continentTranslation', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $continents;
+    private Continents $continents;
 
     #[ORM\ManyToOne(targetEntity: Lang::class, inversedBy: 'continentTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lang;
+    private Lang $lang;
 
     public function getId(): ?int
     {

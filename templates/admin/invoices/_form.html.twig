@@ -1,5 +1,6 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+    {{ include('admin/shared/forms/_form_element_textarea_ckeditor.html.twig') }}
     <button class="btn btn-info">
         <i class="fa fa-save"></i>
         {{ button_label|default('Save') }}

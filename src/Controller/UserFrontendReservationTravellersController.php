@@ -10,6 +10,7 @@ use App\Repository\LangRepository;
 use App\Repository\ReservationDataRepository;
 use App\Repository\TravellersRepository;
 use App\Service\breadcrumbsHelper;
+use App\Service\languageMenuHelper;
 use App\Service\Mailer;
 use App\Service\reservationHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,44 +23,45 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 class UserFrontendReservationTravellersController extends AbstractController
 {
 
-
     public function __construct(
+            private EntityManagerInterface $entityManager,
             private TranslatorInterface $translatorInterface,
             private Breadcrumbs $breadcrumbs,
+            private Mailer $mailer,
             private breadcrumbsHelper $breadcrumbsHelper,
-            private TravellersRepository $travellersRepository)
+            private languageMenuHelper $languageMenuHelper,
+            private TravellersRepository $travellersRepository,
+            private LangRepository $langRepository,
+            private DocumentRepository $documentRepository,
+            private ReservationDataRepository $reservationDataRepository,
+            private ReservationHelper $reservationHelper)
     {
 
     }
 
-   #[Route(path: ['/user/reservation/data/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
-    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/{traveller}', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/{traveller}', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/{traveller}'], name: 'frontend_user_reservation_data_traveller', requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
+   #[Route(
+        path: ['/user/reservation/data/{reservation}/{traveller}'], 
+        name: 'frontend_user_reservation_data_traveller', 
+        requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/reservation/data/{reservation}/{traveller}', 
+            'es' => '{_locale}/usuario/reserva/datos/{reservation}/{traveller}', 
+            'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/{traveller}'], 
+        name: 'frontend_user_reservation_data_traveller', 
+        requirements: ['reservation' => '\d+', 'traveller' => '\d+'])]
     public function frontendUserReservationDataTraveller(
         Request $request,
         Reservation $reservation,
         Travellers $traveller,
         string $_locale = null,
-        LangRepository $langRepository,
-        ReservationDataRepository $reservationDataRepository,
-        DocumentRepository $documentRepository,
-        EntityManagerInterface $em,
-        Mailer $mailer,
-        $locale = 'es'
+        string $locale = 'es'
     ) {
         $locale = $_locale ?: $locale;
 
-        // Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $i = 0;
-        $urlArray = [];
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            ++$i;
-        }
-        // End switch locale loader
-
-        $reservationData = $reservationDataRepository->findOneBy([
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+        
+        $reservationData = $this->reservationDataRepository->findOneBy([
             'reservation' => $reservation,
             'travellers' => $traveller,
         ]);
@@ -70,13 +72,12 @@ class UserFrontendReservationTravellersController extends AbstractController
             $reservationData = $form->getData();
             $reservationData->setReservation($reservation);
             $reservationData->setTraveller($traveller);
-            $em->persist($reservationData);
-            $em->flush();
-            $mailer->sendEmailonDataCompletionToUs($reservation);
+            $this->entityManager->persist($reservationData);
+            $this->entityManager->flush();
+            $this->mailer->sendEmailonDataCompletionToUs($reservation);
         }
 
-        /* $documents = $documentRepository->getDocumentsByReservationByTraveller($reservation, $traveller); */
-        $documents = $documentRepository->findBy([
+        $documents = $this->documentRepository->findBy([
             'reservation' => $reservation,
             'traveller' => $traveller,
         ]);
@@ -98,73 +99,39 @@ class UserFrontendReservationTravellersController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/user/reservation/{reservation}/travellers/save/', name: 'user_reservation_travellers_save', requirements: ['reservation' => '\d+'], methods: ['POST'])]
-    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/travellers/save/', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/save/', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/save/'], name: 'user_reservation_travellers', requirements: ['reservation' => '\d+'], methods: ['POST'])]
+    #[Route(
+        path: '/user/reservation/{reservation}/travellers/save/', 
+        name: 'user_reservation_travellers_save', 
+        requirements: ['reservation' => '\d+'], 
+        methods: ['POST'])]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/reservation/data/{reservation}/travellers/save/', 
+            'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/save/', 
+            'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/save/'], 
+        name: 'user_reservation_travellers', 
+        requirements: ['reservation' => '\d+'], 
+        methods: ['POST'])]
     public function userReservationTravellersSave(
         Request $request,
         Reservation $reservation,
         LangRepository $langRepository,
-        reservationHelper $reservationHelper,
-        TravellersRepository $travellersRepository,
-        EntityManagerInterface $em
     ) {
         $locale = $request->request->get('locale');
         $travellersArray = $request->request->all();
 
-        $lang = $langRepository->findOneBy([
+        $lang = $this->langRepository->findOneBy([
             'iso_code' => $locale,
         ]);
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $i = 0;
-        $urlArray = [];
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            ++$i;
-        }
-        // End swith locale Loader
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
 
-        $options = $reservationHelper->getReservationOptions($reservation, $lang);
+
+        $options = $this->reservationHelper->getReservationOptions($reservation, $lang);
         $this->addFlash('success',
             "{$this->translatorInterface->trans('Gracias, hemos guardado tus datos correctamente')}  
                             {$this->translatorInterface->trans('Puedes volver a tu reserva')}".' <a href='.$this->generateUrl('frontend_user_reservations').">{$this->translatorInterface->trans('aquí')}".'</a>');
-        dump($travellersArray);
+
         $isTravellerInReservation = false;
-        /* foreach ($travellersArray['traveller'] as $travellerArrayItem) {
-            foreach ($reservation->getTravellers() as $reservationTravellerObject) {
-                dump($travellerArrayItem['email']);
-                dump($reservationTravellerObject->getEmail());
-                if ($travellerArrayItem['email'] == $reservationTravellerObject->getEmail()) {
-                    dump("is already a user");
-                    $isTravellerInReservation = true;
-                } else {
-                    $isTravellerInReservation = false;
-                    dump("is already NOT a user");
-                }
-            }
-            dump($isTravellerInReservation);
-            if ($isTravellerInReservation == false) {
-                dump($travellerArrayItem['id']);
-                if($travellerArrayItem['id'] == null) {   
-                    $traveller = new Travellers();
-                } else {
-                    dump($travellerArrayItem['id']);
-                    $traveller = $this->travellersRepository->find($travellerArrayItem['id']);
-                }
-                dump($traveller);
-                $traveller->setPrenom($travellerArrayItem['prenom']);
-                $traveller->setNom($travellerArrayItem['nom']);
-                $traveller->setEmail($travellerArrayItem['email']);
-                $traveller->setTelephone($travellerArrayItem['telephone']);
-                $traveller->setPosition($travellerArrayItem['position']);
-                $traveller->setUser($this->getUser());
-                $now = new \DateTime();
-                $traveller->setDateAjout($now);
-                $traveller->addReservation($reservation);
-                $em->persist($traveller);
-            }
-        }  
-        $em->flush(); */
        
         return $this->render('user/user_reservation_travellers.html.twig', [
             'reservation' => $reservation,
@@ -176,33 +143,32 @@ class UserFrontendReservationTravellersController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/user/reservation/{reservation}/travellers/', name: 'user_reservation_travellers', methods: ['GET'])]
-    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}/travellers/', 'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/'], name: 'user_reservation_travellers', methods: ['GET'])]
+    #[Route(
+        path: '/user/reservation/{reservation}/travellers/', 
+        name: 'user_reservation_travellers', 
+        methods: ['GET'])]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/reservation/data/{reservation}/travellers/', 
+            'es' => '{_locale}/usuario/reserva/datos/{reservation}/travellers/', 
+            'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}/travellers/'], 
+        name: 'user_reservation_travellers', 
+        methods: ['GET'])]
     public function userReservationTravellers(
         Reservation $reservation,
-        LangRepository $langRepository,
-        reservationHelper $reservationHelper,
         string $locale = 'es',
         string $_locale = null
     ) {
         // Swith Locale Loader
         $locale = $_locale ?: $locale;
-        $lang = $langRepository->findOneBy([
-            'iso_code' => $locale,
+        $lang = $this->langRepository->findOneBy([
+            'iso_code' => $locale
         ]);
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $i = 0;
-        $urlArray = [];
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            ++$i;
-        }
-        // End swith locale Loader
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
 
         $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($locale);
 
-        $options = $reservationHelper->getReservationOptions($reservation, $lang);
+        $options = $this->reservationHelper->getReservationOptions($reservation, $lang);
 
         return $this->render('user/user_reservation_travellers.html.twig', [
             'reservation' => $reservation,

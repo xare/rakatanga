@@ -2,8 +2,7 @@
 
 namespace App\Entity;
 
-use Adamski\Symfony\PhoneNumberBundle\Model\PhoneNumber;
-use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Adamski\Symfony\PhoneNumberBundle\Validator as AssertPhoneNumber;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -58,12 +57,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $prenom = null;
 
-    /**
-     * @AssertPhoneNumber
-     */
+    #[AssertPhoneNumber\PhoneNumber]
     #[Groups('main')]
-    #[ORM\Column(name: 'telephone', type: 'phone_number', nullable: true)]
-    private ?PhoneNumber $telephone = null;
+    #[ORM\Column(name: 'telephone', nullable: true)]
+    private ?string $telephone = null;
 
     #[Groups('main')]
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
@@ -260,12 +257,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTelephone(): ?PhoneNumber
+    public function getTelephone(): ?string
     {
         return $this->telephone;
     }
 
-    public function setTelephone(?PhoneNumber $telephone): self
+    public function setTelephone(?string $telephone): self
     {
         $this->telephone = $telephone;
 

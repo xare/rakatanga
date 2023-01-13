@@ -16,26 +16,26 @@ class Infodocs
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filename;
+    #[ORM\Column()]
+    private ?string $filename = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $original_filename;
+    #[ORM\Column()]
+    private ?string $original_filename = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $mime_type;
+    #[ORM\Column(nullable: true)]
+    private ?string $mime_type = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $title;
+    #[ORM\Column(nullable: true)]
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $content;
+    private ?string $content = null;
 
     #[ORM\ManyToMany(targetEntity: Travel::class, inversedBy: 'infodocs')]
-    private $travel;
+    private Collection $travel;
 
     #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'infodocs')]
-    private $optionsTranslations;
+    private Collection $optionsTranslations;
 
     public function __construct()
     {

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DocumentRepository;
 use App\Service\UploadHelper;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,44 +21,44 @@ class Document
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'documents')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user;
+    private User $user;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filename;
+    #[ORM\Column()]
+    private ?string $filename = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $originalFilename;
+    #[ORM\Column()]
+    private ?string $originalFilename = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $mimeType;
+    #[ORM\Column()]
+    private ?string $mimeType = null;
 
     #[ORM\ManyToOne(targetEntity: Travellers::class, inversedBy: 'documents')]
-    private $traveller;
+    private ?Travellers $traveller = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $date_from;
+    private ?DateTime $date_from;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private $date_until;
+    private ?DateTime $date_until = null;
 
     #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'documents')]
-    private $date;
+    private Collection $date;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $doctype;
+    #[ORM\Column(nullable: true)]
+    private ?string $doctype = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $docnumber;
+    #[ORM\Column(nullable: true)]
+    private ?string $docnumber = null;
 
     #[ORM\ManyToMany(targetEntity: ReservationData::class, mappedBy: 'documents')]
-    private $reservationData;
+    private Collection $reservationData;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'documents')]
-    private $reservation;
+    private ?Reservation $reservation = null;
 
     public function __construct(User $user)
     {

@@ -1,0 +1,18 @@
+<textarea name="description" id="description" class="form-control">
+</textarea>
+
+<script type="text/javascript">
+  var CKEDITOR_BASEPATH = "/build/ckeditor/";
+</script>
+<script
+  type="text/javascript"
+  src="{{absolute_url("/build/ckeditor/")}}ckeditor.js">
+</script>
+
+<script type="text/javascript">
+  if (CKEDITOR.instances['description']) {
+    CKEDITOR.instances['description'].destroy(true);
+    delete CKEDITOR.instances['description'];
+  }
+  CKEDITOR.replace("description", "ckeditor");
+</script>

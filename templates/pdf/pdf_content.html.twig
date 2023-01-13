@@ -25,7 +25,7 @@
                 <h1>{{'FACTURA'|trans}}</h1>
                 <div class="invoiceNumber">{{'Número de factura'|trans}}: {{ invoice.invoiceNumber }}</div>
                 <div class="date">{{'Fecha de factura'|trans}}: {{ invoice.dateCreated|date('Y/m/d') }}</div>
-                <div class="date">{{'Fecha de vencimiento'|trans}}: 30/06/2014</div>
+                <div class="date">{{'Fecha de vencimiento'|trans}}: {{'1 mes antes de la salida del viaje' |trans}}</div>
             </div>
         </div>
         <table border="0" cellspacing="0" cellpadding="0">
@@ -45,8 +45,8 @@
                     <td colspan="3">
                         {{ renderLocalizedTravel(invoice.reservation.date.travel.id, locale) }}
                     </td>
-                    
-                    
+
+
                 </tr>
                 <tr>
                     <td colspan="5">{{'Código de reserva'|trans}}: {{ invoice.reservation.code }}</td>
@@ -91,9 +91,9 @@
                                     {{ optionPrice | format_currency('EUR', {fraction_digit: 2}) }}
                                 </td>
                                 <td>
-                                    
+
                                     {{ (reservationOption.ammount * optionPrice) | format_currency('EUR', {fraction_digit: 2}) }}
-                                    
+
                                     {% set total = total + reservationOption.ammount * optionPrice %}
                                 </td>
                             </tr>
@@ -135,9 +135,8 @@
                         <td colspan="4"><strong>{{'Total a pagar'|trans}}</strong></td>
                         <td> {{ 0 | format_currency('EUR', {fraction_digit: 2})}} </td>
                     </tr>
-                {% endif %}             
+                {% endif %}
             </tbody>
         </table>
         <div id="thanks">{{'¡Muchas gracias!'|trans}}</div>
-    
-                
+

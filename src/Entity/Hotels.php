@@ -15,23 +15,23 @@ class Hotels
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $Name;
+    #[ORM\Column()]
+    private ?string $Name = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $city;
+    #[ORM\Column(nullable: true)]
+    private ?string $city = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $country;
+    #[ORM\Column(nullable: true)]
+    private ?string $country = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $website;
+    #[ORM\Column(nullable: true)]
+    private ?string $website = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $category;
+    #[ORM\Column(nullable: true)]
+    private ?string $category = null;
 
     #[ORM\ManyToMany(targetEntity: Travel::class, inversedBy: 'hotels')]
-    private $travel;
+    private Collection $travel;
 
     public function __construct()
     {

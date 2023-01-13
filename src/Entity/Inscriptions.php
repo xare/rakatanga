@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Adamski\Symfony\PhoneNumberBundle\Validator as AssertPhoneNumber;
 use App\Repository\InscriptionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,49 +17,47 @@ class Inscriptions
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nom;
+    private ?string $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $prenom;
+    private ?string $prenom = null;
 
-    /**
-     * @AssertPhoneNumber
-     */
-    #[ORM\Column(type: 'string', name: 'telephone', length: 25, nullable: true)]
-    private $telephone;
+    #[AssertPhoneNumber\PhoneNumber]
+    #[ORM\Column(length: 25, nullable: true)]
+    private ?string $telephone = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $email;
+    #[ORM\Column()]
+    private ?string $email = null;
 
-    #[ORM\Column(type: 'string', length: 15)]
-    private $position;
+    #[ORM\Column(length: 15)]
+    private ?string $position = null;
 
-    #[ORM\Column(type: 'integer')]
-    private $arrhes;
+    #[ORM\Column()]
+    private ?int $arrhes = null;
 
-    #[ORM\Column(type: 'integer')]
-    private $solde;
+    #[ORM\Column()]
+    private ?int $solde = null;
 
-    #[ORM\Column(type: 'string', length: 3)]
-    private $assurance;
+    #[ORM\Column(length: 3)]
+    private ?string $assurance = null;
 
-    #[ORM\Column(type: 'string', length: 3)]
-    private $vols;
+    #[ORM\Column(length: 3)]
+    private ?string $vols = null;
 
-    #[ORM\Column(type: 'string', length: 15)]
-    private $statut;
+    #[ORM\Column(length: 15)]
+    private ?string $statut = null;
 
     #[ORM\Column(type: 'text')]
-    private $remarque;
+    private ?string $remarque = null;
 
     #[ORM\Column(type: 'datetime')]
-    private $date_ajout;
+    private ?\DateTime $date_ajout = null;
 
-    #[ORM\Column(type: 'string', length: 3)]
-    private $langue;
+    #[ORM\Column(length: 3)]
+    private ?string $langue = null;
 
     #[ORM\OneToMany(targetEntity: Oldreservations::class, mappedBy: 'inscriptions')]
-    private $oldreservations;
+    private Collection $oldreservations;
 
     public function __construct()
     {

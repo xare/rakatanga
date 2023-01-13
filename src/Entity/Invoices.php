@@ -14,41 +14,41 @@ class Invoices
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $name;
+    #[ORM\Column(nullable: true)]
+    private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $nif;
+    #[ORM\Column(nullable: true)]
+    private ?string $nif = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $address;
+    #[ORM\Column(nullable: true)]
+    private ?string $address = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $postalcode;
+    #[ORM\Column(nullable: true)]
+    private ?string $postalcode = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $city;
+    #[ORM\Column(nullable: true)]
+    private ?string $city = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $country;
+    #[ORM\Column(nullable: true)]
+    private ?string $country = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $invoice_number;
+    #[ORM\Column()]
+    private ?string $invoice_number = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filename;
+    #[ORM\Column()]
+    private ?string $filename = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $originalFilename;
+    #[ORM\Column()]
+    private ?string $originalFilename = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $date_created;
+    #[ORM\Column()]
+    private \DateTimeImmutable $date_created;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private $dueAmmount;
+    private ?float $dueAmmount = null;
 
     #[ORM\OneToOne(targetEntity: Reservation::class, inversedBy: 'invoice', cascade: ['persist'])]
-    private $reservation;
+    private ?Reservation $reservation = null;
 
     public function __construct()
     {

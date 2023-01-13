@@ -11,6 +11,7 @@ use App\Repository\LangRepository;
 use App\Repository\ReservationDataRepository;
 use App\Repository\TravellersRepository;
 use App\Service\breadcrumbsHelper;
+use App\Service\languageMenuHelper;
 use App\Service\logHelper;
 use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,23 +22,29 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserFrontendReservationDataController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private Mailer $mailer, private breadcrumbsHelper $breadcrumbsHelper, private TranslatorInterface $translator)
+    public function __construct(
+        private EntityManagerInterface $entityManager, 
+        private Mailer $mailer, 
+        private breadcrumbsHelper $breadcrumbsHelper, 
+        private TranslatorInterface $translator,
+        private languageMenuHelper $languageMenuHelper)
     {
     }
 
-    #[Route(path: ['en' => '{_locale}/user/reservation/data/{reservation}', 'es' => '{_locale}/usuario/reserva/datos/{reservation}', 'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}'], name: 'frontend_user_reservation_data')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/reservation/data/{reservation}', 
+            'es' => '{_locale}/usuario/reserva/datos/{reservation}', 
+            'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}'], 
+        name: 'frontend_user_reservation_data')]
       public function frontend_user_reservation_data(
-      Request $request,
-      string $_locale = null,
-      Reservation $reservation,
-      LangRepository $langRepository,
-      ReservationDataRepository $reservationDataRepository,
-      DocumentRepository $documentRepository,
-      EntityManagerInterface $em,
-      Mailer $mailer,
-      logHelper $logHelper,
-      $locale = 'es'
-  ) {
+                            Request $request,
+                            string $_locale = null,
+                            Reservation $reservation,
+                            ReservationDataRepository $reservationDataRepository,
+                            logHelper $logHelper,
+                            string $locale = 'es'
+        ) {
           $locale = $_locale ?: $locale;
 
           /**
@@ -45,20 +52,8 @@ class UserFrontendReservationDataController extends AbstractController
            */
           $user = $this->getUser();
           // Swith Locale Loader
-          $otherLangsArray = $langRepository->findOthers($locale);
-          $i = 0;
-          $urlArray = [];
-          foreach ($otherLangsArray as $otherLangArray) {
-              $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-              $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-              $urlArray[$i]['reservation'] = $reservation;
-              ++$i;
-          }
-          // End switch locale loader
-
-          // BREADCRUMBS
+          $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
           $this->breadcrumbsHelper->reservationTravellersBreadcrumbs('Inicio');
-          // END BREADCRUMBS
 
           $reservationData = $reservationDataRepository->findOneBy([
               'reservation' => $reservation,
@@ -73,8 +68,8 @@ class UserFrontendReservationDataController extends AbstractController
               $reservationData = $form->getData();
               $reservationData->setReservation($reservation);
               $reservationData->setUser($this->getUser());
-              $em->persist($reservationData);
-              $em->flush();
+              $this->entityManager->persist($reservationData);
+              $this->entityManager->flush();
               $logHelper->logThis(
                   'Datos aportados a una reserva',
                   "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] ha depositados datos para una reserva para el viaje
@@ -83,7 +78,7 @@ class UserFrontendReservationDataController extends AbstractController
               {$reservation->getId()} ".strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(), 0, 3)).'',
                   [],
                   'reservation');
-              $mailer->sendEmailonDataCompletionToUs($reservation);
+              $this->mailer->sendEmailonDataCompletionToUs($reservation);
               $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
           }
 
@@ -98,30 +93,24 @@ class UserFrontendReservationDataController extends AbstractController
           ]);
       }
 
-    #[Route(path: 'user/reservationData/new/{reservation}/{traveller}/', methods: ['GET', 'POST'], name: 'frontend-user-reservation-data-new')]
+    #[Route(
+        path: 'user/reservationData/new/{reservation}/{traveller}/', 
+        methods: ['GET', 'POST'], 
+        name: 'frontend-user-reservation-data-new')]
  public function userReservationDataNew(
   Request $request,
-  LangRepository $langRepository,
   DocumentRepository $documentRepository,
   Travellers $traveller,
   Reservation $reservation,
   string $_locale = null,
-  $locale = 'es')
+  string $locale = 'es')
  {
      $locale = $_locale ?: $locale;
      $documents = [];
      $user = $this->getUser();
 
-     // Swith Locale Loader
-     $otherLangsArray = $langRepository->findOthers($locale);
-     $i = 0;
-     $urlArray = [];
-     foreach ($otherLangsArray as $otherLangArray) {
-         $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-         $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-         ++$i;
-     }
-     // End switch locale loader
+     $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+
 
      $reservationData = new ReservationData();
      $form = $this->createForm(ReservationDataType::class, $reservationData);
@@ -149,15 +138,16 @@ class UserFrontendReservationDataController extends AbstractController
 ]);
  }
 
-    #[Route(path: '/user/reservationData/{reservationData}', name: 'frontend-user-reservation-data')]
+    #[Route(
+        path: '/user/reservationData/{reservationData}', 
+        name: 'frontend-user-reservation-data')]
      public function userReservationData(
       Request $request,
       ReservationData $reservationData,
-      LangRepository $langRepository,
       DocumentRepository $documentRepository,
       TravellersRepository $travellersRepository,
       string $_locale = null,
-      $locale = 'es')
+      string $locale = 'es')
      {
          $locale = $_locale ?: $locale;
          $documents = [];
@@ -166,19 +156,9 @@ class UserFrontendReservationDataController extends AbstractController
          if ($travellerId != null) {
              $traveller = $travellersRepository->find($travellerId);
          }
-         $user = $this->getUser();
 
-         // Swith Locale Loader
-         $otherLangsArray = $langRepository->findOthers($locale);
-         $i = 0;
-         $urlArray = [];
-         foreach ($otherLangsArray as $otherLangArray) {
-             $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-             ++$i;
-         }
-         // End switch locale loader
-
+         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+         
          $form = $this->createForm(ReservationDataType::class, $reservationData);
          $form->handleRequest($request);
          if ($form->isSubmitted() && $form->isValid()) {

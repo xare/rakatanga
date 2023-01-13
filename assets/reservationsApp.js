@@ -170,7 +170,6 @@ class reservationsApp {
                 });
                 row.html(response.html);
                 //add swal window with response with downloadable link.
-
             } catch (jqXHR) {
                 console.error(jqXHR);
             }

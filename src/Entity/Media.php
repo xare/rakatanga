@@ -61,7 +61,7 @@ class Media
     private Collection $articles;
 
     #[ORM\OneToOne(targetEntity: Articles::class, mappedBy: 'mainPhoto', cascade: ['persist', 'remove'])]
-    private Collection $article;
+    private ?Articles $article = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isYTVideo;

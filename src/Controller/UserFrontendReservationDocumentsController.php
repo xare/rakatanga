@@ -13,7 +13,7 @@ use App\Repository\ReservationRepository;
 use App\Repository\TravellersRepository;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Routing\Annotation\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,29 +26,42 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserFrontendReservationDocumentsController extends AbstractController
 {
-    #[Route(path: '/user/upload/document/{reservation}', name: 'frontend_user_upload_document')]
-    #[Route(path: ['en' => '{_locale}/upload/document/{reservation}', 'es' => '{_locale}/upload/document/{reservation}', 'fr' => '{_locale}/upload/document/{reservation}'], name: 'frontend_user_upload_document')]
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private UploadHelper $uploadHelper,
+        private ReservationRepository $reservationRepository,
+        private ReservationDataRepository $reservationDataRepository,
+        private TravellersRepository $travellersRepository,
+        private DocumentRepository $documentRepository
+    )
+    {
+
+    }
+    #[Route(
+        path: '/user/upload/document/{reservation}', 
+        name: 'frontend_user_upload_document')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/upload/document/{reservation}', 
+            'es' => '{_locale}/upload/document/{reservation}', 
+            'fr' => '{_locale}/upload/document/{reservation}'], 
+        name: 'frontend_user_upload_document')]
     public function frontend_user_upload_document(
         Request $request,
-        string $_locale = null,
         Reservation $reservation,
-        ReservationDataRepository $reservationDataRepository,
-        UploadHelper $uploadHelper,
-        EntityManagerInterface $em,
         ValidatorInterface $validator,
-        TravellersRepository $travellersRepository,
-        DocumentRepository $documentRepository,
-        $locale = 'es'
+        string $_locale = null,
+        string $locale = 'es'
     ) {
+        $locale = $_locale ?: $locale;
         $uploadedDocument = $request->files->get('document');
-
-        $user = $this->getUser();
         /**
          * @var User $user
          */
+        $user = $this->getUser();
+        
         $userId = $user->getId();
         $type = $request->request->get('type');
-        dump($type);
 
         $violations = $validator->validate(
             $uploadedDocument,
@@ -74,7 +87,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         if ($violations->count() > 0) {
             return $this->json($violations, 400);
         }
-        $filename = $uploadHelper->uploadDocument($uploadedDocument);
+        $filename = $this->uploadHelper->uploadDocument($uploadedDocument);
         $traveller = null;
         $travellerId = null;
         if ($request->request->get('traveller') != null) {
@@ -82,8 +95,8 @@ class UserFrontendReservationDocumentsController extends AbstractController
         }
 
         if ($travellerId != null) {
-            $traveller = $travellersRepository->find($travellerId);
-            $reservationData = $reservationDataRepository->findOneBy([
+            $traveller = $this->travellersRepository->find($travellerId);
+            $reservationData = $this->reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
                 'travellers' => $traveller,
                 'User' => $user,
@@ -95,7 +108,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
                 $reservationData->setUser($user);
             }
         } else {
-            $reservationData = $reservationDataRepository->findOneBy([
+            $reservationData = $this->reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
                 'User' => $user,
             ]);
@@ -118,9 +131,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
         }
         $document->addReservationData($reservationData);
         $reservationData->addDocument($document);
-        $em->persist($reservationData);
-        $em->persist($document);
-        $em->flush();
+        $this->entityManager->persist($reservationData);
+        $this->entityManager->persist($document);
+        $this->entityManager->flush();
 
         $documentsArray = [];
         $i = 0;
@@ -156,16 +169,21 @@ class UserFrontendReservationDocumentsController extends AbstractController
         );
     }
 
-    #[Route(path: '/user/{id}/documents', name: 'user_add_documents')]
-    #[Route(path: ['en' => '{_locale}/user/{id}/documents', 'es' => '{_locale}/usuario/{id}/documentos', 'fr' => '{_locale}/utilisateur/{id}/documentation'], name: 'user_add_documents')]
+    #[Route(
+        path: '/user/{id}/documents', 
+        name: 'user_add_documents')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/{id}/documents', 
+            'es' => '{_locale}/usuario/{id}/documentos', 
+            'fr' => '{_locale}/utilisateur/{id}/documentation'], 
+        name: 'user_add_documents')]
     #[IsGranted('ROLE_USER', subject: 'user')]
     public function uploadDocument(
         User $user,
         Request $request,
-        UploadHelper $uploadHelper,
-        EntityManagerInterface $entityManager,
         ValidatorInterface $validator,
-        $locale = 'es',
+        string $locale = 'es',
         string $_locale = null
     ) {
         /** @var UploadedFile $uploadedFile */
@@ -189,15 +207,15 @@ class UserFrontendReservationDocumentsController extends AbstractController
         if ($violations->count() > 0) {
             return $this->json($violations, 400);
         }
-        $filename = $uploadHelper->uploadDocument($uploadedDocument);
+        $filename = $this->uploadHelper->uploadDocument($uploadedDocument);
 
         $document = new Document($user);
         $document->setFilename($filename);
         $document->setOriginalFilename($uploadedDocument->getClientOriginalName() ?? $filename);
         $document->setMimeType($uploadedDocument->getMimeType() ?? 'application/octet-stream');
 
-        $entityManager->persist($document);
-        $entityManager->flush();
+        $this->entityManager->persist($document);
+        $this->entityManager->flush();
 
         return $this->json(
             $document,
@@ -209,18 +227,19 @@ class UserFrontendReservationDocumentsController extends AbstractController
         );
     }
 
-    #[Route(path: '/user/settings/{id}/document/download', name: 'download_document', methods: ['GET'])]
+    #[Route(
+        path: '/user/settings/{id}/document/download', 
+        name: 'download_document', methods: ['GET'])]
     public function downloadDocument(
-        Document $document,
-        UploadHelper $uploadHelper
+        Document $document
     ) {
         $user = $document->getUser();
 
         $this->denyAccessUnlessGranted('ROLE_USER', $user);
-
+        $uploadHelper = $this->uploadHelper;
         $response = new StreamedResponse(function () use ($document, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');
-            $fileStream = $uploadHelper->readStream($document->getFilePath(), false);
+            $fileStream = $this->uploadHelper->readStream($document->getFilePath(), false);
 
             stream_copy_to_stream($fileStream, $outputStream);
         });
@@ -237,7 +256,10 @@ class UserFrontendReservationDocumentsController extends AbstractController
         return $response;
     }
 
-    #[Route(path: '/user/settings/{id}/documents', methods: 'GET', name: 'frontend_user_list_documents')]
+    #[Route(
+        path: '/user/settings/{id}/documents', 
+        methods: 'GET', 
+        name: 'frontend_user_list_documents')]
     #[IsGranted('ROLE_USER', subject: 'user')]
     public function getDocuments(User $user)
     {
@@ -251,24 +273,20 @@ class UserFrontendReservationDocumentsController extends AbstractController
         );
     }
 
-    #[Route(path: '/user/reservation/{reservation}/documents', options: ['expose' => true], methods: 'GET', name: 'frontend_reservation_list_documents')]
+    #[Route(
+        path: '/user/reservation/{reservation}/documents', 
+        options: ['expose' => true], 
+        methods: 'GET', 
+        name: 'frontend_reservation_list_documents')]
     public function getReservationDocuments(
-        Reservation $reservation,
-        ReservationDataRepository $reservationDataRepository
+        Reservation $reservation
     ) {
-        $reservationData = $reservationDataRepository->findOneBy(
+        $reservationData = $this->reservationDataRepository->findOneBy(
             [
                 'reservation' => $reservation,
                 'User' => $this->getUser(),
             ]
         );
-
-        /* $documents = [];
-        $i = 0;
-        foreach($reservationData as $reservationDataElement){
-            $documents[$i] = $reservationDataElement->getDocuments();
-            $i++;
-        } */
 
         $documents = [];
         if ($reservationData) {
@@ -285,23 +303,25 @@ class UserFrontendReservationDocumentsController extends AbstractController
         );
     }
 
-    #[Route(path: '/user/documents/delete/{document}', name: 'frontend_user_delete_document', options: ['expose' => true], methods: ['DELETE', 'POST'])]
+    #[Route(
+        path: '/user/documents/delete/{document}', 
+        name: 'frontend_user_delete_document', 
+        options: ['expose' => true], 
+        methods: ['DELETE', 'POST'])]
     public function FrontendUserDeleteDocument(
         Request $request,
-        Document $document,
-        UploadHelper $uploadHelper,
-        TravellersRepository $travellersRepository,
-        EntityManagerInterface $entityManager,
-        DocumentRepository $documentRepository,
-        ReservationRepository $reservationRepository
+        Document $document
     ) {
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
         $type = $document->getDoctype();
         $reservationId = $request->request->get('reservationId');
-        $entityManager->remove($document);
-        $entityManager->flush();
-        $uploadHelper->deleteFile($document->getFilePath(), false);
-        $reservation = $reservationRepository->find($reservationId);
+        $this->entityManager->remove($document);
+        $this->entityManager->flush();
+        $this->uploadHelper->deleteFile($document->getFilePath(), false);
+        $reservation = $this->reservationRepository->find($reservationId);
 
         $dropHtmlRenderArray = [
             'type' => $type,
@@ -314,10 +334,10 @@ class UserFrontendReservationDocumentsController extends AbstractController
         ];
         if ($request->request->get('travellerId') !== null && $request->request->get('travellerId') != $user->getId()) {
             $travellerId = $request->request->get('travellerId');
-            $dropHtmlRenderArray['traveller'] = $travellersRepository->find($travellerId);
+            $dropHtmlRenderArray['traveller'] = $this->travellersRepository->find($travellerId);
             $listHtmldRenderArray['documents'] = $dropHtmlRenderArray['traveller']->getDocuments();
         }
-        $documents = $documentRepository->getDocumentsByReservationByUser($reservation);
+        $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation);
 
         $listHtmlRenderArray['documents'] = $documents;
         $listHtml = $this->renderView('user/_documents_list.html.twig', $listHtmlRenderArray);
@@ -338,26 +358,26 @@ class UserFrontendReservationDocumentsController extends AbstractController
         /* return new Response(null, 204); */
     }
 
-    #[Route(path: ['en' => '{_locale}/user/documents', 'es' => '{_locale}/usuario/documentos', 'fr' => '{_locale}/utilisateur/documents'], name: 'frontend_user_documents')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/documents', 
+            'es' => '{_locale}/usuario/documentos', 
+            'fr' => '{_locale}/utilisateur/documents'], 
+        name: 'frontend_user_documents')]
     public function userDocuments(
-        LangRepository $langRepository,
-        ReservationRepository $reservationRepository,
         string $_locale = null,
         string $locale = 'es'
     ) {
         $locale = $_locale ? $_locale : $locale;
         // Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $i = 0;
-        $urlArray = [];
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            ++$i;
-        }
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+        
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
 
-        $reservations = $reservationRepository->findBy(['user' => $user]);
+        $reservations = $this->reservationRepository->findBy(['user' => $user]);
 
         return $this->render('user/user_documents.html.twig', [
             'locale' => $locale,

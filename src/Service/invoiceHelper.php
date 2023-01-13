@@ -75,11 +75,16 @@ class invoiceHelper
      * updateInvoiceBillingData function. The user is updating the billing data. Update the invoice in DB and replace file in db with.
      */
     public function updateInvoiceBillingData(
-        Reservation $reservation,
+        Invoices $invoice,
         string $locale,
         array $customerBillingData = [],
         string $invoiceStatus = 'updated Billing Data'
     ): bool {
+        $this->pdfHelper->removeInvoicePdf($invoice);
+        $invoice = $this->_assignCustomerDataToInvoiceObject($invoice, $locale, $customerBillingData);
+            $this->entityManager->persist($invoice);
+            $this->entityManager->flush();
+        $this->pdfHelper->createInvoicePdf($invoice, $locale, $invoiceStatus);
         return true;
     }
 
@@ -222,8 +227,6 @@ class invoiceHelper
          * @var array $invoiceNumberArray
          */
         $invoiceNumberArray = explode('-', $invoice->getInvoiceNumber());
-        dump($invoiceNumberArray);
-        dump(end($invoiceNumberArray));
 
         return end($invoiceNumberArray);
     }

@@ -30,7 +30,13 @@ class BlogController extends AbstractController
         $this->articlesRepository = $articlesRepository;
     }
 
-    #[Route(path: ['en' => '{_locale}/blog/', 'fr' => '{_locale}/blog/', 'es' => '{_locale}/blog/'], name: 'blog', requirements: ['_locale' => '^[a-z]{2}$'])]
+    #[Route(
+        path: [
+            'en' => '{_locale}/blog/', 
+            'fr' => '{_locale}/blog/', 
+            'es' => '{_locale}/blog/'], 
+        name: 'blog', 
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function index(
         Request $request,
         string $locale = 'es',

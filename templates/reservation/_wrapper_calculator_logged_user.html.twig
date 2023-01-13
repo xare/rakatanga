@@ -1,4 +1,4 @@
-{{ include( 'reservation/_new_reservation_calculator_table.html.twig', {'_locale': app.request.getLocale()})}}
+{{ include( 'reservation/calculator/_reservation_calculator_table.html.twig', {'_locale': app.request.getLocale()})}}
 
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
     {{ include( 'reservation/usercards/_card_logged_user.html.twig' ) }}

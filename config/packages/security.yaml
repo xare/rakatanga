@@ -9,9 +9,9 @@ security:
 
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        App\Entity\User: 'auto'
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-            algorithm: 'auto'
+        App\Entity\User:
+            algorithm: auto
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
 
     providers:
@@ -28,10 +28,10 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            stateless: false
+            stateless: true
             # custom_authenticators:
             #     - App\Security\SecurityAuthenticator
-            entry_point: form_login
+            #entry_point: form_login
             remember_me:
                 secret: "%kernel.secret%"
                 lifetime: 2592000
@@ -50,6 +50,7 @@ security:
                 enable_csrf: true
                 default_target_path: frontend_user
                 use_referer: true
+                target_path_parameter: frontend_user
             # custom_authenticator:
             #- App\Security\AuthenticationHandler
             #- App\Security\DummyAuthenticator

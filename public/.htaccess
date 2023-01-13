@@ -64,6 +64,9 @@ DirectoryIndex index.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://rakatangaclean/$1 [R,L]
 
 # AuthUserFile /var/www/clients/client1/web8/web/rakatangasf/public/.htpasswd
 # AuthType Basic

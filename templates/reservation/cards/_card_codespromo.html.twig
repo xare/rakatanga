@@ -1,0 +1,54 @@
+<div class="card card-default mb-3 shadow d-none card-codespromo">
+    <div class="card-body">
+        <h3>{{'Código promocional'|trans}}</h3>
+        {% if user is defined and user != null %}
+            <table class="table">
+                {% for codepromo in user.codespromos %}
+                    <tr>
+                        <th>
+                            {{ codepromo.Code }}
+                        </th>
+                        <td>
+                            {% if codepromo.montant > 0 %}
+                                {{ codepromo.montant }} €
+                            {% elseif codepromo.pourcentage > 0 %}
+                                {{ codepromo.pourcentage }} %
+                            {% endif %}
+                        </td>
+                    <tr>
+                    <tr>
+                        <td colspan="2">
+                            {{codepromo.commentaire}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary js-apply-codepromo"
+                                    data-codepromo = "{{codepromo.id}}">
+                                    {{'Utilizar'|trans}}
+                            </button>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2" data-container="codepromo-input">
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="codespromo">
+                            <br />
+                            <a
+                                href="#"
+                                data-action="js-add-codespromo"
+                                class="btn btn-primary">{{'Añadir Código de descuento a esta reserva'|trans}}</a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {# <input name="codepromo" class="form-control" value=""> #}
+    </div>
+</div>

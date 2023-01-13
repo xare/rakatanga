@@ -7,6 +7,8 @@ use App\Entity\ReservationOptions;
 use App\Repository\LangRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\ReservationOptionsRepository;
+use App\Service\breadcrumbsHelper;
+use App\Service\languageMenuHelper;
 use App\Service\localizationHelper;
 use App\Service\reservationHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,73 +24,54 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserFrontendReservationController extends AbstractController
 {
-    private $translatorInterface;
-    private $breadcrumbs;
 
-    public function __construct(TranslatorInterface $translatorInterface, Breadcrumbs $breadcrumbs)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ReservationHelper $reservationHelper,
+        private TranslatorInterface $translatorInterface, 
+        private Breadcrumbs $breadcrumbs,
+        private languageMenuHelper $languageMenuHelper,
+        private breadcrumbsHelper $breadcrumbsHelper,
+        private langRepository $langRepository,
+        private OptionsRepository $optionsRepository,
+        private ReservationOptionsRepository $reservationOptionsRepository
+        )
     {
-        $this->translatorInterface = $translatorInterface;
-        $this->breadcrumbs = $breadcrumbs;
+        
     }
 
-    #[Route(path: ['/user/reservation/{reservation}'], options: ['expose' => true], name: 'frontend_user_reservation')]
-    #[Route(path: ['en' => '{_locale}/user/reservation/{reservation}', 'es' => '{_locale}/usuario/reserva/{reservation}', 'fr' => '{_locale}/utilisateur/reservation/{reservation}'], options: ['expose' => true], name: 'frontend_user_reservation')]
+    #[Route(
+        path: ['/user/reservation/{reservation}'], 
+        options: ['expose' => true], 
+        name: 'frontend_user_reservation')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/user/reservation/{reservation}', 
+            'es' => '{_locale}/usuario/reserva/{reservation}', 
+            'fr' => '{_locale}/utilisateur/reservation/{reservation}'], 
+        options: ['expose' => true], 
+        name: 'frontend_user_reservation')]
     public function frontend_user_reservation(
         Reservation $reservation,
-        LangRepository $langRepository,
-        ReservationOptionsRepository $reservationOptionsRepository,
-        reservationHelper $reservationHelper,
         string $_locale = null,
-        localizationHelper $localizationHelper,
-        Breadcrumbs $breadcrumbs,
-        RouterInterface $router,
-        $locale = 'es'
+        string $locale = 'es'
     ) {
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
         $locale = $_locale ? $_locale : $locale;
-        $lang = $langRepository->findOneBy([
+        $lang = $this->langRepository->findOneBy([
             'iso_code' => $locale,
         ]);
-        // Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
-        $i = 0;
-        $urlArray = [];
-        foreach ($otherLangsArray as $otherLangArray) {
-            $urlArray[$i]['iso_code'] = $otherLangArray->getIsoCode();
-            $urlArray[$i]['lang_name'] = $otherLangArray->getName();
-            $urlArray[$i]['reservation'] = $reservation;
-            ++$i;
-        }
-        // End switch locale loader
 
-        // BREADCRUMBS
+        $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale,$reservation);
 
-        $breadcrumbs->addRouteItem(
-            $this->translatorInterface->trans('Tus Reservas'),
-            'frontend_user_reservations',
-            [
-                '_locale' => $locale,
-            ]
-        );
-        $breadcrumbs->addRouteItem(
-            $this->translatorInterface->trans('Tu reserva'),
-            'frontend_user_reservation',
-            [
-                '_locale' => $locale,
-                'reservation' => $reservation,
-            ]
-        );
-        $breadcrumbs->prependRouteItem(
-            $this
-                ->translatorInterface
-                ->trans('Inicio'),
-            'index'
-        );
-        // END BREADCRUMBS
+        $this->breadcrumbsHelper->frontendUserReservationBreadcrumbs($locale,$reservation);
 
-        $options = $reservationHelper->getReservedOptions($reservation, $lang->getIsoCode());
+        $options = $this->reservationHelper->getReservedOptions($reservation, $lang->getIsoCode());
 
-        $selectableOptions = $reservationHelper->getReservationOptions($reservation, $lang);
+        $selectableOptions = $this->reservationHelper->getReservationOptions($reservation, $lang);
 
         return $this->render('reservation/index.html.twig', [
             'date' => $reservation->getDate(),
@@ -104,17 +87,18 @@ class UserFrontendReservationController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/user/reservation/{reservation}/change/option', options: ['expose' => true], name: 'user_reservation_change_option', methods: ['POST'])]
+    #[Route(
+        path: '/user/reservation/{reservation}/change/option', 
+        options: ['expose' => true], 
+        name: 'user_reservation_change_option', 
+        methods: ['POST'])]
     public function userReservationChangeOption(
         Request $request,
-        Reservation $reservation,
-        OptionsRepository $optionsRepository,
-        ReservationOptionsRepository $reservationOptionsRepository,
-        EntityManagerInterface $em
+        Reservation $reservation
     ) {
         $optionData = $request->request->get('optionData');
-        $options = $optionsRepository->find($optionData['id']);
-        $reservationOptions = $reservationOptionsRepository->findOneBy([
+        $options = $this->optionsRepository->find($optionData['id']);
+        $reservationOptions = $this->reservationOptionsRepository->findOneBy([
             'reservation' => $reservation,
             'options' => $optionData['id'],
         ]);
@@ -124,17 +108,20 @@ class UserFrontendReservationController extends AbstractController
             $reservationOptions->setReservation($reservation);
         }
         $reservationOptions->setAmmount($optionData['ammount']);
-        $em->persist($reservationOptions);
-        $em->flush();
+        $this->entityManager->persist($reservationOptions);
+        $this->entityManager->flush();
 
         return new Response('nothing');
     }
 
-    #[Route(path: '/user/reservation/{reservation}/change/nb', options: ['expose' => true], name: 'user_reservation_change_nb', methods: ['POST'])]
+    #[Route(
+        path: '/user/reservation/{reservation}/change/nb', 
+        options: ['expose' => true], 
+        name: 'user_reservation_change_nb', 
+        methods: ['POST'])]
     public function userReservationChangeNb(
         Request $request,
-        Reservation $reservation,
-        EntityManagerInterface $em
+        Reservation $reservation
     ) {
         $nb = $request->request->get('nb');
         $type = $request->request->get('type');
@@ -144,8 +131,8 @@ class UserFrontendReservationController extends AbstractController
         if ($type == 'pilotes') {
             $reservation->setNbpilotes($nb);
         }
-        $em->persist($reservation);
-        $em->flush();
+        $this->entityManager->persist($reservation);
+        $this->entityManager->flush();
 
         return new Response('nb changed');
     }

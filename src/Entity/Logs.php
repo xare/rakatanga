@@ -14,19 +14,19 @@ class Logs
     private ?int $id = null;
 
     #[ORM\Column(type: 'text')]
-    private $action;
+    private ?string $action = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $content;
+    private ?string $content = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeInterface $date;
+    #[ORM\Column()]
+    private \DateTimeImmutable $date;
 
     #[ORM\Column(type: 'json', nullable: true)]
     private $data = [];
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $entity;
+    #[ORM\Column(nullable: true)]
+    private ?string $entity = null;
 
     public function __construct()
     {

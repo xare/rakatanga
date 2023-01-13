@@ -107,24 +107,24 @@
                 {% else %} 
                     data-is-initialized="false"{% endif %}>
             <div class="col-md-8 col-xs-12">
-                {{ include( 'reservation/_card_welcome.html.twig' ) }}
-                {{ include( 'reservation/_card_travel.html.twig' )}}   
-                {{ include( 'reservation/_card_travellers.html.twig' )}}
-                {{ include( 'reservation/_card_options.html.twig' )}}
+                {{ include( 'reservation/cards/_card_welcome.html.twig' ) }}
+                {{ include( 'reservation/cards/_card_travel.html.twig' )}}   
+                {{ include( 'reservation/cards/_card_travellers.html.twig' )}}
+                {{ include( 'reservation/cards/_card_options.html.twig' )}}
                 
                 <div class="row">
                     <div class="col-6 col-xs-12">
-                        {{ include( 'reservation/_card_codespromo.html.twig' ) }}
+                        {{ include( 'reservation/cards/_card_codespromo.html.twig' ) }}
                     </div>
                     <div class="col-6 col-xs-12">
-                        {{ include( 'reservation/_card_comment.html.twig' ) }}
+                        {{ include( 'reservation/cards/_card_comment.html.twig' ) }}
                     </div>
                 </div>
                 <div class="row  d-none" id="js-card-user" data-container="js-card-user">
                     <div class="col-12">
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         {% else %}
-                            {{ include( 'reservation/_card_user.html.twig' ) }}
+                            {{ include( 'reservation/cards/_card_user.html.twig' ) }}
                         {% endif %}
                     </div>
                 </div>

@@ -86,6 +86,11 @@ class reservationApp {
             '#js-update-changes',
             this.updateChanges.bind(this)
         )
+        this.$wrapper.on(
+            'click',
+            '[data-action="js-add-codespromo"]',
+            this.addCodesPromo.bind(this)
+        )
 
     }
 
@@ -404,6 +409,7 @@ class reservationApp {
                 self.$calculator.data('isInitialized', true);
                 self._loadUserSwitch();
                 $("[data-container='js-card-user']").hide();
+                $('.card-codespromo, .card-comment').removeClass('d-none');
                 if (swalResponse.isDismissed !== true && typeof response.codepromo !== 'undefined') {
                     let discount = response.codepromoMontant === null ? response.codepromoPourcentage : response.codepromoMontant;
                     let discountType = response.codepromoMontant === null ? 'pourcentage' : 'ammount';
@@ -620,17 +626,23 @@ class reservationApp {
             }
         )();
     }
-
     updateChanges(event) {
         event.preventDefault();
         $(event.currentTarget).hide();
+        this._updateChanges();
+    }
+
+    _updateChanges() {
+        console.info(this);
         const self = this;
+        console.info(self);
+        console.info(self.$wrapper.data('reservation'));
         (
             async() => {
                 try {
                     const response = await $.ajax({
                         url: Routing.generate('ajax-update-changes', {
-                            'reservation': self.$calculator.data('reservation')
+                            'reservation': self.$wrapper.data('reservation')
                         }),
                         data: {
                             'nbPilotes': self.$calculator.data('nbpilotes'),
@@ -727,6 +739,35 @@ class reservationApp {
             }
         )();
     }
+
+    addCodesPromo(event) {
+        event.preventDefault();
+        const reservationId = this.$wrapper.data('reservation');
+        const $currentTarget = $(event.currentTarget);
+        const $inputElement = $currentTarget.closest('[data-container="codepromo-input"]').find('input');
+        const self = this;
+        const codespromo = $inputElement.val();
+        (
+            async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('reservation-addCodesPromo'),
+                        method: "POST",
+                        data: {
+                            reservationId,
+                            codespromo
+                        }
+                    });
+                    this._updateChanges();
+                    console.info(response);
+                } catch (error) {
+                    console.info(error);
+                }
+            }
+        )();
+
+    }
+
     _setReservationData(data) {
         this.$calculator.attr('data-nbpilotes', data.nbPilotes);
         this.$calculator.attr('data-nbaccomp', data.nbAccomp);

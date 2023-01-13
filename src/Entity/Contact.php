@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Adamski\Symfony\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Adamski\Symfony\PhoneNumberBundle\Validator as AssertPhoneNumber;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -22,8 +22,8 @@ class Contact
      */
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 20)]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $firstname;
+    #[ORM\Column()]
+    private ?string $firstname = null;
 
     /**
      * @var string|null
@@ -31,24 +31,17 @@ class Contact
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 40)]
     #[ORM\Column(type: 'string', length: 255)]
-    private $lastname;
+    private ?string $lastname = null;
 
-    /**
-     * @var string|null
-     *
-     * @AssertPhoneNumber
-     */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: 'phone_number', nullable: true)]
-    private $phone;
+    #[AssertPhoneNumber\PhoneNumber]
+    #[ORM\Column(nullable: true)]
+    private ?string $phone = null;
 
-    /**
-     * @var string|null
-     */
+   
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[ORM\Column(type: 'string', length: 255)]
-    private $email;
+    #[ORM\Column()]
+    private ?string $email = null;
 
     /**
      * @var string|null
@@ -56,7 +49,7 @@ class Contact
     #[Assert\NotBlank]
     #[Assert\Length(min: 10, max: 1000)]
     #[ORM\Column(type: 'text')]
-    private $message;
+    private ?string $message = null;
 
     public function getId(): ?int
     {

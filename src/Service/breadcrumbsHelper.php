@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\CategoryTranslation;
 use App\Entity\Dates;
 use App\Entity\Reservation;
+use App\Entity\TravelTranslation;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
@@ -35,7 +37,11 @@ class breadcrumbsHelper
         $this->breadcrumbs->prependRouteItem('Inicio', 'index');
     }
 
-    public function destinationsByTravelDestinationBreadcrumbs($locale, $categoryTranslation, $categoryTranslation2, $travelTranslation)
+    public function destinationsByTravelDestinationBreadcrumbs(
+                                                    string $locale, 
+                                                    CategoryTranslation $categoryTranslation, 
+                                                    CategoryTranslation $categoryTranslation2, 
+                                                    TravelTranslation $travelTranslation)
     {
         $this->breadcrumbs->addRouteItem(
             $this->translator->trans('Nuestras rutas en moto'),
@@ -211,6 +217,55 @@ class breadcrumbsHelper
         $this->breadcrumbs->addRouteItem(
             $this->translator->trans('Datos del usuario'),
             'frontend_user_settings',
+            [
+                '_locale' => $locale,
+            ]
+        );
+        $this->breadcrumbs->prependRouteItem(
+            $this
+                ->translator
+                ->trans('Inicio'),
+            'index'
+        );
+    }
+
+    public function frontendUserReservationBreadcrumbs(string $locale, Reservation $reservation)
+    {
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Tus Reservas'),
+            'frontend_user_reservations',
+            [
+                '_locale' => $locale,
+            ]
+        );
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Tu reserva'),
+            'frontend_user_reservation',
+            [
+                '_locale' => $locale,
+                'reservation' => $reservation,
+            ]
+        );
+        $this->breadcrumbs->prependRouteItem(
+            $this
+                ->translator
+                ->trans('Inicio'),
+            'index'
+        );
+    }
+
+    public function frontendUserInvoicesBreadcrumbs(string $locale) 
+    {
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Usuario'),
+            'frontend_user',
+            [
+                '_locale' => $locale,
+            ]
+        );
+        $this->breadcrumbs->addRouteItem(
+            $this->translator->trans('Facturas del usuario'),
+            'frontend_user_invoices',
             [
                 '_locale' => $locale,
             ]

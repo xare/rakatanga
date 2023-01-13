@@ -15,47 +15,47 @@ class Lang
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    #[ORM\Column()]
+    private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 7)]
-    private $iso_code;
+    #[ORM\Column(length: 7)]
+    private ?string $iso_code = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $charset;
+    #[ORM\Column(nullable: true)]
+    private ?string $charset = null;
 
     #[ORM\OneToMany(targetEntity: BlogTranslation::class, mappedBy: 'lang')]
-    private $blogTranslations;
+    private Collection $blogTranslations;
 
     #[ORM\OneToMany(targetEntity: CategoryTranslation::class, mappedBy: 'lang', orphanRemoval: true)]
-    private $categoryTranslations;
+    private Collection $categoryTranslations;
 
     #[ORM\OneToMany(targetEntity: PageTranslation::class, mappedBy: 'lang')]
-    private $pageTranslations;
+    private Collection $pageTranslations;
 
     #[ORM\OneToMany(targetEntity: MenuTranslation::class, mappedBy: 'lang')]
-    private $menuTranslations;
+    private Collection $menuTranslations;
 
     #[ORM\OneToMany(targetEntity: TravelTranslation::class, mappedBy: 'lang', orphanRemoval: true)]
-    private $travelTranslations;
+    private Collection $travelTranslations;
 
     #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'lang', orphanRemoval: true)]
-    private $optionsTranslations;
+    private Collection $optionsTranslations;
 
     #[ORM\OneToMany(targetEntity: Texts::class, mappedBy: 'lang')]
-    private $texts;
+    private Collection $texts;
 
     #[ORM\OneToMany(targetEntity: TextTranslations::class, mappedBy: 'Lang')]
-    private $textTranslations;
+    private Collection $textTranslations;
 
     #[ORM\OneToMany(targetEntity: ContinentTranslation::class, mappedBy: 'lang')]
-    private $continentTranslations;
+    private Collection $continentTranslations;
 
     #[ORM\OneToMany(targetEntity: PopupsTranslation::class, mappedBy: 'lang', orphanRemoval: true)]
-    private $popupsTranslations;
+    private Collection $popupsTranslations;
 
     #[ORM\OneToOne(targetEntity: Blog::class, mappedBy: 'lang', cascade: ['persist', 'remove'])]
-    private $blog;
+    private ?Blog $blog = null;
 
     public function __construct()
     {

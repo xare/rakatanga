@@ -23,16 +23,16 @@ class Continents
     /**
      * @var string
      */
-    #[ORM\Column(name: 'code', type: 'string', length: 2, nullable: false)]
+    #[ORM\Column(length: 2, nullable: false)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $code;
+    private string $code;
 
     #[Assert\Valid]
     #[ORM\OneToMany(targetEntity: ContinentTranslation::class, mappedBy: 'continents', orphanRemoval: true, cascade: ['persist'])]
-    private $continentTranslation;
+    private Collection $continentTranslation;
 
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'continents')]
-    private $category;
+    private Collection $category;
 
     public function __construct()
     {
