@@ -56,7 +56,11 @@ class reservationApp {
             '#js-add-travellers',
             this.handleAddTraveller.bind(this)
         )
-
+        this.$wrapper.on(
+            'click',
+            '[data-action="js-add-travellers"]',
+            this.handleAddTraveller.bind(this)
+        )
         this.$wrapper.on(
             'click',
             '.js-assign-to-user',
@@ -90,6 +94,12 @@ class reservationApp {
             'click',
             '[data-action="js-add-codespromo"]',
             this.addCodesPromo.bind(this)
+        )
+
+        this.$wrapper.on(
+            'click',
+            '[data-action="js-edit-traveller"]',
+            this.editTraveller.bind(this)
         )
 
     }
@@ -148,7 +158,12 @@ class reservationApp {
         let data = this.$calculator.data();
         data.locale = $('html').attr('lang');
         $('[data-container="nb' + type + '"]').empty().html(nb);
-
+        if (data.reservation) {
+            this._addTravellersForms(
+                data.reservation,
+                data.nbpilotes,
+                data.nbaccomp);
+        }
         const self = this;
         (
             async() => {
@@ -180,6 +195,32 @@ class reservationApp {
         )();
     }
 
+    _addTravellersForms(reservation, nbpilotes, nbaccomp) {
+        console.info(parseInt(nbpilotes) + parseInt(nbaccomp));
+        console.info(reservation);
+        const isInitialized = this.$calculator.data('isInitialized');
+        console.info(isInitialized);
+        (
+            async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('add-travellers-forms'),
+                        method: 'POST',
+                        data: {
+                            nbpilotes,
+                            nbaccomp,
+                            reservation
+                        }
+                    });
+                    console.info(response);
+                    $('[data-container="js-travellers-form"]').html(response);
+
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        )();
+    }
     handleAddOption(event) {
         event.preventDefault();
         const self = this;
@@ -379,6 +420,7 @@ class reservationApp {
 
     _initializeReservation() {
         const reservationData = this.$calculator.data();
+
         const comment = this.$wrapper.find('[name="reservation_comment]').val();
         let self = this;
         let data = {
@@ -407,6 +449,7 @@ class reservationApp {
                     'showCancelButton': true,
                 });
                 self.$calculator.data('isInitialized', true);
+                self.$calculator.data('reservation', response.reservationId);
                 self._loadUserSwitch();
                 $("[data-container='js-card-user']").hide();
                 $('.card-codespromo, .card-comment').removeClass('d-none');
@@ -452,6 +495,10 @@ class reservationApp {
                         }
                     })();
                 }
+                this._addTravellersForms(
+                    response.reservationId,
+                    data.nbPilotes,
+                    data.nbAccomp);
             } catch (jqXHR) {
                 console.info(jqXHR);
                 if (jqXHR.status == 500) {
@@ -501,7 +548,7 @@ class reservationApp {
         e.preventDefault();
         const self = this;
         const reservationId = this.$calculator.data('reservation');
-        const $travellersForm = $("#js-travellers-form");
+        const $travellersForm = $('[data-container="js-travellers-form"]');
         const formData = $travellersForm.find('input').serialize();
         const $travellersFormContainers = $travellersForm.find('.js-travellers-form-container');
         (async() => {
@@ -513,14 +560,83 @@ class reservationApp {
                     data: formData,
                     method: "POST"
                 });
-                $('#js-travellers-form').closest('.card-body').html(response.travellersTableHtml);
+                $('[data-container="js-travellers-form"]')
+                    .find('.card-body')
+                    .html(response.travellersTableHtml);
+
+                $('#js-reservation-payment').removeClass('disabled');
+                document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { 'reservation': reservationId });
             } catch (jqXHR) {
                 console.error(jqXHR);
             }
         })();
     }
 
-    //activated by .js-assign-to-user in _card_add_travellers_data.html within reservationPayment.html.twig
+    editTraveller(event) {
+        event.preventDefault();
+        const self = this;
+        const traveller = $(event.currentTarget).data('traveller');
+        (async() => {
+            try {
+                const travellerFormResponse = await $.ajax({
+                    url: Routing.generate('ajax-edit-traveller', {
+                        traveller
+                    }),
+                    type: "GET",
+                });
+                console.info(travellerFormResponse);
+                (async(travellerFormResponse) => {
+                    const { value: formValues } = await Swal.fire({
+                        title: "Edit Traveller",
+                        html: travellerFormResponse.swalHtml,
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            return {
+                                prenom: $('#traveller_prenom').val(),
+                                nom: $('#traveller_nom').val(),
+                                email: $('#traveller_email').val(),
+                                telephone: $('#traveller_telephone').val(),
+                                traveller
+                            }
+                        }
+                    });
+                    console.info(formValues);
+                    if (formValues) {
+                        const row = $(event.currentTarget).closest('tr');
+                        console.info(row);
+                        const response = self._handleSubmitTraveller(
+                            formValues,
+                            row);
+                    }
+                })(travellerFormResponse);
+            } catch (jqXHR) {
+                console.error(jqXHR);
+            }
+        })();
+    }
+
+    _handleSubmitTraveller(formData, row) {
+            const traveller = formData.traveller;
+            (
+                async() => {
+                    try {
+                        const response = await $.ajax({
+                            type: 'POST',
+                            url: Routing.generate('ajax-save-traveller', {
+                                traveller
+                            }),
+                            data: formData,
+                            datatype: "json",
+                            encode: true
+                        })
+                        row.html(response.html);
+                    } catch (error) {
+
+                    }
+                }
+            )();
+        }
+        //activated by .js-assign-to-user in _card_add_travellers_data.html within reservationPayment.html.twig
     assignUserDataToTravellerForm(event) {
         event.preventDefault();
         const self = this;
@@ -633,10 +749,7 @@ class reservationApp {
     }
 
     _updateChanges() {
-        console.info(this);
         const self = this;
-        console.info(self);
-        console.info(self.$wrapper.data('reservation'));
         (
             async() => {
                 try {
@@ -647,16 +760,35 @@ class reservationApp {
                         data: {
                             'nbPilotes': self.$calculator.data('nbpilotes'),
                             'nbAccomp': self.$calculator.data('nbaccomp'),
-                            'options': self.$calculator.data('options')
+                            'options': self.$calculator.data('options'),
+                            'codespromo': self.$calculator.data('codespromo')
                         },
                         type: 'POST'
                     })
                     console.info(response);
 
-
                     $('[data-container="calculator-wrapper"]').append(response.html);
                 } catch (e) {
                     console.error(e)
+                }
+            }
+        )();
+    }
+    _updateCalculator() {
+        console.info('update calculator');
+        console.info(this.$calculator.data());
+        (
+            async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('update-calculator'),
+                        data: this.$calculator.data(),
+                        method: 'POST'
+                    });
+                    console.info(response);
+                    $('[data-container="calculator-wrapper"]').empty().append(response);
+                } catch (error) {
+                    console.info(error);
                 }
             }
         )();
@@ -758,7 +890,10 @@ class reservationApp {
                             codespromo
                         }
                     });
+                    this.$calculator.data('codespromo', codespromo);
+                    this.$calculator.data('reservation', reservationId);
                     this._updateChanges();
+                    this._updateCalculator();
                     console.info(response);
                 } catch (error) {
                     console.info(error);

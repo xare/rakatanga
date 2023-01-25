@@ -178,12 +178,9 @@ class Travellers
         return $this->date_ajout;
     }
 
-    /* public function setDateAjout(\DateTimeInterface $date_ajout): self */
-    public function setDateAjout(?\DateTimeInterface $date_ajout): self
+    public function setDateAjout(): self
     {
-        // $date_ajout = new \DateTime();
-        $this->date_ajout = $date_ajout;
-
+        $this->date_ajout = new \DateTimeImmutable();
         return $this;
     }
 

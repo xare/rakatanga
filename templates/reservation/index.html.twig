@@ -62,7 +62,7 @@
 
 {% block title %}{{parent()}} - {{'Iniciación de una reserva'|trans}}{% endblock %}
 
-{% block body %} 
+{% block body %}
     <div class="container">
         <!-- BREADCRUMB -->
         <div class="row">
@@ -71,7 +71,7 @@
             </div>
         </div>
         <!-- END BREADCRUMB -->
-        
+
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger">
                 {{ message|raw }}
@@ -81,37 +81,37 @@
         <div class="row">
             <div class="col-12">
                 <h1>{{ 'Reservar un viaje'|trans }}</h1>
-                        
+
             </div>
         </div>
         <!-- END MAIN TITLE -->
 
         <!-- TWO COLUMN LAYOUT -->
-        <div class="row" 
-                id="js-reservation-wrapper" 
-                data-container="reservation" 
+        <div class="row"
+                id="js-reservation-wrapper"
+                data-container="reservation"
                 data-date-id="{{date.id}}"
                 data-nbpilotes="{{nbpilotes}}"
                 data-nbaccomp="{{nbaccomp}}"
 		        data-options="{{optionsJson}}"
-                data-user="{{ userId }}" 
+                data-user="{{ userId }}"
 		        data-payment="{{ payment }}"
 		        data-discount="{{ discount }}"
 		        data-discount-type="{{ discountType }}"
                 {% if userEdit is defined and userEdit == true %}
                     data-user-edit = "true"
                 {% endif %}
-                {% if reservation != null %} 
-                    data-is-initialized="true" 
+                {% if reservation != null %}
+                    data-is-initialized="true"
                     data-reservation="{{reservation.id}}"
-                {% else %} 
+                {% else %}
                     data-is-initialized="false"{% endif %}>
-            <div class="col-md-8 col-xs-12">
+            <div class="col-8 col-xs-12">
                 {{ include( 'reservation/cards/_card_welcome.html.twig' ) }}
-                {{ include( 'reservation/cards/_card_travel.html.twig' )}}   
+                {{ include( 'reservation/cards/_card_travel.html.twig' )}}
                 {{ include( 'reservation/cards/_card_travellers.html.twig' )}}
                 {{ include( 'reservation/cards/_card_options.html.twig' )}}
-                
+
                 <div class="row">
                     <div class="col-6 col-xs-12">
                         {{ include( 'reservation/cards/_card_codespromo.html.twig' ) }}
@@ -120,7 +120,10 @@
                         {{ include( 'reservation/cards/_card_comment.html.twig' ) }}
                     </div>
                 </div>
-                <div class="row  d-none" id="js-card-user" data-container="js-card-user">
+                <div
+                    class="row d-none"
+                    id="js-card-user"
+                    data-container="js-card-user">
                     <div class="col-12">
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         {% else %}
@@ -128,19 +131,25 @@
                         {% endif %}
                     </div>
                 </div>
+                <div class="row">
+                    <div
+                        class="col-12 col-xs-12"
+                        data-container="js-travellers-form">
+                    </div>
+                </div>
             </div>
             <div class="col-4 col-xs-12">
                 <div class="position-sticky"
-                        data-spy="affix" 
-                        data-offset-top="135" 
+                        data-spy="affix"
+                        data-offset-top="135"
                         data-offset-bottom="100"
                         data-container="calculator-wrapper">
                         {{ include( 'reservation/_wrapper_calculator_logged_user.html.twig' )}}
-                        
+
                         {# {% else %} #}
                             {# {{ include( 'reservation/_card_user.html.twig' ) }} #}
                         {# {% endif %} #}
-                    
+
                 </div>
             </div>
         </div>
@@ -154,6 +163,6 @@
     {{ parent() }}
     {{ encore_entry_script_tags('reservation') }}
     {% if isInitialized == false %}
-        
+
     {% endif %}
 {% endblock %}

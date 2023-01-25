@@ -31,8 +31,8 @@
     {{ include('user/_card_add_travellers_data.html.twig',{'reservation':reservation}) }}
     </div>
     <div class="col-4 col-xs-12">
-      {{ include('reservation/_new_reservation_calculator_table.html.twig',{
-                    'reservation':reservation, 
+      {{ include('reservation/calculator/_reservation_calculator_table.html.twig',{
+                    'reservation':reservation,
                     'date':reservation.date
                     })
                 }}

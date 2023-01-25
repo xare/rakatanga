@@ -21,7 +21,7 @@
 			{{ app.user.prenom }}
 			{{ app.user.nom }}
 			[{{ app.user.email }}]</h4>
-				
+
 		{% if isInitialized != false %}
 			{# <div class="text-center">
 				<button type="button" class="btn btn-success btn-lg" data-action="js-initialize-reservation-logged">
@@ -32,10 +32,10 @@
 			 {# {% if (duePayment-TotalPayment) > 0 %} #}
 			 <p>{{ 'Hemos recibido los detalles de tu reserva'|trans}}. {{'Recibirás un mensaje de correo electrónico con los detalles más importantes, y con instrucciones para poder gestionar los datos'|trans }}.</p>
 			 <p>{{ 'A continuación puedes pasar a la página de prepago para comprobar bien todos los datos y elegir el modo de pago, o si deseas pagar más adelante'|trans }}.</p>
-			 
+
 			{% if userEdit is defined and userEdit == true %}
-				<form 
-					method="post" 
+				<form
+					method="post"
 					action="{{ path('reservation_payment', { 'reservation':reservation.id, '_locale':app.request.getLocale() }) }}">
 					{% if app.request.request.get('userEdit') == true %}
 						<input type="hidden" name="userEdit" value="{{app.request.request.get('userEdit')}}">
@@ -52,16 +52,19 @@
 							<input type="hidden" name="finalOptions[{{loop.index0}}][price]" value="{{option.price}}">
 						{% endfor %}
 					{% endif %}
-					<button class="btn btn-primary btn-lg">
+					<button class="btn btn-primary btn-lg" disabled>
 						{{ 'Continuar'|trans }}
 					</button>
 				</form>
 			{% else %}
 				{% if reservation is defined and reservation != null %}
-					<a href="{{ path('reservation_payment', { 'reservation': reservation.id, '_locale':app.request.getLocale() }) }}" 
-						class="btn btn-primary btn-lg">
+					{# <a href="{{ path('reservation_payment', { 'reservation': reservation.id, '_locale':app.request.getLocale() }) }}"
+						class="btn btn-primary btn-lg"> #}
+						<a
+							class="btn btn-primary btn-lg disabled"
+							id="js-reservation-payment">
 							{{ 'Continuar'|trans }}
-					</a>
+					  </a>
 				{% endif %}
 			{% endif %}
 			<a href="{{path('main-content',{'slug':'cgv','_locale':app.request.locale})}}" target="_blank">{{'Condiciones generales de venta'|trans}}</a>

@@ -55,8 +55,9 @@
 {% endif %}
 {% set totalPrice = 0 %}
 
-<div 
-		class="card card-tarif shadow mb-2" 
+
+<div
+		class="card card-tarif shadow mb-2"
     data-container="calculator"
 		data-waiting="{{'Cargando'|trans}}..."
 		data-date-id="{{date.id}}"
@@ -78,7 +79,7 @@
 								<td>
 									<span class="badge bg-secondary bg-opacity-75 rounded-1">
                     {{ nbpilotes }} &#10005;
-									 </span> 
+									 </span>
 									{{ 'piloto/a'|trans }}
                 </td>
                 <td align="right">
@@ -115,12 +116,13 @@
 											<th>{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</th>
 											<td align="right">
 												{% if reservation.codespromo.montant != 0 %}
+													{% set discount = reservation.codespromo.montant  %}
 													- {{ reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
-												
+
 												{% elseif reservation.codespromo.pourcentage != 0 %}
 													- {{ reservation.codespromo.pourcentage }} %
 													{% set discount = totalPrice * discount / 100 %}
-												{% endif %}		
+												{% endif %}
 											</td>
 										</tr>
 										{% else %}
@@ -144,7 +146,7 @@
 											{% endif %}
 											<strong>{{ totalPrice|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</strong>
 										</td>
-										
+
 									</tr>
 								</tbody>
 							{% if reservation != null %}
@@ -173,7 +175,7 @@
 										<tfoot>
 											<tr>
 												<td>
-													<button 
+													<button
 														class="btn btn-primary d-none"
 														id="js-update-changes"
 														data-container="js-update-changes"
@@ -187,7 +189,7 @@
 										<tfoot>
 											<tr>
 												<td>
-													<button 
+													<button
 																class="btn btn-primary d-none"
 																data-action="js-initialize-reservation-logged"
 																data-swal-waiting-title="{{ 'Espere un momento, por favor'|trans }}"

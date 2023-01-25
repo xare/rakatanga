@@ -3,7 +3,7 @@
   <td>{{invoice.address}}</td>
   <td>{{invoice.invoiceNumber}}</td>
   <td>
-    {{renderLocalizedCategory(invoice.reservation.date.travel.category.id,app.request.getLocale())}} - 
+    {{renderLocalizedCategory(invoice.reservation.date.travel.category.id,app.request.getLocale())}} -
     {{renderLocalizedTravel(invoice.reservation.date.travel.id,app.request.getLocale())}}
   </td>
   <td>
@@ -18,7 +18,10 @@
     </a>
   </td>
   <td>
-    <button class="btn btn-rakatanga-secondary" data-action="js-update-invoice" data-invoiceid="{{invoice.id}}">
+    <button
+      class="btn btn-rakatanga-secondary"
+      data-action="js-update-invoice"
+      data-invoiceid="{{invoice.id}}">
     <i class="fas fa-recycle"></i>
         {{'Actualizar los datos de la factura'|trans }}
     </button>

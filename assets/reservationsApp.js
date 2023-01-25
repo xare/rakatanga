@@ -113,7 +113,7 @@ class reservationsApp {
         event.preventDefault();
         const self = this;
         const invoiceId = $(event.currentTarget)
-            .data("invoiceid");;
+            .data("invoiceid");
         (async() => {
             try {
                 const invoiceFormResponse = await $.ajax({

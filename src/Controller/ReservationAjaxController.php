@@ -27,6 +27,7 @@ use App\Service\Mailer;
 use App\Service\pdfHelper;
 use App\Service\reservationHelper;
 use App\Service\UploadHelper;
+use App\Service\travellersHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,7 +55,8 @@ class ReservationAjaxController extends AbstractController
         private invoiceHelper $invoiceHelper,
         private DatesRepository $datesRepository,
         private reservationManager $reservationManager,
-        private CodespromoRepository $codespromoRepository)
+        private CodespromoRepository $codespromoRepository,
+        private travellersHelper $travellersHelper)
     {
     }
 
@@ -478,26 +480,19 @@ class ReservationAjaxController extends AbstractController
         options: ['expose' => true],
         name: 'ajax-add-travellers')]
     public function ajaxAddTravellers(
+        Request $request,
         Reservation $reservation
     ) {
         /**
          * @var array $travellersArray
          */
-        $travellersArray = [];
-        foreach ($travellersArray['traveller'] as $data) {
-            $traveller = new Travellers();
-            $now = new \DateTime();
-            $traveller->setPrenom($data['prenom']);
-            $traveller->setNom($data['nom']);
-            $traveller->setEmail($data['email']);
-            $traveller->setTelephone($data['telephone']);
-            $traveller->setPosition($data['position']);
-            $traveller->setUser($this->getUser());
-            $traveller->setDateAjout($now);
-            $traveller->addReservation($reservation);
-            $this->entityManager->persist($traveller);
+        $travellersArray = $request->request->all();
+        foreach ($travellersArray['traveller'] as $travellerData) {
+            $this->travellersHelper->addTravellerToReservation(
+                                        $travellerData,
+                                        $reservation,
+                                        $this->getUser());
         }
-        $this->entityManager->flush();
 
         $travellersTableHtml = $this->renderView('reservation/_travellers_table.html.twig', [
             'travellers' => $reservation->getTravellers(),
@@ -744,8 +739,19 @@ class ReservationAjaxController extends AbstractController
          ], 200);
      }
 
-     #[Route(path: 'ajax/update-calculator/{_locale}', methods: ['POST', 'GET'], name: 'update-calculator', options: ['expose' => true])]
-      #[Route(path: ['en' => 'ajax/update-calculator/{_locale}', 'es' => 'ajax/actualizar-calculadora/{_locale}', 'fr' => 'ajax/actualiser-calculatrice/{_locale}'], methods: ['POST', 'GET'], name: 'update-calculator', options: ['expose' => true])]
+     #[Route(
+        path: 'ajax/update-calculator/{_locale}',
+        methods: ['POST', 'GET'],
+        name: 'update-calculator',
+        options: ['expose' => true])]
+      #[Route(
+        path: [
+            'en' => 'ajax/update-calculator/{_locale}',
+            'es' => 'ajax/actualizar-calculadora/{_locale}',
+            'fr' => 'ajax/actualiser-calculatrice/{_locale}'],
+        methods: ['POST', 'GET'],
+        name: 'update-calculator',
+        options: ['expose' => true])]
       public function updateCalculator(
         Request $request,
         ReservationRepository $reservationRepository,
@@ -756,7 +762,7 @@ class ReservationAjaxController extends AbstractController
           $locale = $_locale ? $_locale : $locale;
 
           $data = $request->request->all();
-
+         dump($data);
           $date = $datesRepository->find($data['dateId']);
           $renderArray = [
               'date' => $date,
@@ -767,7 +773,9 @@ class ReservationAjaxController extends AbstractController
           $renderArray = array_merge($renderArray, $data);
 
           if (isset($data['reservation'])) {
+            dump($data['reservation']);
               $reservation = $reservationRepository->find($data['reservation']);
+              dump($reservation);
               $renderArray['reservation'] = $reservation;
           }
 
@@ -780,19 +788,86 @@ class ReservationAjaxController extends AbstractController
           return $this->render('reservation/_wrapper_calculator_logged_user.html.twig', $renderArray);
       }
 
-      #[Route(path: 'ajax/add-codespromo', methods: ['POST'],name: 'reservation-addCodesPromo', options: ['expose' => true] )]
+      #[Route(
+        path: 'ajax/add-codespromo',
+        methods: ['POST'],
+        name: 'reservation-addCodesPromo',
+        options: ['expose' => true] )]
       public function reservationAddCodesPromo(
         Request $request
       ):Response{
         $reservationId = $request->request->get('reservationId');
+
         $codespromoText = $request->request->get('codespromo');
         $codespromo = $this->codespromoRepository->findByCode($codespromoText);
         $reservation = $this->reservationRepository->find($reservationId);
-        dump($codespromo[0]);
+
         $reservation->setCodesPromo($codespromo[0]);
         $this->entityManager->persist($reservation);
         $this->entityManager->flush();
-        dump($reservation);
         return new Response('hello '.$reservationId.' , '.$codespromoText);
       }
+
+      #[Route(
+        path: 'ajax/addTravellersForms',
+        methods: ['POST'],
+        name: 'add-travellers-forms',
+        options: ['expose' => true] )]
+
+        function addTravellersForms(
+            Request $request
+        ){
+            $reservationId = $request->request->get('reservation');
+            $renderArray = [];
+            $renderArray['nbpilotes'] = $request->request->get('nbpilotes');
+            $renderArray['nbaccomp'] = $request->request->get('nbaccomp');
+            if(isset($reservationId) ) {
+                $reservation = $this->reservationRepository->find($reservationId);
+                $renderArray['reservation'] = $reservation;
+            }
+
+            $i = 0;
+            $html = $this->renderView(
+                    'reservation/cards/_card_add_travellers_data.html.twig',
+                    $renderArray
+                );
+            return new Response($html);
+        }
+
+    #[Route(
+        path: 'ajax/edit/traveller/{traveller}',
+        name: 'ajax-edit-traveller',
+        methods: ['POST', 'GET'],
+        options: ['expose' => true]
+    )]
+
+    public function ajaxEditTraveller(
+        Request $request,
+        Travellers $traveller) {
+            $swalHtml = $this->renderView(
+                'reservation/swal/_swal_edit_traveller.html.twig',
+                ['traveller' => $traveller]);
+            return $this->json(
+                ['swalHtml' => $swalHtml],
+                200,
+                [],
+                []);
+        }
+
+    #[Route(
+        path: "ajax/save/traveller/{traveller}",
+        name: "ajax-save-traveller",
+        methods: ["POST","GET"],
+        options: ["expose" => true ]
+    )]
+
+    public function ajaxSaveTraveller(
+        Request $request,
+        Travellers $traveller
+    ) {
+        $data = $request->request->all();
+        $this->travellersHelper->updateTravellerData($traveller,$data );
+        $html = $this->renderView('reservation/_travellers_row.html.twig',['traveller' =>$traveller]);
+        return $this->json(['html' => $html],200,[],[]);
+    }
 }

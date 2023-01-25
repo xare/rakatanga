@@ -1,0 +1,48 @@
+
+<table class="table table-striped">
+  <tr>
+    <td>{{ 'Nombre'|trans }}</td>
+    <td>
+      <input
+        type="text"
+        class="form-control form-text"
+        id="traveller_prenom"
+        value="{{ traveller.prenom }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'Apellido'|trans }}</td>
+    <td>
+      <input
+        type="text"
+        class="form-control form-text"
+        id="traveller_nom"
+        value="{{ traveller.nom }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'Email'|trans }}</td>
+    <td>
+      <input
+        type="text"
+        class="form-control form-text"
+        id="traveller_email"
+        value="{{ traveller.email }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'Teléfono'|trans }}</td>
+    <td>
+      <input
+        type="text"
+        class="form-control form-text"
+        id="traveller_telephone"
+        value="{{ traveller.telephone }}">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+<button data-action="js-submit-traveller" class="btn btn-primary" type="submit">Actualizar Viajero</button>
+    </td>
+  </tr>
+</table>

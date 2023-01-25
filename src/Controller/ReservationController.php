@@ -9,6 +9,7 @@ use App\Form\UserType;
 use App\Repository\CategoryTranslationRepository;
 use App\Repository\DatesRepository;
 use App\Repository\LangRepository;
+use App\Repository\PaymentsRepository;
 use App\Repository\TravelTranslationRepository;
 use App\Service\breadcrumbsHelper;
 use App\Service\languageMenuHelper;
@@ -19,6 +20,7 @@ use App\Service\paymentHelper;
 use App\Service\reservationDataHelper;
 use App\Service\reservationHelper;
 use App\Service\slugifyHelper;
+use App\Service\travellersHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -40,6 +42,7 @@ class ReservationController extends AbstractController
         private CategoryTranslationRepository $categoryTranslationRepository,
         private DatesRepository $datesRepository,
         private LangRepository $langRepository,
+        private PaymentsRepository $paymentsRepository,
         private TranslatorInterface $translator,
         private Breadcrumbs $breadcrumbs,
         private localizationHelper $localizationHelper,
@@ -50,6 +53,7 @@ class ReservationController extends AbstractController
         private logHelper $logHelper,
         private languageMenuHelper $languageMenuHelper,
         private reservationDataHelper $reservationDataHelper,
+        private travellersHelper $travellersHelper,
         private string $stripePublicKey,
         private string $stripeSecretKey
     ) {
@@ -160,9 +164,13 @@ class ReservationController extends AbstractController
         $locale = $_locale ? $_locale : $locale;
         $reservationData = $request->request->all();
 
-        if (isset($reservationData['userEdit']) && $reservationData['userEdit'] == true) {
-            $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData, $locale);
-        }
+        if (
+            isset($reservationData['userEdit'])
+            && $reservationData['userEdit'] == true) {
+
+                $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData, $locale);
+
+            }
         // LANG MENU
         $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale, $reservation);
 
