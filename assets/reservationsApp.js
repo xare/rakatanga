@@ -122,6 +122,7 @@ class reservationsApp {
                     }),
                     type: "GET",
                 });
+                console.info(invoiceFormResponse);
                 (async(invoiceFormResponse) => {
                     const { value: formValues } = await Swal.fire({
                         title: invoiceFormResponse.title,
@@ -138,15 +139,12 @@ class reservationsApp {
                                 invoiceId: $('#invoices_invoice').val(),
                             }
                         }
-                    }).then((formValues) => {
-                        if (formValues.isConfirmed) {
-                            const row = $(event.currentTarget).closest('tr');
-                            const response = self._handleSubmitInvoice(formValues.value, row);
-                        }
-                    }).catch((errorSwal) => {
-                        console.error(errorSwal);
-                        //this._notifyErrorToUser(errorSwal);
                     });
+                    console.info(formValues);
+                    if (formValues) {
+                        const row = $(event.currentTarget).closest('tr');
+                        const response = self._handleSubmitInvoice(formValues, row);
+                    }
                 })(invoiceFormResponse);
             } catch (jqXHR) {
                 console.error(jqXHR);
@@ -157,6 +155,7 @@ class reservationsApp {
 
     _handleSubmitInvoice(formData, row) {
         const invoiceId = formData.invoiceId;
+        console.info('handleSubmitInvoice', row);
         (async() => {
             try {
                 const response = await $.ajax({

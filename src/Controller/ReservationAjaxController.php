@@ -460,9 +460,14 @@ class ReservationAjaxController extends AbstractController
             Invoices $invoice):Response
     {
         $customerData = $request->request->all();
-        $invoiceStatus = $this->invoiceHelper->replaceInvoice($invoice, $customerData);
-
-        $html = $this->renderView('user/_row_user_invoices.html.twig', [
+       try { $invoiceStatus = $this->invoiceHelper->updateInvoiceBillingData(
+            $invoice,
+            'es',
+            $customerData);
+       } catch(\Exception $e) {
+            echo $e->getMessage();
+       }
+        $html = $this->renderView('user/partials/_row_user_invoices.html.twig', [
             'invoice' => $invoice,
         ]);
 
