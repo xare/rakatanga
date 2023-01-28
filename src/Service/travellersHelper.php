@@ -23,8 +23,19 @@ class travellersHelper {
       array $travellerData,
       Reservation $reservation,
       User $user):mixed {
+        if(
+          $travellerData['email'] == $user->getEmail()
+          &&
+          $this->travellersRepository->findBy(['email' =>$travellerData['email']]) != null
+        ) {
+          return false;
+        }
+        if ($this->travellersRepository->find($travellerData['id']) != null ){
+          $traveller =  $this->travellersRepository->find($travellerData['id']);
+        } else {
+            $traveller = new Travellers();
+        }
         try {
-          $traveller = new Travellers();
           $now = new \DateTimeImmutable();
           $traveller->setPrenom($travellerData['prenom']);
           $traveller->setNom($travellerData['nom']);
@@ -33,7 +44,7 @@ class travellersHelper {
           $traveller->setPosition($travellerData['position']);
           $traveller->setUser($user);
           $traveller->setDateAjout($now);
-          $traveller->addReservation($reservation);
+          $traveller->setReservation($reservation);
           $this->entityManager->persist($traveller);
           $this->entityManager->flush();
           return true;

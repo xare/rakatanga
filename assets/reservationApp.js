@@ -156,6 +156,9 @@ class reservationApp {
     _changeNb(reservation, nb, type) {
         this.$calculator.data(`nb${type}`, nb);
         let data = this.$calculator.data();
+        console.info(data);
+        console.info(reservation);
+        console.info(data.reservation);
         data.locale = $('html').attr('lang');
         $('[data-container="nb' + type + '"]').empty().html(nb);
         if (data.reservation) {
@@ -163,6 +166,10 @@ class reservationApp {
                 data.reservation,
                 data.nbpilotes,
                 data.nbaccomp);
+            this._updateReservation(
+                data.reservation,
+                data.nbpilotes,
+                data.nbaccomp, [])
         }
         const self = this;
         (
@@ -212,9 +219,33 @@ class reservationApp {
                             reservation
                         }
                     });
-                    console.info(response);
-                    $('[data-container="js-travellers-form"]').html(response);
+                    console.info(response.html);
+                    $('[data-container="js-travellers-form"]').html(response.html);
 
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        )();
+    }
+    _updateReservation(
+        reservation,
+        nbpilotes = 0,
+        nbaccomp = 0,
+        options = []) {
+        const data = { reservation, nbpilotes, nbaccomp, options };
+
+        (
+            async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('ajax-update-changes', {
+                            reservation
+                        }),
+                        method: 'POST',
+                        data
+                    });
+                    console.info(response);
                 } catch (error) {
                     console.error(error);
                 }
@@ -600,10 +631,8 @@ class reservationApp {
                             }
                         }
                     });
-                    console.info(formValues);
                     if (formValues) {
                         const row = $(event.currentTarget).closest('tr');
-                        console.info(row);
                         const response = self._handleSubmitTraveller(
                             formValues,
                             row);

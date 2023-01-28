@@ -31,10 +31,7 @@ class Reservation
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $log = null;
 
-    #[ORM\JoinTable(name: 'reservation_travellers')]
-    #[ORM\JoinColumn(name: 'reservation_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'travellers_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: Travellers::class, inversedBy: 'reservations')]
+    #[ORM\OneToMany(targetEntity: Travellers::class, mappedBy: 'reservation', cascade: ['persist', 'remove'])]
     private Collection $travellers;
 
     #[Groups('main')]

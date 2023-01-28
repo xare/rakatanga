@@ -104,20 +104,21 @@ class reservationHelper
         return $reservation;
     }
 
-   public function updateReservation($reservation, $data, $locale)
+   public function updateReservation($reservation, $reservationData, $customerData, $locale)
    {
-       $reservation->setNbpilotes($data['nbpilotes']);
-       $reservation->setNbAccomp($data['nbaccomp']);
+    dump($reservationData);
+       $reservation->setNbpilotes($reservationData['nbpilotes']);
+       $reservation->setNbAccomp($reservationData['nbaccomp']);
        $reservation->setStatus('initialized');
        // PERSIST OPTIONS TO RESERVATION
-       if ($data['finalOptions'] != null && count($data['finalOptions']) > 0) {
-           foreach ($data['finalOptions'] as $option) {
+       if ($reservationData['finalOptions'] != null && count($reservationData['finalOptions']) > 0) {
+           foreach ($reservationData['finalOptions'] as $option) {
                $this->_feedReservationOptions($reservation, $option);
            }
        }
        $this->entityManager->persist($reservation);
        $this->entityManager->flush();
-       $this->invoiceHelper->updateReservationInvoice($reservation, $data, 'updated', $locale);
+       $this->invoiceHelper->updateReservationInvoice($reservation,$locale, $customerData  );
 
        return $reservation;
    }
@@ -132,6 +133,7 @@ class reservationHelper
             $user = $reservation->getUser();
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
+
             $this->invoiceHelper->cancelInvoice($reservation, [
                 'name' => $user->getPrenom().' '.$user->getNom(),
                 'address' => $user->getAddress(),

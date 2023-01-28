@@ -163,12 +163,23 @@ class ReservationController extends AbstractController
     {
         $locale = $_locale ? $_locale : $locale;
         $reservationData = $request->request->all();
-
+        dump($reservation);
         if (
             isset($reservationData['userEdit'])
             && $reservationData['userEdit'] == true) {
-
-                $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData, $locale);
+                /**
+          * @var User $user
+          */
+         $user = $this->getUser();
+         $customerData = [
+             'name' => $user->getPrenom().' '.$user->getNom(),
+             'address' => $user->getAddress(),
+             'nif' => $user->getIdCard(),
+             'postalcode' => $user->getPostcode(),
+             'city' => $user->getCity(),
+             'country' => $user->getCountry(),
+         ];
+                $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData,$customerData, $locale);
 
             }
         // LANG MENU

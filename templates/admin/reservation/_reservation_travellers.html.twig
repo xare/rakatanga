@@ -1,7 +1,12 @@
-<ul class="list-group">
+<table class="table">
 {% for traveller in reservation.travellers %}
-  
+  <tr>
+    <td>{{ traveller.prenom }}</td>
+    <td>{{ traveller.nom }}</td>
+    <td>{{ traveller.email }}</td>
+    <td>{{ traveller.telephone }}</td>
+  </tr>
 {% else %}
   Todavía no se han asociado viajeros a esta reserva.
 {% endfor %}
-</ul>
+</table>

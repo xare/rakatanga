@@ -54,8 +54,8 @@ class Travellers
     #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'travellers')]
     private Collection $date;
 
-    #[ORM\ManyToMany(targetEntity: Reservation::class, mappedBy: 'travellers')]
-    private Collection $reservations;
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'travellers')]
+    private ?Reservation $reservation = null;
 
     #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'travellers')]
     private Collection $reservationData;
@@ -68,7 +68,6 @@ class Travellers
         $this->date_ajout = new \DateTimeImmutable();
         $this->documents = new ArrayCollection();
         $this->date = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
         $this->reservationData = new ArrayCollection();
     }
 
@@ -239,31 +238,19 @@ class Travellers
     }
 
     /**
-     * @return Collection|Reservation[]
+     * @return Reservation
      */
-    public function getReservations(): Collection
+    public function getReservation(): ?Reservation
     {
-        return $this->reservations;
+        return $this->reservation;
     }
 
-    public function addReservation(Reservation $reservation): self
+    public function setReservation(?Reservation $reservation): self
     {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->addTraveller($this);
-        }
-
+        $this->reservation = $reservation;
         return $this;
     }
 
-    public function removeReservation(Reservation $reservation): self
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            $reservation->removeTraveller($this);
-        }
-
-        return $this;
-    }
 
     public function __toString()
     {

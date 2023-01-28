@@ -25,6 +25,7 @@ use App\Service\invoiceHelper;
 use App\Service\logHelper;
 use App\Service\Mailer;
 use App\Service\pdfHelper;
+use App\Service\reservationDataHelper;
 use App\Service\reservationHelper;
 use App\Service\UploadHelper;
 use App\Service\travellersHelper;
@@ -52,6 +53,7 @@ class ReservationAjaxController extends AbstractController
         private TravelTranslationRepository $travelTranslationRepository,
         private LangRepository $langRepository,
         private reservationHelper $reservationHelper,
+        private reservationDataHelper $reservationDataHelper,
         private invoiceHelper $invoiceHelper,
         private DatesRepository $datesRepository,
         private reservationManager $reservationManager,
@@ -502,7 +504,7 @@ class ReservationAjaxController extends AbstractController
         $travellersTableHtml = $this->renderView('reservation/_travellers_table.html.twig', [
             'travellers' => $reservation->getTravellers(),
         ]);
-
+        dump($travellersTableHtml);
         return $this->json([
             'travellersTableHtml' => $travellersTableHtml,
             'travellersByReservation' => $reservation->getTravellers(),
@@ -549,7 +551,7 @@ class ReservationAjaxController extends AbstractController
          */
         $user = $this->getUser();
 
-        $this->invoiceHelper->cancelInvoice($reservation->getInvoice(), $request->get('locale'), $customerData);
+        $this->invoiceHelper->cancelInvoice($reservation, $request->get('locale'), $customerData);
         $this->invoiceHelper->createCancelationInvoice($reservation);
 
         return new Response('Cancel Reservation');
@@ -631,21 +633,20 @@ class ReservationAjaxController extends AbstractController
         ],200); */
     }
 
-    #[Route(path: 'ajax/update/changes/{reservation}', options: ['expose' => true], name: 'ajax-update-changes', methods: ['POST'])]
+    #[Route(
+        path: 'ajax/update/changes/{reservation}',
+        options: ['expose' => true],
+        name: 'ajax-update-changes',
+        methods: ['POST'])]
      public function ajaxUpdateChanges(
         Request $request,
         Reservation $reservation,
-        ReservationRepository $reservationRepository,
-        OptionsRepository $optionsRepository,
-        ReservationOptionsRepository $reservationOptionsRepository
      ) {
-         $requestData = [
-             'nbPilotes' => $request->request->get('nbPilotes'),
-             'nbAccomp' => $request->request->get('nbAccomp'),
-             'options' => $request->request->get('options'),
-         ];
-
-         $reservationRepository->find($reservation->getId());
+        $reservationData = [
+            'nbpilotes' => $request->request->get('nbpilotes'),
+            'nbaccomp' => $request->request->get('nbaccomp'),
+            'finalOptions' => $request->request->get('options')
+        ];
 
          /**
           * @var User $user
@@ -660,37 +661,11 @@ class ReservationAjaxController extends AbstractController
              'country' => $user->getCountry(),
          ];
 
-         // $invoiceHelper->updateInvoice($reservation,'updated',$customerData,$request->getLocale(),$requestData);
-         $reservation->setNbpilotes($requestData['nbPilotes']);
-         $reservation->setNbAccomp($requestData['nbAccomp']);
-
-         if ($requestData['options'] != null){
-            if(count($requestData['options']) > 0) {
-             foreach ($requestData['options'] as $optionArray) {
-                 $option = $optionsRepository->find($optionArray['id']);
-                 $reservationOptions = $reservationOptionsRepository->findBy(['options' => $optionArray['id']]);
-
-                 if (count($reservationOptions) == 0) {
-                     $reservationOption = new ReservationOptions();
-                     $reservationOption->setAmmount($optionArray['ammount']);
-                     $reservationOption->setOptions($option);
-
-                     $reservation->addReservationOption($reservationOption);
-                 } else {
-                     foreach ($reservationOptions as $reservationOption) {
-                         $reservationOption->setAmmount($optionArray['ammount']);
-                         $reservationOption->setOptions($option);
-
-                         $reservation->addReservationOption($reservationOption);
-                     }
-                 }
-             }
-            }
-        }
-         $this->entityManager->persist($reservation);
-         $this->entityManager->flush();
-
-         $this->invoiceHelper->updateReservationInvoice($reservation, $request->getLocale(), $customerData);
+         $this->reservationHelper->updateReservation(
+            $reservation,
+            $reservationData,
+            $customerData,
+            $request->getLocale());
 
          $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', ['reservation' => $reservation]);
 
@@ -708,10 +683,10 @@ class ReservationAjaxController extends AbstractController
      {
          $reservationId = $request->request->get('reservation');
          $reservation = $reservationRepository->find($reservationId);
-         $reservation->addCodespromo($codepromo);
+         $reservation->setCodespromo($codepromo);
          $this->entityManager->persist($reservation);
 
-         $totalAmmount = $reservationHelper->getReservationAmmountBeforeDiscount($reservation);
+         $totalAmmount = $this->reservationDataHelper->getReservationAmmountBeforeDiscount($reservation);
          $now = new \DateTime();
          if ($codepromo->getType() == 'uses') {
              $codepromo->setNombre($codepromo->getNombre() - 1);
@@ -823,11 +798,16 @@ class ReservationAjaxController extends AbstractController
             Request $request
         ){
             $reservationId = $request->request->get('reservation');
+            dump($reservationId);
             $renderArray = [];
             $renderArray['nbpilotes'] = $request->request->get('nbpilotes');
             $renderArray['nbaccomp'] = $request->request->get('nbaccomp');
             if(isset($reservationId) ) {
                 $reservation = $this->reservationRepository->find($reservationId);
+                dump(count($reservation->getTravellers()));
+                foreach ($reservation->getTravellers() as $traveller){
+                    dump($traveller);
+                }
                 $renderArray['reservation'] = $reservation;
             }
 
@@ -836,7 +816,8 @@ class ReservationAjaxController extends AbstractController
                     'reservation/cards/_card_add_travellers_data.html.twig',
                     $renderArray
                 );
-            return new Response($html);
+            return $this->json(['html' => $html], 200, [],[]);
+            //return new Response($html);
         }
 
     #[Route(
@@ -874,5 +855,18 @@ class ReservationAjaxController extends AbstractController
         $this->travellersHelper->updateTravellerData($traveller,$data );
         $html = $this->renderView('reservation/_travellers_row.html.twig',['traveller' =>$traveller]);
         return $this->json(['html' => $html],200,[],[]);
+    }
+
+    #[Route(
+        path: "ajax/update/reservation/{reservation}",
+        name: "ajax-update-reservation",
+        methods: ["POST","GET"],
+        options: ["expose" => true ]
+    )]
+    function ajaxUpdateReservation(
+        Request $request,
+        Reservation $reservation
+    ) : Response {
+        return new Response(true);
     }
 }

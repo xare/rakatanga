@@ -12,6 +12,7 @@
 /public/videos/
 /var/
 /vendor/
+/migrations/
 ###< symfony/framework-bundle ###
 
 ###> liip/imagine-bundle ###
