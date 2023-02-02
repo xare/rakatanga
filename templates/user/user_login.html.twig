@@ -2,7 +2,7 @@
 
 {% block title %}
 	{{ parent() }}
-	- Login!!
+	- {{ 'Entrar' |trans}}!!
 {% endblock %}
 
 {% block body %}
@@ -17,7 +17,7 @@
 		<div class="row">
 			<div class="col-6 offset-3 col-xs-12 card p-4">
 				<h1 class="mt-2">{{'Página de acceso'|trans}}</h1>
-				<form method="post" class="needs-validation mb-2" novalidate>
+				<form method="post" action="{{ path('app_login') }}"  class="needs-validation mb-2" novalidate>
 					{% if error %}
 						<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 					{% endif %}
@@ -35,7 +35,7 @@
 					<h3 class="h3 mb-3 font-weight-normal">{{'Por favor, entrar'|trans}}</h3>
 					<div class="mb-3">
 						<label for="inputEmail" class="form-label">{{'Email'|trans}}</label>
-						<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="example@domain.com" required autofocus>
+						<input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" placeholder="example@domain.com" required autofocus>
 						<div class="valid-feedback">
 							{{'Tu email es válido'|trans}}
 						</div>
@@ -44,8 +44,10 @@
 						</div>
 					</div>
 					<div class="mb-3">
-						<label for="inputPassword" class="form-label">{{'Contraseña'|trans}}</label>
-						<input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{'Contraseña'|trans}}" required>
+						<label for="inputPassword" class="form-label">
+							{{'Contraseña'|trans}}
+						</label>
+						<input type="password" name="_password" id="inputPassword" class="form-control" placeholder="{{'Contraseña'|trans}}" required>
 					</div>
 					<div class="checkbox mb-3 form-check form-switch">
 						<input type="checkbox" role="switch" name="_remember_me" id="id_remember_me" class="form-check-input">
@@ -58,12 +60,12 @@
 					<button class="btn btn-lg btn-primary" type="submit">
 						{{'Enviar'|trans}}
 					</button>
-					
+
 				</form>
 				<p>{{'¿Has olvidado tu contraseña?' |trans}}
 					<a target="_blank" href="{{path('app_forgot_password_request')}}">{{'Haz click aquí'|trans}}</a>
 				</p>
-				
+
 			</div>
 		</div>
 	</div>

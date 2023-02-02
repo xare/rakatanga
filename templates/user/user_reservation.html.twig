@@ -1,8 +1,8 @@
-
-
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - {{'Configuración de cuenta'|trans}}{% endblock %}
+{% block title %}
+    {{ parent() }} - {{'Configuración de cuenta'|trans}}
+{% endblock %}
 
 {% block body %}
     {% if reservation.status == "cancelled" %}
@@ -26,7 +26,7 @@
             <form autocomplete="off">
                 <h1>{{'Tu reserva'|trans}}</h1>
                 <p>{{'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.
-                {{ include( 'reservation/_card_travel.html.twig',{'date':reservation.date } )}} 
+                {{ include( 'reservation/_card_travel.html.twig',{'date':reservation.date } )}}
                 {{ include( 'reservation/_card_travellers.html.twig',{'date':reservation.date } )}}
                 {{ include( 'user/_card_options.html.twig',{'options':options } )}}
                 <div class="row">
@@ -46,7 +46,7 @@
             </div>
             <div class="col-4 col-xs-12">
                 {{ include('reservation/_reservation_calculator_table.html.twig',{
-                    'reservation':reservation, 
+                    'reservation':reservation,
                     'date':reservation.date
                     })
                 }}

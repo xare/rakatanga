@@ -23,10 +23,10 @@
         <span class="tag is-info">{{ reservation.status }}</span>
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a 
-          class="btn btn-lg btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+        <a
+          class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
           href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}">
-          <i class="fa fa-edit "></i> 
+          <i class="fa fa-edit "></i>
             {{'Editar los datos de la reserva'|trans}}
         </a>
       </div>
@@ -38,7 +38,7 @@
             <i class="fas fa-{% if (document.doctype|trans({},"messages",'en')) == "Passport" %}passport{% elseif (document.doctype|trans({},"messages",'en')) == "Visa" %}book{% elseif (document.doctype|trans({},"messages",'en')) == "Drivers license" %}id-card{% endif %}">
             </i>
           </span>
-          
+
           <span class="tag is-info" title="{{document.filename}}" data-bs-toggle="tooltip">{{ document.doctype|trans }}</span>
           <span class="tag is-light">
             <a href="{{ path("download_document",{
@@ -55,16 +55,19 @@
             {% endif %}
           </span>
         </div>
-        
+
       {% else %}
         {{'No hay documentos para esta reserva'|trans}}
       {% endfor %}
       <br />
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a 
-          class="btn btn-lg btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-          href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}">
-          <i class="fa fa-edit "></i> 
+        <a
+          class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+          href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
+          title="{{'Editar datos del viaje y documentación'|trans}}"
+          data-bs-toggle="tooltip"
+          >
+          <i class="fa fa-edit "></i>
             {{'Añadir datos del viaje y documentación'|trans}}
         </a>
       </div>
@@ -72,13 +75,13 @@
       {% for traveller in reservation.travellers %}
         {% if traveller.email != reservation.user.email %}
           <div class="reservationTraveller-item">
-            
+
               <div class="tags has-addons">
                 <span class="tag is-link">
                   <i class="fas fa-passport" style="margin:2px"></i>
                 </span>
                 <span class="tag is-info is-light">
-                  <a 
+                  <a
                   href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
                   title="{{'Añadir datos del usuario'|trans}}"
                   data-bs-toggle="tooltip">
@@ -88,21 +91,25 @@
               </div>
          </div>
         {% endif %}
+      {% else %}
+      {{'No hay datos de los viajeros añadidos a este viaje'|trans}}
       {% endfor %}
-        {{'No hay datos de los viajeros añadidos a este viaje'|trans}}.<br />
+
         {# {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %} #}
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <a 
-            class="btn btn-lg btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-            href="{{ path( 'user_reservation_travellers', { 'reservation':reservation.id }) }}">
+          <a
+            class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+            href="{{ path( 'user_reservation_travellers', { 'reservation':reservation.id }) }}"
+            data-bs-toggle="tooltip"
+            title="Añadir datos de los viajeros">
             <i class="fa fa-plus-circle"></i>
               {{'Añadir Viajeros'|trans}}
-            <i class="fa fa-motorcycle"></i> 
+            <i class="fa fa-motorcycle"></i>
           </a>
-        </div> 
+        </div>
         {# {% endif %} #}
       <h5 class="mt-3">{{'Mensajes enviados'|trans}}</h5>
-      
+
       {% for mailing in reservation.mailings %}
       <div class="tags has-addons">
         <span class="tag is-link">
@@ -114,21 +121,25 @@
           {% endif %}
         </span>
         <span class="tag is-light">
-          <a 
-            href="#" 
+          <a
+            href="#"
             target="_blank"
             title="{{mailing.subject}}"
-            data-action="read-more" 
+            data-action="read-more"
+            data-title="{{mailing.subject}}"
             data-content="{{ mailing.content|raw|escape }}"
-            data-bs-toggle="tooltip">{{ mailing.subject|u.truncate(40,'...') }}</a>
+            data-bs-toggle="tooltip">
+            {# {{ mailing.subject|u.truncate(40,'...') }} #}
+            ... {{ mailing.subject|slice(17,20) }}...
+            </a>
         </span>
       </div>
-        
+
         {% else %}
         {{ 'No hay mensajes enviados asociados a esta reserva'|trans }}.
       {% endfor %}
   </div>
-  
+
     {% set totalAmmount = 0 %}
     <div class="box reservationCalculator">
     <h5 class="mt-3">{{'Cálculo de la reserva'|trans}}</h5>
@@ -162,30 +173,38 @@
         </tr>
         {% endif %}
 
-        {% for option in reservation.reservationOptions %}
+        {% for reservationOption in reservation.reservationOptions %}
         <tr>
           <td>
             <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-puzzle-piece"></i></span>
-              <span class="tag is-info">{{option.ammount}}</span>
-              <span class="tag is-light" title="{{renderLocalizedOption(option.options.id,'es')}}" data-bs-toggle="tooltip">{{renderLocalizedOption(option.options.id,'es')|u.truncate(20,'...')}}</span>
+              <span class="tag is-dark">
+                <i class="fas fa-puzzle-piece"></i>
+              </span>
+              <span class="tag is-info">
+                {{reservationOption.ammount}}
+              </span>
+              <span
+                class="tag is-light"
+                title="{{renderLocalizedOption(reservationOption.option.id,'es')}}"
+                data-bs-toggle="tooltip">
+                  {{renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...')}}
+              </span>
             </div>
           </td>
-          {% set totalAmmount = totalAmmount + option.ammount * option.options.price %}
+          {% set totalAmmount = totalAmmount + reservationOption.ammount * reservationOption.option.price %}
           <td>
-            <strong class="small">{{ (option.ammount * option.options.price)|format_currency('EUR') }}</strong>
+            <strong class="small">{{ (reservationOption.ammount * reservationOption.option.price)|format_currency('EUR') }}</strong>
           </td>
         </tr>
       {% endfor %}
       {% if reservation.codespromo is defined and reservation.codespromo != null %}
         {% set discount = 0 %}
-					{# {% for codepromo in reservation.codespromos %} #}
           <tr>
             <td>
               <div class="tags has-addons">
                 <span class="tag is-dark"><i class="fas fa-minus"></i></span>
                 <span class="tag is-danger">{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</span>
-              </div>  
+              </div>
             </td>
             <td align="right">
               <strong class="small">
@@ -200,18 +219,17 @@
             </td>
           </tr>
           {% set totalAmmount = totalAmmount - discount %}
-									{# {% endfor %} #}
 			{% endif %}
       <tr>
         <td>
           <div class="tags has-addons">
             <span class="tag is-dark"><i class="fas fa-plus"></i></span>
             <span class="tag is-success">{{ 'Total'|trans }}</span>
-        </div>     
+        </div>
         </td>
         <td><strong class="small">{{ totalAmmount|format_currency('EUR') }}</strong></td>
       </tr>
-        
+
       {% for payment in reservation.payments %}
         <tr>
           <td>
@@ -236,12 +254,14 @@
         </td>
         <td>
           <strong class="text-danger">{{ totalAmmount|format_currency('EUR') }}</strong>
-        </td> 
+        </td>
       </tr>
       <tr>
         {% if totalAmmount != 0 %}
           <td colspan="2">
-            <a href="{{ path('reservation_payment',{'reservation':reservation.id}) }}" class="btn btn-rakatanga-blue">€ {{ 'Realizar el pago'|trans }}</a>
+            <a
+              href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
+              class="btn btn-rakatanga-blue">€ {{ 'Realizar el pago'|trans }}</a>
           </td>
         {% endif %}
       </tr>
@@ -257,7 +277,7 @@
                 {{ reservation.invoice.invoiceNumber}}
               </span>
               <span class="tag is-light">
-                <a 
+                <a
                   href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
                   title="{{ reservation.invoice.filename }}"
                   data-bs-toggle="tooltip">
@@ -272,17 +292,17 @@
         </tr>
       </table>
     </div>
-    
-    <a class="btn btn-danger btn-rakatanga-danger js-cancel-reservation{% if reservation.status == 'cancelled' %} d-none{% endif %}" 
-    data-sweetalert-title="{{'¿Cancelar reserva?'|trans}}" 
+
+    {# <a class="btn btn-danger btn-rakatanga-danger js-cancel-reservation{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+    data-sweetalert-title="{{'¿Cancelar reserva?'|trans}}"
     data-sweetalert-content="{{'¿Estás seguro que quieres cancelar esta reserva?'|trans}}">
       <i class"fa fa-trash"></i>
         {{ 'Cancelar la reserva'|trans }}
-    </a>
+    </a> #}
 
-  <a class="btn btn-info js-reactivate-reservation{% if reservation.status != 'cancelled' %} d-none{% endif %}" 
-    data-sweetalert-title="{{'¿Reactivar la reserva?'|trans}}" 
+  {# <a class="btn btn-info js-reactivate-reservation{% if reservation.status != 'cancelled' %} d-none{% endif %}"
+    data-sweetalert-title="{{'¿Reactivar la reserva?'|trans}}"
     data-sweetalert-content="{{'¿Estás seguro que quieres reactivar esta reserva?'|trans}}">
     {{ 'Reactivar la reserva'|trans }}
-  </a> 
+  </a> #}
 </div>

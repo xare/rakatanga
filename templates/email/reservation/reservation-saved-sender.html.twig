@@ -7,13 +7,13 @@
             <spacer size="35"></spacer>
             <h4>
                 <center>
-                    {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}], 
+                    {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}],
                     {{ 'hemos recibido tu reserva'|trans}}. {{'Te agradecemos el haber hecho la reserva para el viaje'|trans }}:<br />
                     "{{reservation.date.travel.mainTitle}}
                 </center>
             </h4>
             <spacer size="10"></spacer>
-            
+
         </columns>
     </row>
     <spacer size="30"></spacer>
@@ -59,7 +59,7 @@
         </columns>
     </row>
     <spacer size="10"></spacer>
-<!-- TABLE --> 
+<!-- TABLE -->
    <style>.columns {border: 1px solid #999;}</style>
     <row>
         <columns>
@@ -94,16 +94,16 @@
     <row>
         <columns>
             <p>
-                {{ option.ammount }} x {{ renderLocalizedOption(option.options.id,app.request.locale) }}
+                {{ option.ammount }} x {{ renderLocalizedOption(option.option.id,app.request.locale) }}
             </p>
         </columns>
         <columns>
              <p class="text-right">
-                {{ (option.ammount * option.options.price)|format_currency('EUR', {fraction_digit: 0}) }}
+                {{ (option.ammount * option.option.price)|format_currency('EUR', {fraction_digit: 0}) }}
             </p>
         </columns>
     </row>
-    {% set subtotal = subtotal + (option.ammount * option.options.price) %}
+    {% set subtotal = subtotal + (option.ammount * option.option.price) %}
     {% endfor %}
     <row>
         <columns>
@@ -117,7 +117,7 @@
         <row>
             <columns>
                 {{ 'Descuento'|trans }}
-                    {{reservation.codespromo.code}} ({{reservation.codespromo.libelle}})                
+                    {{reservation.codespromo.code}} ({{reservation.codespromo.libelle}})
             </columns>
             <columns>
                     <p class="text-right">{{reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 0})}}</p>
@@ -133,7 +133,7 @@
             <p class="text-right"><strong>{{ subtotal|format_currency('EUR', {fraction_digit: 0}) }}</strong></p>
         </columns>
     </row>
-   <!-- END TABLE --> 
+   <!-- END TABLE -->
    <spacer size="10"></spacer>
    <style>.columns {border: none; }</style>
    <row>
@@ -149,9 +149,9 @@
         <columns>
             <ul>
                 <li>{{'Apellidos'|trans }}: {{ reservation.user.nom }}</li>
-                <li>{{'Nombre'|trans }}: {{ reservation.user.prenom }}</li> 
+                <li>{{'Nombre'|trans }}: {{ reservation.user.prenom }}</li>
                 <li>{{'Teléfono'|trans }}: {{ reservation.user.telephone }}</li>
-                <li>{{'E-mail'|trans }}: {{ reservation.user.email }}</li> 
+                <li>{{'E-mail'|trans }}: {{ reservation.user.email }}</li>
             </ul>
         </columns>
     </row>
@@ -206,7 +206,7 @@
     <row>
         <columns>
             <p>
-                {{ 'La reserva implica la aceptación total de nuestras'|trans }} 
+                {{ 'La reserva implica la aceptación total de nuestras'|trans }}
                 <a href="#">{{ 'condiciones generales de venta'|trans }}</a>.
             </p>
         </columns>

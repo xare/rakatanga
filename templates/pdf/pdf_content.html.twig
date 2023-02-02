@@ -81,12 +81,12 @@
                                     <strong>{{reservationOption.ammount}}x</strong>
                                 </td>
                                 <td>
-                                    {{ renderLocalizedOption(reservationOption.options.id, locale) }}
+                                    {{ renderLocalizedOption(reservationOption.option.id, locale) }}
                                 </td>
                                 <td>
-                                    {% set optionPrice = reservationOption.options.price %}
+                                    {% set optionPrice = reservationOption.option.price %}
                                     {% if statusChange is defined and statusChange == 'cancelled' %}
-                                        {% set optionPrice = reservationOption.options.price|negativify %}
+                                        {% set optionPrice = reservationOption.option.price|negativify %}
                                     {% endif %}
                                     {{ optionPrice | format_currency('EUR', {fraction_digit: 2}) }}
                                 </td>

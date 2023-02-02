@@ -1,3 +1,4 @@
+{% extends 'email/emailBase.html.twig' %}
 {% block content %}
 
 <h1><center>{{'Hola'|trans}} {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}]</center></h1>

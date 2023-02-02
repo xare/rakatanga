@@ -32,18 +32,18 @@
 		<div class="row">
 			<div class="col-md-12 col-12">
 				<h1>{{ travel.title }}</h1>
-				
+
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-9 col-12">
+			<div class="col-9 col-xs-12">
 				{{ travel.intro|raw }}
 			</div>
-			<div class="col-md-3 col-sm-12">
+			<div class="col-3 col-xs-12">
 				{{ include('frontend/_reservation_box.html.twig',{'dates': dates}) }}
 			</div>
 			<div class="row">
-				<div class="col-9">	
+				<div class="col-9">
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item" role="presentation">
 							<button data-bs-target="#det" aria-controls="det" class="nav-link active" type="button" role="tab" data-bs-toggle="tab">
@@ -98,7 +98,7 @@
 						{{ travel.practical_info | raw  }}
 					</div>
 					<div role="tabpanel" class="tab-pane" id="pho">
-					
+
 								{{ include('frontend/_photo_gallery.html.twig',{ 'travel':travelObject })}}
 
 					</div>

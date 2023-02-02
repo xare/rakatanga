@@ -12,7 +12,7 @@
     </a>
     <br /><br />
     {% if duePayment > 0%}
-    <a class="btn btn-info" href="{{ path('reservation_payment',{ 'reservation': reservation.id })}}">
+    <a id="js-reservation-payment" class="btn btn-info" href="{{ path('reservation_payment',{ 'reservation': reservation.id })}}">
       {{ 'Pagar la cantidad restante'|trans }} : {{ duePayment|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
     </a>
     {% endif %}

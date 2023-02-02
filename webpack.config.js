@@ -48,6 +48,7 @@ Encore
 
 //.addStyleEntry('photogalleryStyle', './assets/styles/photogallery.css')
 .addStyleEntry('email', './assets/styles/email.scss')
+    .addStyleEntry('tags', './assets/styles/tags.scss')
     .addStyleEntry('reservations', './assets/styles/reservations.scss')
     .addStyleEntry('reservations-admin', './assets/styles/reservations_admin.scss')
 

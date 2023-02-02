@@ -6,6 +6,7 @@ use App\Entity\Travellers;
 use App\Form\Travellers1Type;
 use App\Repository\TravellersRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +15,26 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/travellers')]
 class TravellersController extends AbstractController
 {
+    public function __construct(
+        private TravellersRepository $travellersRepository,
+        private PaginatorInterface $paginator
+    ) {
+
+    }
+
     #[Route('/', name: 'travellers_index', methods: ['GET'])]
-    public function index(TravellersRepository $travellersRepository): Response
+    public function index(Request $request): Response
     {
+        $count = count($this->travellersRepository->findAll());
+        $query = $this->travellersRepository->listAll();
+        $travellers = $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('admin/travellers/index.html.twig', [
-            'travellers' => $travellersRepository->findAll(),
+            'travellers' => $travellers,
+            'count' => $count,
         ]);
     }
 

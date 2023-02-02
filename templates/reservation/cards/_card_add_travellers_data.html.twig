@@ -2,7 +2,7 @@
     <div class="card-body form-group">
         <div class="container">
             {# <form action="{{ path('user_reservation_travellers_save',{'reservation':reservation.id}) }}" method="POST"> #}
-            <form action="" method="POST">
+            <form action="" method="POST" data-container="js-travellers-form">
             {% for i in 1..((nbpilotes+nbaccomp)) %}
                 {% set value = null %}
                 {% if i == 1 %}
@@ -107,15 +107,15 @@
                             {% if value != null %}
                                 value="{{ value.id }}"
                             {% endif %} />
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-            <br />
-            <button
-                data-action="js-add-travellers"
-                class="btn btn-primary">
-                {{'Guardar los datos de Viajeros/as'|trans }}
-            </button>
+                {% endfor %}
+                <br />
+                <button
+                    data-action="js-add-travellers"
+                    class="btn btn-primary">
+                    {{'Guardar los datos de Viajeros/as'|trans }}
+                </button>
             </form>
         </div>
     </div>

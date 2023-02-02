@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,7 +31,7 @@ class UserFrontendController extends AbstractController
                         private DatesRepository $datesRepository,
                         private LangRepository $langRepository,
                         private ReservationRepository $reservationRepository,
-                        private TranslatorInterface $translatorInterface,
+                        private TranslatorInterface $translator,
                         private EntityManagerInterface $entityManager,
                         private breadcrumbsHelper $breadcrumbsHelper,
                         private OptionsRepository $optionsRepository,
@@ -42,10 +43,10 @@ class UserFrontendController extends AbstractController
     #[Route(path: '/user', name: 'frontend_user')]
     #[Route(
         path: [
-            'en' => '{_locale}/user', 
-            'es' => '{_locale}/usuario', 
-            'fr' => '{_locale}/utilisateur'], 
-        name: 'frontend_user', 
+            'en' => '{_locale}/user',
+            'es' => '{_locale}/usuario',
+            'fr' => '{_locale}/utilisateur'],
+        name: 'frontend_user',
         priority: 2)]
     public function frontend_user(
         string $_locale = null,
@@ -75,10 +76,10 @@ class UserFrontendController extends AbstractController
     #[Route(path: '/user/reservations/', name: 'frontend_user_reservations')]
     #[Route(
         path: [
-            'en' => '{_locale}/user/reservations/', 
-            'es' => '{_locale}/usuario/reservas/', 
-            'fr' => '{_locale}/utilisateur/reservations/'], 
-        name: 'frontend_user_reservations', 
+            'en' => '{_locale}/user/reservations/',
+            'es' => '{_locale}/usuario/reservas/',
+            'fr' => '{_locale}/utilisateur/reservations/'],
+        name: 'frontend_user_reservations',
         priority: 2)]
     public function frontend_user_reservations(
         string $_locale = null,
@@ -106,12 +107,13 @@ class UserFrontendController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/user/settings', 
-            'es' => '{_locale}/usuario/datos', 
-            'fr' => '{_locale}/utilisateur/donnees'], 
+            'en' => '{_locale}/user/settings',
+            'es' => '{_locale}/usuario/datos',
+            'fr' => '{_locale}/utilisateur/donnees'],
         name: 'frontend_user_settings')]
     public function frontend_user_settings(
         Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
         string $_locale = null,
         string $locale = 'es'
     ) {
@@ -132,7 +134,11 @@ class UserFrontendController extends AbstractController
         // dd($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            // dd($user);
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form['password']->getData()
+                ));
             $this->entityManager->persist($user);
             $this->entityManager->flush();
             $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
@@ -169,7 +175,7 @@ class UserFrontendController extends AbstractController
     } */
 
     #[Route(
-        path: '/user/ajax/reservation-manager/changeNb/', 
+        path: '/user/ajax/reservation-manager/changeNb/',
         name: 'user-ajax-reservation-manager-add-pilote')]
     public function reservationManagerChangeNb(
         Request $request
@@ -210,7 +216,7 @@ class UserFrontendController extends AbstractController
     }
 
     #[Route(
-        path: '/user/ajax/reservation-manager/changeOptionAmmount/', 
+        path: '/user/ajax/reservation-manager/changeOptionAmmount/',
         name: 'user-ajax-reservation-manager-change-option-ammount')]
     public function reservationManagerChangeOptionAmmount(
         Request $request
@@ -244,7 +250,7 @@ class UserFrontendController extends AbstractController
     }
 
     #[Route(
-        path: '/user/ajax/reservation-manager/updateReservation/{reservation}', 
+        path: '/user/ajax/reservation-manager/updateReservation/{reservation}',
         name: 'user-ajax-reservation-manager-update-reservation')]
     public function reservationManagerUpdateReservation(
         Request $request,
@@ -270,7 +276,7 @@ class UserFrontendController extends AbstractController
                     $this->entityManager->persist($reservationOptions);
                 } else {
                     $reservationOptions = new ReservationOptions();
-                    $reservationOptions->setOptions($option);
+                    $reservationOptions->setOption($option);
                     $reservationOptions->setAmmount($nb);
                     $reservation->addReservationOption($reservationOptions);
                     $this->entityManager->persist($reservation);

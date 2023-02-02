@@ -123,7 +123,7 @@ class Options
     {
         if (!$this->reservationOptions->contains($reservationOption)) {
             $this->reservationOptions[] = $reservationOption;
-            $reservationOption->setOptions($this);
+            $reservationOption->setOption($this);
         }
 
         return $this;
@@ -133,8 +133,8 @@ class Options
     {
         if ($this->reservationOptions->removeElement($reservationOption)) {
             // set the owning side to null (unless already changed)
-            if ($reservationOption->getOptions() === $this) {
-                $reservationOption->setOptions(null);
+            if ($reservationOption->getOption() === $this) {
+                $reservationOption->setOption(null);
             }
         }
 

@@ -3,6 +3,11 @@
 {% block title %}Menu index
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('tags')  }}
+{% endblock %}
+
 {% block header %}
 	{{ include('admin/shared/_header.html.twig') }}
 {% endblock %}
@@ -17,42 +22,11 @@
 		<div class="row mb-4">
 			<div class="col-12">
 				<h3>Últimas Reservas</h3>
-				<table class="table table-striped small">
-					{% for reservation in reservations %}
-						<tr>
-							<td>
-								<a href="{{path('reservation_edit',{'id':reservation.id})}}">{{reservation.code}}</a>
-							</td>
-							<td><a href="{{path('user_edit',{'id':reservation.user.id})}}">{{ reservation.user.prenom }} {{ reservation.user.nom }}[{{ reservation.user }}]</a>
-							<td>
-								<a href="{{ path('reservation_edit',{'id':reservation.id}) }}">
-									<i class="fas fa-eye"></i>
-									{{ renderLocalizedTravel(reservation.date.travel.id,'es') }}
-								</a>
-								<a href="{{ path('category_edit',{'id':reservation.id}) }}">
-									[{{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }}]
-								</a>
-							</td>
-							<td>Pilotos: {{reservation.nbpilotes}} - Acompañantes: {{reservation.nbaccomp}}</td>
-							<td><a href="{{ path('reservation_edit',{'id':reservation.id}) }}">{{ reservation.date.debut|date('d/m/Y') }}</a></td>
-							
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="5">
-								Todavía no hay reservas guardadas en el sistema.
-							</td>
-						</tr>
-					{% endfor %}
-						<tr>
-							<td colspan="4">
-									<strong>Total de reservas: {{reservations|length}}</strong>
-							</td>
-							<td class="fit">
-									<a href="{{path('reservation_index')}}"><i class="fa fa-eye"></i></a>
-							</td>
-						</tr>
-				</table>
+				<div class="small reservations-dashboard">
+					{{ include('admin/dashboard/_partials/_block_reservations.html.twig') }}
+				</div>
+				<strong>Total de reservas: {{reservations|length}}</strong>
+				<a href="{{path('reservation_index')}}"><i class="fa fa-eye"></i></a>
 			</div>
 		</div>
 		<div class="row mb-4">
@@ -75,7 +49,7 @@
 								<td>
 									<a href="{{ path('payments_edit',{'id':payment.id}) }}">
 										{{ renderLocalizedTravel(payment.reservation.date.travel.id,'es') }}
-									</a>	
+									</a>
 								</td>
 							</tr>
 						{% else %}
@@ -89,7 +63,7 @@
 								<td colspan="3">
 										<strong>Total de pagos: {{ payments|length }}</strong>
 								</td>
-								<td class="fit"> 
+								<td class="fit">
 										<a href="{{path('payments_index')}}"><i class="fa fa-eye"></i></a>
 								</td>
 							</tr>
@@ -176,7 +150,7 @@
 							<td><a href="{{path('document_edit',{'id':document.id})}}">{{ document.originalFilename}}</a></td>
 							<td><span data-bs-toggle="tooltip" title="{{ document.doctype }}">{{ document.doctype }}</span></td>
 							{#<td> {{ renderLocalizedTravel(document.date.travel.id,'es') }} </td>#}
-							
+
 						</tr>
 					{% else %}
 						<tr>
@@ -187,7 +161,7 @@
 					{% endfor %}
 						<tr>
 							<td colspan="2">
-									<strong>Total de documentos: {{ documents|length }}</strong> 
+									<strong>Total de documentos: {{ documents|length }}</strong>
 							</td>
 							<td class="fit">
 									<a href="{{path('document_index')}}"><i class="fa fa-eye"></i></a>

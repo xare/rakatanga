@@ -8,10 +8,10 @@
     </a>
 </td>
   <td>
-      <span 
-          class="badge bg-secondary" 
-          data-bs-toggle="tooltip" 
-          data-bs-placement="top" 
+      <span
+          class="badge bg-secondary"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
           title="{{ reservation.status }}">
           {{ reservation.status|slice(0,4) }}
       </span>
@@ -31,10 +31,10 @@
   </td>
   <td>
       {% if reservation.user is defined %}
-          
+
           <a href="{{ path('user_show', {
               'id' : reservation.user.id
-          }) }}"> 
+          }) }}">
               {{ reservation.user.prenom }}
               {{ reservation.user.nom }}<br />
               [{{ reservation.user }}]
@@ -45,7 +45,7 @@
       <a href="{{ path('travel_show', {
               'id' : reservation.date.travel.id
           }) }}">
-          {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }} - 
+          {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }} -
           {{ renderLocalizedTravel(reservation.date.travel.id, 'es') }}
       </a>
   </td>
@@ -63,31 +63,31 @@
       <ul class="list-group">
           {% for reservationOption in reservation.reservationOptions %}
               <li class="list-group-item">
-                  {{ reservationOption.ammount }} - 
-                  {{ renderLocalizedOption(reservationOption.options.id,'es') }}
+                  {{ reservationOption.ammount }} -
+                  {{ renderLocalizedOption(reservationOption.option.id,'es') }}
               </li>
           {% endfor %}
       </ul>
   </td>
   <td>
-      {# <a 
+      {# <a
           href="{{ path('reservation_show', {'id': reservation.id}) }}"
           class="btn btn-primary">
           <i class="fa fa-eye"></i>
       </a> #}
       <button
-            class="btn btn-primary js-send-checkin-request" 
+            class="btn btn-primary js-send-checkin-request"
             data-reservation-id="{{reservation.id}}"
             data-action="send-checkin-request"
             data-bs-toggle="tooltip"
             data-swal-waiting-title="Enviando un email"
-            data-swal-waiting-text="Estamos enviando un email con in vínculo " 
+            data-swal-waiting-text="Estamos enviando un email con in vínculo "
             title="Enviar un email para pedir los datos">
             <i class="fas fa-envelope"></i>
         </button>
   </td>
   {# <td>
-      <a 
+      <a
           href="{{ path('reservation_edit', {'id': reservation.id}) }}"
           class="btn btn-info">
           <i class="fa fa-edit"></i>

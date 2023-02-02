@@ -362,3 +362,79 @@ fieldset {
     border-right: 1px solid #dee2e6;
     border-bottom: 1px solid #dee2e6;
 }
+
+
+/* dashboard */
+
+.reservations-dashboard {
+    display: grid;
+    gap: 1rem;
+    grid-auto-rows: 16rem;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+}
+
+.reservations-dashboard a {
+    text-decoration: none;
+    color: #cc6363;
+}
+
+.reservations-dashboard a:hover {
+    color: #6f0e03
+}
+
+.reservations-dashboard-item {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
+    grid-template-rows: auto;
+    grid-template-areas: 'photo photo travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers' 'user user user user user user user';
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+    background: rgb(250, 250, 250);
+    -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+    box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+}
+
+.reservations-dashboard-grid-item>img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    margin-top: 1rem;
+}
+
+.reservations-dashboard-item>div {
+    padding-inline: 1rem;
+}
+
+.reservations-dashboard-item>div:nth-child(1) {
+    grid-area: photo;
+}
+
+.reservations-dashboard-item>div:nth-child(2) {
+    grid-area: travel;
+    padding-inline-start: 0;
+    padding-top: 1rem;
+}
+
+.reservations-dashboard-item>div:nth-child(3) {
+    grid-area: reservation;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.reservations-dashboard-item>div:nth-child(4) {
+    grid-area: user;
+}
+
+.reservations-dashboard-item>div:nth-child(5) {
+    grid-area: travellers;
+}
+
+
+/* @media screen and (min-width: 12rem) {
+    .reservations-dashboard-item {
+        grid-template-areas: 'travel travel' 'reservation travellers' 'user user';
+        ;
+    }
+} */

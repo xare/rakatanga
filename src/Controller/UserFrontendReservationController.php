@@ -28,7 +28,7 @@ class UserFrontendReservationController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ReservationHelper $reservationHelper,
-        private TranslatorInterface $translatorInterface, 
+        private TranslatorInterface $translatorInterface,
         private Breadcrumbs $breadcrumbs,
         private languageMenuHelper $languageMenuHelper,
         private breadcrumbsHelper $breadcrumbsHelper,
@@ -37,19 +37,19 @@ class UserFrontendReservationController extends AbstractController
         private ReservationOptionsRepository $reservationOptionsRepository
         )
     {
-        
+
     }
 
     #[Route(
-        path: ['/user/reservation/{reservation}'], 
-        options: ['expose' => true], 
+        path: ['/user/reservation/{reservation}'],
+        options: ['expose' => true],
         name: 'frontend_user_reservation')]
     #[Route(
         path: [
-            'en' => '{_locale}/user/reservation/{reservation}', 
-            'es' => '{_locale}/usuario/reserva/{reservation}', 
-            'fr' => '{_locale}/utilisateur/reservation/{reservation}'], 
-        options: ['expose' => true], 
+            'en' => '{_locale}/user/reservation/{reservation}',
+            'es' => '{_locale}/usuario/reserva/{reservation}',
+            'fr' => '{_locale}/utilisateur/reservation/{reservation}'],
+        options: ['expose' => true],
         name: 'frontend_user_reservation')]
     public function frontend_user_reservation(
         Reservation $reservation,
@@ -88,9 +88,9 @@ class UserFrontendReservationController extends AbstractController
     }
 
     #[Route(
-        path: '/user/reservation/{reservation}/change/option', 
-        options: ['expose' => true], 
-        name: 'user_reservation_change_option', 
+        path: '/user/reservation/{reservation}/change/option',
+        options: ['expose' => true],
+        name: 'user_reservation_change_option',
         methods: ['POST'])]
     public function userReservationChangeOption(
         Request $request,
@@ -104,7 +104,7 @@ class UserFrontendReservationController extends AbstractController
         ]);
         if (!$reservationOptions) {
             $reservationOptions = new ReservationOptions();
-            $reservationOptions->setOptions($options);
+            $reservationOptions->setOption($options);
             $reservationOptions->setReservation($reservation);
         }
         $reservationOptions->setAmmount($optionData['ammount']);
@@ -115,9 +115,9 @@ class UserFrontendReservationController extends AbstractController
     }
 
     #[Route(
-        path: '/user/reservation/{reservation}/change/nb', 
-        options: ['expose' => true], 
-        name: 'user_reservation_change_nb', 
+        path: '/user/reservation/{reservation}/change/nb',
+        options: ['expose' => true],
+        name: 'user_reservation_change_nb',
         methods: ['POST'])]
     public function userReservationChangeNb(
         Request $request,

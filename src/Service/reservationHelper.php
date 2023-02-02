@@ -13,6 +13,7 @@ use App\Repository\CodespromoRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\OptionsTranslationsRepository;
 use App\Repository\PaymentsRepository;
+use App\Repository\ReservationOptionsRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,18 +25,11 @@ class reservationHelper
         private OptionsTranslationsRepository $optionsTranslationsRepository,
         private PaymentsRepository $paymentsRepository,
         private ReservationRepository $reservationRepository,
+        private ReservationOptionsRepository $reservationOptionsRepository,
         private CodespromoRepository $codespromoRepository,
         private localizationHelper $localizationHelper,
         private invoiceHelper $invoiceHelper)
     {
-        $this->entityManager = $entityManager;
-        $this->optionsRepository = $optionsRepository;
-        $this->optionsTranslationsRepository = $optionsTranslationsRepository;
-        $this->paymentsRepository = $paymentsRepository;
-        $this->reservationRepository = $reservationRepository;
-        $this->codespromoRepository = $codespromoRepository;
-        $this->localizationHelper = $localizationHelper;
-        $this->invoiceHelper = $invoiceHelper;
     }
 
     /**
@@ -98,31 +92,42 @@ class reservationHelper
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
         } elseif ($reservation->getStatus() == 'cancelled') {
-            $reservation->setStatus = 'initialized';
+            $reservation->setStatus('initialized');
         }
 
         return $reservation;
     }
 
-   public function updateReservation($reservation, $reservationData, $customerData, $locale)
-   {
-    dump($reservationData);
-       $reservation->setNbpilotes($reservationData['nbpilotes']);
-       $reservation->setNbAccomp($reservationData['nbaccomp']);
-       $reservation->setStatus('initialized');
+    public function updateReservation(
+        Reservation $reservation,
+        array $reservationData,
+        array $customerData,
+        string $locale):Reservation
+    {
+        dump($reservationData);
+        $reservation->setNbpilotes($reservationData['nbpilotes']);
+        $reservation->setNbAccomp($reservationData['nbaccomp']);
+        $reservation->setStatus('initialized');
+        $this->_resetReservationOptions($reservation);
        // PERSIST OPTIONS TO RESERVATION
-       if ($reservationData['finalOptions'] != null && count($reservationData['finalOptions']) > 0) {
-           foreach ($reservationData['finalOptions'] as $option) {
-               $this->_feedReservationOptions($reservation, $option);
-           }
-       }
-       $this->entityManager->persist($reservation);
-       $this->entityManager->flush();
-       $this->invoiceHelper->updateReservationInvoice($reservation,$locale, $customerData  );
+        if ($reservationData['finalOptions'] != null && count($reservationData['finalOptions']) > 0) {
+            foreach ($reservationData['finalOptions'] as $option) {
+                $this->_feedReservationOptions($reservation, $option);
+            }
+        }
+        $this->entityManager->persist($reservation);
+        $this->entityManager->flush();
+        $this->invoiceHelper->updateReservationInvoice($reservation, $locale, $customerData);
 
-       return $reservation;
-   }
-
+        return $reservation;
+    }
+    private function _resetReservationOptions(Reservation $reservation) :Reservation {
+        foreach($reservation->getReservationOptions() as $reservationOption) {
+            $this->entityManager->remove($reservationOption);
+        }
+        $this->entityManager->flush();
+        return $reservation;
+    }
     public function cancelReservation(Reservation $reservation, $locale)
     {
         try {
@@ -152,28 +157,42 @@ class reservationHelper
         return true;
     }
 
-    private function _feedReservationOptions($reservation, $option)
+    private function _feedReservationOptions(
+        Reservation $reservation,
+        array $option):mixed
     {
         $optionItem = $this->optionsRepository->find($option['id']);
-
-        $this->_isReservationOptionDuplicated($reservation, $option);
-        $reservationOptions = new ReservationOptions();
-
-        $reservationOptions->setOptions($optionItem);
+        $isAlready = $this->_isReservationOptionAlready($reservation, $option);
+        dump($isAlready);
+        if( $isAlready == "true" ){
+            return false;
+        } elseif( $isAlready == "false"){
+            $reservationOptions = new ReservationOptions();
+            $reservationOptions->setOption($optionItem);
+        } elseif ($isAlready == "newAmmount") {
+            $reservationOptions = $this->reservationOptionsRepository->findOneBy(['reservation'=> $reservation]);
+        }
+        dump($reservationOptions);
         $reservationOptions->setAmmount($option['ammount']);
         $reservation->addReservationOption($reservationOptions);
+        $this->entityManager->persist($reservation);
+        $this->entityManager->flush();
+        return $reservation;
     }
 
-    private function _isReservationOptionDuplicated(Reservation $reservation, array $selectedOption): bool
+    private function _isReservationOptionAlready(
+        Reservation $reservation,
+        array $selectedOption): string
     {
-        $returnValue = false;
+        dump($selectedOption);
+        $returnValue = "false";
         foreach ($reservation->getReservationOptions() as $reservedOption) {
-            if (
-                $reservedOption->getOptions()->getId() === $selectedOption['id'] &&
-                $reservedOption->getReservation()->getId() === $selectedOption['id'] &&
-                $reservedOption->getAmmount() === $selectedOption['accmount']
-            ) {
-                $returnValue = true;
+            dump($reservedOption);
+            if ( $reservedOption->getOption()->getId() === $selectedOption['id'] ){
+                if($reservedOption->getAmmount() === $selectedOption['ammount']){
+                    $returnValue = "true";
+                }
+                $returnValue = "newAmmount";
             }
         }
 
@@ -189,6 +208,22 @@ class reservationHelper
         $reservationOptions = $reservation->getReservationOptions();
 
         if (count($travelOptions) > 0) {
+            $i = 0;
+            foreach($travelOptions as $travelOption) {
+                $optionsArray[$i]['ammount'] = 0;
+                foreach($reservationOptions as $reservationOption) {
+                    if($travelOption->getId() == $reservationOption->getOption()->getId()) {
+                        $optionsArray[$i]['ammount'] = $reservationOption->getAmmount();
+                    }
+                }
+                $optionsArray[$i]['price'] = $travelOption->getPrice();
+                $optionsArray[$i]['id'] = $travelOption->getId();
+            $i++;
+            }
+        }
+        dump($optionsArray);
+        return $optionsArray;
+        /* if (count($travelOptions) > 0) {
             $i = 0;
             foreach ($travelOptions as $travelOption) {
                 $optionsArray[$i]['ammount'] = 0;
@@ -217,7 +252,7 @@ class reservationHelper
             }
         }
         // dd($optionsArray);
-        return $optionsArray;
+        return $optionsArray; */
     }
 
     public function getReservedOptions(Reservation $reservation, $locale)
@@ -225,10 +260,10 @@ class reservationHelper
         $reservedOptions = [];
         $i = 0;
         foreach ($reservation->getReservationOptions() as $reservationOption) {
-            $reservedOptions[$i]['id'] = $reservationOption->getOptions()->getId();
+            $reservedOptions[$i]['id'] = $reservationOption->getOption()->getId();
             $reservedOptions[$i]['ammount'] = $reservationOption->getAmmount();
-            $reservedOptions[$i]['title'] = $this->localizationHelper->renderOptionString($reservationOption->getOptions()->getId(), $locale);
-            $reservedOptions[$i]['price'] = $reservationOption->getOptions()->getPrice();
+            $reservedOptions[$i]['title'] = $this->localizationHelper->renderOptionString($reservationOption->getOption()->getId(), $locale);
+            $reservedOptions[$i]['price'] = $reservationOption->getOption()->getPrice();
             ++$i;
         }
 

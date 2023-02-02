@@ -20,22 +20,23 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    private \Doctrine\ORM\EntityManagerInterface $entityManager;
-    private \App\Service\breadcrumbsHelper $breadcrumbsHelper;
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private breadcrumbsHelper $breadcrumbsHelper){}
 
-    public function __construct(EntityManagerInterface $entityManager, breadcrumbsHelper $breadcrumbsHelper)
-    {
-        $this->entityManager = $entityManager;
-        $this->breadcrumbsHelper = $breadcrumbsHelper;
-    }
-
-    #[Route(path: '/login', options: ['expose' => true], name: 'app_login')]
-    #[Route(path: ['en' => '{_locale}/login/', 'es' => '{_locale}/login/', 'fr' => '{_locale}/login/'], priority: 10, name: 'app_login')]
+    #[Route(
+        path: '/login',
+        options: ['expose' => true],
+        name: 'app_login')]
+    #[Route(
+        path: ['en' => '{_locale}/login/', 'es' => '{_locale}/login/', 'fr' => '{_locale}/login/'],
+        priority: 10,
+        name: 'app_login')]
     public function login(
         AuthenticationUtils $authenticationUtils,
         string $_locale = null,
         LangRepository $langRepository,
-        $locale = 'es'
+        string $locale = 'es'
         ): Response {
         $locale = $_locale ? $_locale : $locale;
 

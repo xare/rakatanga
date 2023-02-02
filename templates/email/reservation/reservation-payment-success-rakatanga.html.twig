@@ -22,7 +22,7 @@
     </row>
     <row>
         <columns>
-            <p><strong>{{'Viaje'|trans}}:</strong> 
+            <p><strong>{{'Viaje'|trans}}:</strong>
             {{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}
             </p>
         </columns>
@@ -49,10 +49,10 @@
                     {% for reservationOption in reservation.reservationOptions %}
                     <li>
                         {{ renderLocalizedOption(
-                                reservationOption.options.id,
+                                reservationOption.option.id,
                                 app.request.getLocale())
                         }}
-                        </li> 
+                        </li>
                     {% endfor %}
                 </ul>
             </p>

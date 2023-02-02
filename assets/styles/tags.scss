@@ -1,0 +1,85 @@
+.tags {
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
+.tags.has-addons .tag {
+    margin-right: 0;
+}
+
+.tags .tag {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.tags.has-addons .tag:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.tags.has-addons .tag:not(:first-child) {
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.tag:not(body) {
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 4px;
+    color: #111111;
+    display: inline-flex;
+    font-size: 0.75rem;
+    height: 2em;
+    justify-content: center;
+    line-height: 1.5;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    white-space: nowrap;
+}
+
+.tag:not(body).is-dark {
+    background-color: #363636;
+    color: #fff;
+}
+
+.tag:not(body).is-light {
+    background-color: #ebdfdf;
+    color: #363636;
+}
+
+.tag:not(body).is-info {
+    background-color: #3298dc;
+    color: #fff;
+}
+
+.tag:not(body).is-primary {
+    background-color: #00d1b2;
+    color: #fff;
+}
+
+.tag:not(body).is-link {
+    background-color: #485fc7;
+    color: #fff;
+}
+
+.tag:not(body).is-link a {
+    color: white;
+}
+
+.tag:not(body).is-success {
+    background-color: #48c78e;
+    color: #fff;
+}
+
+.tag:not(body).is-danger {
+    background-color: #f14668;
+    color: #fff;
+}
+
+.tag:not(body).is-info.is-light {
+    background-color: #eff5fb;
+    color: #296fa8;
+}

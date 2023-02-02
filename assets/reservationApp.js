@@ -87,7 +87,8 @@ class reservationApp {
 
         this.$wrapper.on(
             'click',
-            '#js-update-changes',
+            '[data-action="update-changes"]',
+            //this.updateReservation.bind(this)
             this.updateChanges.bind(this)
         )
         this.$wrapper.on(
@@ -169,7 +170,7 @@ class reservationApp {
             this._updateReservation(
                 data.reservation,
                 data.nbpilotes,
-                data.nbaccomp, [])
+                data.nbaccomp)
         }
         const self = this;
         (
@@ -252,30 +253,9 @@ class reservationApp {
             }
         )();
     }
-    handleAddOption(event) {
-        event.preventDefault();
-        const self = this;
-        const previousData = this.$calculator.data() || "";
-        const optionInputName = $(event.currentTarget).attr('name'); //returns reservation_user[option][00]
-        const ammount = parseInt($(event.currentTarget).val());
-        const matches = optionInputName.match(/(\d+)/);
-        const optionTitle = $(event.currentTarget).closest('tr').data('optionTitle');
-        const optionPrice = $(event.currentTarget).closest('tr').data('optionPrice');
-        const reservation = this.$wrapper.data('reservation');
-        let previousOptions = previousData.options == '' ? [] : previousData.options;
+
+    _filterOptions(previousOptions, currentOption) {
         let finalOptions = [];
-
-        this._renderRangeOutput($(event.currentTarget), $(event.currentTarget).attr('max'));
-        let date = {
-            dateId: previousData.dateId
-        };
-        let currentOption = {
-            id: eval(matches[0]),
-            ammount,
-            price: optionPrice,
-            title: optionTitle
-        };
-
         if (previousOptions.every((previousOption) => { //returns true when then new option selected was not part of the previousOptions
                 return (previousOption.id !== null && previousOption.id !== currentOption.id)
             })) {
@@ -291,41 +271,73 @@ class reservationApp {
             });
             finalOptions = previousOptions;
         }
-        let requestData = {
-            ...date,
-            'options': finalOptions,
-            reservation,
-            isInitialized: previousData.isInitialized,
-            'nbpilotes': previousData.nbpilotes,
-            'nbaccomp': previousData.nbaccomp,
-            'userEdit': previousData.userEdit
-        };
-
-        (async() => {
-            try {
-                const response = await $.ajax({
-                    url: Routing.generate('update-calculator', {
-                        '_locale': self.locale
-                    }),
-                    type: 'POST',
-                    beforeSend: () => {
-                        $('[data-container="calculator"]').find('.card-body > div > table').hide();
-                        let waitingText = $('[data-container="calculator"]').data('waiting');
-                        $('[data-container="calculator"]').find('.card-body').append(`<div><i class="fas fa-spinner fa-spin"></i> ${waitingText}`);
-                    },
-                    data: requestData
-                });
-                $('[data-container="calculator-wrapper"]').empty().append(response);
-                self.$calculator.data('nbpilotes', previousData.nbpilotes);
-                self.$calculator.data('nbaccomp', previousData.nbaccomp);
-                self.$calculator.data('options', finalOptions);
-                self._showUpdateButton();
-                self._showInitializeButton();
-            } catch (jqXHR) {
-                console.error(jqXHR);
-            }
-        })();
+        return finalOptions;
     }
+    handleAddOption(event) {
+            event.preventDefault();
+            const self = this;
+            const previousData = this.$calculator.data() || "";
+            const optionInputName = $(event.currentTarget).attr('name'); //returns reservation_user[option][00]
+            const ammount = parseInt($(event.currentTarget).val());
+            const matches = optionInputName.match(/(\d+)/);
+            const optionTitle = $(event.currentTarget).closest('tr').data('optionTitle');
+            const optionPrice = $(event.currentTarget).closest('tr').data('optionPrice');
+            const reservation = this.$wrapper.data('reservation');
+            let previousOptions = previousData.options == '' ? [] : previousData.options;
+
+            this._renderRangeOutput($(event.currentTarget), $(event.currentTarget).attr('max'));
+            let date = {
+                dateId: previousData.dateId
+            };
+            let currentOption = {
+                id: eval(matches[0]),
+                ammount,
+                price: optionPrice,
+                title: optionTitle
+            };
+            let finalOptions = this._filterOptions(previousOptions, currentOption);
+            console.info(finalOptions);
+            let requestData = {
+                ...date,
+                'options': finalOptions,
+                reservation,
+                'isInitialized': previousData.isInitialized,
+                'nbpilotes': previousData.nbpilotes,
+                'nbaccomp': previousData.nbaccomp,
+                'userEdit': previousData.userEdit
+            };
+            console.info(requestData);
+            (async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('update-calculator', {
+                            '_locale': self.locale
+                        }),
+                        type: 'POST',
+                        beforeSend: () => {
+                            $('[data-container="calculator"]').find('.card-body > div > table').hide();
+                            let waitingText = $('[data-container="calculator"]').data('waiting');
+                            $('[data-container="calculator"]').find('.card-body').append(`<div><i class="fas fa-spinner fa-spin"></i> ${waitingText}`);
+                        },
+                        data: requestData
+                    });
+                    $('[data-container="calculator-wrapper"]').empty().append(response);
+                    self.$calculator.data('nbpilotes', previousData.nbpilotes);
+                    self.$calculator.data('nbaccomp', previousData.nbaccomp);
+                    self.$calculator.data('options', finalOptions);
+                    self._showUpdateButton();
+                    self._showInitializeButton();
+                } catch (jqXHR) {
+                    console.error(jqXHR);
+                }
+            })();
+        }
+        /* _arrangeOptions(newOptions){
+            let data = this.$calculator.data();
+            let previousOptions = data.options;
+            let finalOptions = [];
+
+        } */
 
     _renderRangeOutput(item, total) {
         $(item).closest('.js-options-row-select').find('[data-container="current-option-number"]').empty().html($(item).val());
@@ -484,6 +496,7 @@ class reservationApp {
                 self._loadUserSwitch();
                 $("[data-container='js-card-user']").hide();
                 $('.card-codespromo, .card-comment').removeClass('d-none');
+                $('.card-codespromo').html(response.codespromoHtml);
                 if (swalResponse.isDismissed !== true && typeof response.codepromo !== 'undefined') {
                     let discount = response.codepromoMontant === null ? response.codepromoPourcentage : response.codepromoMontant;
                     let discountType = response.codepromoMontant === null ? 'pourcentage' : 'ammount';
@@ -582,6 +595,15 @@ class reservationApp {
         const $travellersForm = $('[data-container="js-travellers-form"]');
         const formData = $travellersForm.find('input').serialize();
         const $travellersFormContainers = $travellersForm.find('.js-travellers-form-container');
+        console.info(this._validateForm());
+        if (!this._validateForm()) {
+            const InvalidResponse = Swal.fire({
+                title: "Invalid form",
+                text: "Not all the fields are valid check again",
+            });
+            console.info(InvalidResponse);
+            return false;
+        }
         (async() => {
             try {
                 const response = await $.ajax({
@@ -602,7 +624,25 @@ class reservationApp {
             }
         })();
     }
-
+    _validateForm() {
+        const form = document.querySelector('form[data-container="js-travellers-form"]');
+        console.info(form);
+        const inputTextElements = Array.from(form.elements).filter(element => element.type === "text");
+        const inputEmailElements = Array.from(form.elements).filter(element => element.type === "email");
+        const isTextEmpty = inputTextElements.some(element => element.value.trim() === "");
+        const isEmailEmpty = inputEmailElements.some(element => element.value.trim() === "");
+        if (isTextEmpty === true || isEmailEmpty === true) {
+            console.info('false');
+            return false;
+        } else {
+            console.info('true?');
+            return inputEmailElements.every(element => this._emailValidate(element.value));
+        }
+    }
+    _emailValidate(emailAddress) {
+        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegex.test(emailAddress);
+    }
     editTraveller(event) {
         event.preventDefault();
         const self = this;
@@ -786,9 +826,10 @@ class reservationApp {
                         url: Routing.generate('ajax-update-changes', {
                             'reservation': self.$wrapper.data('reservation')
                         }),
+
                         data: {
-                            'nbPilotes': self.$calculator.data('nbpilotes'),
-                            'nbAccomp': self.$calculator.data('nbaccomp'),
+                            'nbpilotes': self.$calculator.data('nbpilotes'),
+                            'nbaccomp': self.$calculator.data('nbaccomp'),
                             'options': self.$calculator.data('options'),
                             'codespromo': self.$calculator.data('codespromo')
                         },
@@ -1040,8 +1081,8 @@ class reservationApp {
     }
 
     _showUpdateButton() {
-        if ($('#js-update-changes').hasClass('d-none'))
-            $('#js-update-changes').removeClass('d-none').addClass('d-block');
+        if ($('[data-action="update-changes"]').hasClass('d-none'))
+            $('[data-action="update-changes"]').removeClass('d-none').addClass('d-block');
     }
 
     _showInitializeButton() {

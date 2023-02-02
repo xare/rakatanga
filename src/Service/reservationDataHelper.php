@@ -38,7 +38,7 @@ class reservationDataHelper
            * @var ReservationOptions $reservationOption
            */
           foreach ($reservation->getReservationOptions() as $reservationOption) {
-              $total += $reservationOption->getAmmount() * $reservationOption->getOptions()->getPrice();
+              $total += $reservationOption->getAmmount() * $reservationOption->getOption()->getPrice();
           }
 
           return $total;
@@ -81,6 +81,7 @@ class reservationDataHelper
 
     public function getReservationDueAmmount(Reservation $reservation)
     {
+        dump($reservation);
         dump($this->getReservationAmmount($reservation));
         $totalAmmount = $this->getReservationAmmount($reservation);
         $totalPayments = $this->getReservationTotalPayments($reservation);

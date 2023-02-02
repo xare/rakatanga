@@ -47,4 +47,10 @@ class TravellersRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function listAll()
+    {
+        return $this->createQueryBuilder('t')
+            ->getQuery();
+    }
 }

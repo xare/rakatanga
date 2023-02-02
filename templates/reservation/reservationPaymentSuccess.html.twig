@@ -7,6 +7,7 @@
 {% block stylesheets %}
 	{{ parent() }}
 	{{  encore_entry_link_tags('reservations')  }}
+	{{  encore_entry_link_tags('tags')  }}
 {% endblock %}
 {% block body %}
 <div class="container">
@@ -31,5 +32,5 @@
 	{{ parent() }}
 	{{ encore_entry_script_tags('reservations-user')}}
 	{{ encore_entry_script_tags('readmore')}}
-	
+
 {% endblock %}

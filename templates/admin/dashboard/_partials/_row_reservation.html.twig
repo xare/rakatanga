@@ -1,0 +1,76 @@
+<div class="reservations-dashboard-item">
+  {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
+  <div class="reservations-dashboard-grid-item">
+    <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }}">
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    <strong>
+      <a
+        href="{{ path('category_edit',{'id':reservation.id}) }}"
+        data-bs-toggle="tooltip"
+        title="Visualizar los datos de la categoría">
+        {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }}
+      </a>
+    </strong>
+    <br />
+    <a
+      href="{{ path('reservation_edit',{'id':reservation.id}) }}"
+      data-bs-toggle="tooltip"
+      title="Visualizar los datos de la reserva">
+      {{ renderLocalizedTravel(reservation.date.travel.id,'es') }}
+      <br />
+      <em>{{ reservation.date.debut|date('d/m/Y') }}</em>
+    </a>
+
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    <a
+      href="{{path('reservation_edit',{'id':reservation.id})}}"
+      data-bs-toggle="tooltip"
+      title="Visualizar los datos de la reserva">
+        {{reservation.code}}
+      </a>
+    <br />
+    {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}<br />
+    <div class="tags has-addons">
+              <span class="tag is-dark"><i class="fas fa-receipt"></i></span>
+              <span class="tag is-info">
+                {{ reservation.invoice.invoiceNumber}}
+              </span>
+              <span class="tag is-light">
+                <a
+                  href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
+                  title="{{ reservation.invoice.filename }}"
+                  data-bs-toggle="tooltip">
+                  <i class="fas fa-download"></i>
+                </a>
+                </span>
+            </div>
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    <div class="tags has-addons">
+      <span class="tag is-dark"><i class="fas fa-user"></i></span>
+      <span class="tag is-link">
+        <a
+          href="{{path('user_edit',{'id':reservation.user.id})}}"
+          data-bs-toggle="tooltip"
+          title="Visualizar los datos del usuario">
+          {{ reservation.user.prenom }} {{ reservation.user.nom }}[{{ reservation.user }}]
+        </a>
+      </span>
+    </div>
+  </div>
+
+  <div class="reservations-dashboard-grid-item">
+    <div class="tags has-addons">
+      <span class="tag is-dark"><i class="fas fa-motorcycle"></i></span>
+      <span class="tag is-info">{{reservation.nbpilotes}}</span>
+      <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
+    </div>
+    <div class="tags has-addons">
+      <span class="tag is-dark"><i class="fas fa-user"></i></span>
+      <span class="tag is-info">{{reservation.nbaccomp}}</span>
+      <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
+    </div>
+  </div>
+</div>

@@ -59,7 +59,7 @@ class Travel
     #[ORM\OneToOne(targetEntity: Media::class, cascade: ['persist', 'remove'])]
     private ?Media $mainPhoto = null;
 
-    #[ORM\OneToMany(targetEntity: Options::class, mappedBy: 'travel')]
+    #[ORM\OneToMany(targetEntity: Options::class, mappedBy: 'travel', fetch: 'EXTRA_LAZY')]
     private Collection $options;
 
     #[ORM\ManyToMany(targetEntity: Hotels::class, mappedBy: 'travel')]

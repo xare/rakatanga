@@ -12,7 +12,9 @@ $(document).ready(function() {
         Swal.fire({
             'title': title,
             'html': content,
+            'width': '80%',
             'customClass': 'swal-wide',
+            'showCloseButton': true,
         });
     });
 });

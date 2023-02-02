@@ -1,0 +1,9 @@
+{% for reservation in reservations %}
+  {{ include('admin/dashboard/_partials/_row_reservation.html.twig')}}
+{% else %}
+  <div class="reservations-dashboard-item">
+    <div class="reservations-dashboard-grid-item">
+      Todavía no hay reservas guardadas en el sistema.
+    </div>
+  </div>
+{% endfor %}

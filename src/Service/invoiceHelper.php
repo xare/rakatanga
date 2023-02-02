@@ -42,7 +42,7 @@ class invoiceHelper
         Reservation $reservation,
         string $locale,
         array $customerBillingData,
-    ): bool {
+    ): mixed {
         try {
             $this->_deleteInvoice($reservation->getInvoice);
         } catch (\Exception $exception) {

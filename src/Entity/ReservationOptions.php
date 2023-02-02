@@ -19,7 +19,7 @@ class ReservationOptions
 
     #[ORM\ManyToOne(targetEntity: Options::class, inversedBy: 'reservationOptions', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private Options $options;
+    private Options $option;
 
     #[ORM\Column(type: 'integer')]
     private ?int $ammount = null;
@@ -41,14 +41,14 @@ class ReservationOptions
         return $this;
     }
 
-    public function getOptions(): ?Options
+    public function getOption(): ?Options
     {
-        return $this->options;
+        return $this->option;
     }
 
-    public function setOptions(?Options $options): self
+    public function setOption(?Options $option): self
     {
-        $this->options = $options;
+        $this->option = $option;
 
         return $this;
     }

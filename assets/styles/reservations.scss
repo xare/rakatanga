@@ -1,12 +1,13 @@
 .reservation-container {
     display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    grid-gap: 1rem;
+    grid-template-areas: "photo title title" "reservationOptions reservationOptions reservationOptions" "reservationCalculator reservationCalculator reservationCalculator";
+    grid-auto-columns: 1fr;
     background: #fff;
     align-items: top;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    padding: 1.4rem;
+    border-radius: 0.8rem;
+    margin-bottom: 1.4rem;
     -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
     box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
 }
@@ -19,29 +20,19 @@
     text-align: right;
 }
 
-.reservation {
+
+/* .reservation {
     background: #fff;
     align-items: center;
-    padding: 20px;
+    padding: 1.4rem;
     border-radius: 10px;
     margin-bottom: 20px;
     -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
     box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
-}
-
-.reservation-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
-    grid-auto-rows: minmax(min-content, max-content);
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgb(216, 216, 216);
-    align-content: start;
-}
+} */
 
 .travelPhoto {
-    grid-row: 1 / span 1;
-    grid-column: 1 / span 1;
+    grid-area: photo;
 }
 
 .reservation-container .travelPhoto img {
@@ -52,102 +43,28 @@
 }
 
 .travelName {
-    grid-row: 1;
-    grid-column: 2 / span 3;
+    grid-area: title;
 }
 
 .reservationOptions {
-    grid-row: auto;
-    grid-column: auto / span 2;
+    grid-area: reservationOptions;
     border-right: 1px solid rgb(209, 215, 222);
     padding-right: 1rem;
 }
 
 .reservationCalculator {
-    grid-row: auto;
-    grid-column: auto / span 2;
+    grid-area: reservationCalculator;
 }
 
-.tags {
-    align-items: center;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-}
-
-.tags.has-addons .tag {
-    margin-right: 0;
-}
-
-.tags .tag {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-.tags.has-addons .tag:not(:last-child) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-.tags.has-addons .tag:not(:first-child) {
-    margin-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.tag:not(body) {
-    align-items: center;
-    background-color: whitesmoke;
-    border-radius: 4px;
-    color: #111111;
-    display: inline-flex;
-    font-size: 0.75rem;
-    height: 2em;
-    justify-content: center;
-    line-height: 1.5;
-    padding-left: 0.75em;
-    padding-right: 0.75em;
-    white-space: nowrap;
-}
-
-.tag:not(body).is-dark {
-    background-color: #363636;
-    color: #fff;
-}
-
-.tag:not(body).is-info {
-    background-color: #3298dc;
-    color: #fff;
-}
-
-.tag:not(body).is-info.is-light {
-    background-color: #eff5fb;
-    color: #296fa8;
-}
-
-.tag:not(body).is-primary {
-    background-color: #00d1b2;
-    color: #fff;
-}
-
-.tag:not(body).is-warning {
-    background-color: #ffe08a;
-    color: rgba(0, 0, 0, .7);
-}
-
-.tag:not(body).is-link {
-    background-color: #485fc7;
-    color: #fff;
-}
-
-.tags:last-child {
-    margin-bottom: -0.5rem;
+@media screen and (min-width: 50rem) {
+    .reservation-container {
+        grid-template-areas: "photo title title title" "reservationOptions reservationOptions reservationCalculator reservationCalculator";
+    }
 }
 
 .btn-rakatanga-blue {
     background-color: #296fa8 !important;
     color: #cbeaff;
-    font-size: 1.3em;
 }
 
 .btn-rakatanga-secondary {
@@ -167,67 +84,6 @@
     color: white;
 }
 
-@media all and (min-width: 1024px) and (max-width: 1280px) {
-    .reservationOptions {
-        grid-column: auto / span 2;
-    }
-    .reservationCalculator {
-        grid-column: auto / span 2;
-    }
-}
-
-@media all and (min-width: 768px) and (max-width: 1024px) {
-    .reservationOptions {
-        grid-column: auto / span 5;
-        border-right: none;
-    }
-    .reservationCalculator {
-        grid-column: auto / span 5;
-    }
-}
-
-@media all and (min-width: 480px) and (max-width: 768px) {
-    .reservationOptions {
-        grid-column: auto / span 5;
-        border-right: none;
-    }
-    .reservationCalculator {
-        grid-column: auto / span 5;
-    }
-}
-
-@media all and (max-width: 480px) {
-    .reservationOptions {
-        grid-column: auto / span 5;
-        border-right: none;
-    }
-    .reservationCalculator {
-        grid-column: auto / span 5;
-    }
-}
-
-
-/* Portrait */
-
-@media screen and (orientation:portrait) {
-    /* Portrait styles here */
-}
-
-
-/* Landscape */
-
-@media screen and (orientation:landscape) {
-    /* Landscape styles here */
-}
-
-
-/* CSS for iPhone, iPad, and Retina Displays */
-
-
-/* Non-Retina */
-
-@media screen and (-webkit-max-device-pixel-ratio: 1) {}
-
 
 /* Retina */
 
@@ -235,23 +91,3 @@
 only screen and (-o-min-device-pixel-ratio: 3/2),
 only screen and (min--moz-device-pixel-ratio: 1.5),
 only screen and (min-device-pixel-ratio: 1.5) {}
-
-
-/* iPhone Portrait */
-
-@media screen and (max-device-width: 480px) and (orientation:portrait) {}
-
-
-/* iPhone Landscape */
-
-@media screen and (max-device-width: 480px) and (orientation:landscape) {}
-
-
-/* iPad Portrait */
-
-@media screen and (min-device-width: 481px) and (orientation:portrait) {}
-
-
-/* iPad Landscape */
-
-@media screen and (min-device-width: 481px) and (orientation:landscape) {}

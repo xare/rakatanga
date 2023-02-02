@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $date;
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private Collection $reservation;
+    private Collection $reservations;
 
     #[ORM\OneToMany(targetEntity: BlogTranslation::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $blogTranslations;
@@ -313,15 +313,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection|Reservations[]
      */
-    public function getReservation(): Collection
+    public function getReservations(): Collection
     {
-        return $this->reservation;
+        return $this->reservations;
     }
 
     public function addReservation(Reservation $reservation): self
     {
-        if (!$this->reservation->contains($reservation)) {
-            $this->reservation[] = $reservation;
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
         }
 
         return $this;
@@ -329,7 +329,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeReservation(Reservation $reservation): self
     {
-        $this->reservation->removeElement($reservation);
+        $this->reservations->removeElement($reservation);
 
         return $this;
     }
@@ -432,10 +432,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection|Reservation[]
      */
-    public function getReservations(): Collection
+    /* public function getReservations(): Collection
     {
         return $this->reservation;
-    }
+    } */
 
     public function getAddress(): ?string
     {

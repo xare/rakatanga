@@ -114,7 +114,9 @@
 
                 <div class="row">
                     <div class="col-6 col-xs-12">
-                        {{ include( 'reservation/cards/_card_codespromo.html.twig' ) }}
+                        <div class="card card-default mb-3 shadow d-none card-codespromo">
+                            {{ include( 'reservation/cards/_card_codespromo.html.twig' ) }}
+                        </div>
                     </div>
                     <div class="col-6 col-xs-12">
                         {{ include( 'reservation/cards/_card_comment.html.twig' ) }}

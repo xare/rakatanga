@@ -5,12 +5,17 @@
 {% block body %}
 <div class="container">
     {{ include ('admin/shared/_controlband.html.twig',{'entity':'travellers'})}}
+    <div class="row">
+        <div class="navigation col-2 col-xs-12">
+            {{ knp_pagination_render(travellers) }}
+        </div>
+    </div>
     <div class="row mb-4">
         <div class="col-12 col-md-12 ">
             <h1>Travellers index</h1>
 
             <table class="table">
-                <thead>
+                <thead class="main-red">
                     <tr>
                         <th>Id</th>
                         <th>Langue</th>
@@ -22,13 +27,14 @@
                         <th>Vols</th>
                         <th>Date_ajout</th>
                         <th>Email</th>
-                        <th>actions</th>
+                        <th><i class="fa fa-edit"></i></th>
+                        <th><i class="fa fa-trash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for traveller in travellers %}
                     {{ include('admin/travellers/_row.html.twig',{'traveller': traveller} )}}
-                    
+
                 {% else %}
                     <tr>
                         <td colspan="11">no records found</td>
@@ -36,8 +42,11 @@
                 {% endfor %}
                 </tbody>
             </table>
-
-            <a href="{{ path('travellers_new') }}">Create new</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="navigation col-2 col-xs-12">
+            {{ knp_pagination_render(travellers) }}
         </div>
     </div>
 </div>
