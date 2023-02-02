@@ -10,6 +10,7 @@ use App\Entity\Reservation;
 use App\Entity\ReservationOptions;
 use App\Entity\User;
 use App\Repository\CodespromoRepository;
+use App\Repository\LangRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\OptionsTranslationsRepository;
 use App\Repository\PaymentsRepository;
@@ -27,6 +28,7 @@ class reservationHelper
         private ReservationRepository $reservationRepository,
         private ReservationOptionsRepository $reservationOptionsRepository,
         private CodespromoRepository $codespromoRepository,
+        private LangRepository $langRepository,
         private localizationHelper $localizationHelper,
         private invoiceHelper $invoiceHelper)
     {
@@ -201,12 +203,12 @@ class reservationHelper
 
     public function getReservationOptions(
         Reservation $reservation,
-        $lang
+        string $locale
         ) {
         $optionsArray = [];
         $travelOptions = $reservation->getDate()->getTravel()->getOptions();
         $reservationOptions = $reservation->getReservationOptions();
-
+        $lang = $this->langRepository->findBy(['iso_code' => $locale]);
         if (count($travelOptions) > 0) {
             $i = 0;
             foreach($travelOptions as $travelOption) {
@@ -218,6 +220,8 @@ class reservationHelper
                 }
                 $optionsArray[$i]['price'] = $travelOption->getPrice();
                 $optionsArray[$i]['id'] = $travelOption->getId();
+                $optionTranslation = $this->optionsTranslationsRepository->findOneBy(['option'=>$travelOption->getId(), 'lang'=>$lang]);
+                $optionsArray[$i]['title'] = $optionTranslation->getTitle();
             $i++;
             }
         }

@@ -616,8 +616,10 @@ class reservationApp {
                 $('[data-container="js-travellers-form"]')
                     .find('.card-body')
                     .html(response.travellersTableHtml);
-
-                $('#js-reservation-payment').removeClass('disabled');
+                $('#js-reservation-payment')
+                    .removeAttr('title')
+                    .removeAttr('data-bs-tooltip')
+                    .removeClass('disabled');
                 document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { 'reservation': reservationId });
             } catch (jqXHR) {
                 console.error(jqXHR);

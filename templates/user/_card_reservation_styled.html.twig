@@ -96,7 +96,7 @@
       {% endfor %}
 
         {# {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %} #}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        {# <div class="d-grid gap-2 d-md-flex justify-content-md-end">
           <a
             class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
             href="{{ path( 'user_reservation_travellers', { 'reservation':reservation.id }) }}"
@@ -106,7 +106,7 @@
               {{'Añadir Viajeros'|trans}}
             <i class="fa fa-motorcycle"></i>
           </a>
-        </div>
+        </div> #}
         {# {% endif %} #}
       <h5 class="mt-3">{{'Mensajes enviados'|trans}}</h5>
 

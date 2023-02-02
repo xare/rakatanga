@@ -67,16 +67,16 @@ class localizationHelper
 
         $lang = $this->_getLang($locale);
 
-        $Object = $this->optionsTranslationsRepository->findOneBy(
+        $optionTranslation = $this->optionsTranslationsRepository->findOneBy(
             [
-                'options' => $option,
+                'option' => $option,
                 'lang' => $lang,
             ]);
 
-        if ($Object === null) {
+        if ($optionTranslation === null) {
             return null;
         } else {
-            return $Object->getTitle();
+            return $optionTranslation->getTitle();
         }
     }
 

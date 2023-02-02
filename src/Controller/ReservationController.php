@@ -242,10 +242,10 @@ class ReservationController extends AbstractController
                 }
             }
         }
-        $lang = $this->langRepository->findOneBy([
+        /* $lang = $this->langRepository->findOneBy([
                 'iso_code' => $locale,
-            ]);
-        $optionsArray = $this->reservationHelper->getReservationOptions($reservation, $lang);
+            ]); */
+        $optionsArray = $this->reservationHelper->getReservationOptions($reservation, $locale);
 
         return $this->render('reservation/reservationPayment.html.twig', [
             'locale' => $locale,

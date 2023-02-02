@@ -25,7 +25,7 @@ class OptionsTranslations
 
     #[ORM\ManyToOne(targetEntity: Options::class, inversedBy: 'optionsTranslations')]
     #[ORM\JoinColumn(nullable: false)]
-    private Options $options;
+    private Options $option;
 
     #[ORM\ManyToOne(targetEntity: Infodocs::class, inversedBy: 'optionsTranslations')]
     private ?Infodocs $infodocs = null;
@@ -71,14 +71,14 @@ class OptionsTranslations
         return $this;
     }
 
-    public function getOptions(): ?Options
+    public function getOption(): ?Options
     {
-        return $this->options;
+        return $this->option;
     }
 
-    public function setOptions(?Options $options): self
+    public function setOption(?Options $option): self
     {
-        $this->options = $options;
+        $this->option = $option;
 
         return $this;
     }
