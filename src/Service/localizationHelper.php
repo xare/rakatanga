@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Lang;
 use App\Entity\Popups;
 use App\Repository\CategoryRepository;
 use App\Repository\CategoryTranslationRepository;
@@ -34,7 +35,7 @@ class localizationHelper
          ) {
     }
 
-    public function renderTravelString($id, $locale)
+    public function renderTravelString(int $id, string $locale):mixed
     {
         $travel = $this->travelTranslationRepository->find($id);
         $lang = $this->_getLang($locale);
@@ -47,7 +48,7 @@ class localizationHelper
         }
     }
 
-    public function renderTravelUrl($id, $locale)
+    public function renderTravelUrl(int $id, string $locale):mixed
     {
         $travel = $this->travelRepository->find($id);
         $lang = $this->_getLang($locale);
@@ -61,7 +62,7 @@ class localizationHelper
         }
     }
 
-    public function renderOptionString($id, $locale)
+    public function renderOptionString(int $id, string $locale):mixed
     {
         $option = $this->optionsRepository->find($id);
 
@@ -80,7 +81,7 @@ class localizationHelper
         }
     }
 
-    public function renderOptionIntro($id, $locale)
+    public function renderOptionIntro(int $id, string $locale):mixed
     {
         $option = $this->optionsRepository->find($id);
         $lang = $this->_getLang($locale);
@@ -96,7 +97,7 @@ class localizationHelper
         }
     }
 
-    public function renderOptionInfodoc($id, $locale)
+    public function renderOptionInfodoc(int $id, string $locale):mixed
     {
         $option = $this->optionsRepository->find($id);
         $lang = $this->_getLang($locale);
@@ -112,7 +113,7 @@ class localizationHelper
         }
     }
 
-    public function renderCategoryString($id, $locale)
+    public function renderCategoryString(int $id, string $locale):mixed
     {
         $category = $this->categoryRepository->find($id);
 
@@ -129,7 +130,7 @@ class localizationHelper
         }
     }
 
-    public function renderPageString($id, $locale)
+    public function renderPageString(int $id, string $locale):mixed
     {
         $page = $this->pagesRepository->find($id);
         $lang = $this->_getLang($locale);
@@ -145,7 +146,7 @@ class localizationHelper
         }
     }
 
-    private function _getLang($locale)
+    private function _getLang(string $locale):array
     {
         return $this->langRepository->findBy(
             ['iso_code' => $locale]
