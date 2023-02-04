@@ -17,24 +17,24 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/admin/options')]
 class OptionsController extends MainadminController
 {
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private OptionsRepository $optionsRepository,
+        private PaginatorInterface $paginator)
     {
-        $this->entityManager = $entityManager;
     }
 
     #[Route(path: '/', name: 'options_index', methods: ['GET'])]
     public function index(
-        Request $request,
-        OptionsRepository $optionsRepository,
-        PaginatorInterface $paginator): Response
+        Request $request): Response
     {
-        $options = $paginator->paginate(
-            $optionsRepository->listAll(),
+        $options = $this->paginator->paginate(
+            $this->optionsRepository->listAll(),
             $request->query->getInt('page', 1),
             10
         );
+
 
         return $this->render('admin/options/index.html.twig', [
             'options' => $options,
@@ -53,15 +53,20 @@ class OptionsController extends MainadminController
             $request->query->getInt('page', 1),
             10
         );
-
+        dd($options);
         return $this->render('admin/options/index.html.twig', [
             'options' => $options,
             'count' => 10,
         ]);
     }
 
-    #[Route(path: '/new', name: 'options_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, LangRepository $langRepository): Response
+    #[Route(
+        path: '/new',
+        name: 'options_new',
+        methods: ['GET', 'POST'])]
+    public function new(
+        Request $request,
+        LangRepository $langRepository): Response
     {
         $langs = $langRepository->findAll();
         $option = new Options();

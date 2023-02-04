@@ -118,10 +118,19 @@ class ReservationAjaxController extends AbstractController
         ], 200, [], ['groups' => 'main']);
     }
 
-  #[Route(
-    path: '/ajax/initialize/reservation/register/',
-    options: ['expose' => true],
-    name: 'initialize-reservation-register')]
+    #[Route(
+        path: '/ajax/initialize/reservation/register/{_locale}',
+        options: ['expose' => true],
+        methods: ['POST'],
+        name: 'initialize-reservation-register')]
+    #[Route(
+        path: [
+            'en' => '/ajax/initialize/reservation/register/{_locale}',
+            'es' => '/ajax/initialize/reservation/register/{_locale}',
+            'fr' => '/ajax/initialize/reservation/register/{_locale}'],
+        methods: ['POST'],
+        options: ['expose' => true],
+        name: 'initialize-reservation-register')]
     public function initializeAsRegister(
         Request $request,
         UserAuthenticatorInterface $userAuthenticator,
@@ -130,8 +139,10 @@ class ReservationAjaxController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         UserRepository $userRepository,
         ValidatorInterface $validator,
-        $locale = 'es'
+        string $_locale = null,
+        string $locale = 'es'
     ) {
+        $locale = $locale ? $locale : $_locale;
         if ($request->isXmlHttpRequest()) {
             $userType = new User();
             $form = $this->createForm(UserType::class, $userType);
@@ -333,7 +344,7 @@ class ReservationAjaxController extends AbstractController
             'travel' => $reservation->getDate()->getTravel(),
         ]);
         // CREATE RESERVATION OPTIONS ARRAY
-        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation, $lang);
+        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation, $locale);
 
         $swalHtml = $this->renderView('reservation/_swal_confirmation_message.html.twig',
             [
@@ -384,22 +395,43 @@ class ReservationAjaxController extends AbstractController
     }
 
     #[Route(
-        path: '/ajax/load-user-switch',
+        path: '/ajax/load-user-switch/{_locale}',
         options: ['expose' => true],
         name: 'ajax_load_user_switch')]
-    public function ajaxLoadUserSwitch(): Response
+    #[Route(
+        path: [
+            'en' => '/ajax/load-user-switch/{_locale}',
+            'es' => '/ajax/load-user-switch/{_locale}',
+            'fr' => '/ajax/load-user-switch/{_locale}'],
+        options: ['expose' => true],
+        name: 'ajax_load_user_switch')]
+    public function ajaxLoadUserSwitch(
+        string $_locale = null,
+        string $locale = 'es'): Response
     {
-        return $this->render('shared/_user_switch.html.twig');
+        $locale = $_locale ? $_locale : $locale;
+        return $this->render('shared/_user_switch.html.twig',['locale' => $locale]);
     }
 
     #[Route(
-        path: '/ajax/login-result',
+            path: '/ajax/login-result/{_locale}',
+        options: ['expose' => true],
+        name: 'ajax_login_result',
+        methods: ['POST'])]
+    #[Route(
+        path: [
+            'en' => '/ajax/login-result/{_locale}',
+            'es' => '/ajax/login-result/{_locale}',
+            'fr' => '/ajax/login-result/{_locale}'],
         options: ['expose' => true],
         name: 'ajax_login_result',
         methods: ['POST'])]
     public function ajaxLoginResult(
-        Request $request
+        Request $request,
+        string $_locale = null,
+        string $locale = "es"
         ): Response {
+            $locale = $_locale ? $_locale : $locale;
         /**
          * @var User $user
          */
@@ -418,6 +450,7 @@ class ReservationAjaxController extends AbstractController
         return $this->render('reservation/_login_result_card.html.twig', [
             'user' => $user,
             'reservationId' => $reservationId,
+            'locale' => $locale
         ]);
     }
 
@@ -799,11 +832,18 @@ class ReservationAjaxController extends AbstractController
     }
 
     #[Route(
-        path: 'ajax/addTravellersForms',
+        path: 'ajax/addTravellersForms/{_locale}',
         methods: ['POST'],
         name: 'add-travellers-forms',
         options: ['expose' => true] )]
-
+        #[Route(
+            path: [
+                'en' => '/ajax/addTravellersForms/{_locale}',
+                'es' => '/ajax/addTravellersForms/{_locale}',
+                'fr' => '/ajax/addTravellersForms/{_locale}'],
+            options: ['expose' => true],
+            methods: ['POST'],
+            name: 'add-travellers-forms')]
         function addTravellersForms(
             Request $request
         ){

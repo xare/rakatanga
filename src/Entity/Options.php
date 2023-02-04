@@ -32,10 +32,10 @@ class Options
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Travel $travel = null;
 
-    #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'options', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: OptionsTranslations::class, mappedBy: 'option', orphanRemoval: true, cascade: ['persist'])]
     private Collection $optionsTranslations;
 
-    #[ORM\OneToMany(targetEntity: ReservationOptions::class, mappedBy: 'options', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: ReservationOptions::class, mappedBy: 'option', orphanRemoval: true, cascade: ['persist'])]
     private Collection $reservationOptions;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
@@ -88,7 +88,7 @@ class Options
     {
         if (!$this->optionsTranslations->contains($optionsTranslation)) {
             $this->optionsTranslations[] = $optionsTranslation;
-            $optionsTranslation->setOptions($this);
+            $optionsTranslation->setOption($this);
         }
 
         return $this;
@@ -98,8 +98,8 @@ class Options
     {
         if ($this->optionsTranslations->removeElement($optionsTranslation)) {
             // set the owning side to null (unless already changed)
-            if ($optionsTranslation->getOptions() === $this) {
-                $optionsTranslation->setOptions(null);
+            if ($optionsTranslation->getOption() === $this) {
+                $optionsTranslation->setOption(null);
             }
         }
 

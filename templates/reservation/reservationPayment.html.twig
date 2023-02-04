@@ -2,6 +2,11 @@
 
 {% block title %}{{parent()}} - {{'Resumen datos de la reserva y pago'|trans}} {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	{{  encore_entry_link_tags('tags')  }}
+{% endblock %}
+
 {% block body %}
 
 <div class="container">

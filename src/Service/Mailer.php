@@ -189,8 +189,12 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendRegistrationVerificationToUser(User $user, string $verificationUrl, string $locale)
+    public function sendRegistrationVerificationToUser(
+        User $user,
+        string $verificationUrl,
+        string $locale)
     {
+        dump($locale);
         $email = $this->sendToSender();
         $email->to(
             new Address(

@@ -60,9 +60,9 @@ class OptionsRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('o')
         ->select('ot.title as title')
-            ->innerJoin(ReservationOptions::class, 'ro', Join::WITH, 'ro.options = o.id')
+            ->innerJoin(ReservationOptions::class, 'ro', Join::WITH, 'ro.option = o.id')
             ->innerJoin(Reservation::class, 'r', Join::WITH, 'r.id = ro.reservation')
-            ->innerJoin(OptionsTranslations::class, 'ot', Join::WITH, 'ot.options = o.id')
+            ->innerJoin(OptionsTranslations::class, 'ot', Join::WITH, 'ot.option = o.id')
             ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = ot.lang')
             ->andWhere('r.id = :reservation')
             ->setParameter('reservation', $reservationId)

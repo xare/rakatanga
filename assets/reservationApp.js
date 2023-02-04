@@ -208,11 +208,14 @@ class reservationApp {
         console.info(reservation);
         const isInitialized = this.$calculator.data('isInitialized');
         console.info(isInitialized);
+        const self = this;
         (
             async() => {
                 try {
                     const response = await $.ajax({
-                        url: Routing.generate('add-travellers-forms'),
+                        url: Routing.generate('add-travellers-forms', {
+                            '_locale': self.locale
+                        }),
                         method: 'POST',
                         data: {
                             nbpilotes,
@@ -352,7 +355,8 @@ class reservationApp {
         (async($form) => {
             try {
                 const response = await $.ajax({
-                    url: Routing.generate('initialize-reservation-register'),
+                    url: Routing.generate(
+                        'initialize-reservation-register', { '_locale': self.locale }),
                     type: 'POST',
                     data: $form.serialize()
                 });
@@ -620,7 +624,7 @@ class reservationApp {
                     .removeAttr('title')
                     .removeAttr('data-bs-tooltip')
                     .removeClass('disabled');
-                document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { 'reservation': reservationId });
+                document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { '_locale': self.locale, 'reservation': reservationId });
             } catch (jqXHR) {
                 console.error(jqXHR);
             }
@@ -1026,11 +1030,12 @@ class reservationApp {
 
     _loadUserSwitch() {
         $("#user-switch").empty();
+        const self = this;
         (async() => {
             try {
                 const response = await $.ajax({
                     type: "GET",
-                    url: Routing.generate('ajax_load_user_switch'),
+                    url: Routing.generate('ajax_load_user_switch', { '_locale': self.locale }),
                 });
                 $("#user-switch").html(response);
             } catch (jqXHR) {

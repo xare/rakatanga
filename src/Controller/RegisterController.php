@@ -32,8 +32,17 @@ class RegisterController extends AbstractController
         $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
 
-    #[Route(path: '/register', name: 'register', priority: 10)]
-    #[Route(path: ['en' => '{_locale}/register', 'es' => '{_locale}/registro', 'fr' => '{_locale}/enregistrement'], name: 'register', priority: 10)]
+    #[Route(
+        path: '/register',
+        name: 'register',
+        priority: 10)]
+    #[Route(
+        path: [
+            'en' => '{_locale}/register',
+            'es' => '{_locale}/registro',
+            'fr' => '{_locale}/enregistrement'],
+        name: 'register',
+        priority: 10)]
     public function index(
     Request $request,
     UserPasswordHasherInterface $userPasswordHasher,
@@ -92,7 +101,7 @@ class RegisterController extends AbstractController
                     'user_verify_email',
                     $user->getId(),
                     $user->getEmail(),
-                    ['id' => $user->getId()]
+                    ['id' => $user->getId(),'locale'=>$locale]
                 );
                 $verificationUrl = $signatureComponents->getSignedUrl();
                 $mailer->sendRegistrationVerificationToUser($user, $verificationUrl, $locale);
@@ -210,7 +219,18 @@ class RegisterController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/verify', name: 'user_verify_email')]
+    #[Route(
+        path: '/verify',
+        name: 'user_verify_email',
+        priority: 10)]
+    #[Route(
+        path: [
+            'en' => '{_locale}/verify/',
+            'es' => '{_locale}/verify/',
+            'fr' => '{_locale}/verify/'],
+        name: 'user_verify_email',
+        priority: 10
+        )]
     public function userVerifyEmail(
     Request $request,
     VerifyEmailHelperInterface $verifyEmailHelper,

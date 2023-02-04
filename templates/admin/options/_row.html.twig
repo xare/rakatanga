@@ -4,16 +4,17 @@
     <strong>{{ renderLocalizedCategory(option.travel.category.id,'es')}}</strong><br />
     {{ renderLocalizedTravel(option.travel.id,'es') }}</td>
     <td>{{ option.price }}</td>
-    
+
     <td>
         <a href="{{ path('options_edit', {'id': option.id}) }}">
+        {# {{dump(option.optionsTranslations)}} #}
             {% for optionTranslation in option.optionsTranslations %}
                 <span class="badge bg-secondary">
                     {{ optionTranslation.lang.isoCode|upper }}
                 </span> {{ optionTranslation.title }}
                 <br />
             {% endfor %}
-        </a> 
+        </a>
     </td>
     <td>
         {% if option.isExtension == 1 %}
@@ -22,14 +23,14 @@
             <i class="fa-solid fa-x"></i>
         {% endif %}
     </td>
-    
+
    {#  <td>
         <a href="{{ path('options_show', {'id': option.id}) }}"
         class="btn btn-primary">
             <i class="fa fa-eye"></i>
         </a>
     </td> #}
-    
+
     <td>
         <a href="{{ path('options_duplicate', {'id': option.id}) }}">
             <i class="fa fa-copy"></i>

@@ -40,11 +40,10 @@
                 </thead>
                 <tbody>
                 {% for option in options %}
-                    {{include('admin/options/_row.html.twig')}}
-                    
+                    {{ include('admin/options/_row.html.twig',{'option':option}) }}
                 {% else %}
                     <tr>
-                        <td colspan="6">no records found</td>
+                        <td colspan="6">No se han encontrado opciones.</td>
                     </tr>
                 {% endfor %}
                 </tbody>

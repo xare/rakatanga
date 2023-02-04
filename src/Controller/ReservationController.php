@@ -137,7 +137,7 @@ class ReservationController extends AbstractController
      }
 
     #[Route(
-        path: '/reservation/{reservation}/payment',
+        path: '{_locale}/reservation/{reservation}/payment',
         priority: 6,
         name: 'reservation_payment',
         requirements: ['reservation' => '\d+'],
