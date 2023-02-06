@@ -1,13 +1,13 @@
 <div class="reservation-container">
   <div class="travelName box">
     <h4>
-        <a 
+        <a
           href="{{path('reservation_edit',{'id': reservation.id})}}"
           title="Editar la reserva"
           data-bs-toggle="tooltip">
           {{reservation.code}}
-        </a> - 
-        <a 
+        </a> -
+        <a
           href="{{path('user_edit',{'id': reservation.user.id})}}"
           title="Editar el usuario"
           data-bs-toggle="tooltip"
@@ -35,7 +35,7 @@
       {% for document in reservation.documents %}
         <div class="tags has-addons">
           <span class="tag is-dark"><i class="fas fa-{% if document.doctype == "passport" %}passport{% elseif document.doctype == "visa" %}book{% elseif document.doctype == "drivers" %}id-card{% endif %}"></i></span>
-          
+
           <span class="tag is-info" title="{{document.filename}}" data-bs-toggle="tooltip">{{ document.filename|u.truncate(20,'...') }}</span>
           <span class="tag is-light">
             <a href="{{ path("download_document",{
@@ -53,7 +53,7 @@
         {% if traveller.email != reservation.user.email %}
           <div class="reservationTraveller-item">
             <a href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
-            title="{{'Añadir Datos del usuario'|trans}}"
+            title="{{'Añadir datos del usuario'|trans}}"
             data-bs-toggle="tooltip">
               <div class="tags has-addons">
                 <span class="tag is-link">
@@ -81,19 +81,19 @@
           {% endif %}
         </span>
         <span class="tag is-light">
-          <a 
-            href="{{ path( 'mailings_show' , { 'id':mailing.id } ) }}" 
+          <a
+            href="{{ path( 'mailings_show' , { 'id':mailing.id } ) }}"
             target="_blank"
             title="{{mailing.subject}}"
             data-bs-toggle="tooltip">{{ mailing.subject|u.truncate(40,'...') }}</a>
         </span>
       </div>
-        
+
         {% else %}
         No hay mensajes enviados asociados a esta reserva.
       {% endfor %}
   </div>
-  
+
     {% set totalAmmount = 0 %}
     <div class="box reservationCalculator">
       <table class="table table-borderless">
@@ -146,7 +146,7 @@
             <div class="tags has-addons">
               <span class="tag is-dark"><i class="fas fa-plus"></i></span>
               <span class="tag is-info">Total</span>
-          </div>     
+          </div>
           </td>
           <td><strong class="small">{{ totalAmmount|format_currency('EUR') }}</strong></td>
         </tr>
@@ -175,7 +175,7 @@
           </td>
           <td>
             <strong class="text-danger">{{ totalAmmount|format_currency('EUR') }}</strong>
-          </td> 
+          </td>
         </tr>
       <tr>
         <td><h6>FACTURAS</h6></td>
@@ -189,7 +189,7 @@
                 {{reservation.invoice.invoiceNumber}}
               </span>
               <span class="tag is-light">
-                <a 
+                <a
                   href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
                   title="{{reservation.invoice.filename}}"
                   data-bs-toggle="tooltip">

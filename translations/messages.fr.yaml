@@ -46,8 +46,8 @@ completo: complet
 del: du
 de: de
 al: au
-Piloto/a moto: Pilote moto
-Pasajero/a: Passager
+Piloto moto: Pilote moto
+Pasajero: Passager
 Reserva: Réserver
 Página de acceso: Page de connexion
 Estás conectado como: Vous êtes connecté en tant que
@@ -188,6 +188,7 @@ Hotel a la llegada: Hôtel à l'arrivée
 Hotel en el destino: Hôtel dans la destination
 Fecha de salida: Date de sortie
 Nº de vuelo de regreso: Numéro de vol de retour
+Aeropuerto de salida: Aéroport de sortie (Retour)
 Aeropuerto de salida (regreso): Aéroport de sortie (Retour)
 Hotel antes del regreso: Hôtel avant du retour
 Número de teléfono de contacto: Numéro de teléphone de contact
@@ -205,9 +206,10 @@ Arrastra el archivo hasta aquí o haz símplemente click, y se abrirá la ventan
 No hay documentos asociados a esta reserva: Il n'y a pas de documents associés à cette réserve
 DATOS: DONNEES
 Guardar: Sauvegarde
-Resetea tu contraseña: Demander un nouveau mot de passe
+Reinicia tu contraseña: Demander un nouveau mot de passe
 Introduce tu cuenta de correo electrónico y te enviaremos un vínculo via email para que puedas resetear tu contraseña: Introduisez votre addresse de courrier électronique et vous recevrez un message avec un lien qui vous permettra de renouveller votre mot de passe.
 Enviar un correo con un vínculo de renovación de contraseña: Envoyez moi le lien de renouvellement de mon mot de passe
+Ha habido un problema validando tu petición de reinicio de contraseña: Il y a eu un problème avec la validation de ta demande de réinitialisation de mot de passe
 Código de reserva: Code de la réservation
 TODAVIA NO HAS AÑADIDO LOS DATOS DE TODOS LOS VIAJEROS: VOUS N'AVEZ PAS ENCORE AJOUTÉ LES DONNÉES DE TOUS LES VOYAGEURS
 Te pedimos que lo hagas a continuación para que queden guardados en nuestro sistema: Nous vous demandons de le faire ici pour pouvoir garder toutes les données dans nôtre système
@@ -314,7 +316,8 @@ desde ahí podrás realizar modificaciones y añadir los datos necesario para or
 Datos de la reserva: Données de la réservation
 Cálculo de la reserva: Cálcul de la réservation
 Ya has comenzado tu reserva para este viaje: Vous avez déjà réservé se voyage
-Ver Reserva: Voir réservation
+Ver reserva: Voir réservation
+Transferencia Bancaria: Virement bancaire
 Número de factura: Número de factura
 CLIENTE: CLIENT
 FACTURA: FACTURE
@@ -366,3 +369,85 @@ Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pa
 Por favor envíenos via email el justificante de la transferencia para validación de su reserva: S'il vous plait envoyez nous le justifiat du paiement via courrier électronique pour que l'on puisse valider votre réservation
 Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje: Nous garderons votre place un maximum d'une semaine (7 jours) Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje
 1 mes antes de la salida del viaje: 1 moi avant de la sortie du voyage
+Esta reserva ya ha sido realizada, acude a tu espacio de usuario para continuar con tu proceso de reserva: Cette réservation a déjà été réalisée, veuillez bien aller à vôtre espace d'utilisateur pour continuer avec le processus de réservation
+Editar datos del viaje y documentación: Editer les données du voyage et la documentation
+Acompañantes: Compagnons
+No se ha encontrado un token de reestablecimiento de la contraseña ni en el url ni en la sesión: Nous n'avons trouvé de jeton de réétablissement du mot de passe ni dans l'url ni dans la session
+Puedes volver a tu reserva: Vous pouvez retournet à vôtre réservation
+Elige los viajes que más te interesan: Choicissez les voyages qui vous intéressent le plus
+PAGO: PAIEMENT
+Confirmación de pago para el viaje: Confirmation du paiement du voyage
+Blog: Blog
+Blogs: Blogs
+Reservas: Reservations
+Tu reserva ha sido iniciada: Ta réservation a été initialisée
+Este email ya está tomado: Cet email a déjà été pris
+Este email ya está en nuestro sistema, por favor, rellena los campos siguientes: Cet email est déjà dans nôtre système, veuillez remplir les champs suivants
+Revisión y pago: Revisión y pago
+No hay documentos para esta reserva: Il n'y a pas de documentation pour cette réservation
+No se han generado facturas para esta reserva: Pas de factures ont été crées pour cette réservation
+Introduce tu contraseña: Introduisez vôtre mot de passe
+Este viaje no contiene documentos asociados: Ce voyage ne contient pas de documents associés
+Artículo: Articles
+Galería de fotos: Galerie de photos
+Rakatanga-Blog: Rakatanga-Blog
+No hemos encontrado la página que buscabas: Nous n'avons pas trouvé la page que vous cherchiez
+Si sencillamente quieres información general sobre cualquier viaje haz click aquí, por favor: Si vous souhaitez simplement des informations générales sur un voyage, veuillez cliquer ici
+India: Indie
+Ver rutas: Voir les itinéraires
+Permiso de circulación: Permis de circulation
+Error: Erreur
+Tu reserva ha sido iniciada. Para poder cerrarla puedes pasar a realizar el pago. Gracias: Votre réservation a commencé. Pour pouvoir le fermer, vous pouvez procéder au paiement. Merci
+Referencia de la reserva: Référence de réservation
+Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos: Ce voyage est en préparation, si vous souhaitez en savoir plus, contactez-nous et nous vous informerons
+Infos: Infos
+Documentación informativa: Documentación informativa
+Documentación: Documentación
+Extensiones: Extensiones
+No hay documentación adjunta para este viaje: No hay documentación adjunta para este viaje
+Haz click sobre la foto para verla a pantalla completa: Haz click sobre la foto para verla a pantalla completa
+Bono descuento: Bono descuento
+Valor de cancelación: Valor de cancelación
+Total a pagar: Total a pagar
+Factura válida creada electrónicamente: Factura válida creada electrónicamente
+Resto por pagar: Resto por pagar
+Actualizar cambios: Actualizar cambios
+Guardar los datos de viajeros: Guardar los datos de viajeros
+usuario: usuario
+dominio.com: dominio.com
+Añadir código de descuento a esta reserva: Añadir código de descuento a esta reserva
+Iniciación de una nueva reserva: Iniciación de una nueva reserva
+No hay facturas asociadas a esta reserva: No hay facturas asociadas a esta reserva
+Pago de la reserva: Pago de la reserva
+Transferencia bancaria: Transferencia bancaria
+Datos de la cuenta bancaria para efectuar el pago: Datos de la cuenta bancaria para efectuar el pago
+La reserva implica la aceptación total de nuestras condiciones generales de venta: La reserva implica la aceptación total de nuestras condiciones generales de venta
+Mis datos: Mis datos
+Pago anulado: Pago anulado
+Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias: Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias
+Pago realizado: Pago realizado
+Apellido: Apellido
+Entrar como usuario invitado: Entrar como usuario invitado
+Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico: Afin de commencer à traiter votre réservation, nous avons besoin de votre adresse e-mail
+Inicializar: Initialiser
+Esta tarjeta se activará en cuanto hayas rellenado los datos de todos los viajeros que participan en este viaje: Cette carte sera activée dès que vous aurez renseigné les coordonnées de tous les voyageurs participant à ce voyage
+Entrar en tu cuenta: Connectez-vous à votre compte
+Haz login con tu cuenta: Connectez-vous avec votre compte
+Este email ya está en nuestro sistema, por favor, rellena la contraseña: Cet e-mail est déjà dans notre système, veuillez saisir le mot de passe
+Introduce tu correo eletrónico: Entrer votre Email
+Datos de los viajeros: Données voyageurs
+Por favor, añade los datos de los: S'il vous plait ajoutez les données des
+y de los: et des
+Seguro de asistencia en viaje: Assurance d'assistance en voyage
+Transfer aeropuerto: Transfer de l'aeroport
+Número de uso actual: Número de utilisation actuelle
+Número de usos total: Número de utilisations totale
+Cierra esta ventana: Fermer cette fenêtre
+Utilizar los datos del usuario: Utiliser les données de l'utilisateur
+Reserva actualizada: Reservation renouvelée
+Volver a ver mis reservas: Retourner sur mes réservations
+Pagar la cantidad restante: Paye la somme restante
+No hay facturas a tu nombre: Il n'y a pas de factures à vôtre nom
+No hay reservas: Il n'y a pas de réservation
+No has elegido ninguna opción: Vous n'avez pas choisi aucune option
+

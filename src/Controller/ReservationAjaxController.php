@@ -208,7 +208,7 @@ class ReservationAjaxController extends AbstractController
                         'errorIntro' => $this->translator->trans('Este email ya está en nuestro sistema, por favor, rellena los campos siguientes'),
                         'html' => $swalHtml,
                         'emailLabel' => $this->translator->trans('Email'),
-                        'passwordLabel' => $this->translator->trans('Password'),
+                        'passwordLabel' => $this->translator->trans('Contraseña'),
                         'takenEmail' => true,
                         'email' => $userRequestData['email'],
                     ], 401);
@@ -315,10 +315,10 @@ class ReservationAjaxController extends AbstractController
                 'reservation' => $isReservedObject->getId(),
                 '_locale' => $locale,
             ]);
-
+            $messageHtml = $this->renderView('reservation/_partials/_reservation_initialized.html.twig',['url'=> $url]);
             return $this->json([
                 'isReserved' => true,
-                'message' => $this->translator->trans('Esta reserva ya ha sido realizada, acude a tu espacio de usuario para continuar con tu proceso de reserva. <a href="'.$url.'">Tu reserva</a>'),
+                'message' => $messageHtml,
                 'user' => $user,
                 'userId' => $user ? $user->getId() : '',
                 'reservationId' => $isReservedObject->getId(),
@@ -614,7 +614,7 @@ class ReservationAjaxController extends AbstractController
         return new Response('Reactivate Reservation');
     }
 
-    #[Route(
+    /* #[Route(
         path: 'ajax/reservation/setStatus/{reservation}',
         options: ['expose' => true],
         methods: ['POST'],
@@ -630,7 +630,7 @@ class ReservationAjaxController extends AbstractController
         /**
          * @var User @user
          */
-        $user = $this->getUser();
+        /*$user = $this->getUser();
         $customerData = [
             'name' => $user->getPrenom().' '.$user->getNom(),
             'address' => $user->getAddress(),
@@ -676,7 +676,7 @@ class ReservationAjaxController extends AbstractController
         'status' => 200,
         'response' => $translator->trans('Esta reserva se ha cambiado a cancelada')
         ],200); */
-    }
+    /*} */
 
     #[Route(
         path: 'ajax/update/changes/{reservation}',

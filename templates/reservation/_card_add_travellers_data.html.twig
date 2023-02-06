@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body form-group">
         <div class="container" id="js-travellers-form">
-        <h2>{{ 'Datos de los/las viajeros/as'|trans }}</h2>
+        <h2>{{ 'Datos de los viajeros'|trans }}</h2>
         <p>{{ 'Por favor, añade los datos de los '|trans }} <strong>{{ reservation.nbPilotes }} {{'pilotos'|trans }}</strong> {{ 'y de los'|trans }} <strong>{{ reservation.nbaccomp }} {{ 'acompañantes'|trans }}</strong>.</p>
             {% for i in 1..((nbpilotes+nbaccomp)) %}
                 {% if reservation.travellers|length > 0 %}

@@ -44,8 +44,8 @@ completo: completo
 del: del
 de: de
 al: al
-Piloto/a moto: Piloto/a moto
-Pasajero/a: Pasajero/a
+Piloto moto: Piloto moto
+Pasajero: Pasajero
 Reserva: Reserva
 Página de acceso: Página de acceso
 Estás conectado como: Estás conectado como
@@ -196,6 +196,7 @@ Ya has subido tu documento al sistema. Gracias. Para comprobar que es correcto p
 Arrastra el archivo hasta aquí o haz símplemente click, y se abrirá la ventana de selección de archivo: Arrastra el archivo hasta aquí o haz símplemente click, y se abrirá la ventana de selección de archivo
 No hay documentos asociados a esta reserva: No hay documentos asociados a esta reserva
 DATOS: DATOS
+Guardar: Guardar
 Precio total: Precio total
 Total pagado: Total pagado
 Reinicia tu contraseña: Reinicia tu contraseña
@@ -312,7 +313,8 @@ desde ahí podrás realizar modificaciones y añadir los datos necesario para or
 Datos de la reserva: Datos de la reserva
 Cálculo de la reserva: Cálculo de la reserva
 Ya has comenzado tu reserva para este viaje: Ya has comenzado tu reserva para este viaje
-Ver Reserva: Ver Reserva
+Ver reserva: Ver reserva
+Transferencia Bancaria: Transferencia Bancaria
 Número de factura: Número de factura
 CLIENTE: CLIENTE
 FACTURA: FACTURA
@@ -375,3 +377,90 @@ Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pa
 Por favor envíenos via email el justificante de la transferencia para validación de su reserva: Por favor envíenos via email el justificante de la transferencia para validación de su reserva
 Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje: Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje
 1 mes antes de la salida del viaje: 1 mes antes de la salida del viaje
+Esta reserva ya ha sido realizada, acude a tu espacio de usuario para continuar con tu proceso de reserva: Esta reserva ya ha sido realizada, acude a tu espacio de usuario para continuar con tu proceso de reserva
+Editar datos del viaje y documentación: Editar datos del viaje y documentación
+Acompañantes: Acompañantes
+No se ha encontrado un token de reestablecimiento de la contraseña ni en el url ni en la sesión: No se ha encontrado un token de reestablecimiento de la contraseña ni en el url ni en la sesión
+Puedes volver a tu reserva: Puedes volver a tu reserva
+Elige los viajes que más te interesan: Elige los viajes que más te interesan
+PAGO: PAGO
+Confirmación de pago para el viaje: Confirmación de pago para el viaje
+Blog: Blog
+Blogs: Blogs
+Reservas: Reservas
+Revisión y pago: Revisión y pagoSi sencillamente quieres informaci├│n general sobre cualquier viaje haz click aqu├¡, por favor
+No hay documentos para esta reserva: No hay documentos para esta reserva
+No se han generado facturas para esta reserva: No se han generado facturas para esta reserva
+Introduce tu contraseña: Introduce tu contraseña
+Este viaje no contiene documentos asociados: Este viaje no contiene documentos asociados
+Artículo: Artículo
+Galería de fotos: Galería de fotos
+Rakatanga-Blog: Rakatanga-Blog
+No hemos encontrado la página que buscabas: No hemos encontrado la página que buscabas
+Si sencillamente quieres información general sobre cualquier viaje haz click aquí, por favor: Si sencillamente quieres información general sobre cualquier viaje haz click aquí, por favor
+India: India
+Ver rutas: Ver Rutas
+Permiso de circulación: Permiso de circulación
+Tu reserva ha sido iniciada: Tu reserva ha sido iniciada
+Error: Error
+Este email ya está tomado: Este email ya está tomado
+Este email ya está en nuestro sistema, por favor, rellena los campos siguientes: Este email ya está en nuestro sistema, por favor, rellena los campos siguientes
+Tu reserva ha sido iniciada. Para poder cerrarla puedes pasar a realizar el pago. Gracias: Tu reserva ha sido iniciada. Para poder cerrarla puedes pasar a realizar el pago. Gracias
+Referencia de la reserva: Referencia de la reserva
+Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos: Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos
+Infos: Infos
+Documentación informativa: Documentación informativa
+Documentación: Documentación
+Extensiones: Extensiones
+Hemos preparado esta guía que te puedes descargar para conocer al detalle esta oferta: Hemos preparado esta guía que te puedes descargar para conocer al detalle esta oferta
+Este viaje no ofrece extensiones: Este viaje no ofrece extensiones
+No hay documentación adjunta para este viaje: No hay documentación adjunta para este viaje
+Haz click sobre la foto para verla a pantalla completa: Haz click sobre la foto para verla a pantalla completa
+Bono descuento: Bono descuento
+Valor de cancelación: Valor de cancelación
+Total a pagar: Total a pagar
+Factura válida creada electrónicamente: Factura válida creada electrónicamente
+Resto por pagar: Resto por pagar
+Actualizar cambios: Actualizar cambios
+Guardar los datos de viajeros: Guardar los datos de viajeros
+usuario: usuario
+dominio.com: dominio.com
+Añadir código de descuento a esta reserva: Añadir código de descuento a esta reserva
+Iniciación de una nueva reserva: Iniciación de una nueva reserva
+No hay facturas asociadas a esta reserva: No hay facturas asociadas a esta reserva
+Pago de la reserva: Pago de la reserva
+Transferencia bancaria: Transferencia bancaria
+Datos de la cuenta bancaria para efectuar el pago: Datos de la cuenta bancaria para efectuar el pago
+Titular: Titular
+Banco: Banco
+La reserva implica la aceptación total de nuestras condiciones generales de venta: La reserva implica la aceptación total de nuestras condiciones generales de venta
+Mis datos: Mis datos
+Pago anulado: Pago anulado
+Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias: Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias
+Pago realizado: Pago realizado
+Apellido: Apellido
+Entrar como usuario invitado: Entrar como usuario invitado
+Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico: Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico
+Inicializar: Inicializar
+Esta tarjeta se activará en cuanto hayas rellenado los datos de todos los viajeros que participan en este viaje: Esta tarjeta se activará en cuanto hayas rellenado los datos de todos los viajeros que participan en este viaje
+Entrar en tu cuenta: Entrar en tu cuenta
+Haz login con tu cuenta: Haz login con tu cuenta
+Este email ya está en nuestro sistema, por favor, rellena la contraseña: Este email ya está en nuestro sistema, por favor, rellena la contraseña
+Introduce tu correo eletrónico: Introduce tu correo eletrónico
+Datos de los viajeros: Datos de los viajeros
+Por favor, añade los datos de los: Por favor, añade los datos de los
+y de los: y de los
+Número de uso actual: Número de uso actual
+Número de usos total: Número de usos total
+Reinicia tu contraseña: Reinicia tu contraseña
+Cierra esta ventana: Cierra esta ventana
+Utilizar los datos del usuario: Utilizar los datos del usuario
+Reserva actualizada: Reserva actualizada
+Volver a ver mis reservas: Volver a ver mis reservas
+Pagar la cantidad restante: Pagar la cantidad restante
+No tienes reservas pendientes:
+No tienes reservas pendientes
+No hay facturas a tu nombre: No hay facturas a tu nombre
+No hay reservas: No hay reservas
+No has elegido ninguna opción: No has elegido ninguna opción
+

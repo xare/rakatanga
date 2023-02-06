@@ -12,18 +12,18 @@
                     {{renderLocalizedTravel(date.travel.id, app.request.locale)}}
                 </p>
                 <p>
-                    <strong>{{'Fechas'|trans}}:</strong> 
-                    {{'del'|trans}} {{ date.debut|date('j') }} 
+                    <strong>{{'Fechas'|trans}}:</strong>
+                    {{'del'|trans}} {{ date.debut|date('j') }}
                     {{'al'|trans}} {{ date.fin|date('d') }}
                     {{'de'|trans}}
                     {{ date.debut|format_datetime(pattern="MMMM",locale=locale) }}
-                    {{'de'|trans}} 
+                    {{'de'|trans}}
                     {{ date.debut|date('Y')}}
                 </p>
-                
-                {% if reservation is defined and reservation != null %}    
-                    <p><strong>{{'Estatus'|trans}}</strong>: 
-                    
+
+                {# {% if reservation is defined and reservation != null %}
+                    <p><strong>{{'Estatus'|trans}}</strong>:
+
                     {% if reservation.status == "cancelled" %}
                         <span id="js-reservation-status-statement">
                             {{ 'Esta reserva está cancelada'|trans }}
@@ -34,8 +34,8 @@
                     </span>
                     {% endif %}
                         <div class="form-switch">
-                            <input 
-                                type="checkbox" 
+                            <input
+                                type="checkbox"
                                 class="form-check-input" id="js_reservation_status_initialized"
                                 role="switch">
                             <label class="form-check-label" for="js_reservation_status_initialized">
@@ -43,7 +43,7 @@
                             </label>
                         </div>
                     </span>
-                {% endif %}
+                {% endif %} #}
             </div>
             <div class="col-md-4 col-sm-5">
                 {% set MediaPath = '/media/' ~ date.travel.mainPhoto.Path %}

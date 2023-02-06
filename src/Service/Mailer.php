@@ -222,7 +222,7 @@ class Mailer
         );
 
         $email
-            ->subject('['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('PAGO')} ] {$this->translator->trans('Pago Realizado', [], 'email')} {$user->getPrenom()} {$user->getNom()}")
+            ->subject('['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('PAGO')} ] {$this->translator->trans('Pago realizado', [], 'email')} {$user->getPrenom()} {$user->getNom()}")
             ->htmlTemplate('email/reservation/reservation-payment-success-rakatanga.html.twig')
             ->context([
                 'locale' => $locale,

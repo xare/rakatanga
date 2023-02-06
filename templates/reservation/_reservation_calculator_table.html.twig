@@ -44,17 +44,17 @@
 	{% set userId = "" %}
 {% endif %}
 
-	<div 
-		class="card card-tarif shadow" 
+	<div
+		class="card card-tarif shadow"
 		id="js-calculator"
-		data-nb-pilotes="{{nbpilotes}}" 
-		data-nb-passagers="{{nbaccomp}}" 
-		data-options="{{ optionsJson }}" 
-		data-price-pilote="{{ date.prixPilote }}" 
-		data-price-passager="{{ date.prixAccomp }}" 
-		data-date="{{ date.id }}" 
-		data-reservation="{{ reservationId }}" 
-		data-user="{{ userId }}" 
+		data-nb-pilotes="{{nbpilotes}}"
+		data-nb-passagers="{{nbaccomp}}"
+		data-options="{{ optionsJson }}"
+		data-price-pilote="{{ date.prixPilote }}"
+		data-price-passager="{{ date.prixAccomp }}"
+		data-date="{{ date.id }}"
+		data-reservation="{{ reservationId }}"
+		data-user="{{ userId }}"
 		data-payment="{{ payment }}"
 		data-discount="{{ discount }}"
 		data-discount-type="{{ discountType }}">
@@ -90,13 +90,13 @@
 						<tbody class="js-reservation-options">
 							{% if reservation.reservationOptions is defined %}
 								{% for option in reservation.reservationOptions %}
-									<tr 
-										class="js-calculation-row js-option-row" 
-										id="js-option-row-{{option.options.id}}" 
-										data-option-id="{{option.options.id}}" 
-										data-ammount="{{option.ammount}}" 
-										data-value="{{option.options.price}}" 
-										data-field="option" 
+									<tr
+										class="js-calculation-row js-option-row"
+										id="js-option-row-{{option.options.id}}"
+										data-option-id="{{option.options.id}}"
+										data-ammount="{{option.ammount}}"
+										data-value="{{option.options.price}}"
+										data-field="option"
 										data-option-name="{{ renderLocalizedOption(option.options.id,app.request.locale) }}">
 										<td>
 											<span class="js-option-ammount">{{option.ammount}}</span>
@@ -123,7 +123,7 @@
 											{% elseif codepromo.pourcentage != 0 %}
 												- {{ codepromo.pourcentage }} %
 												{% set discount = totalprice * discount / 100 %}
-											{% endif %}		
+											{% endif %}
 										</td>
 									</tr>
 								{% endfor %}
@@ -136,7 +136,7 @@
 								</th>
 								<td align="right">
 
-									
+
 									{% if discount is defined %}
 										{% set totalprice = totalprice - discount %}
 									{% endif %}
@@ -157,7 +157,7 @@
 										</td>
 									</tr>
 								</tbody>
-							
+
 							{% set toBePaid = totalprice - payment %}
 							{% if toBePaid > 0 %}
 								<tbody class="js-left-payment">
@@ -173,10 +173,10 @@
 								<tfoot>
 									<tr>
 										<td>
-											<button 
+											<button
 												class="btn btn-primary d-none"
 												id="js-update-changes"
-											>{{ 'Actualizar Cambios' |trans }}
+											>{{ 'Actualizar cambios' |trans }}
 										</td>
 									</tr>
 								</tfoot>

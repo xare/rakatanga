@@ -47,8 +47,8 @@ completo: full
 del: from
 de: of
 al: to
-Piloto/a moto: Moto driver
-Pasajero/a: Passenger
+Piloto moto: Moto driver
+Pasajero: Passenger
 Reserva: Booking
 Página de acceso: Login page
 Estás conectado como: You are connected as
@@ -214,7 +214,8 @@ No hay documentos asociados a esta reserva: No linked documents to this reservat
 DATOS: DATA
 Resetea tu contraseña: Reset your password
 Introduce tu cuenta de correo electrónico y te enviaremos un vínculo via email para que puedas resetear tu contraseña: Introduce your email address and we will send you a link via email so you can reset your password
-Enviar un correo con un vínculo de renovación de contraseña: Send an email with the password renovation link.
+Enviar un correo con un vínculo de renovación de contraseña: Send an email with the password renovation link
+Ha habido un problema validando tu petición de reinicio de contraseña: There has been a problem validationg your request to reset your password
 Código de reserva: Reservation code
 TODAVIA NO HAS AÑADIDO LOS DATOS DE TODOS LOS VIAJEROS: YOU STILL HAVE NOT ADDED TRAVELLERS'S DATA
 Te pedimos que lo hagas a continuación para que queden guardados en nuestro sistema: We ask you to send them to us so we can store them in our system
@@ -322,8 +323,9 @@ desde ahí podrás realizar modificaciones y añadir los datos necesario para or
 Datos de la reserva: Reservation data
 Cálculo de la reserva: Reservation calculation
 Ya has comenzado tu reserva para este viaje: You have already made a reservation for this trip
-Ver Reserva: See reservation
-Número de factura: Número de factura
+Ver reserva: See reservation
+Transferencia Bancaria: Wire Transfer
+Número de factura: Invoice number
 CLIENTE: CUSTOMER
 FACTURA: INVOICE
 Fecha de factura: Date of invoice
@@ -345,7 +347,6 @@ Si no recibes un mensaje, por favor, comprueba tu carpeta de spam o: If you don'
 intentalo de nuevo: try again
 Este vínculo caducará dentro de: This link will expire in
 Recuperación de contraseña: Password recovery
-Ha habido un problema validando tu petición de reinicio de contraseña: There was a problem validating your reset request
 Permiso: Drivers
 Permiso de conducir: Drivers license
 Nuestras redes sociales: Our social networks
@@ -375,4 +376,65 @@ Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pa
 Por favor envíenos via email el justificante de la transferencia para validación de su reserva: Please send us via email the receipt of your payment in order to validate your reservation
 Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje: Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje
 1 mes antes de la salida del viaje: 1 month before the beginning of the travel
-
+Esta reserva ya ha sido realizada, acude a tu espacio de usuario para continuar con tu proceso de reserva: This reservation has already been initialized, please, go to your user space in order to follow your reservation process
+Editar datos del viaje y documentación: Edit travel data and documentation
+Acompañantes: Companions
+No se ha encontrado un token de reestablecimiento de la contraseña ni en el url ni en la sesión: No reset password token found in the URL or in the session
+Puedes volver a tu reserva: You can return back to your reservation
+Elige los viajes que más te interesan: Choose the travels that interest you the most
+PAGO: PAYMENT
+Confirmación de pago para el viaje: Confirmation of payment for the travel
+Blog: Blog
+Blogs: Blogs
+Reservas: Reservations
+Tu reserva ha sido iniciada: Your reservation has been initialized
+Error: Error
+Este email ya está tomado: This email has already been taken
+Este email ya está en nuestro sistema, por favor, rellena los campos siguientes: This email is already in our system, please fill in the following fields
+Revisión y pago: review and payment
+No hay documentos para esta reserva: There are no documents for this reservation
+No se han generado facturas para esta reserva: No invoices have been generated for this reservation
+Introduce tu contraseña: Enter your password
+Este viaje no contiene documentos asociados: This trip does not contain associated documents
+Artículo: Article
+Galería de fotos: Photo gallery
+Rakatanga-Blog: Rakatanga-Blog
+No hemos encontrado la página que buscabas: We have not found the page you were looking for
+Si sencillamente quieres información general sobre cualquier viaje haz click aquí, por favor: If you simply want general information about any trip, please click here
+India: India
+Permiso de circulación: Driver's license
+Tu reserva ha sido iniciada. Para poder cerrarla puedes pasar a realizar el pago. Gracias: Your reservation has been started. To be able to close it you can proceed to make the payment. Thank you
+Referencia de la reserva: Reservation reference
+Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos: This trip is in preparation, if you want to know more about it, contact us and we will inform you
+Infos: Info
+usuario: user
+dominio.com: domain.com
+Añadir código de descuento a esta reserva: Add discount code to this reservation
+Iniciación de una nueva reserva: Starting a new reservation
+No hay facturas asociadas a esta reserva: There are no invoices associated with this reservation
+Pago de la reserva: Reservation payment
+Transferencia bancaria: Wire transfer
+Datos de la cuenta bancaria para efectuar el pago: Bank account details to make the payment
+Titular: Holder
+Banco: Bank
+La reserva implica la aceptación total de nuestras condiciones generales de venta: The reservation implies the total acceptance of our general conditions of sale
+Mis datos: My data
+Pago anulado: Voided payment
+Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias: Something has gone wrong. Contact us to see how to continue, thank you
+Pago realizado: Payment made
+Apellido: Name
+Entrar como usuario invitado: Enter as guest user
+Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico: In order to start processing your reservation we need your email address
+Inicializar: Initialize
+Esta tarjeta se activará en cuanto hayas rellenado los datos de todos los viajeros que participan en este viaje: This card will be activated as soon as you have filled in the details of all the travelers participating in this trip
+Entrar en tu cuenta: Login to your account
+Haz login con tu cuenta: Login with your account
+Este email ya está en nuestro sistema, por favor, rellena la contraseña: This email is already in our system, please fill in the password
+Introduce tu correo eletrónico: Enter your email
+Datos de los viajeros: Traveler data
+Por favor, añade los datos de los: Please, add the data of the
+y de los: and of the
+Número de uso actual: Actual number of uses
+Número de usos total: Total number of uses
+Reinicia tu contraseña: Reset your password
+Cierra esta ventana: Close this window

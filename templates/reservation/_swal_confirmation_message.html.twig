@@ -16,7 +16,7 @@
           <td> {{ codepromo.code }}</td>
         </tr>
         <tr>
-          <td><strong>{{ 'Etiqueta'|trans }} : </strong></td> 
+          <td><strong>{{ 'Etiqueta'|trans }} : </strong></td>
           <td>{{ codepromo.libelle }}</td>
         </tr>
         <tr>
@@ -25,37 +25,37 @@
         </tr>
         {% if codepromo.montant != null %}
           <tr>
-            <td><strong> {{ 'Cantidad'|trans }} : </strong></td> 
+            <td><strong> {{ 'Cantidad'|trans }} : </strong></td>
             <td>{{ codepromo.montant }} </td>
           </tr>
         {% endif %}
         {% if codepromo.pourcentage != null %}
           <tr>
-            <td><strong> {{ '%'|trans }} : </strong></td>  
-            <td>{{ codepromo.pourcentage }}</td> 
+            <td><strong> {{ '%'|trans }} : </strong></td>
+            <td>{{ codepromo.pourcentage }}</td>
           </tr>
         {% endif %}
         {% if codepromo.debut != null %}
           <tr>
-            <td><strong> {{ 'Comienzo'|trans }} : </strong></td>  
+            <td><strong> {{ 'Comienzo'|trans }} : </strong></td>
             <td>{{ codepromo.debut|date('d/m/Y') }} </td>
           </tr>
         {% endif %}
         {% if codepromo.fin != null %}
           <tr>
-            <td><strong> {{ 'Final'|trans }} : </strong></td>  
+            <td><strong> {{ 'Final'|trans }} : </strong></td>
             <td>{{ codepromo.fin|date('d/m/Y') }} </td>
           </tr>
         {% endif %}
        {#  {% if codepromo.nombre != null %} #}
           <tr>
-            <td><strong> {{ 'Número de uso actual'|trans }} : </strong></td>  
+            <td><strong> {{ 'Número de uso actual'|trans }} : </strong></td>
             <td>{{ codepromo.nombre }} </td>
           </tr>
         {# {% endif %} #}
         {% if codepromo.nombreTotal != null %}
           <tr>
-            <td><strong> {{ 'Número de usos Total'|trans }} : </strong></td>  
+            <td><strong> {{ 'Número de usos total'|trans }} : </strong></td>
             <td>{{ codepromo.nombreTotal }} </td>
           </tr>
         {% endif %}

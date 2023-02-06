@@ -1,3 +1,4 @@
+{% trans_default_domain 'email' %}
 {% extends 'email/emailBase.html.twig' %}
 {% block content %}
     <row class="welcome">
@@ -51,7 +52,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha de emisión del Pasaporte:</strong>:</p> 
+            <p><strong>Fecha de emisión del Pasaporte:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.passportIssueDate|date('d-m-Y')}}</p>
@@ -60,7 +61,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha de caducidad del Pasaporte:</strong>:</p> 
+            <p><strong>Fecha de caducidad del Pasaporte:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.passportExpirationDate|date('d-m-Y')}}</p>
@@ -69,7 +70,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Número del visado:</strong>:</p> 
+            <p><strong>Número del visado:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.visaNumber}}</p>
@@ -78,7 +79,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha expedición visado:</strong>:</p> 
+            <p><strong>Fecha expedición visado:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.visaIssueDate|date('d-m-Y')}}</p>
@@ -87,7 +88,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha caducidad visado:</strong>:</p> 
+            <p><strong>Fecha caducidad visado:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.visaExpirationDate|date('d-m-Y')}}</p>
@@ -96,7 +97,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Carnet de conducir:</strong>:</p> 
+            <p><strong>Carnet de conducir:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.driversNumber}}</p>
@@ -105,7 +106,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha del carnet de conducir:</strong>:</p> 
+            <p><strong>Fecha del carnet de conducir:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.driversIssueDate|date('d-m-Y')}}</p>
@@ -114,7 +115,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha caducidad del carnet de conducir:</strong>:</p> 
+            <p><strong>Fecha caducidad del carnet de conducir:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.driversExpirationDate|date('d-m-Y')}}</p>
@@ -123,7 +124,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Compañía de seguros:</strong>:</p> 
+            <p><strong>Compañía de seguros:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.insuranceCompany}}</p>
@@ -132,7 +133,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Nº póliza de seguros:</strong>:</p> 
+            <p><strong>Nº póliza de seguros:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.insuranceContractNumber}}</p>
@@ -141,7 +142,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Teléfono de contacto:</strong>:</p> 
+            <p><strong>Teléfono de contacto:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.abroadPhoneNumber}}</p>
@@ -150,7 +151,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Nombre de persona a contactar:</strong>:</p> 
+            <p><strong>Nombre de persona a contactar:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.contactPersonName}}</p>
@@ -159,7 +160,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Nº de persona a contactar:</strong>:</p> 
+            <p><strong>Nº de persona a contactar:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.contactPersonPhone}}</p>
@@ -168,7 +169,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Nº de vuelo de ida:</strong>:</p> 
+            <p><strong>Nº de vuelo de ida:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.flightNumber}}</p>
@@ -177,7 +178,7 @@
         <spacer size="10"></spacer>
          <row>
           <columns class="small-4 large-12">
-            <p><strong>Fecha del vuelo de ida:</strong>:</p> 
+            <p><strong>Fecha del vuelo de ida:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.flightArrival|date('d-m-Y')}}</p>
@@ -186,7 +187,7 @@
         <spacer size="10"></spacer>
          <row>
           <columns class="small-4 large-12">
-            <p><strong>Aeropuerto de llegada:</strong>:</p> 
+            <p><strong>Aeropuerto de llegada:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.flightArrivalAirport}}</p>
@@ -195,7 +196,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Hotel de llegada:</strong>:</p> 
+            <p><strong>Hotel de llegada:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.ArrivalHotel}}</p>
@@ -204,7 +205,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Nº de vuelo de vuelta:</strong>:</p> 
+            <p><strong>Nº de vuelo de vuelta:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.flightDepartureNumber}}</p>
@@ -213,7 +214,7 @@
         <spacer size="10"></spacer>
          <row>
           <columns class="small-4 large-12">
-            <p><strong>Aeropuerto de vuelta:</strong>:</p> 
+            <p><strong>Aeropuerto de vuelta:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.flightDepartureAirport}}</p>
@@ -222,7 +223,7 @@
         <spacer size="10"></spacer>
         <row>
           <columns class="small-4 large-12">
-            <p><strong>Hotel de vuelta:</strong>:</p> 
+            <p><strong>Hotel de vuelta:</strong>:</p>
           </columns>
           <columns class="small-8 large-12">
             <p>{{reservationDatum.departureHotel}}</p>
@@ -230,7 +231,7 @@
         </row>
         <spacer size="10"></spacer>
     {% endfor %}
-    
-    
-    
+
+
+
 {% endblock %}

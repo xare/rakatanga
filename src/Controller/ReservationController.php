@@ -204,10 +204,9 @@ class ReservationController extends AbstractController
                         ['csrf_protection' => false])
                 ->add('paymentMethod', ChoiceType::class, [
                         'choices' => [
-                            $this->translator->trans('Stripe') => 'stripe',
-                            $this->translator->trans('Stripe 500€') => 'stripe500',
+                            'Stripe' => 'stripe',
+                            'Stripe 500€' => 'stripe500',
                             $this->translator->trans('Transferencia Bancaria') => 'bankTransfer',
-                            $this->translator->trans('Pagar más adelante') => 'payLater',
                         ],
                         'expanded' => true,
                         'multiple' => false,

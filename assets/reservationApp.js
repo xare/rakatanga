@@ -67,11 +67,11 @@ class reservationApp {
             this.assignUserDataToTravellerForm.bind(this)
         );
 
-        this.$wrapper.on(
+        /* this.$wrapper.on(
             'click',
             '#js_reservation_status_initialized',
             this.setReservationStatus.bind(this)
-        )
+        ) */
 
         this.$wrapper.on(
             'click',
@@ -157,9 +157,7 @@ class reservationApp {
     _changeNb(reservation, nb, type) {
         this.$calculator.data(`nb${type}`, nb);
         let data = this.$calculator.data();
-        console.info(data);
-        console.info(reservation);
-        console.info(data.reservation);
+
         data.locale = $('html').attr('lang');
         $('[data-container="nb' + type + '"]').empty().html(nb);
         if (data.reservation) {
@@ -204,10 +202,7 @@ class reservationApp {
     }
 
     _addTravellersForms(reservation, nbpilotes, nbaccomp) {
-        console.info(parseInt(nbpilotes) + parseInt(nbaccomp));
-        console.info(reservation);
         const isInitialized = this.$calculator.data('isInitialized');
-        console.info(isInitialized);
         const self = this;
         (
             async() => {
@@ -356,7 +351,8 @@ class reservationApp {
             try {
                 const response = await $.ajax({
                     url: Routing.generate(
-                        'initialize-reservation-register', { '_locale': self.locale }),
+                        'initialize-reservation-register', { '_locale': self.locale }
+                    ),
                     type: 'POST',
                     data: $form.serialize()
                 });
@@ -366,9 +362,7 @@ class reservationApp {
             } catch (jqXHR) {
                 if (jqXHR.responseJSON.takenEmail == true) {
                     try {
-                        const {
-                            value: formValues
-                        } = await Swal.fire({
+                        const { value: formValues } = await Swal.fire({
                             title: jqXHR.responseJSON.errorTitle,
                             html: jqXHR.responseJSON.html,
                             focusConfirm: false,
@@ -738,50 +732,50 @@ class reservationApp {
         })();
     }
 
-    setReservationStatus(event) {
-        event.preventDefault();
-        const self = this
-        $('#js-reservation-status-statement').html('The reservation has been activated')
-        let $checkbox = $(event.currentTarget)
-        $(event.currentTarget).closest('.card').addClass('alert-danger')
-        const status = this.$wrapper.data('reservationStatus')
-        let newStatus = (status == 'cancelled') ? 'initialized' : 'cancelled';
-        if (newStatus == "cancelled") {
-            self.$wrapper.data('reservationStatus', 'cancelled')
-            $(event.currentTarget).closest('.card').addClass('alert-danger')
-            $('#js-card-travellers').fadeOut(1000)
-            $('.travel-options').fadeOut(1000)
-            $('.card-logged-user').fadeOut(1000)
-        } else {
-            self.$wrapper.data('reservationStatus', 'initialized')
-            $(event.currentTarget).closest('.card').removeClass('alert-danger')
-            $('#js-card-travellers').removeClass('d-none')
-            $('#js-card-travellers').fadeIn(1000)
-            $('.travel-options').removeClass('d-none')
-            $('.travel-options').fadeIn(1000)
-            $('.card-logged-user').fadeIn(1000)
-            $('.card-logged-user').closest('.row').removeClass('d-none')
-        }
-        const reservationId = this.$wrapper.data('reservation-id');
-        (async() => {
-            try {
-                const response = await $.ajax({
-                    url: Routing.generate('ajax_reservation_set_status', {
-                        'reservation': reservationId
-                    }),
-                    data: {
-                        'status': newStatus
-                    },
-                    type: "POST"
-                })
-                $('#js-reservation-status-statement').html(response.message);
-                $('.form-check-label').html(response.label);
+    /*  setReservationStatus(event) {
+         event.preventDefault();
+         const self = this
+         $('#js-reservation-status-statement').html('The reservation has been activated')
+         let $checkbox = $(event.currentTarget)
+         $(event.currentTarget).closest('.card').addClass('alert-danger')
+         const status = this.$wrapper.data('reservationStatus')
+         let newStatus = (status == 'cancelled') ? 'initialized' : 'cancelled';
+         if (newStatus == "cancelled") {
+             self.$wrapper.data('reservationStatus', 'cancelled')
+             $(event.currentTarget).closest('.card').addClass('alert-danger')
+             $('#js-card-travellers').fadeOut(1000)
+             $('.travel-options').fadeOut(1000)
+             $('.card-logged-user').fadeOut(1000)
+         } else {
+             self.$wrapper.data('reservationStatus', 'initialized')
+             $(event.currentTarget).closest('.card').removeClass('alert-danger')
+             $('#js-card-travellers').removeClass('d-none')
+             $('#js-card-travellers').fadeIn(1000)
+             $('.travel-options').removeClass('d-none')
+             $('.travel-options').fadeIn(1000)
+             $('.card-logged-user').fadeIn(1000)
+             $('.card-logged-user').closest('.row').removeClass('d-none')
+         }
+         const reservationId = this.$wrapper.data('reservation-id');
+         (async() => {
+             try {
+                 const response = await $.ajax({
+                     url: Routing.generate('ajax_reservation_set_status', {
+                         'reservation': reservationId
+                     }),
+                     data: {
+                         'status': newStatus
+                     },
+                     type: "POST"
+                 })
+                 $('#js-reservation-status-statement').html(response.message);
+                 $('.form-check-label').html(response.label);
 
-            } catch (jqXHR) {
-                console.error(jqXHR)
-            }
-        })();
-    }
+             } catch (jqXHR) {
+                 console.error(jqXHR)
+             }
+         })();
+     } */
 
     applyCodePromo(event) {
         event.preventDefault()
@@ -851,8 +845,6 @@ class reservationApp {
         )();
     }
     _updateCalculator() {
-        console.info('update calculator');
-        console.info(this.$calculator.data());
         (
             async() => {
                 try {
@@ -861,7 +853,6 @@ class reservationApp {
                         data: this.$calculator.data(),
                         method: 'POST'
                     });
-                    console.info(response);
                     $('[data-container="calculator-wrapper"]').empty().append(response);
                 } catch (error) {
                     console.info(error);
@@ -970,7 +961,6 @@ class reservationApp {
                     this.$calculator.data('reservation', reservationId);
                     this._updateChanges();
                     this._updateCalculator();
-                    console.info(response);
                 } catch (error) {
                     console.info(error);
                 }

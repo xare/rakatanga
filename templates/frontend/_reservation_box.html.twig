@@ -14,10 +14,10 @@
           {{'de'|trans}}
           {{ date.debut|date('Y')}}
         <p>
-          {{'Piloto/a moto'|trans}}:
+          {{'Piloto moto'|trans}}:
           {{ date.prixPilote|format_currency('EUR', {fraction_digit: 0}) }}<br/>
           {% if date.prixAccomp > 0 %}
-            {{'Pasajero/a'|trans}}:
+            {{'Pasajero'|trans}}:
             {{ date.prixAccomp|format_currency('EUR', {fraction_digit: 0}) }}
           {% endif %}
         </p>

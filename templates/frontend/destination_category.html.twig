@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - 
-    {{'Rutas en moto'|trans}} - 
+    {{ parent() }} -
+    {{'Rutas en moto'|trans}} -
     {{category.title}}
 {% endblock %}
 
@@ -43,14 +43,14 @@
                         <div class="col-md-6 col-sm-7">
                             <h2>{{ travel.title }}</h2>
                             <p class="infos">
-                                <i class="fas fa-clock" aria-hidden="true"></i> 
-                                    {{ travel.duration }} {{'días'|trans}}  
-                                <i class="fa fa-signal" aria-hidden="true"></i> 
+                                <i class="fas fa-clock" aria-hidden="true"></i>
+                                    {{ travel.duration }} {{'días'|trans}}
+                                <i class="fa fa-signal" aria-hidden="true"></i>
                                     {{ travel.level }}
                             </p>
                                 {{travel.summary|raw}}
                                 <p>
-                                    <a class="btn btn-default" 
+                                    <a class="btn btn-default"
                                         href="{{ path('destination',{
                                                     _locale: locale,
                                                     category: category|slugify,
@@ -63,15 +63,15 @@
                                 <div class="card-heading ps-3 pe-3 pt-2 pb-2">
                                     {{'Próxima salida'|trans}}
                                 </div>
-                                <div class="card-body"> 
+                                <div class="card-body">
                                     {% if travel.status == "complet" %}
                                             <span class="label label-danger">{{'completo'|trans}}</span>
                                     {% endif %}
-                                    
+
                                     {% for date in travel.dates %}
-                                        <p><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> 
-                                        {{'del'|trans}} 
-                                        {{ date.debut|date('j') }} 
+                                        <p><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                        {{'del'|trans}}
+                                        {{ date.debut|date('j') }}
                                         {{'al'|trans}} {{ date.fin|date('d') }}
                                         {{'de'|trans}}
                                         {{ date.debut|format_datetime(pattern="MMMM",locale=locale) }}
@@ -88,10 +88,10 @@
                 </div>
             <br />
             {% else %}
-            {{ 'Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotras y te informamos' | trans}}.
-            {% endfor %} 
+            {{ 'Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos' | trans}}.
+            {% endfor %}
         </div>
-    </div>   
+    </div>
 </div>
 {% endblock %}
 

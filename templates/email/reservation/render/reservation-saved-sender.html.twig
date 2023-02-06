@@ -1,10 +1,11 @@
+{% trans_default_domain 'email' %}
 {% set subtotal = 0 %}
 <h1>
     <center>
         {{ 'Buenos dias'|trans }},
         {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}],
-        {{ 'hemos recibido tu reserva. Le agradecemos el haber hecho la reserva para el viaje'|trans }}
-        "{{reservation.date.travel.mainTitle}}"
+        {{ 'hemos recibido tu reserva'|trans}}. {{'Te agradecemos el haber hecho la reserva para el viaje'|trans }}:<br />
+        "{{reservation.date.travel.mainTitle}}".
     </center>
 </h1>
     <h3>{{ 'El viaje'|trans }}</h3>
@@ -101,7 +102,7 @@
     <h3>{{ 'Comentarios'|trans }}</h3>
      <p>{{reservation.comment}}</p>
     <h3>{{ 'Pago'|trans }}</h3></columns>
-    <p><strong>{{'Datos cuenta bancaria para efectuar el pago'|trans}}:</strong></p>
+    <p><strong>{{'Datos de la cuenta bancaria para efectuar el pago'|trans}}:</strong></p>
     <p>
         {{'Titular'|trans}}: Rakatanga Tour Europe S.L<br />
         {{'Banco'|trans}}: Caixabank<br />
@@ -125,9 +126,9 @@
     </p>
     <p>{{ 'Todo pago que no sea por trasferencia bancaria tendrá una comisión según se detalla más abajo'|trans }}:</p>
     <ul>
-        <li>{{ 'Tarjetas de crédito dentro de la comunidad Europea: Comisión del 2,9% del pago'|trans }}</li>.
+        <li>{{ 'Tarjetas de crédito dentro de la comunidad Europea'|trans }}: {{ ' Comisión del 2,9% del pago'|trans }}</li>.
         <li>{{ 'Tarjetas de crédito fuera de la comunidad Europea: Comisión del 4,9% del pago'|trans }}</li>.
-        <li>{{ 'Cuenta Paypal directamente: Comisión del 2,9% del pago'|trans }}</li>.
+        <li>{{ 'Cuenta Paypal directamente'|trans }}: {{ ' Comisión del 2,9% del pago'|trans }}</li>.
     </ul>
     <p>{{ 'En el caso de utilizar Paypal o tarjeta de crédito se podrá pagar la comisión directamente a nuestro guía el día del inicio del viaje'|trans }}.</p>
 
