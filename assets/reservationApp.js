@@ -596,8 +596,8 @@ class reservationApp {
         console.info(this._validateForm());
         if (!this._validateForm()) {
             const InvalidResponse = Swal.fire({
-                title: "Invalid form",
-                text: "Not all the fields are valid check again",
+                title: $travellersFormContainers.data('validation-title'),
+                text: $travellersFormContainers.data('validation-message'),
             });
             console.info(InvalidResponse);
             return false;

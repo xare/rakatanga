@@ -121,4 +121,12 @@ class ReservationRepository extends ServiceEntityRepository
                 ->setParameter('categoryName', $categoryName)
                 ->getQuery();
     }
+
+    public function getLatestReservation(){
+        return $this->createQueryBuilder('r')
+        ->orderBy('r.date_ajout', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
 }

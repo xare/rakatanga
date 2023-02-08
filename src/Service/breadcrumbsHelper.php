@@ -38,9 +38,9 @@ class breadcrumbsHelper
     }
 
     public function destinationsByTravelDestinationBreadcrumbs(
-                                                    string $locale, 
-                                                    CategoryTranslation $categoryTranslation, 
-                                                    CategoryTranslation $categoryTranslation2, 
+                                                    string $locale,
+                                                    CategoryTranslation $categoryTranslation,
+                                                    CategoryTranslation $categoryTranslation2,
                                                     TravelTranslation $travelTranslation)
     {
         $this->breadcrumbs->addRouteItem(
@@ -137,20 +137,28 @@ class breadcrumbsHelper
         $this->breadcrumbs->prependRouteItem($this->translator->trans('Inicio'), 'index');
     }
 
-    public function reservationPaymentBreadcrumbs(string $locale, Reservation $reservation): void
+    public function reservationPaymentBreadcrumbs(
+        string $locale,
+        Reservation $reservation): void
     {
-        $this->breadcrumbs->addRouteItem($this->translator->trans('Nuestras rutas en moto'), 'destinations');
         $this->breadcrumbs->addRouteItem(
-            $this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale), 'destinations-by-category', [
-                '_locale' => $locale,
-                'category' => $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
-         ]);
+            $this->translator->trans('Nuestras rutas en moto'),
+            'destinations');
         $this->breadcrumbs->addRouteItem(
-            $this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale), 'destination', [
-                '_locale' => $locale,
-                'category' => $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
-                'travel' => $this->slugifyHelper->slugify($this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale)),
-         ]);
+            $this->localizationHelper->renderCategoryString(
+                $reservation->getDate()->getTravel()->getCategory()->getId(), $locale),
+                'destinations-by-category', [
+                        '_locale' => $locale,
+                        'category' => $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString ($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
+                    ]);
+            $this->breadcrumbs->addRouteItem(
+                $this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale), 'destination', [
+                    '_locale' => $locale,
+                    'category' => $this->slugifyHelper->slugifY(
+                        $this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
+                    'travel' => $this->slugifyHelper->slugify(
+                        $this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale)),
+                ]);
         /* $this->breadcrumbs->addRouteItem($this->translator->trans('Reserva'), 'reservation', [
            '_locale' => $locale,
            'category' => $this->slugifyHelper->slugify($this->localizationHelper->renderCategoryString($reservation->getDate()->getTravel()->getCategory()->getId(), $locale)),
@@ -254,7 +262,7 @@ class breadcrumbsHelper
         );
     }
 
-    public function frontendUserInvoicesBreadcrumbs(string $locale) 
+    public function frontendUserInvoicesBreadcrumbs(string $locale)
     {
         $this->breadcrumbs->addRouteItem(
             $this->translator->trans('Usuario'),

@@ -167,21 +167,24 @@ class ReservationController extends AbstractController
         if (
             isset($reservationData['userEdit'])
             && $reservationData['userEdit'] == true) {
-                /**
-          * @var User $user
-          */
-         $user = $this->getUser();
-         $customerData = [
-             'name' => $user->getPrenom().' '.$user->getNom(),
-             'address' => $user->getAddress(),
-             'nif' => $user->getIdCard(),
-             'postalcode' => $user->getPostcode(),
-             'city' => $user->getCity(),
-             'country' => $user->getCountry(),
-         ];
-                $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData,$customerData, $locale);
-
-            }
+            /**
+            * @var User $user
+            */
+            $user = $this->getUser();
+            $customerData = [
+                'name' => $user->getPrenom().' '.$user->getNom(),
+                'address' => $user->getAddress(),
+                'nif' => $user->getIdCard(),
+                'postalcode' => $user->getPostcode(),
+                'city' => $user->getCity(),
+                'country' => $user->getCountry(),
+            ];
+            $reservation = $this->reservationHelper->updateReservation(
+                $reservation,
+                $reservationData,
+                $customerData,
+                $locale);
+        }
         // LANG MENU
         $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale, $reservation);
 

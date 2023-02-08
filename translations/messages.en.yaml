@@ -407,6 +407,7 @@ Tu reserva ha sido iniciada. Para poder cerrarla puedes pasar a realizar el pago
 Referencia de la reserva: Reservation reference
 Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos: This trip is in preparation, if you want to know more about it, contact us and we will inform you
 Infos: Info
+Guardar los datos de viajeros: Save travellers' data
 usuario: user
 dominio.com: domain.com
 Añadir código de descuento a esta reserva: Add discount code to this reservation
@@ -438,3 +439,5 @@ Número de uso actual: Actual number of uses
 Número de usos total: Total number of uses
 Reinicia tu contraseña: Reset your password
 Cierra esta ventana: Close this window
+El formulario no está completo: El formulario no está completo
+Faltan campos por rellenar correctamente: Missing fields to fill in correctly

@@ -2,11 +2,11 @@
 	{% set isComplete = false %}
 	{% if (parameterName1 != null and parameterName2 != null and parameterName3 != null) %}
 		{% if (child.vars.name == parameterName1 or
-									 			 child.vars.name == parameterName2 or 
+									 			 child.vars.name == parameterName2 or
 												 child.vars.name == parameterName3) and
 												 child.vars.value != null %}
 			{% set isComplete = true %}
-			
+
 			<li data-type="{{ child.vars.name }}" data-checked="false" class="list-group-item list-success mb-1">
 				<i class="fa fa-check-circle" style="color:#155724"></i>
 				{{ child.vars.label }}:
@@ -28,8 +28,8 @@
 	{% set passportDocument = false %}
 	{% set visaDocument = false %}
 	{% set driversDocument = false %}
-	
-	
+
+
 	{% if reservationData is defined and reservationData != null %}
 		{% if reservationData.documents != null %}
 			{% set documents = reservationData.documents %}
@@ -58,7 +58,7 @@
 		{% endif %}
 
 	{% endfor %}
-	
+
 	{% extends 'base.html.twig' %}
 
 	{% block title %}
@@ -68,7 +68,7 @@
 	{% endblock %}
 
 	{% block body %}
-
+{# {{dump(traveller)}} #}
 {# {{ dump(reservation.reservationData) }}
 		{{ parent() }}
 {% if reservationData is defined %}
@@ -86,32 +86,35 @@
 						{{ wo_render_breadcrumbs() }}
 				</div>
 			</div>
-	
+
 			{{form_start(form,{'attr':{'class':'form-group'}})}}
-			<div 
-				class="row" 
-				id="js-reservation-wrapper" 
+			<div
+				class="row"
+				id="js-reservation-wrapper"
 				{# data-reservation-id="{{reservation.id}}"  #}
-				{% if reservationData is defined and reservationData != null %} 
-					{% if reservationData.traveller != null %}
-						data-traveller-id="{{ reservationData.traveller.id }}"
+				{% if traveller is defined and traveller != null %}
+						data-traveller-id="{{ traveller.id }}"
 					{% else %}
 						data-user-id="{{app.user.id}}"
 					{% endif %}
-				{% endif %}
+					{# {% if reservationData is defined and reservationData != null %}
+
+
+				{% endif %} #}
 				data-locale="{{ app.request.getLocale() }}">
 				<div class="col-md-8 col-12">
 					<h1>
 						{{ 'Tu reserva'|trans }}:
-						{% if reservationData is defined and reservationData != null %} 
-							{% if reservationData.traveller != null %}
-									{{ reservationData.traveller.prenom }}
-									{{ reservationData.traveller.nom }}
+						{% if traveller is defined and traveller != null %}
+									{{ traveller.prenom }}
+									{{ traveller.nom }}
 								{% else %}
 									{{ app.user.prenom }}
 									{{ app.user.nom }}
 								{% endif %}
-							{% endif %}
+						{# {% if reservationData is defined and reservationData != null %}
+
+							{% endif %} #}
 					</h1>
 
 					<p>{{ 'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.</p>
@@ -159,7 +162,7 @@
 						</div>
 						<button id="previous" data-action="previous" class="btn btn-rounded btn-primary previous">< {{ 'Anterior'|trans }}</button>
 						<button id="next" data-action="next" class="btn btn-rounded btn-primary next">{{ 'Siguiente'|trans }} ></button>
-						
+
 					</div>
 				</div>
 				<div class="col-4 col-xs-12">
@@ -169,8 +172,8 @@
 								<h4>{{ 'Documentos'|trans }}</h4>
 							</div>
 							<div class="card-body">
-								<ul 
-									class="list-group small mb-3 js-documents-list" 
+								<ul
+									class="list-group small mb-3 js-documents-list"
 									data-reservation-id="{{reservation.id}}"
 									data-url="{{ path('frontend_reservation_list_documents', {'reservation': reservation.id}) }}"
 									>
@@ -178,7 +181,7 @@
                                'reservation':reservation
                            }) }}
 								</ul>
-							
+
 							</div>
 						</div>
 						<div class="card card-tarif">
@@ -209,11 +212,11 @@
 									child.vars.name != "visaExpirationDate" and
 									child.vars.name != "driversIssueDate" and
 									child.vars.name != "driversExpirationDate" and
-									child.vars.name != "insuranceContractNumber" and 
-									child.vars.name != "flightArrivalAirport" and 
-									child.vars.name != "ArrivalHotel" and 
-									child.vars.name != "flightDeparture" and 
-									child.vars.name != "flightDepartureAirport" and 
+									child.vars.name != "insuranceContractNumber" and
+									child.vars.name != "flightArrivalAirport" and
+									child.vars.name != "ArrivalHotel" and
+									child.vars.name != "flightDeparture" and
+									child.vars.name != "flightDepartureAirport" and
 									child.vars.name != "flightDepartureHotel"
 									 %}
 											{% if child.vars.value != null %}

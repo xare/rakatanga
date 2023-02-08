@@ -25,7 +25,7 @@
                 </center>
             </h2>
             <p>{{ 'Recuerda que para formalizar todo el proceso de reserva necesitamos recibir los datos y la documentación relacionados con tu reserva. Así que si tienes a mano tus documentos de identidad (pasaporte, visado, permiso de conducir), y los datos de tu seguro de asistencia así como de tu transfer de aeropuerto te pedimos que vengas a este vínculo a rellenar los datos'|trans }}.</p>
-            <button href="{{path('frontend_user_reservation_data',{'reservation':reservation.id})}}">{{ 'Añadir datos y documentación'|trans }}</button>
+            <button href="{{absolute_url(path('frontend_user_reservation_data',{'reservation':reservation.id}))}}">{{ 'Añadir datos y documentación'|trans }}</button>
         </columns>
     </row>
     <spacer size="30"></spacer>

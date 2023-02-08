@@ -38,19 +38,21 @@
     <br />
     {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}<br />
     <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-receipt"></i></span>
-              <span class="tag is-info">
-                {{ reservation.invoice.invoiceNumber}}
-              </span>
-              <span class="tag is-light">
-                <a
-                  href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
-                  title="{{ reservation.invoice.filename }}"
-                  data-bs-toggle="tooltip">
-                  <i class="fas fa-download"></i>
-                </a>
-                </span>
-            </div>
+      <span class="tag is-dark">
+        <i class="fas fa-receipt"></i>
+      </span>
+      <span class="tag is-info">
+        {{ reservation.invoice.invoiceNumber}}
+      </span>
+      <span class="tag is-light">
+        <a
+          href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
+          title="{{ reservation.invoice.filename }}"
+          data-bs-toggle="tooltip">
+            <i class="fas fa-download"></i>
+        </a>
+      </span>
+    </div>
   </div>
   <div class="reservations-dashboard-grid-item">
     <div class="tags has-addons">

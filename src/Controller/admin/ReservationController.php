@@ -17,31 +17,33 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/admin/reservation')]
 class ReservationController extends MainadminController
 {
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ReservationRepository $reservationRepository,
+        private PaginatorInterface $paginator)
     {
-        $this->entityManager = $entityManager;
+
     }
 
     #[Route(path: '/', name: 'reservation_index', methods: ['GET'])]
     public function index(
-        Request $request,
-        ReservationRepository $reservationRepository,
-        PaginatorInterface $paginator
+        Request $request
         ): Response {
         /* if(!$pageNumber = $request->query->get('page')){
             $pageNumber = 0;
         } */
-        $query = $reservationRepository->listAll();
-        $items = $paginator->paginate(
+        $query = $this->reservationRepository->listAll();
+        $items = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             10
         );
-
+        $latestReservation = $this->reservationRepository->getLatestReservation();
         return $this->render('admin/reservation/index.html.twig', [
             'reservations' => $items,
+            'latestReservation' => $latestReservation
             /* 'pageNumber' => $pageNumber */
         ]);
     }

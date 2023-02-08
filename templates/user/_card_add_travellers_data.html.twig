@@ -16,6 +16,8 @@
                     class="js-travellers-form-container{% if i == 1 or i == (nbpilotes+1) %}
                          js-contains-button
                     {% endif %}"
+                    data-validation-title="{{'El formulario no está completo'|trans}}"
+                    data-validation-message="{{'Faltan campos por rellenar correctamente'|trans}}"
                     >
                     <div class="row{% if i > 1 %} mt-4{% endif %}">
                         <div class="col-12">

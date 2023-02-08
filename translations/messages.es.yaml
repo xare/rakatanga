@@ -210,7 +210,6 @@ Gracias: Gracias
 closed: cerrado
 full: completo
 open: abierto
-Guardar: Guardar
 Este sitio web utiliza cookies para asegurar que realizas la mejor experiencia en tu sitio web: Este sitio web utiliza cookies para asegurar que realizas la mejor experiencia en tu sitio web
 Todos los campos marcados con el símbolo * son obligatorios: Todos los campos marcados con el símbolo * son obligatorios
 Añade tu número de teléfono: Añade tu número de teléfono
@@ -388,7 +387,7 @@ Confirmación de pago para el viaje: Confirmación de pago para el viaje
 Blog: Blog
 Blogs: Blogs
 Reservas: Reservas
-Revisión y pago: Revisión y pagoSi sencillamente quieres informaci├│n general sobre cualquier viaje haz click aqu├¡, por favor
+Revisión y pago: Revisión y pago
 No hay documentos para esta reserva: No hay documentos para esta reserva
 No se han generado facturas para esta reserva: No se han generado facturas para esta reserva
 Introduce tu contraseña: Introduce tu contraseña
@@ -452,15 +451,14 @@ Por favor, añade los datos de los: Por favor, añade los datos de los
 y de los: y de los
 Número de uso actual: Número de uso actual
 Número de usos total: Número de usos total
-Reinicia tu contraseña: Reinicia tu contraseña
 Cierra esta ventana: Cierra esta ventana
 Utilizar los datos del usuario: Utilizar los datos del usuario
 Reserva actualizada: Reserva actualizada
 Volver a ver mis reservas: Volver a ver mis reservas
 Pagar la cantidad restante: Pagar la cantidad restante
-No tienes reservas pendientes:
-No tienes reservas pendientes
+No tienes reservas pendientes: No tienes reservas pendientes
 No hay facturas a tu nombre: No hay facturas a tu nombre
 No hay reservas: No hay reservas
 No has elegido ninguna opción: No has elegido ninguna opción
-
+El formulario no está completo: El formulario no está completo
+Faltan campos por rellenar correctamente: Faltan campos por rellenar correctamente

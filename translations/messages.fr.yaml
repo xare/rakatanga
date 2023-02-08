@@ -401,34 +401,34 @@ Tu reserva ha sido iniciada. Para poder cerrarla puedes pasar a realizar el pago
 Referencia de la reserva: Référence de réservation
 Este viaje está en preparación, si quieres saber más sobre él, ponte en contacto con nosotros y te informamos: Ce voyage est en préparation, si vous souhaitez en savoir plus, contactez-nous et nous vous informerons
 Infos: Infos
-Documentación informativa: Documentación informativa
-Documentación: Documentación
-Extensiones: Extensiones
-No hay documentación adjunta para este viaje: No hay documentación adjunta para este viaje
-Haz click sobre la foto para verla a pantalla completa: Haz click sobre la foto para verla a pantalla completa
-Bono descuento: Bono descuento
-Valor de cancelación: Valor de cancelación
-Total a pagar: Total a pagar
-Factura válida creada electrónicamente: Factura válida creada electrónicamente
-Resto por pagar: Resto por pagar
-Actualizar cambios: Actualizar cambios
-Guardar los datos de viajeros: Guardar los datos de viajeros
-usuario: usuario
+Documentación informativa: Documentation informative
+Documentación: Documentation
+Extensiones: Extensions
+No hay documentación adjunta para este viaje: Il n'y a pas de documentation associée a ce voyage
+Haz click sobre la foto para verla a pantalla completa: Cliquez sur la photo pour la voir en plein écran
+Bono descuento: Bon de réduction
+Valor de cancelación: Valeur d'annulation
+Total a pagar: Total a payer
+Factura válida creada electrónicamente: Facture valide créée électroniquement
+Resto por pagar: Reste à payer
+Actualizar cambios: Mettre à jour les modifications
+Guardar los datos de viajeros: Enregistrer les données des voyageurs
+usuario: utilisateur
 dominio.com: dominio.com
-Añadir código de descuento a esta reserva: Añadir código de descuento a esta reserva
-Iniciación de una nueva reserva: Iniciación de una nueva reserva
-No hay facturas asociadas a esta reserva: No hay facturas asociadas a esta reserva
-Pago de la reserva: Pago de la reserva
-Transferencia bancaria: Transferencia bancaria
-Datos de la cuenta bancaria para efectuar el pago: Datos de la cuenta bancaria para efectuar el pago
-La reserva implica la aceptación total de nuestras condiciones generales de venta: La reserva implica la aceptación total de nuestras condiciones generales de venta
-Mis datos: Mis datos
-Pago anulado: Pago anulado
-Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias: Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias
-Pago realizado: Pago realizado
-Apellido: Apellido
-Entrar como usuario invitado: Entrar como usuario invitado
-Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico: Afin de commencer à traiter votre réservation, nous avons besoin de votre adresse e-mail
+Añadir código de descuento a esta reserva: Ajouter un code de réduction à cette réservation
+Iniciación de una nueva reserva: Commencer une nouvelle réservation
+No hay facturas asociadas a esta reserva: Il n'y a pas de factures associées à cette réservation
+Pago de la reserva: Paiement de la réservation
+Transferencia bancaria: Virement bancaire
+Datos de la cuenta bancaria para efectuar el pago: Coordonnées bancaires pour effectuer le paiement
+La reserva implica la aceptación total de nuestras condiciones generales de venta: La réservation implique l'acceptation totale de nos conditions générales de vente
+Mis datos: Mes données
+Pago anulado: Paiement annulé
+Algo ha fallado. Ponte en contacto con nosotros para ver cómo continuar, gracias: Quelque chose a mal tourné. Contactez-nous pour voir comment continuer, merci
+Pago realizado: Paiement réalisé
+Apellido: Nom
+Entrar como usuario invitado: Entrez en tant qu'utilisateur invité
+Para poder empezar a tramitar tu reserva necesitamos tu dirección de correo electrónico: Afin de commencer votre réservation, veuillez nous envoyer votre adresse e-mail
 Inicializar: Initialiser
 Esta tarjeta se activará en cuanto hayas rellenado los datos de todos los viajeros que participan en este viaje: Cette carte sera activée dès que vous aurez renseigné les coordonnées de tous les voyageurs participant à ce voyage
 Entrar en tu cuenta: Connectez-vous à votre compte
@@ -450,4 +450,5 @@ Pagar la cantidad restante: Paye la somme restante
 No hay facturas a tu nombre: Il n'y a pas de factures à vôtre nom
 No hay reservas: Il n'y a pas de réservation
 No has elegido ninguna opción: Vous n'avez pas choisi aucune option
-
+El formulario no está completo: Le formulaire n'est pas complet
+Faltan campos por rellenar correctamente: Champs manquants à remplir correctement

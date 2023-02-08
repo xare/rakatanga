@@ -32,6 +32,7 @@ Encore
     .addEntry('admin-upload-media', './assets/upload-media.js')
     .addEntry('datepicker', './assets/datepicker.js')
     .addEntry('documents', './assets/documents.js')
+    .addEntry('notifications', './assets/notifications.js')
     .addEntry('reservation', './assets/reservation.js')
     .addEntry('reservation-payment', './assets/reservation-payment.js')
     .addEntry('reservation-data-manager', './assets/reservation-data-manager.js')
@@ -50,6 +51,7 @@ Encore
 .addStyleEntry('email', './assets/styles/email.scss')
     .addStyleEntry('tags', './assets/styles/tags.scss')
     .addStyleEntry('reservations', './assets/styles/reservations.scss')
+    .addStyleEntry('admin_reservations', './assets/styles/admin_reservations.scss')
     .addStyleEntry('reservations-admin', './assets/styles/reservations_admin.scss')
 
 // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

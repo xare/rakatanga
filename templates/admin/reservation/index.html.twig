@@ -2,8 +2,18 @@
 
 {% block title %}Reservation index{% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+    {{  encore_entry_link_tags('admin_reservations')  }}
+	{{  encore_entry_link_tags('tags')  }}
+{% endblock %}
+
 {% block body %}
-<div class="container" id="js-admin-wrapper">
+<div
+    class="container"
+    id="js-admin-wrapper"
+    data-container="js-reservation-admin-index"
+    data-reservation="{{latestReservation.id}}">
 	{{ include ('admin/shared/_controlband.html.twig',{'entity':'reservation'})}}
     <div class="row">
         <div class="col-md-12 col-12">
@@ -12,7 +22,7 @@
     </div>
     <div class="row mb-4">
         <div class="count col-md-3 col-xs-12">
-            <strong>Total de reservas:</strong> 
+            <strong>Total de reservas:</strong>
             <span id="totalItemCount">{{ reservations|length }}</span>
         </div>
          <div class="col-md-1 offset-md-7 col-xs-12">
@@ -25,8 +35,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="table-responsive col-12">
-            <table class="table table-striped table-hover small">
+        {# <div class="table-responsive col-12"> #}
+            {# <table class="table table-striped table-hover small">
                  <thead class="main-red">
                     <tr>
                         <th>Id</th>
@@ -45,21 +55,23 @@
                         <th><i class="fa fa-trash"></i></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody> #}
+                <ul class="list-group">
                 {% for reservation in reservations %}
                     {{ include('admin/reservation/_row.html.twig', {'reservation': reservation}) }}
                 {% else %}
-                    <tr>
-                        <td colspan="14">No records found</td>
-                    </tr>
+                    {# <tr>
+                        <td colspan="14"> #}No records found{# </td>
+                    </tr> #}
                 {% endfor %}
-                </tbody>
-            </table>
+                {#</tbody>
+             </table> #}
+             </ul>
             </div>
             <div class="navigation">
             {{ knp_pagination_render(reservations) }}
             </div>
-        </div>
+        {# </div>#}
     </div>
 </div>
 {% endblock %}
@@ -67,4 +79,5 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('admin-send-message')}}
+    {{ encore_entry_script_tags('notifications')}}
 {% endblock %}
