@@ -11,7 +11,7 @@
 
 .tags .tag {
     margin-bottom: 0.5rem;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .tags.has-addons .tag:not(:last-child) {
@@ -77,6 +77,11 @@
 .tag:not(body).is-danger {
     background-color: #f14668;
     color: #fff;
+}
+
+.tag:not(body).is-danger.is-light {
+    background-color: #feecf0;
+    color: #cc0f35;
 }
 
 .tag:not(body).is-info.is-light {

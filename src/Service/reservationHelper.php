@@ -220,8 +220,9 @@ class reservationHelper
                 }
                 $optionsArray[$i]['price'] = $travelOption->getPrice();
                 $optionsArray[$i]['id'] = $travelOption->getId();
-                $optionTranslation = $this->optionsTranslationsRepository->findOneBy(['option'=>$travelOption->getId(), 'lang'=>$lang]);
-                $optionsArray[$i]['title'] = $optionTranslation->getTitle();
+                /* $optionTranslation = $this->optionsTranslationsRepository->findOneBy(['option'=>$travelOption->getId(), 'lang'=>$lang]);
+                $optionsArray[$i]['title'] = $optionTranslation->getTitle(); */
+                $optionsArray[$i]['title'] = $this->localizationHelper->renderOptionString($travelOption->getId(), $locale);
             $i++;
             }
         }
