@@ -37,10 +37,12 @@ class TravellersType extends AbstractType
                 ],
             ])
             ->add('vols')
-            ->add('date_ajout', DateType::class, [
+            /* ->add('date_ajout', DateType::class, [
                 'empty_data' => '',
-            ])
+            ]) */
             ->add('user')
+            ->add('date')
+            ->add('reservation')
         ;
     }
 

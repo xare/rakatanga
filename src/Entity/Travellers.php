@@ -177,11 +177,11 @@ class Travellers
         return $this->date_ajout;
     }
 
-    public function setDateAjout(): self
+   /*  public function setDateAjout(): self
     {
         $this->date_ajout = new \DateTimeImmutable();
         return $this;
-    }
+    } */
 
     /**
      * @return Collection|Document[]

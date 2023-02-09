@@ -860,7 +860,7 @@ class ReservationAjaxController extends AbstractController
                 }
                 $renderArray['reservation'] = $reservation;
             }
-            dump($renderArray);
+
             $i = 0;
             $html = $this->renderView(
                     'reservation/cards/_card_add_travellers_data.html.twig',

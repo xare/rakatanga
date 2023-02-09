@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block title %}Edit Travellers{% endblock %}
 
@@ -9,11 +9,11 @@
         <div class="col-12 col-md-12 ">
             <h1>Edit Travellers</h1>
 
-            {{ include('travellers/_form.html.twig', {'button_label': 'Update'}) }}
+            {{ include('admin/travellers/_form.html.twig', {'button_label': 'Update'}) }}
 
             <a href="{{ path('travellers_index') }}">back to list</a>
 
-            {{ include('travellers/_delete_form.html.twig') }}
+            {{ include('admin/travellers/_delete_form.html.twig') }}
         </div>
     </div>
 </div>

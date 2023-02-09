@@ -36,14 +36,12 @@ class travellersHelper {
             $traveller = new Travellers();
         }
         try {
-          $now = new \DateTimeImmutable();
           $traveller->setPrenom($travellerData['prenom']);
           $traveller->setNom($travellerData['nom']);
           $traveller->setEmail($travellerData['email']);
           $traveller->setTelephone($travellerData['telephone']);
           $traveller->setPosition($travellerData['position']);
           $traveller->setUser($user);
-          $traveller->setDateAjout($now);
           $traveller->setReservation($reservation);
           $this->entityManager->persist($traveller);
           $this->entityManager->flush();

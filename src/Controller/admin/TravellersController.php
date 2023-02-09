@@ -4,6 +4,7 @@ namespace App\Controller\admin;
 
 use App\Entity\Travellers;
 use App\Form\Travellers1Type;
+use App\Form\TravellersType;
 use App\Repository\TravellersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -17,7 +18,8 @@ class TravellersController extends AbstractController
 {
     public function __construct(
         private TravellersRepository $travellersRepository,
-        private PaginatorInterface $paginator
+        private PaginatorInterface $paginator,
+        private EntityManagerInterface $entityManager
     ) {
 
     }
@@ -66,14 +68,19 @@ class TravellersController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'travellers_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Travellers $traveller, EntityManagerInterface $entityManager): Response
+    #[Route(
+        path: '/{id}/edit',
+        name: 'travellers_edit',
+        methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        Travellers $traveller): Response
     {
-        $form = $this->createForm(Travellers1Type::class, $traveller);
+        $form = $this->createForm(TravellersType::class, $traveller);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('travellers_index', [], Response::HTTP_SEE_OTHER);
         }

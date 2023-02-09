@@ -9,12 +9,12 @@
     <td>{{reservation.nbaccomp}}</td>
     <td>{{(reservation.nbaccomp * reservation.date.prixaccomp)|format_currency('EUR', {fraction_digit: 2}) }}</td>
   </tr>
-  
+
     {% for reservationOption in reservation.reservationOptions %}
     <tr>
       <td>{{ reservationOption.ammount }} *  </td>
-      <td>{{ renderLocalizedOption(reservationOption.options.id,'es') }}</td>
-      <td>{{ (reservationOption.ammount * reservationOption.options.price)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
+      <td>{{ renderLocalizedOption(reservationOption.option.id,'es') }}</td>
+      <td>{{ (reservationOption.ammount * reservationOption.option.price)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
     </tr>
     {% endfor %}
 

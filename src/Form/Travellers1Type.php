@@ -23,7 +23,7 @@ class Travellers1Type extends AbstractType
             ->add('email')
             ->add('user')
             ->add('date')
-            ->add('reservations')
+            ->add('reservation')
         ;
     }
 
