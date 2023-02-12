@@ -53,10 +53,10 @@ class ReservationData
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservationData')]
     #[ORM\JoinColumn(nullable: false)]
-    private User $User;
+    private User $user;
 
     #[ORM\ManyToOne(targetEntity: Travellers::class, inversedBy: 'reservationData')]
-    private ?Travellers $travellers = null;
+    private ?Travellers $traveller = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $insuranceCompany = null;
@@ -83,7 +83,7 @@ class ReservationData
     private ?string $flightArrivalAirport = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $ArrivalHotel = null;
+    private ?string $arrivalHotel = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $flightDepartureNumber = null;
@@ -95,7 +95,7 @@ class ReservationData
     private ?string $flightDepartureAirport = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $DepartureHotel = null;
+    private ?string $departureHotel = null;
 
     public function __construct()
     {
@@ -253,24 +253,24 @@ class ReservationData
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): self
+    public function setUser(?User $user): self
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getTraveller(): ?Travellers
     {
-        return $this->travellers;
+        return $this->traveller;
     }
 
-    public function setTraveller(?Travellers $travellers): self
+    public function setTraveller(?Travellers $traveller): self
     {
-        $this->travellers = $travellers;
+        $this->traveller = $traveller;
 
         return $this;
     }
@@ -373,12 +373,12 @@ class ReservationData
 
     public function getArrivalHotel(): ?string
     {
-        return $this->ArrivalHotel;
+        return $this->arrivalHotel;
     }
 
-    public function setArrivalHotel(?string $ArrivalHotel): self
+    public function setArrivalHotel(?string $arrivalHotel): self
     {
-        $this->ArrivalHotel = $ArrivalHotel;
+        $this->arrivalHotel = $arrivalHotel;
 
         return $this;
     }
@@ -421,12 +421,12 @@ class ReservationData
 
     public function getDepartureHotel(): ?string
     {
-        return $this->DepartureHotel;
+        return $this->departureHotel;
     }
 
-    public function setDepartureHotel(?string $DepartureHotel): self
+    public function setDepartureHotel(?string $departureHotel): self
     {
-        $this->DepartureHotel = $DepartureHotel;
+        $this->departureHotel = $departureHotel;
 
         return $this;
     }

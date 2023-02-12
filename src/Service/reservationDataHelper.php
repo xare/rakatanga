@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\PaymentsRepository;
 use App\Repository\ReservationDataRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 
 class reservationDataHelper
 {
@@ -100,24 +101,35 @@ class reservationDataHelper
     public function getReservationDataFields(ReservationData $reservationData){
         $reflection = new \ReflectionObject($reservationData);
 
-        $getterMethods = array_filter($reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) {
+        $getterMethods = array_filter($reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) use($reservationData) {
             return substr($method->getName(), 0, 3) === 'get';
         });
         $filledFieldsCount = 0;
         $fieldsCount = 0;
+        $getterToPropertyMap = [
+            'getTravellers' => 'travellers',
+        ];
         foreach ($getterMethods as $method) {
-            if ($reservationData->{$method->getName()}() !== null) {
-                $filledFieldsCount++;
+            $propertyName = lcfirst(substr($method->getName(), 3));
+            if (array_key_exists($method->getName(), $getterToPropertyMap)) {
+                $propertyName = $getterToPropertyMap[$method->getName()];
+                $property = $reflection->getProperty(substr($propertyName,0,-1));
+            } else {
+                $property = $reflection->getProperty($propertyName);
+            }
+
+            if(!$property->isPrivate()
+            && !($property->getValue($reservationData) instanceof PersistentCollection)
+            ){
+                if ($reservationData->{$method->getName()}() !== null) {
+                    $filledFieldsCount++;
+                }
             }
             $fieldsCount++;
         }
         $array['filledFieldsCount'] = $filledFieldsCount;
         $array['fieldsCount'] = $fieldsCount;
     return $array;
-        /* $reservationDataFields = [];
-        $reservationDataFields['totalFieldsNumber'] = count($properties);
-        $reservationDataFields['filledFieldsNumber'] = ; */
-
     }
 
     public function getUserLatestData(User $user) {

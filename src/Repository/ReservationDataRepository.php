@@ -54,7 +54,7 @@ class ReservationDataRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('rd')
         ->andWhere('rd.reservation = :reservation')
         ->setParameter('reservation', $reservation)
-        ->andWhere('rd.User = :user')
+        ->andWhere('rd.user = :user')
         ->setParameter('user', $reservation->getUser())
         ->getQuery()
         ->getResult();
@@ -66,7 +66,7 @@ class ReservationDataRepository extends ServiceEntityRepository
         ->innerJoin(Document::class, 'd', 'd.rd=rd.d')
         ->andWhere('rd.reservation = :reservation')
         ->setParameter('reservation', $reservation)
-        ->andWhere('rd.travellers = :traveller')
+        ->andWhere('rd.traveller = :traveller')
         ->setParameter('traveller', $traveller)
         ->getQuery()
         ->getResult();
@@ -74,9 +74,9 @@ class ReservationDataRepository extends ServiceEntityRepository
 
     public function getUserLatestData($user) {
         return $this->createQueryBuilder('rd')
-        ->andWhere('rd.User = :user')
+        ->andWhere('rd.user = :user')
         ->setParameter('user', $user)
-        ->andWhere('rd.travellers IS NULL')
+        ->andWhere('rd.traveller IS NULL')
         ->orderBy('rd.id','DESC')
         ->setMaxResults(1)
         ->getQuery()
