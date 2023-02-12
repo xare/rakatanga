@@ -77,10 +77,7 @@ class UserFrontendReservationDataController extends AbstractController
             $reservationData->setDriversNumber($previousReservationData->getDriversNumber());
             $reservationData->setDriversIssueDate($previousReservationData->getDriversIssueDate());
             $reservationData->setDriversExpirationDate($previousReservationData->getDriversExpirationDate());
-
-            $this->addFlash('success',$this->translator->trans('Hemos recuperado algunos datos de tu última reserva y tienes, la parte de la documentación personal, ya rellenada. Pero si algo ha cambiado puedes cambiarlo aquí.'));
         }
-        dump($reservationData);
           $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
           $documents = $reservationData->getDocuments();
           $form = $this->createForm(ReservationDataType::class, $reservationData);

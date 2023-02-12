@@ -7,6 +7,7 @@ use App\Entity\ReservationData;
 use App\Entity\User;
 use App\Repository\PaymentsRepository;
 use App\Repository\ReservationDataRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 
@@ -101,32 +102,24 @@ class reservationDataHelper
     public function getReservationDataFields(ReservationData $reservationData){
         $reflection = new \ReflectionObject($reservationData);
 
-        $getterMethods = array_filter($reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) use($reservationData) {
+        $getterMethods = array_filter($reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) {
             return substr($method->getName(), 0, 3) === 'get';
         });
+
         $filledFieldsCount = 0;
-        $fieldsCount = 0;
-        $getterToPropertyMap = [
-            'getTravellers' => 'travellers',
-        ];
+        $fieldsCount = count($getterMethods);
         foreach ($getterMethods as $method) {
             $propertyName = lcfirst(substr($method->getName(), 3));
-            if (array_key_exists($method->getName(), $getterToPropertyMap)) {
-                $propertyName = $getterToPropertyMap[$method->getName()];
-                $property = $reflection->getProperty(substr($propertyName,0,-1));
-            } else {
-                $property = $reflection->getProperty($propertyName);
+            if($propertyName == "reservation" || $propertyName == "documents"  || $propertyName == "user"){
+                $fieldsCount --;
+                continue;
             }
-
-            if(!$property->isPrivate()
-            && !($property->getValue($reservationData) instanceof PersistentCollection)
-            ){
-                if ($reservationData->{$method->getName()}() !== null) {
-                    $filledFieldsCount++;
-                }
+            /* $property = $reflection->getProperty($propertyName); */
+            if ($reservationData->{$method->getName()}() !== null) {
+                $filledFieldsCount++;
             }
-            $fieldsCount++;
         }
+
         $array['filledFieldsCount'] = $filledFieldsCount;
         $array['fieldsCount'] = $fieldsCount;
     return $array;
