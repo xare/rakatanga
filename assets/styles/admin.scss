@@ -49,6 +49,16 @@ header {
 .badge-secondary {
     color: #fff;
     background-color: #6c757d;
+    font-weight: 400;
+}
+
+.badge-rakatanga-reservations {
+    color: #fff;
+    background-color: #9aa3aa;
+    font-weight: 400;
+    min-width: 10rem;
+    display: inline-block;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 

@@ -1,6 +1,7 @@
-   {% for document in documents %} 
-      <li 
-        class="list-group-item d-flex justify-content-between align-items-center" 
+   {% for document in documents %}
+    {% if document.traveller == null %}
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
         >
         <a href="{{ path("download_document",{
                                 'id': document.id}
@@ -9,23 +10,20 @@
           <strong>{{document.doctype|trans}}</strong>:
           {{document.originalFilename}}
           <span>
-          {% if document.mimetype == 'image/jpeg' or document.mimetype == 'image/jpg' or document.mimetype == 'image/png' %} 
+          {% if document.mimetype == 'image/jpeg' or document.mimetype == 'image/jpg' or document.mimetype == 'image/png' %}
             <img src="{{ path("download_document",{
                               'id': document.id}
               )}}" style="width:50px; height:auto" />
           {% else %}
-                  <span class="fa fa-download"></span>
+            <span class="fa fa-download"></span>
           {% endif %}
         </a>
         </span>
-        <button 
+        <button
           class="btn btn-link btn-sm"
           data-action="js-document-delete"
           data-type="{{document.doctype}}"
           data-document-id="{{document.id}}"
-          {% if traveller is defined and traveller != null %}
-            data-traveller-id="{{traveller.id}}"
-          {% endif %}
           data-reservation-id="{{reservation.id}}"
           >
           <span class="fa fa-trash"></span>
@@ -33,4 +31,5 @@
       </li>
       {% else %}
       <li class="list-group-item alert alert-danger">{{ 'No hay documentos asociados a esta reserva'|trans }}.</li>
+    {% endif %}
   {% endfor %}

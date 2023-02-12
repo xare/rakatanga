@@ -64,6 +64,7 @@ class DocumentRepository extends ServiceEntityRepository
         ->andWhere('d.reservation = :reservation')
         ->setParameter('reservation', $reservation)
         ->andWhere('d.user = :user')
+        ->andWhere('d.traveller IS NULL')
         ->setParameter('user', $reservation->getUser())
         ->getQuery()
         ->getResult();

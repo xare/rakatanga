@@ -14,14 +14,17 @@ use App\Repository\ReservationOptionsRepository;
 use App\Repository\ReservationRepository;
 use App\Service\breadcrumbsHelper;
 use App\Service\languageMenuHelper;
+use App\Service\reservationDataHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
@@ -36,7 +39,8 @@ class UserFrontendController extends AbstractController
                         private breadcrumbsHelper $breadcrumbsHelper,
                         private OptionsRepository $optionsRepository,
                         private ReservationOptionsRepository $reservationOptionsRepository,
-                        private languageMenuHelper $languageMenuHelper)
+                        private languageMenuHelper $languageMenuHelper,
+                        private reservationDataHelper $reservationDataHelper)
     {
     }
 
@@ -98,6 +102,7 @@ class UserFrontendController extends AbstractController
 
         $reservations = $this->reservationRepository->findBy(['user' => $user], ['date_ajout' => 'DESC']);
 
+
         return $this->render('/user/user_reservations.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
@@ -114,9 +119,11 @@ class UserFrontendController extends AbstractController
     public function frontend_user_settings(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
+        AuthenticationUtils $authenticationUtils,
         string $_locale = null,
         string $locale = 'es'
-    ) {
+    ):Response {
+        dump("salut");
         $locale = $_locale ?: $locale;
 
         // Swith Locale Loader
@@ -129,21 +136,25 @@ class UserFrontendController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
+        dump($user);
         $form = $this->createForm(UserType::class, $user);
+        dump($form);
         $form->handleRequest($request);
-        // dd($form);
+        dump($authenticationUtils->getLastAuthenticationError());
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
+
+            $userData = $form->getData();
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form['password']->getData()
                 ));
-            $this->entityManager->persist($user);
+            $userData->setPassword($user->getPassword());
+            $this->entityManager->persist($userData);
             $this->entityManager->flush();
             $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
 
-            // return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('frontend_user');
         }
 
         return $this->render('user/user_settings.html.twig', [

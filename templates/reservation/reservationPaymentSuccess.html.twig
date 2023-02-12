@@ -21,7 +21,7 @@
             <p>
                 {{'Si lo deseas puedes acceder a tu cuenta y ver la reserva realizada en tu espacio, seleccionando'|trans}} <a href="{{path('frontend_user_reservations')}}">{{'Mis reservas'|trans}}"</a>,  {{'desde ahí podrás realizar modificaciones y añadir los datos necesario para organizar tu viaje'|trans}}.
             </p>
-            {{ include ('user/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
+            {{ include ('user/_cards/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
             <a href="{{path('frontend_user_reservations')}}" class="btn btn-primary btn-lg">{{'Mis reservas'|trans}}</a>
             <a href="{{path('frontend_user_settings')}}" class="btn btn-info btn-lg">{{'Mis datos'|trans}}</a>
         </div>

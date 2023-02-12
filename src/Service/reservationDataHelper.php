@@ -3,13 +3,19 @@
 namespace App\Service;
 
 use App\Entity\Reservation;
+use App\Entity\ReservationData;
+use App\Entity\User;
 use App\Repository\PaymentsRepository;
+use App\Repository\ReservationDataRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class reservationDataHelper
 {
-    public function __construct(private PaymentsRepository $paymentsRepository)
+    public function __construct(
+        private PaymentsRepository $paymentsRepository,
+        private EntityManagerInterface $entityManager,
+        private ReservationDataRepository $reservationDataRepository)
     {
-        $this->paymentsRepository = $paymentsRepository;
     }
 
       /**
@@ -89,5 +95,32 @@ class reservationDataHelper
         $dueAmmount = $totalAmmount - $totalPayments;
 
         return $dueAmmount;
+    }
+
+    public function getReservationDataFields(ReservationData $reservationData){
+        $reflection = new \ReflectionObject($reservationData);
+
+        $getterMethods = array_filter($reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) {
+            return substr($method->getName(), 0, 3) === 'get';
+        });
+        $filledFieldsCount = 0;
+        $fieldsCount = 0;
+        foreach ($getterMethods as $method) {
+            if ($reservationData->{$method->getName()}() !== null) {
+                $filledFieldsCount++;
+            }
+            $fieldsCount++;
+        }
+        $array['filledFieldsCount'] = $filledFieldsCount;
+        $array['fieldsCount'] = $fieldsCount;
+    return $array;
+        /* $reservationDataFields = [];
+        $reservationDataFields['totalFieldsNumber'] = count($properties);
+        $reservationDataFields['filledFieldsNumber'] = ; */
+
+    }
+
+    public function getUserLatestData(User $user) {
+        return $this->reservationDataRepository->getUserLatestData($user);
     }
 }

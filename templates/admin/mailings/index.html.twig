@@ -13,7 +13,7 @@
     <div class="row mb-4">
         <div class="count col-md-3 col-xs-12">
             <strong>Mailings en total:</strong>
-            <span id="totalItemCount"> {# {{ count }} #}</span>
+            <span id="totalItemCount"> {# {{ count }} </span>#}
         </div>
         <div class="col-md-1 offset-md-7 col-xs-12">
             {{ include('admin/mailings/_filtrar_resultados.html.twig') }}
@@ -26,7 +26,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-        
+
             <table class="table table-striped table-hover small">
                 <thead class="main-red">
                     <tr>
@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                     {% for mailing in mailings %}
-                        {% include('admin/mailings/_row.html.twig')%}
+                        {{ include('admin/mailings/_row.html.twig') }}
                     {% else %}
                         <tr>
                             <td colspan="6">no records found</td>

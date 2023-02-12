@@ -12,6 +12,7 @@ use App\Repository\TravellersRepository;
 use App\Service\breadcrumbsHelper;
 use App\Service\languageMenuHelper;
 use App\Service\Mailer;
+use App\Service\reservationDataHelper;
 use App\Service\reservationHelper;
 use App\Service\travellersHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,8 @@ class UserFrontendReservationTravellersController extends AbstractController
             private DocumentRepository $documentRepository,
             private ReservationDataRepository $reservationDataRepository,
             private ReservationHelper $reservationHelper,
-            private travellersHelper $travellersHelper)
+            private travellersHelper $travellersHelper,
+            private reservationDataHelper $reservationDataHelper)
     {
 
     }
@@ -90,12 +92,14 @@ class UserFrontendReservationTravellersController extends AbstractController
             $array[$i] = $reservationDatum;
         }
         // dd($reservationData);
+        $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
         return $this->render('user/user_reservation_data.html.twig', [
             'langs' => $urlArray,
             'locale' => $locale,
             'traveller' => $traveller,
             'reservation' => $reservation,
             'reservationData' => $reservationData,
+            'fieldsCompletion' => $fieldsCompletion,
             'documents' => $documents,
             'form' => $form->createView(),
         ]);

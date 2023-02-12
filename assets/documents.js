@@ -37,7 +37,7 @@ class DocumentsList {
                     data,
                     method: 'POST',
                 });
-                $('.js-documents-list').html(response.listHtml);
+                $('[data-container="js-documents-list"]').html(response.listHtml);
                 $(`#js-dropzone-${data.type}-container`).html(response.dropHtml);
                 self.initializeDropzone(data.type, self.travellerId);
             } catch (jqXHR) {

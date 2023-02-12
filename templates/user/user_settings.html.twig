@@ -33,7 +33,7 @@
 			<div class="col-12 col-xs-12">
 				<div class="card">
 					<div class="card-body">
-					
+
 					{{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
 					<div class="row mb-3">
 						<div class="col-4 col-xs-12">
@@ -63,7 +63,7 @@
 															'label':'Lengua'|trans ,
 															'attr':{
 																	'class':'form-select'
-																	}   
+																	}
 															}) }}
 						</div>
 					</div>
@@ -147,6 +147,7 @@
 						</div>
 					</div>
 					{{ form_row(form._token) }}
+					<input type="hidden" name="_remember_me" id="id_remember_me" value="true">
 					{# <input type="hidden" name="token" value="{{ csrf_token('user') }}"/> #}
 					{{ form_end(form,{'render_rest': false})}}
 				</div>

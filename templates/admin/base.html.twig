@@ -12,15 +12,15 @@
         {% endblock %}
     </head>
     <body>
-    
+
         {% block header %}
             {{ include('admin/shared/_header.html.twig') }}
         {% endblock %}
-    
+
         {% block body %}
         {% endblock %}
-    
-        
+
+
         {% block footer %}
             {{ include('admin/shared/_footer.html.twig') }}
         {% endblock %}
@@ -28,7 +28,7 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
             {{ encore_entry_script_tags('admin-tools') }}
-            {{ encore_entry_script_tags('readmore') }}
+             {{ encore_entry_script_tags('readmore') }}
         {% endblock %}
     </body>
 </html>

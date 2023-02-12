@@ -1,0 +1,90 @@
+{% set progress = (fieldsCompletion.filledFieldsCount * 100) / fieldsCompletion.fieldsCount %}
+{{progress}} %
+
+<div class="position-sticky">
+  <div class="card card-tarif mb-3">
+    <div class="card-header">
+      <h4>{{ 'Documentos'|trans }}</h4>
+    </div>
+    <div class="card-body">
+      <ul
+        class="list-group small mb-3 js-documents-list"
+        data-container="js-documents-list"
+        data-reservation-id="{{reservation.id}}"
+        {% if traveller is defined %}
+          data-traveller="{{traveller.id}}"
+        {% endif %}
+        data-url="{{ path('frontend_reservation_list_documents', {'reservation': reservation.id}) }}"
+        >
+        {% if traveller is not defined %}
+          {{ include('user/_documents_list.html.twig',{
+                      'reservation' : reservation
+                  }) }}
+        {% else %}
+          {{ include('user/_documents_list_traveller.html.twig',{
+                      'reservation' : reservation
+                  }) }}
+        {% endif %}
+
+      </ul>
+
+    </div>
+  </div>
+  <div class="card card-tarif">
+    <div class="card-header">
+      <h4>{{ 'DATOS'|trans }}</h4>
+    </div>
+    <div class='card-body'>
+      {% set counter = 0 %}
+      {% for child in form.children %}
+        {% if child.vars.value != null %}
+          {% set counter = counter + 1 %}
+        {% endif %}
+      {% endfor %}
+      {% set width = counter/( (form.children|length -1) )*100 %}
+      <div id="js-progress" class="mb-3" data-counter="{{counter}}">
+        <div class="progress">
+          <div class="progress-bar bg-{% if width >= 0 and width < 25 %}
+                                  danger{% elseif width >= 25 and width < 50 %}warning
+                                  {% elseif width >= 50 and width < 75 %}info{% elseif width >= 75 and width <= 100 %}success{% endif %}" role="progressbar" style="width: {{ width }}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+      <ul class="list-group mb-3" id="js-verification-list">
+        {% for child in form.children %}
+          {% if child.vars.name != "_token" and
+        child.vars.name != "passportIssueDate" and
+        child.vars.name != "passportExpirationDate" and
+        child.vars.name != "visaIssueDate" and
+        child.vars.name != "visaExpirationDate" and
+        child.vars.name != "driversIssueDate" and
+        child.vars.name != "driversExpirationDate" and
+        child.vars.name != "insuranceContractNumber" and
+        child.vars.name != "flightArrivalAirport" and
+        child.vars.name != "ArrivalHotel" and
+        child.vars.name != "flightDeparture" and
+        child.vars.name != "flightDepartureAirport" and
+        child.vars.name != "flightDepartureHotel"
+          %}
+            {% if child.vars.value != null %}
+              <li data-type="{{ child.vars.name }}" data-checked="false" class="list-group-item list-success mb-1">
+                <i class="fa fa-check-circle" style="color:#155724"></i>
+                {{ child.vars.label }}:
+                {{ child.vars.value }}
+              {% else %}
+                <li data-type="{{ child.vars.name }}" data-checked="true" class="list-group-item bg-warning mb-1">
+                  <i class="fa fa-exclamation-triangle" style="color:red"></i>
+                  {{ child.vars.label }}{{ child.vars.value }}
+                </li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card-footer">
+        <button name="submit" class="btn btn-info">
+          {{'Guardar'|trans}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -67,103 +67,114 @@
             </h3>
         </div>
         <div class="card-body">
-            <div class="tags has-addons">
-                <span class="tag">
-                    <i class="fas fa-receipt"></i>
-                </span>
-                <span
-                    class="tag"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Status: {{ reservation.status }}">
-                    {{ reservation.status }}
-                </span>
-            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge badge-rakatanga-reservations">Estatus Reserva/pago</span>
+                    <div class="tags has-addons">
+                    <span class="tag">
+                        <i class="fas fa-receipt"></i>
+                    </span>
+                    <span
+                        class="tag"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Status: {{ reservation.status }}">
+                        {{ reservation.status }}
+                    </span>
+                    </div>
 
-            <div class="tags has-addons">
-                <span class="tag"><i class="fas fa-coins"></i></span>
-                <span class="tag">Coste</span>
-                <span class="tag is-light">{{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</span>
-                <span class="tag">Pagado</span>
-                {# <span class="tag is-light">{{ totalAmmount|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</span> #}
-                <span class="tag is-light">{{ paymentTotal|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</span>
-            </div>
-            <div class="tags has-addons">
-                <span class="tag"><i class="fas fa-calendar-day"></i></span>
-                <span class="tag">Reservado el: </span>
-                <span class="tag is-light">{{ reservation.dateAjout ? reservation.dateAjout|date('d/m/Y H:i:s') : '' }}</span>
+                    <div class="tags has-addons">
+                        <span class="tag"><i class="fas fa-coins"></i></span>
+                        <span class="tag">Coste</span>
+                        <span class="tag is-light">{{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</span>
+                        <span class="tag">Pagado</span>
+                        {# <span class="tag is-light">{{ totalAmmount|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</span> #}
+                        <span class="tag is-light">{{ paymentTotal|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</span>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge badge-rakatanga-reservations">Fechas Reserva/pago</span>
+                    <div class="tags has-addons">
+                        <span class="tag"><i class="fas fa-calendar-day"></i></span>
+                        <span class="tag">Reservado el: </span>
+                        <span class="tag is-light">{{ reservation.dateAjout ? reservation.dateAjout|date('d/m/Y H:i:s') : '' }}</span>
 
-                {% if reservation.payments|length > 0 %}
-                <span class="tag">Pagado el: </span>
-                    {% for payment in reservation.payments %}
-                        <span class="tag is-light">{{ payment.dateAjout|date('d/m/Y H:i:s') }}</span>
+                        {% if reservation.payments|length > 0 %}
+                        <span class="tag">Pagado el: </span>
+                            {% for payment in reservation.payments %}
+                                <span class="tag is-light">{{ payment.dateAjout|date('d/m/Y H:i:s') }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </li>
+                <li class="list-group-item">
+                <span class="badge badge-rakatanga-reservations">Parámetros reserva</span>
+                    <div class="tags has-addons">
+                        <span class="tag"><i class="fas fa-motorcycle"></i></span>
+                        <span class="tag">{{ reservation.nbpilotes }}</span>
+                        <span class="tag is-light">Pilotos</span>
+                        {% if reservation.nbaccomp > 0 %}
+                            <span class="tag">{{ reservation.nbaccomp }}</span>
+                            <span class="tag is-light">Acompañantes</span>
+                        {% endif %}
+                    </div>
+
+                    {% if reservation.reservationOptions|length > 0 %}
+                    <div class="tags has-addons">
+                    {% endif %}
+                    {% for reservationOption in reservation.reservationOptions %}
+                        {% if loop.index == 1 %}
+                            <span class="tag">
+                                <i class="fas fa-puzzle-piece"></i>
+                            </span>
+                        {% endif %}
+                        <span class="tag">
+                            {{ reservationOption.ammount }}
+                        </span>
+                        <span
+                            class="tag is-light"
+                            data-bs-toggle="tooltip"
+                            title="{{ renderLocalizedOption(reservationOption.option.id,'es') }}">
+                            {{ renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...') }}
+                        </span>
                     {% endfor %}
-                {% endif %}
-            </div>
-    <div class="clearfix separator"></div>
-
-        <div class="tags has-addons">
-            <span class="tag"><i class="fas fa-motorcycle"></i></span>
-            <span class="tag">{{ reservation.nbpilotes }}</span>
-            <span class="tag is-light">Pilotos</span>
-            {% if reservation.nbaccomp > 0 %}
-                <span class="tag">{{ reservation.nbaccomp }}</span>
-                <span class="tag is-light">Acompañantes</span>
-            {% endif %}
-        </div>
-        {% if reservation.reservationOptions|length > 0 %}
-        <div class="tags has-addons">
-        {% endif %}
-        {% for reservationOption in reservation.reservationOptions %}
-            {% if loop.index == 1 %}
-                <span class="tag">
-                    <i class="fas fa-puzzle-piece"></i>
-                </span>
-            {% endif %}
-            <span class="tag">
-                {{ reservationOption.ammount }}
-            </span>
-            <span
-                class="tag is-light"
-                data-bs-toggle="tooltip"
-                title="{{ renderLocalizedOption(reservationOption.option.id,'es') }}">
-                {{ renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...') }}
-            </span>
-    {% endfor %}
-    {% if reservation.reservationOptions|length > 0 %}
-    </div>
-    {% endif %}
-<div class="clearfix separator"></div>
-    <div class="tags has-addons">
-        <span class="tag"><i class="fas fa-user"></i></span>
-        <span class="tag is-danger is-light">
-            <a
-                href="{{path('user_edit',{'id':reservation.user.id})}}"
-                data-bs-toggle="tooltip"
-                title="Visualizar los datos del usuario">
-                {{ reservation.user.prenom }} {{ reservation.user.nom }}[{{ reservation.user }}]
-            </a>
-        </span>
-    {% if reservation.travellers|length == 0 %}
-    </div>
-    {% endif %}
-{% for traveller in reservation.travellers %}
-    {% if traveller.email != reservation.user.email %}
-        <span class="tag">
-            <a
-                class="traveller-tag-content"
-                href="{{path('travellers_edit',{'id':traveller.id})}}"
-                data-bs-toggle="tooltip"
-                title="Visualizar los datos del viajero">
-                    {{ traveller.prenom }} {{ traveller.nom }}
-            </a>
-        </span>
-    {% endif %}
-{% endfor %}
-{% if reservation.travellers|length > 0 %}
-    </div>
-{% endif %}
-    <div class="clearfix separator"></div>
+                    {% if reservation.reservationOptions|length > 0 %}
+                    </div>
+                    {% endif %}
+                </li>
+                <li class="list-group-item">
+                <span class="badge badge-rakatanga-reservations">Participantes</span>
+                    <div class="tags has-addons">
+                        <span class="tag"><i class="fas fa-user"></i></span>
+                        <span class="tag is-danger is-light">
+                            <a
+                                href="{{path('user_edit',{'id':reservation.user.id})}}"
+                                data-bs-toggle="tooltip"
+                                title="Visualizar los datos del usuario">
+                                {{ reservation.user.prenom }} {{ reservation.user.nom }}[{{ reservation.user }}]
+                            </a>
+                        </span>
+                    {% if reservation.travellers|length == 0 %}
+                    </div>
+                    {% endif %}
+                    {% for traveller in reservation.travellers %}
+                        {% if traveller.email != reservation.user.email %}
+                            <span class="tag">
+                                <a
+                                    class="traveller-tag-content"
+                                    href="{{path('travellers_edit',{'id':traveller.id})}}"
+                                    data-bs-toggle="tooltip"
+                                    title="Visualizar los datos del viajero">
+                                        {{ traveller.prenom }} {{ traveller.nom }}
+                                </a>
+                            </span>
+                        {% endif %}
+                    {% endfor %}
+                    {% if reservation.travellers|length > 0 %}
+                        </div>
+                    {% endif %}
+                </li>
+            </ul>
         <div class="btn-toolbar pull-right" role="toolbar" aria-label="">
             <button
                 class="btn btn-primary js-send-checkin-request"

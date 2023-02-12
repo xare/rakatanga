@@ -68,18 +68,7 @@
 	{% endblock %}
 
 	{% block body %}
-{# {{dump(traveller)}} #}
-{# {{ dump(reservation.reservationData) }}
-		{{ parent() }}
-{% if reservationData is defined %}
-    {% else %}
-	{{dump(reservation) }}
-{% endif %}
-<ol>
-    {% for key, value in _context  %}
-      <li>{{ key }}</li>
-    {% endfor %}
-</ol> #}
+
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 col-12">
@@ -97,24 +86,17 @@
 					{% else %}
 						data-user-id="{{app.user.id}}"
 					{% endif %}
-					{# {% if reservationData is defined and reservationData != null %}
-
-
-				{% endif %} #}
 				data-locale="{{ app.request.getLocale() }}">
 				<div class="col-md-8 col-12">
 					<h1>
 						{{ 'Tu reserva'|trans }}:
 						{% if traveller is defined and traveller != null %}
-									{{ traveller.prenom }}
-									{{ traveller.nom }}
-								{% else %}
-									{{ app.user.prenom }}
-									{{ app.user.nom }}
-								{% endif %}
-						{# {% if reservationData is defined and reservationData != null %}
-
-							{% endif %} #}
+							{{ traveller.prenom }}
+							{{ traveller.nom }}
+						{% else %}
+							{{ app.user.prenom }}
+							{{ app.user.nom }}
+						{% endif %}
 					</h1>
 
 					<p>{{ 'En este espacio recogeremos los datos que deposites sobre tu reserva'|trans}}.</p>
@@ -166,82 +148,7 @@
 					</div>
 				</div>
 				<div class="col-4 col-xs-12">
-					<div class="position-sticky">
-						<div class="card card-tarif mb-3">
-							<div class="card-header">
-								<h4>{{ 'Documentos'|trans }}</h4>
-							</div>
-							<div class="card-body">
-								<ul
-									class="list-group small mb-3 js-documents-list"
-									data-reservation-id="{{reservation.id}}"
-									data-url="{{ path('frontend_reservation_list_documents', {'reservation': reservation.id}) }}"
-									>
-									{{ include('user/_documents_list.html.twig',{
-                               'reservation':reservation
-                           }) }}
-								</ul>
-
-							</div>
-						</div>
-						<div class="card card-tarif">
-							<div class="card-header">
-								<h4>{{ 'DATOS'|trans }}</h4>
-							</div>
-							<div class='card-body'>
-								{% set counter = 0 %}
-								{% for child in form.children %}
-									{% if child.vars.value != null %}
-										{% set counter = counter + 1 %}
-									{% endif %}
-								{% endfor %}
-								{% set width = counter/( (form.children|length -1) )*100 %}
-								<div id="js-progress" class="mb-3" data-counter="{{counter}}">
-									<div class="progress">
-										<div class="progress-bar {% if width >= 0 and width < 25 %}
-																						bg-danger{% elseif width >= 25 and width < 50 %} bg-warning
-																						{% elseif width >= 50 and width < 75 %} bg-info{% elseif width >= 75 and width <= 100 %} bg-success{% endif %}" role="progressbar" style="width: {{ width }}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-									</div>
-								</div>
-								<ul class="list-group mb-3" id="js-verification-list">
-									{% for child in form.children %}
-										{% if child.vars.name != "_token" and
-									child.vars.name != "passportIssueDate" and
-									child.vars.name != "passportExpirationDate" and
-									child.vars.name != "visaIssueDate" and
-									child.vars.name != "visaExpirationDate" and
-									child.vars.name != "driversIssueDate" and
-									child.vars.name != "driversExpirationDate" and
-									child.vars.name != "insuranceContractNumber" and
-									child.vars.name != "flightArrivalAirport" and
-									child.vars.name != "ArrivalHotel" and
-									child.vars.name != "flightDeparture" and
-									child.vars.name != "flightDepartureAirport" and
-									child.vars.name != "flightDepartureHotel"
-									 %}
-											{% if child.vars.value != null %}
-												<li data-type="{{ child.vars.name }}" data-checked="false" class="list-group-item list-success mb-1">
-													<i class="fa fa-check-circle" style="color:#155724"></i>
-													{{ child.vars.label }}:
-													{{ child.vars.value }}
-												{% else %}
-													<li data-type="{{ child.vars.name }}" data-checked="true" class="list-group-item bg-warning mb-1">
-														<i class="fa fa-exclamation-triangle" style="color:red"></i>
-														{{ child.vars.label }}{{ child.vars.value }}
-													</li>
-												{% endif %}
-											{% endif %}
-										{% endfor %}
-									</ul>
-								</div>
-								<div class="card-footer">
-									<button name="submit" class="btn btn-info">
-										{{'Guardar'|trans}}
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
+					{{ include('user/partials/_reservationData_sidebar.html.twig') }}
 				</div>
 				{# {{ form_row( form._token ) }} #}
 				{# {{ form_end( form, {'render_rest': false} ) }}  #}

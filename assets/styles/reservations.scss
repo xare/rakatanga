@@ -1,15 +1,21 @@
+#js-user-reservations_wrapper .card-header>img {
+    width: 6rem !important;
+    float: left;
+    margin-right: 1rem;
+    border-radius: 6px;
+}
+
 .reservation-container {
     display: grid;
     grid-gap: 1rem;
     grid-template-areas: "photo title title" "reservationOptions reservationOptions reservationOptions" "reservationCalculator reservationCalculator reservationCalculator";
     grid-auto-columns: 1fr;
-    background: #fff;
     align-items: top;
-    padding: 1.4rem;
+    /*    padding: 1.4rem;
     border-radius: 0.8rem;
     margin-bottom: 1.4rem;
     -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
-    box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+    box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39); */
 }
 
 .box {

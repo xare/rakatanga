@@ -5,6 +5,7 @@ $(document).ready(function() {
     /*********************** */
     /* Sweet alerts          */
     /*********************** */
+
     $("[data-action='read-more']").on('click', (event) => {
         event.preventDefault();
         let content = $(event.currentTarget).data('content');

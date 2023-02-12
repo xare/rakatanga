@@ -1,308 +1,394 @@
-<div class="reservation-container">
- <div class="travelPhoto">
+{% set hasPassport = false %}
+{% set hasDrivers = false %}
+{% set hasVisa = false %}
+{% set doctypesArray = ['visa','drivers','passport'] %}
+{% for doctypeElement in doctypesArray %}
+  {% for document in reservation.documents %}
+    {% if document.traveller == null %}
+      {% if doctypeElement == 'passport' and document.doctype == doctypeElement %}
+        {% set hasPassport = true %}
+      {% endif %}
+      {% if doctypeElement == 'drivers' and document.doctype == doctypeElement %}
+        {% set hasDrivers = true %}
+      {% endif %}
+      {% if doctypeElement == 'visa' and document.doctype == doctypeElement %}
+        {% set hasVisa = true %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+<div class="card mb-2">
+  <div class="card-header">
     {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
-      <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
+    <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
+    <h3>{{ reservation.code }} - {{renderLocalizedTravel(reservation.date.travel.id,locale)}}
+    <div class="tags has-addons me-1">
+      <span class="tag is-danger is-light">{{reservation.date.debut|date('d/m/Y')}}</span><i class="fas fa-arrow-right" style="font-size:0.8rem"></i>
+     </div>
+    <div class="tags has-addons">
+      <span class="tag is-danger is-light">{{reservation.date.fin|date('d/m/Y')}}</span>
+    </div></h3>
   </div>
-  <div class="travelName box">
-      <h4>{{renderLocalizedTravel(reservation.date.travel.id,locale)}}</h4>
-      <h5>{{ 'Código de reserva'|trans }}: {{ reservation.code }}</h5>
-  </div>
-
-  <div class="reservationOptions box">
-    <h5 class="mt-3">{{'Datos de la reserva'|trans}}</h5>
-      <div class="tags has-addons me-1">
-        <span class="tag is-dark"><i class="fas fa-calendar-day"></i></span>
-        <span class="tag is-primary">{{reservation.date.debut|date('d/m/Y')}}</span>
-      </div>
-      <div class="tags has-addons">
-        <span class="tag is-dark"><i class="fas fa-calendar-day"></i></span>
-        <span class="tag is-warning">{{reservation.date.fin|date('d/m/Y')}}</span>
-      </div>
-      <div class="tags has-addons">
-        <span class="tag is-dark"><i class="fas fa-suitcase"></i></span>
-        <span class="tag is-info">{{ reservation.status }}</span>
-      </div>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a
-          class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-          href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}">
-          <i class="fa fa-edit "></i>
-            {{'Editar los datos de la reserva'|trans}}
-        </a>
-      </div>
-      <br />
-      <h5 class="mt-3">{{'Documentos'|trans}}</h5>
-      {% for document in reservation.documents %}
+  <div class="card-body reservation-container">
+    <div class="reservationOptions box">
+      <h5 class="mt-3">{{'Datos de la reserva'|trans}}</h5>
         <div class="tags has-addons">
-          <span class="tag is-dark">
-            <i class="fas fa-{% if (document.doctype|trans({},"messages",'en')) == "Passport" %}passport{% elseif (document.doctype|trans({},"messages",'en')) == "Visa" %}book{% elseif (document.doctype|trans({},"messages",'en')) == "Drivers license" %}id-card{% endif %}">
-            </i>
-          </span>
+          <span class="tag is-dark"><i class="fas fa-suitcase"></i></span>
+          <span class="tag is-info">{{ reservation.status }}</span>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <a
+            class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+            href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}">
+            <i class="fa fa-edit "></i>
+              {{'Editar los datos de la reserva'|trans}}
+          </a>
+        </div>
+        <br />
+        <h5 class="mt-3">{{'Datos y documentación'|trans}}</h5>
+        <h6>{{'Tus datos'|trans}}</h6>
+          <div class="tags has-addons">
+            <span class="tag">{{app.user.prenom}} {{app.user.nom}}
+            </span>
 
-          <span class="tag is-info" title="{{document.filename}}" data-bs-toggle="tooltip">{{ document.doctype|trans }}</span>
           <span class="tag is-light">
-            <a href="{{ path("download_document",{
-                                'id': document.id}
-                                )}}">
-                <span class="fa fa-download"></span>
-            </a>
-          </span>
-          <span class="tag is-light">
-            {% if document.traveller is defined and document.traveller != null %}
-              {{document.traveller.prenom}} {{document.traveller.nom}}
-            {% else %}
-              {{document.user.prenom}} {{document.user.nom}}
+                <i class="fa fa-passport">
+                </i>
+              </span>
+          {% for document in reservation.documents %}
+            {% if document.traveller == null %}
+              {% if document.doctype == "passport" %}
+                <span class="tag is-light">
+                  <a href="{{ path("download_document",{
+                                  'id': document.id}
+                                    )}}"
+                    title="{{document.doctype|trans}} {{document.filename}}"
+                    data-bs-toggle="tooltip"
+                    class="text-success">
+                      <span class="fa fa-check-circle"></span>
+                  </a>
+              </span>
+              {% endif %}
             {% endif %}
+          {% endfor %}
+          {% if hasPassport == false %}
+            <span class="tag is-light text-danger">
+              <i class="fa fa-x"></i>
+            </span>
+          {% endif %}
+            <span class="tag is-light">
+              <i class="fa fa-id-card"></i>
+            </span>
+            {% for document in reservation.documents %}
+              {% if document.traveller == null %}
+                {% if document.doctype == "drivers" %}
+                <span class="tag is-light">
+                  <a href="{{ path("download_document",{
+                                    'id': document.id}
+                                      )}}"
+                    title="{{document.doctype|trans}} {{document.filename}}"
+                    data-bs-toggle="tooltip"
+                    class="text-success">
+                    <span class="fa fa-check-circle"></span>
+                </a>
+              </span>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if hasDrivers == false %}
+            <span class="tag is-light text-danger">
+              <i class="fa fa-x"></i>
+            </span>
+          {% endif %}
+          <span class="tag is-light">
+            <i class="fa fa-book"></i>
+          </span>
+        {% for document in reservation.documents %}
+            {% if document.traveller == null %}
+              {% if document.doctype == "visa" %}
+                <span class="tag is-light">
+                  <a href="{{ path("download_document",{
+                                  'id': document.id}
+                                    )}}"
+                      title="{{document.doctype|trans}} {{document.filename}}"
+                      data-bs-toggle="tooltip"
+                      class="text-success">
+                    <span class="fa fa-check-circle"></span>
+                  </a>
+                </span>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if hasVisa == false %}
+          <span class="tag is-light text-danger">
+            <i class="fa fa-x"></i>
+          </span>
+          {% endif %}
+          <span class="tag is-info">
+            <a
+              href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
+              title="{{'Editar datos del viaje y documentación'|trans}}"
+              data-bs-toggle="tooltip"
+            >
+              <i class="fa fa-edit "></i>
+            </a>
           </span>
         </div>
 
-      {% else %}
-        {{'No hay documentos para esta reserva'|trans}}
-      {% endfor %}
-      <br />
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a
-          class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-          href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
-          title="{{'Editar datos del viaje y documentación'|trans}}"
-          data-bs-toggle="tooltip"
-          >
-          <i class="fa fa-edit "></i>
-            {{'Añadir datos del viaje y documentación'|trans}}
-        </a>
-      </div>
-      <h5 class="mt-3">{{'Viajeros'|trans}}</h6>
-      {% for traveller in reservation.travellers %}
-        {% if traveller.email != reservation.user.email %}
-          <div class="reservationTraveller-item">
+        <h6 class="mt-3">{{'Datos de tus acompañantes'|trans}}</h6>
+        {% for traveller in reservation.travellers %}
+          {% if traveller.email != reservation.user.email %}
+            <div class="reservationTraveller-item">
+                <div class="tags has-addons">
+                  <span class="tag is-info is-light">
+                    <a
+                      href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
+                      title="{{'Añadir datos del usuario'|trans}}"
+                      data-bs-toggle="tooltip">
+                        {{ traveller.prenom }} {{ traveller.nom }}
+                    </a>
+                  </span>
+                  {% for document in reservation.documents %}
+                    {% if document.traveller != null %}
+                      <span class="tag is-light">
+                        <i class="fas fa-{% if (document.doctype|trans({},"messages",'en')) == "Passport" %}passport{% elseif (document.doctype|trans({},"messages",'en')) == "Visa" %}book{% elseif (document.doctype|trans({},"messages",'en')) == "Driver's license" %}id-card{% endif %}"
+                        >
+                        </i>
+                      </span>
+                      <span class="tag is-light">
+                        <a href="{{ path("download_document",{
+                                            'id': document.id}
+                                            )}}"
+                                            title="{{document.doctype|trans}} {{document.filename}}" data-bs-toggle="tooltip">
+                          <span class="fa fa-download"></span>
+                        </a>
+                      </span>
+                      <span class="tag is-info">
+                        <a
+                          href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller': traveller.id }) }}"
+                          title="{{'Editar datos del viaje y documentación'|trans}}"
+                          data-bs-toggle="tooltip"
+                        >
+                          <i class="fa fa-edit "></i>
+                        </a>
+                      </span>
+                    {% endif %}
+              {# <span class="tag is-light">
+                {% if document.traveller is defined and document.traveller != null %}
+                  {{document.traveller.prenom}} {{document.traveller.nom}}
+                {% else %}
+                  {{document.user.prenom}} {{document.user.nom}}
+                {% endif %}
+              </span> #}
+                  {% else %}
+                    {{'No hay documentos para esta reserva'|trans}}
+                  {% endfor %}
+                </div>
+          </div>
 
-              <div class="tags has-addons">
-                <span class="tag is-link">
-                  <i class="fas fa-passport" style="margin:2px"></i>
-                </span>
-                <span class="tag is-info is-light">
-                  <a
-                  href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id, 'traveller': traveller.id }) }}"
-                  title="{{'Añadir datos del usuario'|trans}}"
-                  data-bs-toggle="tooltip">
-                    {{ traveller.prenom }} {{ traveller.nom }}
-                  </a>
-                </span>
-              </div>
-         </div>
-        {% endif %}
-      {% else %}
-      {{'No hay datos de los viajeros añadidos a este viaje'|trans}}
-      {% endfor %}
-
-        {# {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %} #}
-        {# <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <a
-            class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-            href="{{ path( 'user_reservation_travellers', { 'reservation':reservation.id }) }}"
-            data-bs-toggle="tooltip"
-            title="Añadir datos de los viajeros">
-            <i class="fa fa-plus-circle"></i>
-              {{'Añadir Viajeros'|trans}}
-            <i class="fa fa-motorcycle"></i>
-          </a>
-        </div> #}
-        {# {% endif %} #}
-      <h5 class="mt-3">{{'Mensajes enviados'|trans}}</h5>
-
-      {% for mailing in reservation.mailings %}
-      <div class="tags has-addons">
-        <span class="tag is-link">
-          <i class="fas fa-envelope" style="margin:2px"></i>
-        </span>
-        <span class="tag is-info">
-          {% if mailing.dateSent != null %}
-            {{ mailing.dateSent|date('d/m/Y') }}
           {% endif %}
-        </span>
-        <span class="tag is-light">
-          <a
-            href="#"
-            target="_blank"
-            title="{{mailing.subject}}"
-            data-action="read-more"
-            data-title="{{mailing.subject}}"
-            data-content="{{ mailing.content|raw|escape }}"
-            data-bs-toggle="tooltip">
-            {# {{ mailing.subject|u.truncate(40,'...') }} #}
-            ... {{ mailing.subject|slice(17,20) }}...
-            </a>
-        </span>
-      </div>
 
         {% else %}
-        {{ 'No hay mensajes enviados asociados a esta reserva'|trans }}.
-      {% endfor %}
-  </div>
+        {{'No hay datos de los viajeros añadidos a este viaje'|trans}}
+        {% endfor %}
+
+          {# {% if reservation.travellers|length < (reservation.nbpilotes + reservation.nbaccomp) %} #}
+          {# <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a
+              class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
+              href="{{ path( 'user_reservation_travellers', { 'reservation':reservation.id }) }}"
+              data-bs-toggle="tooltip"
+              title="Añadir datos de los viajeros">
+              <i class="fa fa-plus-circle"></i>
+                {{'Añadir Viajeros'|trans}}
+              <i class="fa fa-motorcycle"></i>
+            </a>
+          </div> #}
+          {# {% endif %} #}
+        <h5 class="mt-3">{{'Mensajes enviados'|trans}}</h5>
+
+        {% for mailing in reservation.mailings %}
+        <div class="tags has-addons">
+          <span class="tag is-link">
+            <i class="fas fa-envelope" style="margin:2px"></i>
+          </span>
+          <span class="tag is-info">
+            {% if mailing.dateSent != null %}
+              {{ mailing.dateSent|date('d/m/Y') }}
+            {% endif %}
+          </span>
+          <span class="tag is-light">
+            <a
+              href="#"
+              target="_blank"
+              title="{{mailing.subject}}"
+              data-action="read-more"
+              data-title="{{mailing.subject}}"
+              data-content="{{ mailing.content|raw|escape }}"
+              data-bs-toggle="tooltip">
+              {# {{ mailing.subject|u.truncate(40,'...') }} #}
+              ... {{ mailing.subject|slice(17,20) }}...
+              </a>
+          </span>
+        </div>
+
+          {% else %}
+          {{ 'No hay mensajes enviados asociados a esta reserva'|trans }}.
+        {% endfor %}
+    </div>
 
     {% set totalAmmount = 0 %}
     <div class="box reservationCalculator">
-    <h5 class="mt-3">{{'Cálculo de la reserva'|trans}}</h5>
-      <table class="table table-borderless">
-        <tr>
-          <td>
-            <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-motorcycle"></i></span>
-              <span class="tag is-info">{{reservation.nbpilotes}}</span>
-              <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
-            </div>
-          </td>
-          {% set totalAmmount = totalAmmount + reservation.nbpilotes * reservation.date.prixPilote %}
-          <td>
-            <strong class="small">{{ (totalAmmount)|format_currency('EUR') }}</strong>
-          </td>
-        </tr>
-        {% if reservation.nbAccomp > 0 %}
-        <tr>
-          <td>
-            <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-user"></i></span>
-              <span class="tag is-info">{{reservation.nbaccomp}}</span>
-               <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
-            </div>
-          </td>
-          {% set totalAmmount = totalAmmount + reservation.nbAccomp * reservation.date.prixAccomp %}
-          <td>
-            <strong class="small">{{ (reservation.nbAccomp * reservation.date.prixAccomp)|format_currency('EUR') }}</strong>
-          </td>
-        </tr>
-        {% endif %}
-
-        {% for reservationOption in reservation.reservationOptions %}
-        <tr>
-          <td>
-            <div class="tags has-addons">
-              <span class="tag is-dark">
-                <i class="fas fa-puzzle-piece"></i>
-              </span>
-              <span class="tag is-info">
-                {{reservationOption.ammount}}
-              </span>
-              <span
-                class="tag is-light"
-                title="{{renderLocalizedOption(reservationOption.option.id,'es')}}"
-                data-bs-toggle="tooltip">
-                  {{renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...')}}
-              </span>
-            </div>
-          </td>
-          {% set totalAmmount = totalAmmount + reservationOption.ammount * reservationOption.option.price %}
-          <td>
-            <strong class="small">{{ (reservationOption.ammount * reservationOption.option.price)|format_currency('EUR') }}</strong>
-          </td>
-        </tr>
-      {% endfor %}
-      {% if reservation.codespromo is defined and reservation.codespromo != null %}
-        {% set discount = 0 %}
+      <h5 class="mt-3">{{'Cálculo de la reserva'|trans}}</h5>
+        <table class="table table-borderless">
           <tr>
             <td>
               <div class="tags has-addons">
-                <span class="tag is-dark"><i class="fas fa-minus"></i></span>
-                <span class="tag is-danger">{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</span>
+                <span class="tag is-dark"><i class="fas fa-motorcycle"></i></span>
+                <span class="tag is-info">{{reservation.nbpilotes}}</span>
+                <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
               </div>
             </td>
-            <td align="right">
-              <strong class="small">
-                {% if reservation.codespromo.montant != 0 %}
-                  - {{ reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
-                  {% set discount = reservation.codespromo.montant %}
-                {% elseif reservation.codespromo.pourcentage != 0 %}
-                  - {{ reservation.codespromo.pourcentage }} %
-                  {% set discount = totalAmmount * discount / 100 %}
-                {% endif %}
-              </strong>
+            {% set totalAmmount = totalAmmount + reservation.nbpilotes * reservation.date.prixPilote %}
+            <td>
+              <strong class="small">{{ (totalAmmount)|format_currency('EUR') }}</strong>
             </td>
           </tr>
-          {% set totalAmmount = totalAmmount - discount %}
-			{% endif %}
-      <tr>
-        <td>
-          <div class="tags has-addons">
-            <span class="tag is-dark"><i class="fas fa-plus"></i></span>
-            <span class="tag is-success">{{ 'Total'|trans }}</span>
-        </div>
-        </td>
-        <td><strong class="small">{{ totalAmmount|format_currency('EUR') }}</strong></td>
-      </tr>
+          {% if reservation.nbAccomp > 0 %}
+          <tr>
+            <td>
+              <div class="tags has-addons">
+                <span class="tag is-dark"><i class="fas fa-user"></i></span>
+                <span class="tag is-info">{{reservation.nbaccomp}}</span>
+                <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
+              </div>
+            </td>
+            {% set totalAmmount = totalAmmount + reservation.nbAccomp * reservation.date.prixAccomp %}
+            <td>
+              <strong class="small">{{ (reservation.nbAccomp * reservation.date.prixAccomp)|format_currency('EUR') }}</strong>
+            </td>
+          </tr>
+          {% endif %}
 
-      {% for payment in reservation.payments %}
+          {% for reservationOption in reservation.reservationOptions %}
+          <tr>
+            <td>
+              <div class="tags has-addons">
+                <span class="tag is-dark">
+                  <i class="fas fa-puzzle-piece"></i>
+                </span>
+                <span class="tag is-info">
+                  {{reservationOption.ammount}}
+                </span>
+                <span
+                  class="tag is-light"
+                  title="{{renderLocalizedOption(reservationOption.option.id,'es')}}"
+                  data-bs-toggle="tooltip">
+                    {{renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...')}}
+                </span>
+              </div>
+            </td>
+            {% set totalAmmount = totalAmmount + reservationOption.ammount * reservationOption.option.price %}
+            <td>
+              <strong class="small">{{ (reservationOption.ammount * reservationOption.option.price)|format_currency('EUR') }}</strong>
+            </td>
+          </tr>
+        {% endfor %}
+        {% if reservation.codespromo is defined and reservation.codespromo != null %}
+          {% set discount = 0 %}
+            <tr>
+              <td>
+                <div class="tags has-addons">
+                  <span class="tag is-dark"><i class="fas fa-minus"></i></span>
+                  <span class="tag is-danger">{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</span>
+                </div>
+              </td>
+              <td align="right">
+                <strong class="small">
+                  {% if reservation.codespromo.montant != 0 %}
+                    - {{ reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+                    {% set discount = reservation.codespromo.montant %}
+                  {% elseif reservation.codespromo.pourcentage != 0 %}
+                    - {{ reservation.codespromo.pourcentage }} %
+                    {% set discount = totalAmmount * discount / 100 %}
+                  {% endif %}
+                </strong>
+              </td>
+            </tr>
+            {% set totalAmmount = totalAmmount - discount %}
+        {% endif %}
         <tr>
           <td>
             <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-coins"></i></span>
-              <span class="tag is-primary">{{ 'Pago'|trans }}</span>
-              <span class="tag is-light">{{ payment.dateAjout|date('d/m/Y') }}</span>
-            </div>
+              <span class="tag is-dark"><i class="fas fa-plus"></i></span>
+              <span class="tag is-success">{{ 'Total'|trans }}</span>
+          </div>
           </td>
-          {% set totalAmmount = totalAmmount - payment.ammount %}
-          <td>
-            <strong class="text-success">{{ payment.ammount|format_currency('EUR') }}</strong>
-          </td>
+          <td><strong class="small">{{ totalAmmount|format_currency('EUR') }}</strong></td>
         </tr>
-      {% endfor %}
-      <tr>
-        <td>
-          <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-coins"></i></span>
-              <span class="tag is-danger">{{'Resto a pagar'|trans}}</span>
-            </div>
-        </td>
-        <td>
-          <strong class="text-danger">{{ totalAmmount|format_currency('EUR') }}</strong>
-        </td>
-      </tr>
-      <tr>
-        {% if totalAmmount != 0 %}
-          <td colspan="2">
-            <a
-              href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
-              class="btn btn-rakatanga-blue">€ {{ 'Realizar el pago'|trans }}</a>
-          </td>
-        {% endif %}
-      </tr>
-      <tr>
-        <td><h5>{{ 'Facturas'|trans }}</h5></td>
-      </tr>
-      <tr>
-        <td>
-          {% if reservation.invoice != null %}
-            <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-receipt"></i></span>
-              <span class="tag is-info">
-                {{ reservation.invoice.invoiceNumber}}
-              </span>
-              <span class="tag is-light">
+
+        {% for payment in reservation.payments %}
+          <tr>
+            <td>
+              <div class="tags has-addons">
+                <span class="tag is-dark"><i class="fas fa-coins"></i></span>
+                <span class="tag is-primary">{{ 'Pago'|trans }}</span>
+                <span class="tag is-light">{{ payment.dateAjout|date('d/m/Y') }}</span>
+              </div>
+            </td>
+            {% set totalAmmount = totalAmmount - payment.ammount %}
+            <td>
+              <strong class="text-success">{{ payment.ammount|format_currency('EUR') }}</strong>
+            </td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td>
+              <div class="tags has-addons">
+                <span class="tag is-dark"><i class="fas fa-coins"></i></span>
+                <span class="tag is-danger">{{'Resto a pagar'|trans}}</span>
+              </div>
+            </td>
+            <td>
+              <strong class="text-danger">{{ totalAmmount|format_currency('EUR') }}</strong>
+            </td>
+          </tr>
+          <tr>
+            {% if totalAmmount != 0 %}
+              <td colspan="2">
                 <a
-                  href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
-                  title="{{ reservation.invoice.filename }}"
-                  data-bs-toggle="tooltip">
-                  <i class="fas fa-download"></i>
-                </a>
-                </span>
-            </div>
-          {% else %}
-            <p>{{ 'No se han generado facturas para esta reserva'|trans }}.</p>
-          {% endif %}
-        </td>
-        </tr>
-      </table>
+                  href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
+                  class="btn btn-rakatanga-blue">€ {{ 'Realizar el pago'|trans }}</a>
+              </td>
+            {% endif %}
+          </tr>
+          <tr>
+            <td><h5>{{ 'Facturas'|trans }}</h5></td>
+          </tr>
+          <tr>
+            <td>
+              {% if reservation.invoice != null %}
+                <div class="tags has-addons">
+                  <span class="tag is-dark"><i class="fas fa-receipt"></i></span>
+                  <span class="tag is-info">
+                    {{ reservation.invoice.invoiceNumber}}
+                  </span>
+                  <span class="tag is-light">
+                    <a
+                      href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
+                      title="{{ reservation.invoice.filename }}"
+                      data-bs-toggle="tooltip">
+                      <i class="fas fa-download"></i>
+                    </a>
+                    </span>
+                </div>
+              {% else %}
+                <p>{{ 'No se han generado facturas para esta reserva'|trans }}.</p>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-
-    {# <a class="btn btn-danger btn-rakatanga-danger js-cancel-reservation{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-    data-sweetalert-title="{{'¿Cancelar reserva?'|trans}}"
-    data-sweetalert-content="{{'¿Estás seguro que quieres cancelar esta reserva?'|trans}}">
-      <i class"fa fa-trash"></i>
-        {{ 'Cancelar la reserva'|trans }}
-    </a> #}
-
-  {# <a class="btn btn-info js-reactivate-reservation{% if reservation.status != 'cancelled' %} d-none{% endif %}"
-    data-sweetalert-title="{{'¿Reactivar la reserva?'|trans}}"
-    data-sweetalert-content="{{'¿Estás seguro que quieres reactivar esta reserva?'|trans}}">
-    {{ 'Reactivar la reserva'|trans }}
-  </a> #}
 </div>

@@ -113,13 +113,6 @@ class Mailings
         return $this->date_sent;
     }
 
-    public function setDateSent(?\DateTimeImmutable $date_sent): self
-    {
-        $this->date_sent = $date_sent;
-
-        return $this;
-    }
-
     public function getCategory(): ?string
     {
         return $this->category;

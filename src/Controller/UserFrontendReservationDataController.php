@@ -14,6 +14,7 @@ use App\Service\breadcrumbsHelper;
 use App\Service\languageMenuHelper;
 use App\Service\logHelper;
 use App\Service\Mailer;
+use App\Service\reservationDataHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,19 +24,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UserFrontendReservationDataController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager, 
-        private Mailer $mailer, 
-        private breadcrumbsHelper $breadcrumbsHelper, 
+        private EntityManagerInterface $entityManager,
+        private Mailer $mailer,
+        private breadcrumbsHelper $breadcrumbsHelper,
         private TranslatorInterface $translator,
-        private languageMenuHelper $languageMenuHelper)
+        private languageMenuHelper $languageMenuHelper,
+        private ReservationDataRepository $reservationDataRepository,
+        private reservationDataHelper $reservationDataHelper)
     {
     }
 
     #[Route(
         path: [
-            'en' => '{_locale}/user/reservation/data/{reservation}', 
-            'es' => '{_locale}/usuario/reserva/datos/{reservation}', 
-            'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}'], 
+            'en' => '{_locale}/user/reservation/data/{reservation}',
+            'es' => '{_locale}/usuario/reserva/datos/{reservation}',
+            'fr' => '{_locale}/utilisateur/reservation/donnees/{reservation}'],
         name: 'frontend_user_reservation_data')]
       public function frontend_user_reservation_data(
                             Request $request,
@@ -52,13 +55,24 @@ class UserFrontendReservationDataController extends AbstractController
            */
           $user = $this->getUser();
           // Swith Locale Loader
+
           $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
           $this->breadcrumbsHelper->reservationTravellersBreadcrumbs('Inicio');
 
-          $reservationData = $reservationDataRepository->findOneBy([
+          if( $this->reservationDataRepository->findOneBy([
               'reservation' => $reservation,
-          ]);
-
+          ]) != null){
+            $reservationData = $this->reservationDataRepository->findOneBy([
+                'reservation' => $reservation,
+            ]);
+        } elseif ($this->reservationDataRepository->getUserLatestData($user)!= null) {
+            $reservationData = $this->reservationDataRepository->getUserLatestData($user);
+            $this->addFlash('success',$this->translator->trans('Hemos recuperado algunos datos de tu última reserva y tienes, la parte de la documentación personal, ya rellenada. Pero si algo ha cambiado puedes cambiarlo aquí.'));
+        } else {
+            $reservationData = new ReservationData();
+        }
+          $this->reservationDataRepository->getUserLatestData($user);
+          $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
           $reservationData = $reservationData ?: new ReservationData();
           $documents = $reservationData->getDocuments();
           $form = $this->createForm(ReservationDataType::class, $reservationData);
@@ -87,6 +101,7 @@ class UserFrontendReservationDataController extends AbstractController
               'locale' => $locale,
               'user' => $this->getUser(),
               'reservationData' => $reservationData,
+              'fieldsCompletion' => $fieldsCompletion,
               'reservation' => $reservation,
               'documents' => $documents,
               'form' => $form->createView(),
@@ -94,8 +109,8 @@ class UserFrontendReservationDataController extends AbstractController
       }
 
     #[Route(
-        path: 'user/reservationData/new/{reservation}/{traveller}/', 
-        methods: ['GET', 'POST'], 
+        path: 'user/reservationData/new/{reservation}/{traveller}/',
+        methods: ['GET', 'POST'],
         name: 'frontend-user-reservation-data-new')]
  public function userReservationDataNew(
   Request $request,
@@ -110,7 +125,7 @@ class UserFrontendReservationDataController extends AbstractController
      $user = $this->getUser();
 
      $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-
+     dump($this->reservationDataRepository->getUserLatestData($user));
 
      $reservationData = new ReservationData();
      $form = $this->createForm(ReservationDataType::class, $reservationData);
@@ -139,7 +154,7 @@ class UserFrontendReservationDataController extends AbstractController
  }
 
     #[Route(
-        path: '/user/reservationData/{reservationData}', 
+        path: '/user/reservationData/{reservationData}',
         name: 'frontend-user-reservation-data')]
      public function userReservationData(
       Request $request,
@@ -158,7 +173,7 @@ class UserFrontendReservationDataController extends AbstractController
          }
 
          $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-         
+
          $form = $this->createForm(ReservationDataType::class, $reservationData);
          $form->handleRequest($request);
          if ($form->isSubmitted() && $form->isValid()) {

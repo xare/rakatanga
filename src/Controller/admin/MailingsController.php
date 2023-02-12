@@ -15,13 +15,24 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/mailings')]
 class MailingsController extends AbstractController
 {
-    #[Route('/', name: 'mailings_index', methods: ['GET'])]
+    public function __construct(
+        private MailingsRepository $mailingsRepository,
+        private PaginatorInterface $paginator,
+        private EntityManagerInterface $entityManager
+        ) {
+
+        }
+
+    #[Route(
+        path: '/',
+        name: 'mailings_index',
+        methods: ['GET'])]
     public function index(
-        Request $request, MailingsRepository $mailingsRepository, PaginatorInterface $paginator): Response
+        Request $request ): Response
     {
-        $count = count($mailingsRepository->findAll());
-        $query = $mailingsRepository->listAll();
-        $mailings = $paginator->paginate(
+        $count = count($this->mailingsRepository->findAll());
+        $query = $this->mailingsRepository->listAll();
+        $mailings = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             10
@@ -33,15 +44,16 @@ class MailingsController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/search/{categoryName}', name: 'mailings_by_category', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/search/{categoryName}',
+        name: 'mailings_by_category',
+        methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
-        string $categoryName,
-        MailingsRepository $mailingsRepository,
-        PaginatorInterface $paginator
+        string $categoryName
     ) {
-        $mailings = $paginator->paginate(
-            $mailingsRepository->listMailingsByCategory($categoryName),
+        $mailings = $this->paginator->paginate(
+            $this->mailingsRepository->listMailingsByCategory($categoryName),
             $request->query->getInt('page', 1),
             10
         );
@@ -52,16 +64,19 @@ class MailingsController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'mailings_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route(
+        path: '/new',
+        name: 'mailings_new',
+        methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
     {
         $mailing = new Mailings();
         $form = $this->createForm(MailingsType::class, $mailing);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($mailing);
-            $entityManager->flush();
+            $this->entityManager->persist($mailing);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('mailings_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -72,7 +87,10 @@ class MailingsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'mailings_show', methods: ['GET'])]
+    #[Route(
+        path:'/{id}',
+        name: 'mailings_show',
+        methods: ['GET'])]
     public function show(Mailings $mailing): Response
     {
         return $this->render('admin/mailings/show.html.twig', [
@@ -80,14 +98,19 @@ class MailingsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'mailings_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Mailings $mailing, EntityManagerInterface $entityManager): Response
+    #[Route(
+        path: '/{id}/edit',
+        name: 'mailings_edit',
+        methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        Mailings $mailing): Response
     {
         $form = $this->createForm(MailingsType::class, $mailing);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('admin/mailings_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -98,12 +121,17 @@ class MailingsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'mailings_delete', methods: ['POST'])]
-    public function delete(Request $request, Mailings $mailing, EntityManagerInterface $entityManager): Response
+    #[Route(
+        path: '/{id}',
+        name: 'mailings_delete',
+        methods: ['POST'])]
+    public function delete(
+        Request $request,
+        Mailings $mailing): Response
     {
         if ($this->isCsrfTokenValid('delete'.$mailing->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($mailing);
-            $entityManager->flush();
+            $this->entityManager->remove($mailing);
+            $this->entityManager->flush();
         }
 
         return $this->redirectToRoute('mailings_index', [], Response::HTTP_SEE_OTHER);

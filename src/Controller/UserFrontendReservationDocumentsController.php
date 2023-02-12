@@ -38,13 +38,13 @@ class UserFrontendReservationDocumentsController extends AbstractController
 
     }
     #[Route(
-        path: '/user/upload/document/{reservation}', 
+        path: '/user/upload/document/{reservation}',
         name: 'frontend_user_upload_document')]
     #[Route(
         path: [
-            'en' => '{_locale}/upload/document/{reservation}', 
-            'es' => '{_locale}/upload/document/{reservation}', 
-            'fr' => '{_locale}/upload/document/{reservation}'], 
+            'en' => '{_locale}/upload/document/{reservation}',
+            'es' => '{_locale}/upload/document/{reservation}',
+            'fr' => '{_locale}/upload/document/{reservation}'],
         name: 'frontend_user_upload_document')]
     public function frontend_user_upload_document(
         Request $request,
@@ -59,7 +59,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
-        
+
         $userId = $user->getId();
         $type = $request->request->get('type');
 
@@ -170,13 +170,13 @@ class UserFrontendReservationDocumentsController extends AbstractController
     }
 
     #[Route(
-        path: '/user/{id}/documents', 
+        path: '/user/{id}/documents',
         name: 'user_add_documents')]
     #[Route(
         path: [
-            'en' => '{_locale}/user/{id}/documents', 
-            'es' => '{_locale}/usuario/{id}/documentos', 
-            'fr' => '{_locale}/utilisateur/{id}/documentation'], 
+            'en' => '{_locale}/user/{id}/documents',
+            'es' => '{_locale}/usuario/{id}/documentos',
+            'fr' => '{_locale}/utilisateur/{id}/documentation'],
         name: 'user_add_documents')]
     #[IsGranted('ROLE_USER', subject: 'user')]
     public function uploadDocument(
@@ -228,14 +228,15 @@ class UserFrontendReservationDocumentsController extends AbstractController
     }
 
     #[Route(
-        path: '/user/settings/{id}/document/download', 
-        name: 'download_document', methods: ['GET'])]
+        path: '/user/{id}/document/download',
+        name: 'download_document',
+        methods: ['GET'])]
     public function downloadDocument(
         Document $document
     ) {
         $user = $document->getUser();
 
-        $this->denyAccessUnlessGranted('ROLE_USER', $user);
+        //$this->denyAccessUnlessGranted('ROLE_USER', $user);
         $uploadHelper = $this->uploadHelper;
         $response = new StreamedResponse(function () use ($document, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');
@@ -257,8 +258,8 @@ class UserFrontendReservationDocumentsController extends AbstractController
     }
 
     #[Route(
-        path: '/user/settings/{id}/documents', 
-        methods: 'GET', 
+        path: '/user/settings/{id}/documents',
+        methods: 'GET',
         name: 'frontend_user_list_documents')]
     #[IsGranted('ROLE_USER', subject: 'user')]
     public function getDocuments(User $user)
@@ -274,9 +275,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
     }
 
     #[Route(
-        path: '/user/reservation/{reservation}/documents', 
-        options: ['expose' => true], 
-        methods: 'GET', 
+        path: '/user/reservation/{reservation}/documents',
+        options: ['expose' => true],
+        methods: 'GET',
         name: 'frontend_reservation_list_documents')]
     public function getReservationDocuments(
         Reservation $reservation
@@ -304,9 +305,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
     }
 
     #[Route(
-        path: '/user/documents/delete/{document}', 
-        name: 'frontend_user_delete_document', 
-        options: ['expose' => true], 
+        path: '/user/documents/delete/{document}',
+        name: 'frontend_user_delete_document',
+        options: ['expose' => true],
         methods: ['DELETE', 'POST'])]
     public function FrontendUserDeleteDocument(
         Request $request,
@@ -336,11 +337,15 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $travellerId = $request->request->get('travellerId');
             $dropHtmlRenderArray['traveller'] = $this->travellersRepository->find($travellerId);
             $listHtmldRenderArray['documents'] = $dropHtmlRenderArray['traveller']->getDocuments();
+            $documents = $this->documentRepository->getDocumentsByReservationByTraveller($reservation, $dropHtmlRenderArray['traveller']);
+        } else {
+            $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation);
         }
-        $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation);
 
         $listHtmlRenderArray['documents'] = $documents;
+
         $listHtml = $this->renderView('user/_documents_list.html.twig', $listHtmlRenderArray);
+
         $dropHtml = $this->renderView('user/_dropzone_input.html.twig', $dropHtmlRenderArray);
 
         return $this->json(
@@ -360,9 +365,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/user/documents', 
-            'es' => '{_locale}/usuario/documentos', 
-            'fr' => '{_locale}/utilisateur/documents'], 
+            'en' => '{_locale}/user/documents',
+            'es' => '{_locale}/usuario/documentos',
+            'fr' => '{_locale}/utilisateur/documents'],
         name: 'frontend_user_documents')]
     public function userDocuments(
         string $_locale = null,
@@ -371,7 +376,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $locale = $_locale ? $_locale : $locale;
         // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-        
+
         /**
          * @var User $user
          */
