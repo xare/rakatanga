@@ -59,6 +59,7 @@ class UserFrontendReservationDataController extends AbstractController
           $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
           $this->breadcrumbsHelper->reservationTravellersBreadcrumbs('Inicio');
 
+          $reservationData = new ReservationData();
           if( $this->reservationDataRepository->findOneBy([
               'reservation' => $reservation,
           ]) != null){
@@ -66,14 +67,21 @@ class UserFrontendReservationDataController extends AbstractController
                 'reservation' => $reservation,
             ]);
         } elseif ($this->reservationDataRepository->getUserLatestData($user)!= null) {
-            $reservationData = $this->reservationDataRepository->getUserLatestData($user);
+            $previousReservationData = $this->reservationDataRepository->getUserLatestData($user);
+            $reservationData->setPassportNo($previousReservationData->getPassportNo());
+            $reservationData->setPassportIssueDate($previousReservationData->getPassportIssueDate());
+            $reservationData->setPassportExpirationDate($previousReservationData->getPassportExpirationDate());
+            $reservationData->setVisaNumber($previousReservationData->getVisaNumber());
+            $reservationData->setVisaIssueDate($previousReservationData->getVisaIssueDate());
+            $reservationData->setVisaExpirationDate($previousReservationData->getVisaExpirationDate());
+            $reservationData->setDriversNumber($previousReservationData->getDriversNumber());
+            $reservationData->setDriversIssueDate($previousReservationData->getDriversIssueDate());
+            $reservationData->setDriversExpirationDate($previousReservationData->getDriversExpirationDate());
+
             $this->addFlash('success',$this->translator->trans('Hemos recuperado algunos datos de tu última reserva y tienes, la parte de la documentación personal, ya rellenada. Pero si algo ha cambiado puedes cambiarlo aquí.'));
-        } else {
-            $reservationData = new ReservationData();
         }
-          $this->reservationDataRepository->getUserLatestData($user);
+
           $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
-          $reservationData = $reservationData ?: new ReservationData();
           $documents = $reservationData->getDocuments();
           $form = $this->createForm(ReservationDataType::class, $reservationData);
           $form->handleRequest($request);
