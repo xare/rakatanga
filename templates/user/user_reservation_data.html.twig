@@ -80,14 +80,16 @@
 			<div
 				class="row"
 				id="js-reservation-wrapper"
+				data-container="js-reservation-wrapper"
 				{# data-reservation-id="{{reservation.id}}"  #}
 				{% if traveller is defined and traveller != null %}
 						data-traveller-id="{{ traveller.id }}"
 					{% else %}
 						data-user-id="{{app.user.id}}"
 					{% endif %}
+				data-reservation="{{reservation.id}}"
 				data-locale="{{ app.request.getLocale() }}">
-				<div class="col-md-8 col-12">
+				<div class="col-8 col-xs-12">
 					<h1>
 						{{ 'Tu reserva'|trans }}:
 						{% if traveller is defined and traveller != null %}

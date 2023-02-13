@@ -92,16 +92,10 @@ class UserFrontendController extends AbstractController
         $locale = $_locale ? $_locale : $locale;
         $user = $this->getUser();
 
-        // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-
-        // BREADCRUMBS
         $this->breadcrumbsHelper->userFrontendReservationsBreadcrumbs($locale);
 
-        // END BREADCRUMBS
-
         $reservations = $this->reservationRepository->findBy(['user' => $user], ['date_ajout' => 'DESC']);
-
 
         return $this->render('/user/user_reservations.html.twig', [
             'locale' => $locale,

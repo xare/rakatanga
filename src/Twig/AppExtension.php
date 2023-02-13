@@ -2,8 +2,12 @@
 
 namespace App\Twig;
 
+use App\Entity\Document;
 use App\Entity\Reservation;
+use App\Entity\Travellers;
+use App\Entity\User;
 use App\Service\contentHelper;
+use App\Service\documentHelper;
 use App\Service\localizationHelper;
 use App\Service\reservationDataHelper;
 use App\Service\reservationHelper;
@@ -56,6 +60,11 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('class', [$this, 'getClass']),
             new TwigFunction('renderReservationAmmount', [$this, 'getReservationAmmount']),
             new TwigFunction('renderReservationDuePayment', [$this, 'getReservationDuePayment']),
+            new TwigFunction('listDocumentsByReservationByUser', [$this, 'getDocumentsByReservationByUser']),
+            new TwigFunction('listDocumentsByReservationByTraveller', [$this, 'getDocumentsByReservationByTraveller']),
+            new TwigFunction('hasDoctype', [$this, 'hasDoctype']),
+            new TwigFunction('notPresentDoctypeUser', [$this, 'notPresentDoctypeUser']),
+            new TwigFunction('notPresentDoctypeTraveller', [$this, 'notPresentDoctypeTraveller']),
         ];
     }
 
@@ -208,9 +217,48 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->getReservationDueAmmount($reservation);
     }
 
+    public function getDocumentsByReservationByUser(Reservation $reservation)
+    {
+        return $this->container
+            ->get(documentHelper::class)
+            ->getDocumentsByReservationByUser($reservation);
+    }
+
+    public function getDocumentsByReservationByTraveller(Reservation $reservation, Travellers $traveller)
+    {
+        return $this->container
+            ->get(documentHelper::class)
+            ->getDocumentsByReservationByTraveller($reservation, $traveller);
+    }
+
+    public function hasDoctype(Document $document, string $doctype)
+    {
+        return $this->container
+            ->get(documentHelper::class)
+            ->hasDoctype($document, $doctype);
+    }
+    public function notPresentDoctypeUser(
+        Reservation $reservation,
+        User $user,
+        string $doctype ) {
+        return $this->container
+            ->get(documentHelper::class)
+            ->notPresentDoctypeUser($reservation, $user, $doctype);
+    }
+
+    public function notPresentDoctypeTraveller(
+        Reservation $reservation,
+        Travellers $traveller,
+        string $doctype ) {
+        return $this->container
+            ->get(documentHelper::class)
+            ->notPresentDoctypeTraveller($reservation, $traveller, $doctype);
+    }
+
     public static function getSubscribedServices():array
     {
         return [
+            documentHelper::class,
             UploadHelper::class,
             reservationHelper::class,
             reservationDataHelper::class,

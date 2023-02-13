@@ -1,6 +1,8 @@
 <tr>
   <td>{{ document.id }}</td>
-  <td><a href="/user/settings/{{ document.id }}/document/download">{{ document.filename }}</a></td>
+  <td><a href="{{ path("download_document",{
+          'id': document.id}
+        )}}">{{ document.filename }}</a></td>
   <td><a href="{{ path('document_edit', {'id': document.id}) }}">{{ document.originalFilename }}</a></td>
   <td>{{ document.mimeType }}</td>
   <td>

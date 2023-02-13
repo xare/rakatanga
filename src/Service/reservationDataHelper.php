@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Reservation;
 use App\Entity\ReservationData;
 use App\Entity\User;
+use App\Repository\DocumentRepository;
 use App\Repository\PaymentsRepository;
 use App\Repository\ReservationDataRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +17,8 @@ class reservationDataHelper
     public function __construct(
         private PaymentsRepository $paymentsRepository,
         private EntityManagerInterface $entityManager,
-        private ReservationDataRepository $reservationDataRepository)
+        private ReservationDataRepository $reservationDataRepository,
+        private DocumentRepository $documentRepository)
     {
     }
 
@@ -110,11 +112,14 @@ class reservationDataHelper
         $fieldsCount = count($getterMethods);
         foreach ($getterMethods as $method) {
             $propertyName = lcfirst(substr($method->getName(), 3));
-            if($propertyName == "reservation" || $propertyName == "documents"  || $propertyName == "user"){
+            if (
+                $propertyName == "reservation" ||
+                $propertyName == "documents"  ||
+                $propertyName == "user" ){
                 $fieldsCount --;
                 continue;
             }
-            /* $property = $reflection->getProperty($propertyName); */
+
             if ($reservationData->{$method->getName()}() !== null) {
                 $filledFieldsCount++;
             }
@@ -128,4 +133,10 @@ class reservationDataHelper
     public function getUserLatestData(User $user) {
         return $this->reservationDataRepository->getUserLatestData($user);
     }
+
+    public function getUserLatestDocuments(User $user) {
+        $reservationData = $this->getUserLatestData($user);
+        return $reservationData->getDocuments();
+    }
+
 }

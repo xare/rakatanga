@@ -9,6 +9,7 @@ use App\Form\ReservationDataType;
 use App\Repository\DocumentRepository;
 use App\Repository\LangRepository;
 use App\Repository\ReservationDataRepository;
+use App\Repository\ReservationRepository;
 use App\Repository\TravellersRepository;
 use App\Service\breadcrumbsHelper;
 use App\Service\languageMenuHelper;
@@ -18,8 +19,10 @@ use App\Service\reservationDataHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class UserFrontendReservationDataController extends AbstractController
 {
@@ -29,6 +32,7 @@ class UserFrontendReservationDataController extends AbstractController
         private breadcrumbsHelper $breadcrumbsHelper,
         private TranslatorInterface $translator,
         private languageMenuHelper $languageMenuHelper,
+        private ReservationRepository $reservationRepository,
         private ReservationDataRepository $reservationDataRepository,
         private reservationDataHelper $reservationDataHelper)
     {
@@ -80,6 +84,7 @@ class UserFrontendReservationDataController extends AbstractController
         }
           $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
           $documents = $reservationData->getDocuments();
+          dump($documents);
           $form = $this->createForm(ReservationDataType::class, $reservationData);
           $form->handleRequest($request);
 
@@ -214,4 +219,32 @@ class UserFrontendReservationDataController extends AbstractController
     ]);
          }
      }
+
+     #[Route(
+        path: "check/reservation/data",
+        methods: ["GET"],
+        name: "check-reservation-data",
+        options: ['expose' => true]
+     )]
+     public function checkReservationData():Response {
+        $reservation = $this->reservationRepository->getLatestReservation();
+        $reservationData = $this->reservationDataRepository->getUserLatestData($this->getUser());
+        dump($reservationData);
+        if($reservationData instanceOf ReservationData){
+            $reservationDataFieldsArray = $this->reservationDataHelper->getReservationDataFields($reservationData);
+            if ( $reservationDataFieldsArray['fieldsCount'] != $reservationDataFieldsArray['filledFieldsCount']) {
+                $ratio = ($reservationDataFieldsArray['filledFieldsCount']*100/$reservationDataFieldsArray['fieldsCount']);
+
+                $html = $this->renderView('user/partials/_swal_missing_reservationData.html.twig');
+                return $this->json([
+                    'ratio' => $ratio,
+                    'title' => "Faltan datos y documentos",
+                    'message' => $html
+                ], 200, [], []);
+            }
+        }
+        return $this->json([
+                'message' => "Faltan datos y documentos"
+        ], 200, [], []);
+    }
 }

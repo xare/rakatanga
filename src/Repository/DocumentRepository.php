@@ -74,7 +74,7 @@ class DocumentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('d')
         ->innerJoin(ReservationData::class, 'rd')
-        ->innerJoin(Travellers::class, 'tr', join::WITH, 'tr.id = rd.travellers')
+        ->innerJoin(Travellers::class, 'tr', join::WITH, 'tr.id = rd.traveller')
         ->andWhere('rd.reservation = :reservation')
         ->setParameter('reservation', $reservation)
         ->andWhere('tr.id = :traveller')

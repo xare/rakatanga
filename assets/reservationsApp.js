@@ -175,7 +175,27 @@ class reservationsApp {
         })(formData);
 
     }
-
+    popUpForMoreData() {
+        const reservation = this.$wrapper.data('reservation');
+        (
+            async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('check-reservation-data'),
+                        method: 'GET',
+                    });
+                    console.info(response);
+                    let parsedHtml = new DOMParser().parseFromString(response.message, 'text/html');
+                    Swal.fire({
+                        'title': response.title,
+                        'html': response.message
+                    });
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+        )();
+    }
 }
 
 export default reservationsApp;

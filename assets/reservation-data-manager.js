@@ -11,6 +11,7 @@ $(document).ready(function() {
     var ReservationDataApp = new reservationDataApp($wrapper);
 
 
+
     var documentsList = new DocumentsList($wrapper);
     var types = [
         'passport', 'visa', 'drivers'
@@ -27,8 +28,8 @@ $(document).ready(function() {
 
     const airportOptions = {
         formatting: `<div class="$(unique-result)"
-                     single-result" 
-                     data-index="$(i)"> 
+                     single-result"
+                     data-index="$(i)">
                    <strong>$(IATA)</strong> $(name) ($(city) - $(country)) </div>`,
         fuse_options: {
             shouldSort: true,

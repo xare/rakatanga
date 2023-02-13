@@ -1,3 +1,9 @@
+const routes = require('../public/build/fos_js_routes.json');
+import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.js';
+
+import Swal from 'sweetalert2';
+
+Routing.setRoutingData(routes);
 class reservationDataApp {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
@@ -103,6 +109,8 @@ class reservationDataApp {
     /* render() {;
         this.$elementListContainer.html('Hello');
     } */
+
+
 }
 
 export default reservationDataApp;
