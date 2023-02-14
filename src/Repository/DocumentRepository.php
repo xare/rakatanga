@@ -70,14 +70,14 @@ class DocumentRepository extends ServiceEntityRepository
         ->getResult();
     }
 
-    public function getDocumentsByReservationByTraveller($reservation, $traveller)
+    public function getDocumentsByReservationByTraveller(Reservation $reservation, Travellers $traveller)
     {
         return $this->createQueryBuilder('d')
-        ->innerJoin(ReservationData::class, 'rd')
-        ->innerJoin(Travellers::class, 'tr', join::WITH, 'tr.id = rd.traveller')
-        ->andWhere('rd.reservation = :reservation')
+        //->innerJoin(ReservationData::class, 'rd')
+        //->innerJoin(Travellers::class, 'tr', join::WITH, 'tr.id = rd.traveller')
+        ->andWhere('d.reservation = :reservation')
         ->setParameter('reservation', $reservation)
-        ->andWhere('tr.id = :traveller')
+        ->andWhere('d.traveller = :traveller')
         ->setParameter('traveller', $traveller)
         ->getQuery()
         ->getResult();

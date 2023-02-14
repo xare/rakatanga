@@ -9,7 +9,7 @@ use App\Entity\User;
 use App\Repository\DocumentRepository;
 
 class documentHelper {
-  public function __construct(private DocumentRepository $documentRepository){
+  public function __construct(private DocumentRepository $documentRepository) {
 
   }
 
@@ -32,18 +32,34 @@ class documentHelper {
 
   public function notPresentDoctypeUser(Reservation $reservation, User $user, string $doctype) {
     $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation,$user);
-
-    array_filter($documents,function($document) use($doctype){
-      if ($document->getDoctype() === $doctype) return false;
+    $documentsArray = [];
+    $i = 0;
+    foreach ($documents as $document) {
+      $documentsArray[$i] = $document->getDoctype();
+      $i++;
+    }
+    if (!in_array($doctype,$documentsArray)){
+      return true;
+    }
+    return false;
+    /* $notPresent = false;
+    array_filter($documents,function($document) use($doctype, $notPresent){
+      if ($document->getDoctype() === $doctype) return $notPresent = true;
     });
-    return true;
+    return $notPresent; */
   }
   public function notPresentDoctypeTraveller(Reservation $reservation, Travellers $traveller, string $doctype) {
-    $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation, $traveller);
-    array_filter($documents,function($document) use($doctype){
-      if ($document->getDoctype() === $doctype) return false;
-    });
-    return true;
+    $documents = $this->documentRepository->getDocumentsByReservationByTraveller($reservation, $traveller);
+    $documentsArray = [];
+    $i = 0;
+    foreach ($documents as $document) {
+      $documentsArray[$i] = $document->getDoctype();
+      $i++;
+    }
+    if (!in_array($doctype,$documentsArray)){
+      return true;
+    }
+    return false;
   }
 
 

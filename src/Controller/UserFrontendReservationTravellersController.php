@@ -67,7 +67,7 @@ class UserFrontendReservationTravellersController extends AbstractController
 
         $reservationData = $this->reservationDataRepository->findOneBy([
             'reservation' => $reservation,
-            'travellers' => $traveller,
+            'traveller' => $traveller,
         ]);
 
         $form = $this->createForm(ReservationDataType::class, $reservationData);
@@ -91,8 +91,9 @@ class UserFrontendReservationTravellersController extends AbstractController
         foreach ($reservation->getReservationData() as $reservationDatum) {
             $array[$i] = $reservationDatum;
         }
-        // dd($reservationData);
-        $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
+
+        $fieldsCompletion = $reservationData == null ? ['filledFieldsCount' => 0, 'fieldsCount'=>1] :$this->reservationDataHelper->getReservationDataFields($reservationData);
+
         return $this->render('user/user_reservation_data.html.twig', [
             'langs' => $urlArray,
             'locale' => $locale,

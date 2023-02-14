@@ -46,8 +46,9 @@ class DocumentsList {
         })(data);
     }
 
-    initializeDropzone(type, travellerId) {
+    initializeDropzone(type, travellerId = null) {
         const self = this;
+        console.info(travellerId);
         $(`#js-${type}-dropzone`).dropzone({
             paramName: 'document',
             /* params: {
@@ -57,8 +58,10 @@ class DocumentsList {
             maxFiles: 1,
             init: function() {
                 this.on('sending', (file, xhr, data) => {
+                    console.info(travellerId);
                     data.append('type', type);
-                    data.append('traveller', travellerId);
+                    if (travellerId != null)
+                        data.append('traveller', travellerId);
                 });
                 this.on('success', (file, response) => {
                     $(`#js-${type}-dropzone`).parent().html(response.dropHtml);

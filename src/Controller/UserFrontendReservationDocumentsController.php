@@ -90,17 +90,17 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $filename = $this->uploadHelper->uploadDocument($uploadedDocument);
         $traveller = null;
         $travellerId = null;
+        dump($request->request->get('traveller'));
         if ($request->request->get('traveller') != null) {
             $travellerId = $request->request->get('traveller');
-        }
 
-        if ($travellerId != null) {
             $traveller = $this->travellersRepository->find($travellerId);
             $reservationData = $this->reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
-                'travellers' => $traveller,
-                'User' => $user,
+                'traveller' => $traveller,
+                'user' => $user,
             ]);
+            dump($reservationData);
             if ($reservationData === null) {
                 $reservationData = new ReservationData();
                 $reservationData->setTraveller($traveller);
@@ -110,7 +110,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         } else {
             $reservationData = $this->reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
-                'User' => $user,
+                'user' => $user,
             ]);
         }
 
@@ -141,7 +141,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $documentsArray[$i] = $documentItem;
             ++$i;
         }
-
+        dump($documentsArray);
         $renderArray = [
             'reservation' => $reservation,
             'document' => $document,
@@ -152,8 +152,8 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $dropHtml = $this->renderView(
             'user/_renderFile_in_dropzone.html.twig', $renderArray
         );
-
         $listHtml = $this->renderView('user/_documents_list.html.twig', $renderArray);
+        if($travellerId != null) $listHtml = $this->renderView('user/_documents_list_traveller.html.twig', $renderArray);
 
         return $this->json(
             [
@@ -338,6 +338,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $dropHtmlRenderArray['traveller'] = $this->travellersRepository->find($travellerId);
             $listHtmldRenderArray['documents'] = $dropHtmlRenderArray['traveller']->getDocuments();
             $documents = $this->documentRepository->getDocumentsByReservationByTraveller($reservation, $dropHtmlRenderArray['traveller']);
+            //dump($documents);
         } else {
             $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation);
         }
