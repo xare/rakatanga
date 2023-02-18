@@ -95,13 +95,13 @@ O por e-mail: Ou par e-mail
 ¿Has olvidado tu contraseña?: As tu oublié ton mot de passe?
 Haz click aquí: Cliquez ici
 Página del usuario: Page de l'utilisateur
-Bienvenido: Bienvenu/e
-a tu espacio personal: à ton espace personel
-En este lugar podrás ver la lista de fechas posibles: Dans cet espace tu pourras voir la liste des dates possibles
-y también: et aussi
-cambiar los datos de tu cuenta: changer les données de ton compte
-y tus reservas, así como añadir la documentación que falta: et tes réserves, aussi, ajouter la documentation qui nous manque
-Tus Reservas: Tes réserves
+Bienvenido: Bienvenue
+a tu espacio personal: dans ton espace personel
+En este lugar podrás ver la lista de fechas posibles: Dans cet espace tu peux voir la liste et les dates des voyages prévus
+y también: mais aussi
+cambiar los datos de tu cuenta: changer tes données personelles
+y tus reservas, así como añadir la documentación que falta: et tes réservations, et aussi, ajouter les documents nécessaire
+Tus Reservas: Tes réservations
 Aquí podrás gestionar tus reservas. En esta tabla hay dos opciones, cambiar los datos de la reserva o añadir datos y documentos faltantes: Ici tu pourras gérer tes réservations. Sur cette table il y a deux options, soit changer les données de la réservation, soit ajouter les documents qui manquent
 Ver y cambiar tus reservas: Voire et changes tes réservations
 Podrás cambiar los datos de tus reservas: Tu pourras changes les donnés de ta réservation
@@ -314,7 +314,7 @@ Para cualquier duda puedes ponerte en contacto con nosotros en la dirección sig
 Si lo deseas puedes acceder a tu cuenta y ver la reserva realizada en tu espacio, seleccionando: Si vous le souhaitez, vous pouvez accéder à votre compte et consulter la réservation effectuée dans votre espace en sélectionnant
 desde ahí podrás realizar modificaciones y añadir los datos necesario para organizar tu viaje: De là, vous pouvez apporter des modifications et ajouter les données nécessaires pour organiser votre voyage
 Datos de la reserva: Données de la réservation
-Cálculo de la reserva: Cálcul de la réservation
+Cálculo de la reserva: Calcul de la réservation
 Ya has comenzado tu reserva para este viaje: Vous avez déjà réservé se voyage
 Ver reserva: Voir réservation
 Transferencia Bancaria: Virement bancaire
@@ -452,3 +452,16 @@ No hay reservas: Il n'y a pas de réservation
 No has elegido ninguna opción: Vous n'avez pas choisi aucune option
 El formulario no está completo: Le formulaire n'est pas complet
 Faltan campos por rellenar correctamente: Champs manquants à remplir correctement
+Faltan datos y documentos: Données et documents manquants
+A continuación puedes añadir los datos de tu viaje en este espacio de cliente. En tu reserva actual te pedimos que nos aportes tu documentación y datos del viaje para así poder asistirte mejor: Vous pouvez ensuite ajouter les détails de votre trajet dans cet espace client. Dans votre réservation en cours, nous vous demandons de nous fournir votre documentation et vos informations de voyage afin de mieux vous aider.
+Intenta tener, en tu ordenador, el escaneado de tu Pasaporte, visado y carnet de conducir así como datos de vuelo y seguro: Essayez d'avoir, sur votre ordinateur, le scan de votre passeport, visa et permis de conduire ainsi que les informations de vol et d'assurance
+Si en este momento no dispones de ellos puedes venir en otro momento y depositar tus datos: Si à ce moment vous ne les avez pas, vous pouvez venir à un autre moment et déposer vos données
+Estos datos están protegidos por la LOPD y las imágenes de escaneado estarán protegidas de modo que sólo tú y nosotros podremos acceder a ellos con el objetivo de poder realizar las gestiones necesarias para la tramitaciónd e tu viaje: Ces données sont protégées par la LOPD et les images numérisées seront protégées afin que seuls vous et nous puissions y accéder afin de pouvoir effectuer les démarches nécessaires au traitement de votre voyage
+En el cuadro de "reservas" verás este esquema que te mostramos aquí debajo tanto para tí como para cada viajero acompañante: Dans le cadre "reservations" vous trouverez cette icone ci dessous pour que vous même ou vos accompagnants puissiez ajouter les données et les documents nécessaires
+Para ello deberás cerrar esta ventana flotante, y desde la ventana de tus reservas hacer click en el botón azul tal y como te mostramos aquí: Pour cela vous devez fermer cette fenêtre flottante, et depuis la fenêtre de vos réservations cliquez sur le bouton bleu comme nous vous le montrons ici
+Datos y documentación: Données et documents
+Datos de tus acompañantes: Données de vos compagnons de voyage
+Nivel de datos completados: Niveau de données completées
+Acceso a los datos de los otros viajeros: Accès aux données des autres voyageurs
+Editar datos del viaje y añadir documentación: Modifier les détails du voyage et ajouter de la documentation
+Haciendo click en los botones de la derecha se abrirá una nuevas pestaña con el mismo formulario pero para el viajero elegido: Cliquer sur les boutons à droite ouvrira un nouvel onglet avec le même formulaire mais pour le voyageur choisi

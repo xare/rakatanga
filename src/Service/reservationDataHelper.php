@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Reservation;
 use App\Entity\ReservationData;
+use App\Entity\Travellers;
 use App\Entity\User;
 use App\Repository\DocumentRepository;
 use App\Repository\PaymentsRepository;
@@ -128,6 +129,39 @@ class reservationDataHelper
         $array['filledFieldsCount'] = $filledFieldsCount;
         $array['fieldsCount'] = $fieldsCount;
     return $array;
+    }
+
+    public function getUserReservationDataFields(
+        Reservation $reservation,
+        User $user){
+        $reservationData = $this->reservationDataRepository->findOneBy([
+            'reservation'=>$reservation,
+            'user'=>$user
+        ]);
+        dump($reservationData);
+        if($reservationData != null) {
+            return $this->getReservationDataFields($reservationData);
+        }
+        return [
+            'filledFieldsCount' => 0,
+            'fieldsCount' => 1
+        ];
+    }
+    public function getTravellerReservationDataFields(
+        Reservation $reservation,
+        Travellers $traveller){
+        $reservationData = $this->reservationDataRepository->findOneBy([
+            'reservation'=>$reservation,
+            'traveller'=>$traveller
+        ]);
+        dump($reservationData);
+        if($reservationData != null) {
+            return $this->getReservationDataFields($reservationData);
+        }
+        return [
+            'filledFieldsCount' => 0,
+            'fieldsCount' => 1
+        ];
     }
 
     public function getUserLatestData(User $user) {

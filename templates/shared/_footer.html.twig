@@ -10,7 +10,7 @@
 						<p>{{ show_text( {
 								locale: app.request.locale,
 								section: "footer",
-								acronym: "intro" } )|raw }}</p>			    					
+								acronym: "intro" } )|raw }}</p>
 			    </div>
 			    <div class="col-md-3 hidden-sm">
 					<h4>{{'Los destinos'|trans}}</h4>
@@ -18,12 +18,12 @@
 							locale: app.request.locale
 						}) %}
 							{% for category in categories %}
-								<i 
-									class="fa fa-arrow-circle-right" 
+								<i
+									class="fa fa-arrow-circle-right"
 									aria-hidden="true"></i>
 									<a href="{{ path('destinations-by-category',{
-											'_locale':app.request.getLocale(), 
-											'category':category.title|lower
+											'_locale':app.request.getLocale(),
+											'category':category.title|lower|replace({' ': '-'})
 											}) }}">
 										{{ category.title }}
 									</a>
@@ -31,9 +31,9 @@
 							{% endfor %}
 			    	</div>
 			    	<div class="col-md-3 hidden-sm">
-				    	
+
 						<h4>{{'Más información'|trans}}</h4>
-				
+
 							{# <a href="/es/presentacion/">Nuestra agencia</a><br>
 							<a href="/es/faq/">Información práctica</a><br>
 							<a href="/es/blog/">El blog de Pablo « Rakatanga Tour »</a><br>
@@ -41,11 +41,11 @@
 							<a href="/es/aviso-legal/">Aviso legal</a><br>
 							<a href="/es/cgv/">Condiciones generales de venta</a><br> #}
 							{% for menuItem in menuFooter %}
-              
+
                 <a href="{{app.request.baseUrl ~ '/' ~ app.request.getLocale() ~ '/' ~ menuItem.slug ~ ''}}">
                   {{ menuItem.title }}
                 </a><br />
-              
+
             {% endfor %}
 			    	</div>
 			    	<div class="col-md-3 col-sm-4">
@@ -60,7 +60,7 @@
 		    </div>
 	  	</div>
 	    <div class="footer-bottom">
-		    <div class="container">    
+		    <div class="container">
 				  <div class="row">
 					  <div class="col-sm-12">
 							<p class="text-left">&copy; {{ "now"|date("Y")}} Rakatanga Tour v2. {{'Todos los derechos reservados'|trans}}.</p>

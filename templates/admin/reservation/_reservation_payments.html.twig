@@ -9,8 +9,13 @@ A continuación puedes ver los pagos realizados por el cliente.
       {{ payment.ammount|format_currency('EUR', {fraction_digit: 2}, 'es') }}
     </td>
     <td>
-      <a href="#">
-        <i class="fa fa-eye"></i>
+      <a
+      href="{{path('payments_edit',{'id': payment.id })}}"
+      target="_blank"
+      title="Abrir en nueva pestaña"
+      data-bs-toggle="tooltip"
+      >
+        <i class="fa fa-edit"></i>
       </a>
     </td>
   </tr>

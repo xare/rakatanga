@@ -6,9 +6,8 @@
     <div class="container">
         {{ include ('admin/shared/_controlband.html.twig',{'entity':'document'}) }}
         <div class="row">
-            <div class="col-12 col-sm-12">
+            <div class="col-12 col-xs-12">
                 <h1>Edit Document</h1>
-
                 {{ include('admin/document/_form.html.twig', {'button_label': 'Update'}) }}
                 {{ include('admin/document/_delete_form.html.twig') }}
             </div>

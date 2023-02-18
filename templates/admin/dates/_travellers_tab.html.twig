@@ -1,29 +1,56 @@
-<h4>Viajeros</a>
-
-
+<h4>Titular de la reserva</h4>
+<table class="table table-striped">
+{% for reservation in date.reservations %}
+  <tr>
+    <td>
+      <a
+        href="{{ path('reservation_edit',{'id': reservation.id})}}"
+        target="_blank"
+        title="Editar reserva en nueva pestaña"
+        data-bs-toggle="tooltip">
+          {{reservation.code}}
+      </a>
+        </td>
+    <td>{{reservation.user.prenom}} {{reservation.user.nom}} </td>
+    <td>{{reservation.user.telephone}}</td>
+    <td>{{reservation.user.email}}</td>
+  </tr>
+{% else %}
+  Todavía no se han realizado reservas para esta fecha.
+{% endfor %}
+</table>
+<h4> Acompañantes </h4>
 <table class="table table-striped">
 
 {% for reservation in date.reservations %}
   {% for traveller in reservation.travellers %}
     <tr>
-      <td>{{ traveller.email }}</td>
-      <td>{{ traveller.prenom }}</td>
-      <td>{{ traveller.nom }}</td>
+      <td>
+        <a
+        href="{{ path('reservation_edit',{'id': reservation.id})}}"
+        target="_blank"
+        title="Editar reserva en nueva pestaña"
+        data-bs-toggle="tooltip">
+        {{ reservation.code }}
+        </a>
+        </td>
+      <td>{{ traveller.prenom }}{{ traveller.nom }}</td>
       <td>{{ traveller.telephone }}</td>
+      <td>{{ traveller.email }}</td>
       <td><strong>{{ traveller.position }}</strong></td>
       <td>
-      {% if traveller.reservationData|length > 0 %}
+       {% if traveller.reservationData|length > 0 %}
         {{ include( 'admin/dates/_reservation_data_icons.html.twig' , { 'reservationData':traveller.reservationData } ) }}
-        <a 
-          class="btn btn-secondary js-show-reservation-data" 
+        <a
+          class="btn btn-secondary js-show-reservation-data"
           data-traveller-id="{{traveller.id}}">
             Reservation Data
-        </a> 
+        </a>
       {% endif %}
       </td>
       <td>
       {% if traveller.reservationData|length > 0 %}
-      <ul class="list-group">
+        <ul class="list-group">
         {% for reservationDatum in traveller.reservationData %}
           {% for document in reservationDatum.documents %}
             <li class="list-group-item">

@@ -8,26 +8,25 @@ use App\Form\DatesType;
 use App\Repository\DatesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/admin/dates')]
-class DatesController extends MainadminController
+class DatesController extends AbstractController
 {
-    private $datesRepository;
-    private $entityManager;
 
-    public function __construct(DatesRepository $datesRepository, EntityManagerInterface $entityManager)
+    public function __construct(
+        private DatesRepository $datesRepository,
+        private EntityManagerInterface $entityManager,
+        private PaginatorInterface $paginator)
     {
-        $this->datesRepository = $datesRepository;
-        $this->entityManager = $entityManager;
     }
 
     #[Route(path: '/', name: 'dates_index', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
-        PaginatorInterface $paginator,
     ): Response {
         $date = new Dates();
         if (!$pageNumber = $request->query->get('page')) {
@@ -54,7 +53,7 @@ class DatesController extends MainadminController
 
         $count = count($this->datesRepository->findAll());
         $query = $this->datesRepository->listIndex();
-        $dates = $paginator->paginate(
+        $dates = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             15

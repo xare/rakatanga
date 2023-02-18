@@ -68,21 +68,23 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    #[Route(path: '/search/{categoryName}', name: 'reservation_by_category', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/search/{categoryName}',
+        name: 'reservation_by_category',
+        methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
-        string $categoryName,
-        ReservationRepository $reservationRepository,
-        PaginatorInterface $paginator)
+        string $categoryName)
     {
-        $reservations = $paginator->paginate(
-            $reservationRepository->listReservationsByCategory($categoryName),
+        $reservations = $this->paginator->paginate(
+            $this->reservationRepository->listReservationsByCategory($categoryName),
             $request->query->getInt('page', 1),
             10
         );
-
+        $latestReservation = $this->reservationRepository->getLatestReservation();
         return $this->render('admin/reservation/index.html.twig', [
             'reservations' => $reservations,
+            'latestReservation' => $latestReservation,
             'count' => 10,
         ]);
     }

@@ -222,29 +222,32 @@ class UserFrontendReservationDataController extends AbstractController
 
      #[Route(
         path: "check/reservation/data",
-        methods: ["GET"],
+        methods: ["GET","POST"],
         name: "check-reservation-data",
         options: ['expose' => true]
      )]
-     public function checkReservationData():Response {
+     public function checkReservationData(
+        Request $request
+     ):Response {
+        $locale = $request->request->get('locale');
         $reservation = $this->reservationRepository->getLatestReservation();
         $reservationData = $this->reservationDataRepository->getUserLatestData($this->getUser());
-        dump($reservationData);
         if($reservationData instanceOf ReservationData){
             $reservationDataFieldsArray = $this->reservationDataHelper->getReservationDataFields($reservationData);
             if ( $reservationDataFieldsArray['fieldsCount'] != $reservationDataFieldsArray['filledFieldsCount']) {
                 $ratio = ($reservationDataFieldsArray['filledFieldsCount']*100/$reservationDataFieldsArray['fieldsCount']);
 
-                $html = $this->renderView('user/partials/_swal_missing_reservationData.html.twig');
+                $html = $this->renderView('user/partials/_swal_missing_reservationData.html.twig',['ratio'=>$ratio, 'locale'=>$locale]);
                 return $this->json([
                     'ratio' => $ratio,
-                    'title' => "Faltan datos y documentos",
-                    'message' => $html
+                    'title' => $this->translator->trans("Faltan datos y documentos", array(), null, $locale),
+                    'message' => $html,
+                    '_locale' => $locale
                 ], 200, [], []);
             }
         }
         return $this->json([
-                'message' => "Faltan datos y documentos"
+                'message' => $this->translator->trans("Faltan datos y documentos", array(), null, $locale)
         ], 200, [], []);
     }
 }

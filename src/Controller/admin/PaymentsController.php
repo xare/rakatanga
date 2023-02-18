@@ -14,8 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/payments')]
 class PaymentsController extends MainadminController
 {
-    #[Route('/{id}/edit/', name: 'payments_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], priority: 10)]
-    public function edit(Request $request, Payments $payment, EntityManagerInterface $entityManager): Response
+    #[Route(
+        path: '/{id}/edit/',
+        name: 'payments_edit',
+        methods: ['GET', 'POST'],
+        requirements: ['id' => '\d+'],
+        priority: 10)]
+    public function edit(
+        Request $request,
+        Payments $payment,
+        EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PaymentsType::class, $payment);
         $form->handleRequest($request);

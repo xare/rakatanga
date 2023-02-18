@@ -35,21 +35,21 @@
                 <div class="col-12 col-xs-12">
                     {{ form_row(form.statut,
                         {   'label':'Estado',
-                            'attr':{'class':'form-control form-select'}}) 
+                            'attr':{'class':'form-control form-select'}})
                     }}
                 </div>
             </div>
     </div>
-    <div class="col-md-8 col-xs-12">
+    <div class="col-8 col-xs-12">
     <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist" id="myTab">
-        <li class="nav-item">
+            <li class="nav-item">
                 <button class="nav-link active"
-                    id="documentation-tab" 
-                    data-bs-toggle="tab" 
-                    data-bs-target="#documentation" 
-                    type="button" 
-                    role="tab" 
+                    id="documentation-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#documentation"
+                    type="button"
+                    role="tab"
                     aria-controls="documentation"
                     aria-selected="true"
                         >Documentación requerida
@@ -58,11 +58,11 @@
          {% if date.reservations|length > 0 %}
             <li class="nav-item">
                 <button class="nav-link"
-                        id="reservations-tab" 
-                        data-bs-toggle="tab" 
-                        data-bs-target="#reservation" 
-                        type="button" 
-                        role="tab" 
+                        id="reservations-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#reservation"
+                        type="button"
+                        role="tab"
                         aria-controls="#reservation"
                         aria-selected="false"
                 >Reservas
@@ -73,11 +73,11 @@
         {% if date.reservations|length > 0 %}
             <li class="nav-item">
                 <button class="nav-link"
-                        id="travellers-tab" 
-                        data-bs-toggle="tab" 
-                        data-bs-target="#travellers" 
-                        type="button" 
-                        role="tab" 
+                        id="travellers-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#travellers"
+                        type="button"
+                        role="tab"
                         aria-controls="#travellers"
                         aria-selected="false"
                 >Viajeros/as
@@ -87,11 +87,11 @@
             {% if date.oldreservations|length > 0 %}
                 <li class="nav-item">
                     <button class="nav-link"
-                        id="oldreservations-tab" 
-                        data-bs-toggle="tab" 
-                        data-bs-target="#oldreservations" 
-                        type="button" 
-                        role="tab" 
+                        id="oldreservations-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#oldreservations"
+                        type="button"
+                        role="tab"
                         aria-controls="oldreservations"
                         aria-selected="true"
                             >Reservas anteriores<span class="badge badge-secondary">{{ date.oldreservations|length }}</span>
@@ -99,13 +99,13 @@
                 </li>
             {% endif %}
         </ul>
-    
+
         <!-- Tab panes -->
         <div class="tab-content">
-            <div 
-                class="tab-pane fade show active" 
-                id="documentation" 
-                role="tabpanel" 
+            <div
+                class="tab-pane fade show active"
+                id="documentation"
+                role="tabpanel"
                 aria-labelledby="documentation-tab">
                 <div class="col-md-12 col-xs-12">
                     {{ form_row(form.requestedDocs)}}
@@ -113,10 +113,10 @@
             </div>
 
             {% if date.reservations|length > 0 %}
-                <div 
-                    class="tab-pane fade" 
-                    id="reservation" 
-                    role="tabpanel" 
+                <div
+                    class="tab-pane fade"
+                    id="reservation"
+                    role="tabpanel"
                     aria-labelledby="reservation-tab">
                     <h5 class="pb-3">Nº Reservas: {{date.reservations|length}} </h5>
                     {{ include( 'admin/dates/_reservations_tab_content.html.twig',{'date': date } ) }}
@@ -124,7 +124,7 @@
             {% endif %}
 
             {% if date.reservations|length > 0 %}
-                <div 
+                <div
                     class="tab-pane fade"
                     id="travellers"
                     role="tabpanel"
@@ -134,10 +134,10 @@
             {% endif %}
 
             {% if date.oldreservations|length > 0 %}
-                <div 
-                    class="tab-pane fade" 
-                    id="oldreservations" 
-                    role="tabpanel" 
+                <div
+                    class="tab-pane fade"
+                    id="oldreservations"
+                    role="tabpanel"
                     aria-labelledby="oldreservations-tab">
                     {{ include('admin/dates/_old_reservations_tab.html.twig',{'date':date}) }}
                 </div>
@@ -147,10 +147,10 @@
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <br />
-            <button 
-                class="btn btn-success" 
+            <button
+                class="btn btn-success"
                 title="{{ button_label|default('Guardar') }}"
-                data-bs-toggle="tooltip" 
+                data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 >
                 <i class="fa fa-save"></i>

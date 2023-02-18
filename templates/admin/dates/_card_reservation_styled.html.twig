@@ -137,7 +137,7 @@
               <div class="tags has-addons">
                 <span class="tag is-dark"><i class="fas fa-puzzle-piece"></i></span>
                 <span class="tag is-info">{{reservationOption.ammount}}</span>
-                <span class="tag is-light" title="{{renderLocalizedOption(option.option.id,'es')}}" data-bs-toggle="tooltip">{{renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...')}}</span>
+                <span class="tag is-light" title="{{renderLocalizedOption(reservationOption.option.id,'es')}}" data-bs-toggle="tooltip">{{renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...')}}</span>
               </div>
             </td>
             {% set totalAmmount = totalAmmount + reservationOption.ammount * reservationOption.option.price %}

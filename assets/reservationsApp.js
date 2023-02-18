@@ -177,15 +177,15 @@ class reservationsApp {
     }
     popUpForMoreData() {
         const reservation = this.$wrapper.data('reservation');
+        const locale = document.documentElement.lang;
         (
             async() => {
                 try {
                     const response = await $.ajax({
                         url: Routing.generate('check-reservation-data'),
-                        method: 'GET',
+                        method: 'POST',
+                        data: { locale }
                     });
-                    console.info(response);
-                    let parsedHtml = new DOMParser().parseFromString(response.message, 'text/html');
                     Swal.fire({
                         'title': response.title,
                         'html': response.message

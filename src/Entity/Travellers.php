@@ -51,13 +51,10 @@ class Travellers
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'traveller')]
     private Collection $documents;
 
-    #[ORM\ManyToMany(targetEntity: Dates::class, inversedBy: 'travellers')]
-    private Collection $date;
-
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'travellers')]
     private ?Reservation $reservation = null;
 
-    #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'travellers')]
+    #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'traveller')]
     private Collection $reservationData;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -67,7 +64,6 @@ class Travellers
     {
         $this->date_ajout = new \DateTimeImmutable();
         $this->documents = new ArrayCollection();
-        $this->date = new ArrayCollection();
         $this->reservationData = new ArrayCollection();
     }
 
@@ -209,30 +205,6 @@ class Travellers
                 $document->setTraveller(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Dates[]
-     */
-    public function getDate(): Collection
-    {
-        return $this->date;
-    }
-
-    public function addDate(Dates $date): self
-    {
-        if (!$this->date->contains($date)) {
-            $this->date[] = $date;
-        }
-
-        return $this;
-    }
-
-    public function removeDate(Dates $date): self
-    {
-        $this->date->removeElement($date);
 
         return $this;
     }

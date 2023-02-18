@@ -88,5 +88,15 @@
         </button>
       </div>
     </div>
+
+    <div class="card mt-4">
+      <div class="card-header">
+        <h3>{{'Acceso a los datos de los otros viajeros'|trans}}</h3>
+      </div>
+      <div class="card-body">
+      <p>{{'Haciendo click en los botones de la derecha se abrirá una nuevas pestaña con el mismo formulario pero para el viajero elegido'|trans}}.</p>
+        {{ include('user/partials/_reservationOtherTravellers.html.twig')}}
+      </div>
+    </div>
   </div>
 </div>

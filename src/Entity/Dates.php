@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: DatesRepository::class)]
 class Dates
 {
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
@@ -53,9 +53,6 @@ class Dates
     #[ORM\ManyToMany(targetEntity: Document::class, mappedBy: 'date')]
     private Collection $documents;
 
-    #[ORM\ManyToMany(targetEntity: Travellers::class, mappedBy: 'date')]
-    private Collection $travellers;
-
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'date', cascade: ['persist', 'remove'])]
     private Collection $reservations;
 
@@ -66,7 +63,6 @@ class Dates
     {
         $this->users = new ArrayCollection();
         $this->documents = new ArrayCollection();
-        $this->travellers = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->oldreservations = new ArrayCollection();
     }
@@ -214,33 +210,6 @@ class Dates
     {
         if ($this->documents->removeElement($document)) {
             $document->removeDate($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Travellers[]
-     */
-    public function getTravellers(): Collection
-    {
-        return $this->travellers;
-    }
-
-    public function addTraveller(Travellers $traveller): self
-    {
-        if (!$this->travellers->contains($traveller)) {
-            $this->travellers[] = $traveller;
-            $traveller->addDate($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTraveller(Travellers $traveller): self
-    {
-        if ($this->travellers->removeElement($traveller)) {
-            $traveller->removeDate($this);
         }
 
         return $this;

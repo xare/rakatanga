@@ -1,18 +1,18 @@
 {% macro displayBadge(title,icon) %}
-    <div 
+    <div
           class="badge bg-success col-3 me-1 mb-1"
-          data-bs-toggle="tooltip" 
-          data-bs-placement="top"  
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
           title="{{title}}"
       >
           <i class="fas fa-{{icon}} fa-2x"></i>
       </div>
 {% endmacro %}
 {% macro displayEmptyBadge(icon) %}
-  <div 
+  <div
         class="badge bg-light text-dark col-3 me-1 mb-1"
-        data-bs-toggle="tooltip" 
-        data-bs-placement="top"  
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
         title="Todavía no se han aportado datos"
     >
         <i class="fas fa-{{icon}} fa-2x"></i>
@@ -21,7 +21,7 @@
 
 
 <div class="row">
-  {% for reservationDatum in reservationData %}
+ {% for reservationDatum in reservationData %}
     {% if reservationDatum.passportNo != null %}
       {{ _self.displayBadge(
                     "PASAPORTE: "~reservationDatum.passportNo,
@@ -43,7 +43,7 @@
                   'id-card') }}
     {% else %}
       {{ _self.displayEmptyBadge('id-card')}}
-    {% endif %}  
+    {% endif %}
         </div>
         <div class="row">
     {% if reservationDatum.insuranceContractNumber != null %}
@@ -53,7 +53,7 @@
                   'car-crash') }}
     {% else %}
       {{ _self.displayEmptyBadge('car-crash')}}
-    {% endif %} 
+    {% endif %}
 
     {% if reservationDatum.flightNumber != null %}
       {{ _self.displayBadge(
@@ -74,6 +74,6 @@
     {% endif %}
 
 
- 
+
   {% endfor %}
 </div>

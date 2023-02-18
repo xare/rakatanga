@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Entity\Document;
 use App\Entity\Reservation;
+use App\Entity\ReservationData;
 use App\Entity\Travellers;
 use App\Entity\User;
 use App\Service\contentHelper;
@@ -65,6 +66,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('hasDoctype', [$this, 'hasDoctype']),
             new TwigFunction('notPresentDoctypeUser', [$this, 'notPresentDoctypeUser']),
             new TwigFunction('notPresentDoctypeTraveller', [$this, 'notPresentDoctypeTraveller']),
+            new TwigFunction('getReservationDataFields', [$this, 'getReservationDataFields']),
+            new TwigFunction('getUserReservationDataFields',[$this, 'getUserReservationDataFields']),
+            new TwigFunction('getTravellerReservationDataFields',[$this, 'getTravellerReservationDataFields'])
         ];
     }
 
@@ -253,6 +257,25 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $this->container
             ->get(documentHelper::class)
             ->notPresentDoctypeTraveller($reservation, $traveller, $doctype);
+    }
+
+    public function getReservationDataFields(ReservationData $reservationData) {
+        return $this->container
+            ->get(reservationDataHelper::class)
+            ->getReservationDataFields($reservationData);
+    }
+    public function getUserReservationDataFields(Reservation $reservation, User $user) {
+        return $this->container
+            ->get(reservationDataHelper::class)
+            ->getUserReservationDataFields($reservation, $user);
+    }
+
+    public function getTravellerReservationDataFields(
+        Reservation $reservation,
+        Travellers $traveller ) {
+        return $this->container
+            ->get(reservationDataHelper::class)
+            ->getTravellerReservationDataFields($reservation, $traveller);
     }
 
     public static function getSubscribedServices():array
