@@ -1,4 +1,4 @@
-<h4>{{ 'Factura'|trans }}</h4>
+<h4>{{ 'Factura'|trans({}, null, locale) }}</h4>
 <div class="form-check">
     <input
         type="hidden"
@@ -6,23 +6,22 @@
         data-invoice-id="{{invoice.id}}"
         name="invoice"
         value="{{invoice.id}}">
-    <label class="form-check-label" for="js-invoice-user">{{ 'Utilizar los datos del usuario'|trans }}</label>
+        {# <label
+            class="form-check-label"
+            for="js-invoice-user">
+                {{ 'Utilizar los datos del usuario'|trans }}
+        </label> #}
 </div>
-    {{form_start(formInvoice)}}
-        {# {{form_row(formInvoice.name, { 'value' : invoice.reservation.user.prenom~' '~invoice.reservation.user.nom})}}
-        {{form_row(formInvoice.nif, { 'value' : invoice.reservation.user.idcard })}}
-        {{form_row(formInvoice.address, { 'value' : invoice.reservation.user.address })}}
-        {{form_row(formInvoice.city, { 'value' : invoice.reservation.user.city })}}
-        {{form_row(formInvoice.postalcode, { 'value' : invoice.reservation.user.postcode })}}
-        {{form_row(formInvoice.country, { 'value' : invoice.reservation.user.country })}} #}
-        {{form_row(formInvoice.name,{label:'Nombre'|trans})}}
-        {{form_row(formInvoice.nif,{label:'NIF'|trans})}}
-        {{form_row(formInvoice.address,{label:'Dirección'|trans})}}
-        {{form_row(formInvoice.city,{label:'Ciudad'|trans})}}
-        {{form_row(formInvoice.postalcode,{label:'Código postal'|trans})}}
-        {{form_row(formInvoice.country,{label:'País'|trans})}}
+    {{ form_start(formInvoice) }}
+        {# {{form_row(formInvoice.country, { 'value' : invoice.reservation.user.country })}} #}
+        {{ form_row(formInvoice.name,{label:'Nombre'|trans({}, null, locale)}) }}
+        {{ form_row(formInvoice.nif,{label:'NIF'|trans({}, null, locale)}) }}
+        {{ form_row(formInvoice.address,{label:'Dirección'|trans({}, null, locale)}) }}
+        {{ form_row(formInvoice.city,{label:'Ciudad'|trans({}, null, locale)}) }}
+        {{ form_row(formInvoice.postalcode,{label:'Código postal'|trans({}, null, locale)}) }}
+        {{ form_row(formInvoice.country,{label:'País'|trans({}, null, locale)}) }}
         <br />
-        <button id="js-submit-invoice" class="btn btn-primary" type="submit">{{'Actualizar factura'|trans}}</button>
-    {{form_end(formInvoice,{'render_rest': false})}}
+        <button id="js-submit-invoice" class="btn btn-primary" type="submit">{{ 'Actualizar factura'|trans({}, null, locale) }}</button>
+    {{ form_end(formInvoice,{ 'render_rest': false }) }}
     <br />
 

@@ -16,17 +16,22 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class ContactController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private TranslatorInterface $translator)
     {
-        $this->entityManager = $entityManager;
     }
 
-    #[Route(path: ['en' => '{_locale}/contact/', 'es' => '{_locale}/contacto/', 'fr' => '{_locale}/contacte/'], name: 'contact')]
+    #[Route(
+        path: [
+            'en' => '{_locale}/contact/',
+            'es' => '{_locale}/contacto/',
+            'fr' => '{_locale}/contact/'],
+        name: 'contact')]
     public function index(
         Request $request,
         Breadcrumbs $breadcrumbs,
         LangRepository $langRepository,
-        TranslatorInterface $translator,
         ContactManager $contactManager,
         string $_locale = null,
         string $locale = 'es'
@@ -45,7 +50,7 @@ class ContactController extends AbstractController
         // END LANG MENU
 
         // BREADCRUMB
-        $breadcrumbs->addItem('  '.$translator->trans('Contacto').' ');
+        $breadcrumbs->addItem('  '.$this->translator->trans('Contacto').' ');
         $breadcrumbs->prependRouteItem('Inicio', 'index');
         // END BREADCRUMB
 
@@ -73,7 +78,7 @@ class ContactController extends AbstractController
             return $this->render('contact/success.html.twig', [
                 'locale' => $locale,
                 'langs' => $urlArray,
-                'success' => 'Has enviado el mensaje.',
+                'success' => $this->translator->trans('Has enviado el mensaje.'),
             ]);
         }
 

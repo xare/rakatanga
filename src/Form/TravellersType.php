@@ -41,7 +41,6 @@ class TravellersType extends AbstractType
                 'empty_data' => '',
             ]) */
             ->add('user')
-            ->add('date')
             ->add('reservation')
         ;
     }

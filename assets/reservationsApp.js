@@ -112,6 +112,8 @@ class reservationsApp {
     openInvoiceForm(event) {
         event.preventDefault();
         const self = this;
+        const locale = document.documentElement.lang;
+        console.info(locale);
         const invoiceId = $(event.currentTarget)
             .data("invoiceid");
         (async() => {
@@ -120,7 +122,8 @@ class reservationsApp {
                     url: Routing.generate('ajax_invoice', {
                         'invoice': invoiceId
                     }),
-                    type: "GET",
+                    type: "post",
+                    data: { locale }
                 });
                 console.info(invoiceFormResponse);
                 (async(invoiceFormResponse) => {

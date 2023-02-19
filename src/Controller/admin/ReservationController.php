@@ -48,7 +48,10 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    #[Route(path: '/new', name: 'reservation_new', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/new',
+        name: 'reservation_new',
+        methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $reservation = new Reservation();
@@ -61,7 +64,6 @@ class ReservationController extends MainadminController
 
             return $this->redirectToRoute('reservation_index');
         }
-
         return $this->render('admin/reservation/new.html.twig', [
             'reservation' => $reservation,
             'form' => $form->createView(),

@@ -472,20 +472,24 @@ class ReservationAjaxController extends AbstractController
 
     #[Route(
         path: '/ajax/invoice/{invoice}',
+        methods: ["GET","POST"],
         options: ['expose' => true],
         name: 'ajax_invoice')]
     public function ajaxInvoice(
+        Request $request,
         Invoices $invoice
         ): Response
     {
+        $locale = $request->request->get('locale');
         $formInvoice = $this->createForm(InvoicesType::class, $invoice);
         $html = $this->renderView('user/partials/_card_reservation_invoice.html.twig', [
             'invoice' => $invoice,
+            'locale' => $locale,
             'formInvoice' => $formInvoice->createView(),
         ]);
 
         return $this->json([
-                'title' => $this->translator->trans('Completar datos de facturación'),
+                'title' => $this->translator->trans('Completar datos de facturación',[],null, $locale),
                 'html' => $html,
             ], 200, [], ['group' => 'main']);
     }

@@ -35,7 +35,10 @@
                 </div>
             </div>
         </div>
+
         <div class="col-8">
+
+        {% if reservation.date != null%}
             <ul class="nav nav-tabs" role="tablist" id="myTab">
                 <li class="nav-item">
                     <button class="nav-link active"
@@ -158,6 +161,7 @@
                     </div>
 
                 </div>
+        {% endif %}
         </div>
     </div>
 

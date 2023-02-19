@@ -813,6 +813,8 @@ class reservationApp {
     }
     updateChanges(event) {
         event.preventDefault();
+        console.info(event.currentTarget);
+        $(event.currentTarget).removeClass('d-block');
         $(event.currentTarget).hide();
         this._updateChanges();
     }

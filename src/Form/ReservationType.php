@@ -25,7 +25,7 @@ class ReservationType extends AbstractType
             /* ->add('date_ajout', DateTimeType::class)
             ->add('date_paiement', DateTimeType::class) */
             // ->add('options', TextType::class)
-            ->add('date', TextType::class)
+            ->add('date')
             ->add('user', TextType::class)
             /* ->add('travellers', TextType::class) */
         ;

@@ -1,11 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block title %}New Logs{% endblock %}
 
 {% block body %}
-    <h1>Create new Logs</h1>
-
-    {{ include('logs/_form.html.twig') }}
-
-    <a href="{{ path('logs_index') }}">back to list</a>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Create new Logs</h1>
+            {{ include('admin/logs/_form.html.twig') }}
+            <a href="{{ path('logs_index') }}">back to list</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -44,7 +44,7 @@ class TravellersController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $traveller = new Travellers();
-        $form = $this->createForm(Travellers1Type::class, $traveller);
+        $form = $this->createForm(TravellersType::class, $traveller);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

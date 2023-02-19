@@ -47,7 +47,7 @@ class DocumentController extends AbstractController
         methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
-        $document = new Document();
+        $document = new Document($this->getUser());
         $form = $this->createForm(DocumentType::class, $document);
         $form->handleRequest($request);
 
