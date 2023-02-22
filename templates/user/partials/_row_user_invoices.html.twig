@@ -1,6 +1,6 @@
   <td>{{invoice.name}}</td>
   <td>{{invoice.nif}}</td>
-  <td>{{invoice.address}}</td>
+  <td>{{invoice.address}} {{invoice.city}} ({{invoice.country}})</td>
   <td>{{invoice.invoiceNumber}}</td>
   <td>
     {{renderLocalizedCategory(invoice.reservation.date.travel.category.id,app.request.getLocale())}} -
@@ -23,6 +23,6 @@
       data-action="js-update-invoice"
       data-invoiceid="{{invoice.id}}">
     <i class="fas fa-recycle"></i>
-        {{'Actualizar los datos de la factura'|trans }}
+        {{'Actualizar los datos de la factura'|trans({}, null, app.request.getLocale()) }}
     </button>
   </td>

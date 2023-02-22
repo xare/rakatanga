@@ -187,6 +187,8 @@
     <row>
         <columns>
             <p>{{'Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pago total de su viaje. El resto del pago deberá hacerse como muy tarde 30 días antes de la fecha de salida'|trans}}.</p>
+
+
         </columns>
     </row>
     <row>
@@ -207,7 +209,10 @@
         <columns>
             <p>
                 {{ 'La reserva implica la aceptación total de nuestras'|trans }}
-                <a href="#">{{ 'condiciones generales de venta'|trans }}</a>.
+                <a href="{{ path( 'main-content',{
+                    '_locale'=> app.request.locale,
+                    'slug' => 'cgv'
+                }) }}">{{ 'condiciones generales de venta'|trans }}</a>.
             </p>
         </columns>
     </row>
@@ -231,7 +236,10 @@
             <p>{{ 'Para evitar la comisión de gestión a través de la pasarela de pagos de Paypal, recomendamos el pago por transferencia bancaria'|trans }}.</p>
 
             <p>{{ 'Puede elegir pagar la reserva o la totalidad del viaje a través de nuestra página de pago'|trans }} :</p>
-            <button href="#">{{'Pagar'|trans}}</button>
+            <button href="{{path('reservation_payment',{
+                '_locale': app.request.locale,
+                'reservation':reservation.id
+            }) }}">{{'Pagar'|trans}}</button>
 
             <p> {{'Para acceder a los datos de la reserva es posible utilizando su cuenta de usuario donde puede acceder a su espacio personalizado y así añadir, corregir y actualizar datos de su reserva'|trans}}.</p>
             <p>{{'Nos comunicaremos con usted en breve para la organización del viaje'|trans}}.</p>

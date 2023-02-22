@@ -1,0 +1,45 @@
+<div class="payments-dashboard-item">
+  {# {% set MediaPath = '/media/' ~ payment.reservation.date.travel.mainPhoto.Path %}
+  <div class="payments-dashboard-grid-item">
+    <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }}">
+  </div> #}
+  <div class="payments-dashboard-grid-item">
+    <h4><a
+      href="{{ path('payments_edit',{'id':payment.id}) }}"
+      data-bs-toggle="tooltip"
+      title="Visualizar los datos de la categoría">
+        {{payment.ammount|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}
+    </a></h4>
+    {{payment.reservation.code}}<br />
+    [{{ renderReservationAmmount(payment.reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}]
+    <div class="tags has-addons">
+      <span class="tag is-dark">
+        <i class="fas fa-receipt"></i>
+      </span>
+      <span class="tag is-info">
+        {{ payment.reservation.invoice.invoiceNumber }}
+      </span>
+      <span class="tag is-light">
+        <a
+          href="{{path('user-download-invoice',{'invoice': payment.reservation.invoice.id})}}"
+          title="{{ payment.reservation.invoice.filename }}"
+          data-bs-toggle="tooltip">
+            <i class="fas fa-download"></i>
+        </a>
+      </span>
+    </div>
+  </div>
+  <div class="payments-dashboard-grid-item">
+  {{ payment.reservation.user.prenom }} {{ payment.reservation.user.nom }} [{{ payment.reservation.user }}]
+    <h6 class="mb-0">
+        {{ renderLocalizedCategory(payment.reservation.date.travel.category.id,'es') }}
+    </h6>
+      {{ renderLocalizedTravel(payment.reservation.date.travel.id,'es') }}
+      <br />
+      <em data-bs-toggle="tooltip"
+      title="Visualizar los datos de la fecha">{{ payment.reservation.date.debut|date('d/m/Y') }}</em>
+      <i class="fas fa-arrow-right"></i>
+      <em data-bs-toggle="tooltip"
+      title="Visualizar los datos de la fecha">{{ payment.reservation.date.fin|date('d/m/Y') }}</em>
+  </div>
+</div>

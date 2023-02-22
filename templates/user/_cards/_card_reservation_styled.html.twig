@@ -5,7 +5,10 @@
 {% set reservationUserDataFields = getUserReservationDataFields(reservation, reservation.user) %}
 {% set reservationUserRatio = ((reservationUserDataFields.filledFieldsCount/reservationUserDataFields.fieldsCount) * 100)|round(0) %}
   <div class="tags has-addons">
-    <span class="tag">{{app.user.prenom}} {{app.user.nom}}</span>
+    <span class="tag is-light">
+      <i class="fas fa-motorcycle"></i>
+    </span>
+    <span class="tag tag-name">{{app.user.prenom}} {{app.user.nom}}</span>
     <span class="tag{% if reservationUserRatio < 100 %} is-danger is-light{% endif %}"
      title="{{'Nivel de compleción de datos de usuario'|trans }}" data-bs-toggle="tooltip"
     >{{ reservationUserRatio }} %</span>
@@ -33,7 +36,7 @@
         </span>
       {% endif %}
     {% endfor %}
-    <span class="tag is-info">
+    <span class="tag is-info is-light">
       <a
         href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
         title="{{'Editar datos del viaje y documentación'|trans}}"
@@ -41,6 +44,10 @@
       >
         <i class="fa fa-edit "></i>
       </a>
+    </span>
+    <span class="tag is-light">
+      <i class="fas fa-arrow-left" style="font-size:0.8rem"></i>
+      &nbsp;&nbsp;{{'Editar'|trans}}
     </span>
   </div>
 
@@ -51,7 +58,10 @@
   {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}
 
   <div class="tags has-addons">
-    <span class="tag">{{traveller.prenom}} {{traveller.nom}}</span>
+    <span class="tag is-light">
+      <i class="fas fa-user"></i>
+    </span>
+    <span class="tag tag-name">{{traveller.prenom}} {{traveller.nom}}</span>
     <span class="tag{% if reservationTravellerRatio < 100 %} is-danger is-light{% endif %}" title="{{'Nivel de compleción de datos de viajero'|trans }}" data-bs-toggle="tooltip">{{ reservationTravellerRatio }} %</span>
     {% for doctype in doctypesArray %}
       <span class="tag is-light">
@@ -77,7 +87,7 @@
         </span>
       {% endif %}
     {% endfor %}
-    <span class="tag is-info">
+    <span class="tag is-info is-light">
       <a
         href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller':traveller.id }) }}"
         title="{{'Editar datos del viaje y documentación'|trans}}"
@@ -86,6 +96,10 @@
         <i class="fa fa-edit "></i>
       </a>
     </span>
+    <span class="tag is-light">
+      <i class="fas fa-arrow-left" style="font-size:0.8rem"></i>
+      &nbsp;&nbsp;{{'Editar'|trans}}
+    </span>
   </div>
   <br />
 {% endmacro %}
@@ -93,7 +107,7 @@
   <div class="card-header">
     {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
     <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
-    <h3>{{ reservation.code }} - {{renderLocalizedTravel(reservation.date.travel.id,locale)}}
+    <h2>{{ reservation.code }} - {{renderLocalizedTravel(reservation.date.travel.id,locale)}}
     <div class="tags has-addons me-1">
       <span class="tag is-danger is-light">{{reservation.date.debut|date('d/m/Y')}}</span>
       <span class="tag">
@@ -106,7 +120,7 @@
     <div class="tags has-addons">
       <span class="tag"><i class="fas fa-suitcase"></i></span>
       <span class="tag  is-danger is-light">{{ reservation.status }}</span>
-      <span class="tag is-info">
+      <span class="tag is-info is-light">
       <a
         href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}"
         title="{{'Editar datos de la reserva'|trans}}"
@@ -117,7 +131,7 @@
     </span>
     </div>
 
-    </h3>
+    </h2>
   </div>
   <div class="card-body reservation-container">
     <div class="reservationOptions box">
@@ -142,10 +156,8 @@
         <h6>
           {{'Tus datos'|trans}}
         </h6>
-
           {{ _self.showUsersDocumentsLine(documentsByUser,reservation) }}
-
-        <h6 class="mt-3">
+        <h6 class="mt-1">
           {{'Datos de tus acompañantes'|trans}}
         </h6>
 
@@ -154,19 +166,19 @@
           {% set documentsByTraveller = listDocumentsByReservationByTraveller(reservation, traveller ) %}
           {{ _self.showTravellersDocumentsLine(documentsByTraveller, traveller, reservation) }}
         {% endfor %}
-        <h5 class="mt-3">{{'Mensajes enviados'|trans}}</h5>
+        <h5 class="mt-1">{{'Mensajes enviados'|trans}}</h5>
 
         {% for mailing in reservation.mailings %}
         <div class="tags has-addons">
-          <span class="tag is-link">
+          <span class="tag is-light">
             <i class="fas fa-envelope" style="margin:2px"></i>
           </span>
-          <span class="tag is-info">
+          <span class="tag">
             {% if mailing.dateSent != null %}
               {{ mailing.dateSent|date('d/m/Y') }}
             {% endif %}
           </span>
-          <span class="tag is-light">
+          <span class="tag">
             <a
               href="#"
               target="_blank"
@@ -180,7 +192,7 @@
               </a>
           </span>
         </div>
-
+        <br />
           {% else %}
           {{ 'No hay mensajes enviados asociados a esta reserva'|trans }}.
         {% endfor %}
@@ -190,9 +202,9 @@
     <div class="box reservationCalculator">
       <h5>{{'Cálculo de la reserva'|trans}}</h5>
         <div class="tags has-addons">
-          <span class="tag is-dark"><i class="fas fa-motorcycle"></i></span>
-          <span class="tag is-info">{{reservation.nbpilotes}}</span>
-          <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
+          <span class="tag is-light has-fontawesome"><i class="fas fa-motorcycle"></i></span>
+          <span class="tag is-info is-light">{{reservation.nbpilotes}}</span>
+          <span class="tag is-light has-concept">{{ 'Pilotos'|trans }}</span>
           {% set totalAmmount = totalAmmount + reservation.nbpilotes * reservation.date.prixPilote %}
             <span class="tag is-light">
               <strong>
@@ -202,23 +214,25 @@
           </div><br />
           {% if reservation.nbAccomp > 0 %}
           <div class="tags has-addons">
-            <span class="tag is-dark"><i class="fas fa-user"></i></span>
-            <span class="tag is-info">{{reservation.nbaccomp}}</span>
-            <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
+            <span class="tag is-light has-fontawesome">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="tag is-info is-light">{{reservation.nbaccomp}}</span>
+            <span class="tag is-light has-concept">{{ 'Acompañantes'|trans }}</span>
               {% set totalAmmount = totalAmmount + reservation.nbAccomp * reservation.date.prixAccomp %}
             <span class="tag is-light"><strong>{{ (reservation.nbAccomp * reservation.date.prixAccomp)|format_currency('EUR') }}</strong>
           </div><br />
           {% endif %}
           {% for reservationOption in reservation.reservationOptions %}
             <div class="tags has-addons">
-              <span class="tag is-dark">
+              <span class="tag is-light has-fontawesome">
                 <i class="fas fa-puzzle-piece"></i>
               </span>
-              <span class="tag is-info">
+              <span class="tag is-info is-light">
                 {{reservationOption.ammount}}
               </span>
               <span
-                class="tag is-light"
+                class="tag is-light has-concept"
                 title="{{renderLocalizedOption(reservationOption.option.id,'es')}}"
                 data-bs-toggle="tooltip">
                   {{renderLocalizedOption(reservationOption.option.id,'es')|u.truncate(20,'...')}}
@@ -236,7 +250,7 @@
         {% if reservation.codespromo is defined and reservation.codespromo != null %}
          {% set discount = 0 %}
           <div class="tags has-addons">
-            <span class="tag is-dark"><i class="fas fa-minus"></i></span>
+            <span class="tag is-light has-fontawesome"><i class="fas fa-minus"></i></span>
             <span class="tag is-danger">{{ 'Descuento'|trans }} : {{ reservation.codespromo.code }}</span>
             <span class="tag is-danger">
               <strong class="small">
@@ -254,18 +268,22 @@
             <br />
         {% endif %}
             <div class="tags has-addons">
-              <span class="tag is-dark"><i class="fas fa-plus"></i></span>
-              <span class="tag is-success">{{ 'Total'|trans }}</span>
-              <span class="tag is-success"><strong>{{ totalAmmount|format_currency('EUR') }}</strong></span>
+              <span class="tag is-light has-fontawesome">
+                <i class="fas fa-plus"></i>
+              </span>
+              <span class="tag is-success">
+                <strong>{{ 'Total'|trans }}</strong>
+              </span>
+              <span class="tag is-success has-total">{{ totalAmmount|format_currency('EUR') }}</span>
           </div>
           <br />
         {% for payment in reservation.payments %}
               <div class="tags has-addons">
-                <span class="tag is-dark"><i class="fas fa-coins"></i></span>
-                <span class="tag is-primary">{{ 'Pago'|trans }}</span>
+                <span class="tag is-light has-fontawesome"><i class="fas fa-coins"></i></span>
+                <span class="tag is-success">{{ 'Pago'|trans }}</span>
                 <span class="tag is-light">{{ payment.dateAjout|date('d/m/Y') }}</span>
-                <span class="tag is-light">
-                <strong>{{ payment.ammount|format_currency('EUR') }}</strong>
+                <span class="tag is-light has-payment">
+                  {{ payment.ammount|format_currency('EUR') }}
                 </span>
               </div>
               <br />
@@ -273,25 +291,30 @@
           {% endfor %}
           {% if totalAmmount != 0 %}
               <div class="tags has-addons">
-                <span class="tag is-dark"><i class="fas fa-coins"></i></span>
-                <span class="tag is-danger">{{'Resto a pagar'|trans}}</span>
-                <span class="tag is-danger">
-                  <strong>
+                <span class="tag is-light has-fontawesome"><i class="fas fa-coins"></i></span>
+                <span class="tag is-danger is-light">{{'Resto a pagar'|trans}}</span>
+                <span class="tag is-danger is-light has-tobepaid">
                     {{ totalAmmount|format_currency('EUR') }}
-                  </strong>
+                </span>
+                <span class="tag is-danger is-light has-creditcard">
+
+                  <a
+                    href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
+                    data-bs-toggle="tooltip"
+                    title="{{ 'Realizar el pago'|trans }}"
+                    ><i class="fas fa-credit-card"></i>
+                  </a>
+                </span>
               </div><br />
-                <a
-                  href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
-                  class="btn btn-rakatanga-blue">€ {{ 'Realizar el pago'|trans }}</a>
             {% endif %}
-            <h5 class="mt-3">{{ 'Facturas'|trans }}</h5>
+            <h5 class="mt-1">{{ 'Facturas'|trans }}</h5>
               {% if reservation.invoice != null %}
                 <div class="tags has-addons">
-                  <span class="tag is-dark"><i class="fas fa-receipt"></i></span>
-                  <span class="tag is-info">
+                  <span class="tag is-light has-fontawesome"><i class="fas fa-receipt"></i></span>
+                  <span class="tag">
                     {{ reservation.invoice.invoiceNumber}}
                   </span>
-                  <span class="tag is-light">
+                  <span class="tag">
                     <a
                       href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
                       title="{{ reservation.invoice.filename }}"

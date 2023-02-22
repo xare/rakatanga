@@ -1,3 +1,11 @@
+{% set paymentsCount = 0 %}
+
+{% for reservation in user.reservations %}
+    {% for payment in reservation.payments %}
+        {% set paymentsCount = paymentsCount +1 %}
+    {% endfor %}
+{% endfor %}
+
 {{ form_start(form) }}
     <div class="row">
         <div class="col-4 col-xs-12">
@@ -95,7 +103,7 @@
                     aria-selected="true"
                         >Documentación
                         <span class="badge badge-secondary">
-                            {{user.documents|length}}
+                            {{listDocumentsByUser(user)|length}}
                         </span>
                 </button>
             </li>
@@ -109,6 +117,9 @@
                     aria-controls="payments"
                     aria-selected="true"
                         >Pagos
+                        <span class="badge badge-secondary">
+                        {{paymentsCount|length}}
+                    </span>
                 </button>
             </li>
             <li class="nav-item">
@@ -136,6 +147,7 @@
                 {% for reservation in user.reservations %}
                    <li class="list-group-item">
                    <a href="{{ path('reservation_edit', { 'id':reservation.id } ) }}">
+                        <strong>{{ reservation.code}}</strong>
                         {{ reservation.date.debut|date('d-m-Y') }}
                         {{ reservation.date.fin|date('d-m-Y') }} - {{ reservation.date.travel }}
 
@@ -153,31 +165,36 @@
                 role="tabpanel"
                 aria-labelledby="documentation-tab">
                 <div class="col-12 col-xs-12">
-                    <ul class="list-group">
+                    <h4>Usuario</h4>
 
-                    {% for document in user.documents %}
-                    {% if document.traveller == null %}
-                        <li class="list-group-item">
-                            <a
-                                href="{{ absolute_url( path("download_document",{ 'id': document.id}
-                                    ))}}"
-                                target="_blank"
-                                >
-                        {% if document.mimetype == 'image/jpeg' %}
-                            <img src="{{ absolute_url(path("download_document",{
-                                                    'id': document.id})) }}"
-                                style="width:50px; height:auto" />
-                        {% else %}
-                            <span>
-                                <span class="fa fa-download"></span>
-                            </span>
-                        {% endif %}
-                        <strong>{{document.doctype}}:</strong> <em>{{document.originalFilename}}</em> [{{document.mimetype}}]
-                        </a>
-                    </li>
-                    {% endif %}
-                {% endfor %}
-                </ul>
+                    {% for reservation in user.reservations %}
+                    <h5>{{reservation.code}} [{{reservation.date.debut|date('d/m/Y')}}]</h5>
+                    <ul class="list-group mb-3">
+                        {% for document in listDocumentsByReservationByUser(reservation,user) %}
+                            {{ include('admin/user/partials/_row_document.html.twig',{ 'document':document })}}
+                            {% else %}
+                           <li class="list-group-item">Documentos no registrados en esta reserva</li>
+                        {% endfor %}
+                    </ul>
+
+                    {% endfor %}
+
+                {# <h4>Acompañante</h4> #}
+                    {# {% for reservation in user.reservations %}
+                        <h5>
+                            {{ reservation.code }}
+                            {{ reservation.date.debut|date('d/m/Y') }}
+                        </h5>
+                        {% for traveller in reservation.travellers %}
+                            <h6>{{traveller.prenom}} {{traveller.nom }}</h6>
+                            <ul class="list-group">
+                                {% for document in listDocumentsByTraveller(traveller) %}
+                                    {{ include('admin/user/partials/_row_document.html.twig',{'document':document })}}
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    {% endfor %} #}
+
                 </div>
             </div>
             <div

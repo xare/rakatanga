@@ -62,7 +62,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('renderReservationAmmount', [$this, 'getReservationAmmount']),
             new TwigFunction('renderReservationDuePayment', [$this, 'getReservationDuePayment']),
             new TwigFunction('listDocumentsByReservationByUser', [$this, 'getDocumentsByReservationByUser']),
-            new TwigFunction('listDocumentsByReservationByTraveller', [$this, 'getDocumentsByReservationByTraveller']),
+            new TwigFunction('listDocumentsByTraveller', [$this, 'getDocumentsByTraveller']),
+            new TwigFunction('listDocumentsByUser', [$this, 'getDocumentsByUser']),
+            new TwigFunction('listDocumentsByReservationByTraveller', [$this, 'getDocumentsByTraveller']),
             new TwigFunction('hasDoctype', [$this, 'hasDoctype']),
             new TwigFunction('notPresentDoctypeUser', [$this, 'notPresentDoctypeUser']),
             new TwigFunction('notPresentDoctypeTraveller', [$this, 'notPresentDoctypeTraveller']),
@@ -220,12 +222,23 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             ->get(reservationDataHelper::class)
             ->getReservationDueAmmount($reservation);
     }
-
+    public function getDocumentsByUser(User $user)
+    {
+        return $this->container
+            ->get(documentHelper::class)
+            ->getDocumentsByUser($user);
+    }
     public function getDocumentsByReservationByUser(Reservation $reservation)
     {
         return $this->container
             ->get(documentHelper::class)
             ->getDocumentsByReservationByUser($reservation);
+    }
+    public function getDocumentsByTraveller(Travellers $traveller)
+    {
+        return $this->container
+            ->get(documentHelper::class)
+            ->getDocumentsByTraveller($traveller);
     }
 
     public function getDocumentsByReservationByTraveller(Reservation $reservation, Travellers $traveller)

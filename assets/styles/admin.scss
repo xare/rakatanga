@@ -376,34 +376,54 @@ fieldset {
 
 /* dashboard */
 
-.reservations-dashboard {
+.reservations-dashboard,
+.payments-dashboard {
     display: grid;
     gap: 1rem;
-    grid-auto-rows: 16rem;
     grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
 }
 
-.reservations-dashboard a {
+.reservations-dashboard {
+    grid-auto-rows: 16rem;
+}
+
+.payments-dashboard {
+    grid-auto-rows: 9.5rem;
+}
+
+.reservations-dashboard a,
+.payments-dashboard a {
     text-decoration: none;
     color: #cc6363;
 }
 
-.reservations-dashboard a:hover {
+.reservations-dashboard a:hover,
+.payments-dashboard a:hover {
     color: #6f0e03
 }
 
-.reservations-dashboard-item {
+.reservations-dashboard-item,
+.payments-dashboard-item {
     display: grid;
     grid-gap: 0.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
-    grid-template-rows: auto;
-    grid-template-areas: 'photo photo travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers' 'user user user user user user user';
     margin-bottom: 1rem;
     border: 1px solid #ccc;
     border-radius: 0.4rem;
     background: rgb(250, 250, 250);
     -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
     box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+}
+
+.reservations-dashboard-item {
+    grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
+    grid-template-rows: auto;
+    grid-template-areas: 'photo photo travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers' 'user user user user user user user';
+}
+
+.payments-dashboard-item {
+    grid-template-columns: repeat(auto-fill, minmax(8.1rem, 1fr));
+    grid-template-rows: auto;
+    grid-template-areas: 'left right right';
 }
 
 .reservations-dashboard-grid-item>img {
@@ -413,7 +433,8 @@ fieldset {
     margin-top: 1rem;
 }
 
-.reservations-dashboard-item>div {
+.reservations-dashboard-item>div,
+.payments-dashboard-item>div {
     padding-inline: 1rem;
 }
 
@@ -421,8 +442,23 @@ fieldset {
     grid-area: photo;
 }
 
+.payments-dashboard-item>div:nth-child(1) {
+    grid-area: left;
+}
+
+.payments-dashboard-item>div:nth-child(1) {
+    padding-inline-start: 1rem;
+    padding-top: 1rem;
+}
+
 .reservations-dashboard-item>div:nth-child(2) {
     grid-area: travel;
+    padding-inline-start: 0;
+    padding-top: 1rem;
+}
+
+.payments-dashboard-item>div:nth-child(2) {
+    grid-area: right;
     padding-inline-start: 0;
     padding-top: 1rem;
 }

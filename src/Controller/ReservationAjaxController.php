@@ -491,6 +491,7 @@ class ReservationAjaxController extends AbstractController
         return $this->json([
                 'title' => $this->translator->trans('Completar datos de facturación',[],null, $locale),
                 'html' => $html,
+                'confirmButtonText' => $this->translator->trans('Actualizar factura',[],null, $locale)
             ], 200, [], ['group' => 'main']);
     }
 

@@ -51,7 +51,7 @@
                                     <th>Fechas</th>
                                     <td>
                                         <strong>Inicio:</strong> {{invoice.reservation.date.debut | date('Y/m/d')}}<br />
-                                        <strong>Fin:</strong> {{invoice.reservation.date.fin | date('Y/m/d')}}<br /> 
+                                        <strong>Fin:</strong> {{invoice.reservation.date.fin | date('Y/m/d')}}<br />
                                     </td>
                                 </tr>
                                 <tr>
@@ -62,8 +62,8 @@
                                         <strong>Opcion/es:</strong>
                                         <ul>
                                             {% for option in invoice.reservation.reservationOptions %}
-                                                <li><strong>{{option.ammount}}</strong>: {{ renderLocalizedOption(option.id, "es") }} <br /> 
-                                                {{option.options.price}}</li>
+                                                <li><strong>{{option.ammount}}</strong>: {{ renderLocalizedOption(option.id, "es") }} <br />
+                                                {{option.option.price}}</li>
                                             {% endfor %}
                                         </ul>
                                     </td>

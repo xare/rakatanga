@@ -130,6 +130,8 @@ class reservationsApp {
                     const { value: formValues } = await Swal.fire({
                         title: invoiceFormResponse.title,
                         html: invoiceFormResponse.html,
+                        width: 800,
+                        confirmButtonText: invoiceFormResponse.confirmButtonText,
                         focusConfirm: false,
                         preConfirm: () => {
                             return {

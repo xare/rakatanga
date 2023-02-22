@@ -1,0 +1,9 @@
+{% for payment in payments %}
+    {{ include('admin/dashboard/_partials/_row_payment.html.twig')}}
+{% else %}
+    <div class="payments-dashboard-item">
+        <div class="payments-dashboard-grid-item">
+            Todavía no hay reservas guardadas en el sistema.
+        </div>
+    </div>
+{% endfor %}

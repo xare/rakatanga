@@ -21,21 +21,48 @@
 		</div>
 		<div class="row mb-4">
 			<div class="col-12">
-				<h3>Últimas Reservas</h3>
+				<div class="row mb-2">
+					<div class="col-9">
+						<h3>Últimas Reservas</h3>
+					</div>
+					<div class="col-3 text-right">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('reservation_index') }}">
+							<i class="fa fa-eye"></i>
+							Ver todas las reservas [{{reservations|length}}]
+						</a>
+					</div>
+				</div>
 				<div class="small reservations-dashboard">
 					{{ include('admin/dashboard/_partials/_block_reservations.html.twig') }}
 				</div>
-				<strong>Total de reservas: {{reservations|length}}</strong>
-				<a href="{{path('reservation_index')}}"><i class="fa fa-eye"></i></a>
+				{# <strong>Total de reservas: {{reservations|length}}</strong>
+				<a href="{{path('reservation_index')}}"><i class="fa fa-eye"></i></a> #}
 			</div>
 		</div>
 		<div class="row mb-4">
-			<div class="col-6">
-					<h3>Últimos Pagos</h3>
-					<table class="table table-striped small">
+			<div class="col-12">
+					<div class="row mb-2">
+					<div class="col-9">
+						<h3>Últimos Pagos</h3>
+					</div>
+					<div class="col-3 text-right">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('payments_index') }}">
+							<i class="fa fa-eye"></i>
+							Ver todas las reservas [{{payments|length}}]
+						</a>
+					</div>
+				</div>
+					<div class="small payments-dashboard">
+						{{ include('admin/dashboard/_partials/_block_payments.html.twig') }}
+					</div>
+					{# <table class="table table-striped small">
 						{% for payment in payments %}
 							<tr>
-								<td width="30%">
+								<td>
 									<a href="{{ path('payments_edit',{'id':payment.id}) }}">
 											<i class="fas fa-eye"></i>
 											{{ payment.ammount|format_currency('EUR') }}
@@ -54,26 +81,37 @@
 							</tr>
 						{% else %}
 							<tr>
-								<td colspan="4">
+								<td colspan="3">
 									Todavía no hay pagos guardados en el sistema.
 								</td>
 							</tr>
 						{% endfor %}
 							<tr>
-								<td colspan="3">
+								<td colspan="2">
 										<strong>Total de pagos: {{ payments|length }}</strong>
 								</td>
 								<td class="fit">
 										<a href="{{path('payments_index')}}"><i class="fa fa-eye"></i></a>
 								</td>
 							</tr>
-					</table>
+					</table> #}
 				</div>
-			{# </div>
-		</div>
-		<div class="row mb-4"> #}
+			</div>
+		<div class="row mb-4">
 			<div class="col-6">
-				<h3>Últimos usuarios registrados</h3>
+				<div class="row mt-2">
+					<div class="col-8">
+						<h3>Últimos Usuario registrados</h3>
+					</div>
+					<div class="col-4 text-right">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('user_index') }}">
+							<i class="fa fa-eye"></i>
+							Ver todos [{{users|length}}]
+						</a>
+					</div>
+				</div>
 				<table class="table table-striped small">
 					{% for user in users %}
 						<tr>
@@ -92,20 +130,22 @@
 							</td>
 						</tr>
 					{% endfor %}
-						<tr>
-							<td colspan="2">
-									<strong>Ver todos:</strong>
-							</td>
-							<td class="fit">
-									<a href="{{path('user_index')}}"><i class="fa fa-eye"></i></a>
-							</td>
-						</tr>
 				</table>
 			</div>
-		</div>
-		<div class="row mb-4">
 			<div class="col-6">
-				<h3>Últimos Viajeros añadidos</h3>
+				<div class="row mt-2">
+					<div class="col-8">
+						<h3>Últimos Acompañantes añadidos</h3>
+					</div>
+					<div class="col-4 text-right">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('travellers_index') }}">
+							<i class="fa fa-eye"></i>
+							Ver todos [{{travellers|length}}]
+						</a>
+					</div>
+				</div>
 				<table class="table table-striped small">
 					{% for traveller in travellers %}
 						<tr>
@@ -122,18 +162,24 @@
 							</td>
 						</tr>
 					{% endfor %}
-						<tr>
-							<td colspan="2">
-									<strong>Ir a lista de viajeros:</strong>
-							</td>
-							<td class="fit">
-									<a href="{{path('travellers_index')}}"><i class="fa fa-eye"></i></a>
-							</td>
-						</tr>
 				</table>
 			</div>
+		</div>
+		<div class="row">
 			<div class="col-6">
-				<h3>Últimos Documentos Añadidos</h3>
+				<div class="row mt-2">
+					<div class="col-8">
+						<h3>Últimos Documentos añadidos</h3>
+					</div>
+					<div class="col-4 text-right">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('document_index') }}">
+								<i class="fa fa-eye"></i>
+								Ver todos [{{documents|length}}]
+						</a>
+					</div>
+				</div>
 				<table class="table table-striped small">
 					{% for document in documents %}
 						<tr>
@@ -159,20 +205,22 @@
 							</td>
 						</tr>
 					{% endfor %}
-						<tr>
-							<td colspan="2">
-									<strong>Total de documentos: {{ documents|length }}</strong>
-							</td>
-							<td class="fit">
-									<a href="{{path('document_index')}}"><i class="fa fa-eye"></i></a>
-							</td>
-						</tr>
 				</table>
 			</div>
-		</div>
-		<div class="row mb-4">
 			<div class="col-6">
-				<h3>Últimas Facturas</h3>
+				<div class="row mt-2">
+					<div class="col-8">
+						<h3>Últimas facturas añadidas</h3>
+					</div>
+					<div class="col-4 text-right">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('invoices_index') }}">
+								<i class="fa fa-eye"></i>
+								Ver todas [{{invoices|length}}]
+						</a>
+					</div>
+				</div>
 				<table class="table table-striped small">
 					{% for invoice in invoices %}
 						<tr>
@@ -191,14 +239,6 @@
 							</td>
 						</tr>
 					{% endfor %}
-						<tr>
-							<td colspan="2">
-								<strong>Total de facturas: {{ invoices|length }}</strong>
-							</td>
-							<td>
-								<a href="{{path('invoices_index')}}"><i class="fa fa-eye"></i></a>
-							</td>
-						</tr>
 				</table>
 			</div>
 		</div>

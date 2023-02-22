@@ -13,8 +13,14 @@ class documentHelper {
 
   }
 
+  public function getDocumentsByUser(User $user) {
+    return $this->documentRepository->getDocumentsByUser($user);
+  }
   public function getDocumentsByReservationByUser(Reservation $reservation) {
     return $this->documentRepository->getDocumentsByReservationByUser($reservation);
+  }
+  public function getDocumentsByTraveller(Travellers $traveller) {
+    return $this->documentRepository->getDocumentsByTraveller($traveller);
   }
 
   public function getDocumentsByReservationByTraveller($reservation, $traveller) {

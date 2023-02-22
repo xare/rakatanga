@@ -57,6 +57,14 @@ class DocumentRepository extends ServiceEntityRepository
     }
     */
 
+    public function getDocumentsByUser($user) {
+        return $this->createQueryBuilder('d')
+        ->andWhere('d.user = :user')
+        ->andWhere('d.traveller IS NULL')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
+    }
     public function getDocumentsByReservationByUser($reservation)
     {
         return $this->createQueryBuilder('d')
@@ -69,7 +77,13 @@ class DocumentRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
-
+    public function getDocumentsByTraveller($traveller) {
+        return $this->createQueryBuilder('d')
+        ->andWhere('d.traveller = :traveller')
+        ->setParameter('traveller', $traveller)
+        ->getQuery()
+        ->getResult();
+    }
     public function getDocumentsByReservationByTraveller(Reservation $reservation, Travellers $traveller)
     {
         return $this->createQueryBuilder('d')

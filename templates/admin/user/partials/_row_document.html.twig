@@ -1,0 +1,18 @@
+<li class="list-group-item">
+    <a
+        href="{{ absolute_url( path("download_document",{ 'id': document.id}
+            ))}}"
+        target="_blank"
+        >
+{% if document.mimetype == 'image/jpeg' %}
+    <img src="{{ absolute_url(path("download_document",{
+                            'id': document.id})) }}"
+        style="width:50px; height:auto" />
+{% else %}
+    <span>
+        <span class="fa fa-download"></span>
+    </span>
+{% endif %}
+<strong>{{document.doctype}}:</strong> <em>{{document.originalFilename}}</em> [{{document.mimetype}}]
+</a>
+</li>

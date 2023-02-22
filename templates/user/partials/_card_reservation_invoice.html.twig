@@ -13,15 +13,31 @@
         </label> #}
 </div>
     {{ form_start(formInvoice) }}
-        {# {{form_row(formInvoice.country, { 'value' : invoice.reservation.user.country })}} #}
-        {{ form_row(formInvoice.name,{label:'Nombre'|trans({}, null, locale)}) }}
-        {{ form_row(formInvoice.nif,{label:'NIF'|trans({}, null, locale)}) }}
-        {{ form_row(formInvoice.address,{label:'Dirección'|trans({}, null, locale)}) }}
-        {{ form_row(formInvoice.city,{label:'Ciudad'|trans({}, null, locale)}) }}
-        {{ form_row(formInvoice.postalcode,{label:'Código postal'|trans({}, null, locale)}) }}
-        {{ form_row(formInvoice.country,{label:'País'|trans({}, null, locale)}) }}
-        <br />
-        <button id="js-submit-invoice" class="btn btn-primary" type="submit">{{ 'Actualizar factura'|trans({}, null, locale) }}</button>
+    <div class="container">
+    <div class="row">
+        <div class="col-6 col-xs-12">
+            {{ form_row(formInvoice.name,{label:'Nombre'|trans({}, null, locale)}) }}
+        </div>
+        <div class="col-6 col-xs-12">
+            {{ form_row(formInvoice.nif,{label:'NIF'|trans({}, null, locale)}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(formInvoice.address,{label:'Dirección'|trans({}, null, locale)}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 col-xs-12">
+            {{ form_row(formInvoice.city,{label:'Ciudad'|trans({}, null, locale)}) }}
+        </div>
+        <div class="col-4 col-xs-12">
+            {{ form_row(formInvoice.postalcode,{label:'Código postal'|trans({}, null, locale)}) }}
+        </div>
+        <div class="col-4 col-xs-12">
+            {{ form_row(formInvoice.country,{label:'País'|trans({}, null, locale)}) }}
+        </div>
+    </div>
+    </div>
     {{ form_end(formInvoice,{ 'render_rest': false }) }}
-    <br />
 

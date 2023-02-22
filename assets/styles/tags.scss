@@ -70,8 +70,9 @@
 }
 
 .tag:not(body).is-success {
-    background-color: #48c78e;
-    color: #fff;
+    /* background-color: #48c78e;
+    color: #fff; */
+    color: #48c78e;
 }
 
 .tag:not(body).is-danger {
@@ -87,4 +88,48 @@
 .tag:not(body).is-info.is-light {
     background-color: #eff5fb;
     color: #296fa8;
+}
+
+.tag-name {
+    width: 8rem;
+}
+
+.has-fontawesome {
+    width: 2rem;
+}
+
+.has-concept {
+    display: block;
+    width: 8rem !important;
+    padding-block-start: 0.2rem;
+    text-align: left;
+}
+
+.has-total {
+    width: 11.5rem !important;
+    text-align: right !important;
+    font-weight: bold !important;
+    justify-content: right !important;
+}
+
+.has-payment {
+    width: 6.5rem !important;
+    text-align: right !important;
+    font-weight: bold !important;
+    justify-content: right !important;
+}
+
+.has-tobepaid {
+    width: 8.5rem !important;
+    text-align: right !important;
+    font-weight: bold !important;
+    justify-content: right !important;
+}
+
+.has-creditcard {
+    background: rgb(204, 15, 53) !important;
+}
+
+.has-creditcard a {
+    color: white !important;
 }
