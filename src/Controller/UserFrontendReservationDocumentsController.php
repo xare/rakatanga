@@ -11,6 +11,7 @@ use App\Repository\LangRepository;
 use App\Repository\ReservationDataRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\TravellersRepository;
+use App\Service\languageMenuHelper;
 use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\IsGranted;
@@ -20,9 +21,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserFrontendReservationDocumentsController extends AbstractController
 {
@@ -32,7 +35,9 @@ class UserFrontendReservationDocumentsController extends AbstractController
         private ReservationRepository $reservationRepository,
         private ReservationDataRepository $reservationDataRepository,
         private TravellersRepository $travellersRepository,
-        private DocumentRepository $documentRepository
+        private DocumentRepository $documentRepository,
+        private TranslatorInterface $translation,
+        private languageMenuHelper $languageMenuHelper
     )
     {
 
@@ -232,28 +237,35 @@ class UserFrontendReservationDocumentsController extends AbstractController
         name: 'download_document',
         methods: ['GET'])]
     public function downloadDocument(
-        Document $document
+        Document $document,
+        AuthorizationCheckerInterface $authorization
     ) {
         $user = $document->getUser();
-
-        //$this->denyAccessUnlessGranted('ROLE_USER', $user);
-        $uploadHelper = $this->uploadHelper;
-        $response = new StreamedResponse(function () use ($document, $uploadHelper) {
+        $currentUser = $this->getUser();
+        if(
+            $user->getUserIdentifier() == $currentUser->getUserIdentifier()
+            || $authorization->isGranted('ROLE_ADMIN'))
+        {
+            //$this->denyAccessUnlessGranted('ROLE_USER', $user);
+            $uploadHelper = $this->uploadHelper;
+            $response = new StreamedResponse(function () use ($document, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');
             $fileStream = $this->uploadHelper->readStream($document->getFilePath(), false);
 
             stream_copy_to_stream($fileStream, $outputStream);
         });
 
-        $response->headers->set('Content-Type', $document->getMimeType());
+            $response->headers->set('Content-Type', $document->getMimeType());
 
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_ATTACHMENT,
-            $document->getOriginalFilename()
-        );
+            $disposition = HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                $document->getOriginalFilename()
+            );
 
-        $response->headers->set('Content-Disposition', $disposition);
-
+            $response->headers->set('Content-Disposition', $disposition);
+        } else {
+            $response = new Response($this->translation->trans('No estás autorizado a acceder a este archivo'));
+        }
         return $response;
     }
 

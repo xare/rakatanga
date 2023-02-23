@@ -33,9 +33,9 @@ class UserFrontendReservationInvoicesController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/user/invoices', 
-            'es' => '{_locale}/usuario/facturas', 
-            'fr' => '{_locale}/utilisateur/factures'], 
+            'en' => '{_locale}/user/invoices',
+            'es' => '{_locale}/usuario/facturas',
+            'fr' => '{_locale}/utilisateur/factures'],
         name: 'frontend_user_invoices')]
     public function userInvoices(
         Request $request,
@@ -45,10 +45,10 @@ class UserFrontendReservationInvoicesController extends AbstractController
     ) {
         $locale = $_locale ? $_locale : $locale;
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-        
+
         // BREADCRUMBS
         $this->breadcrumbsHelper->frontendUserInvoicesBreadcrumbs($locale);
-        
+
 
         $user = $this->getUser();
 
@@ -68,10 +68,10 @@ class UserFrontendReservationInvoicesController extends AbstractController
     }
 
     #[Route(
-        path: '/user/download/invoice/{invoice}', 
+        path: '/user/download/invoice/{invoice}',
         name: 'user-download-invoice')]
     public function downloadInvoice(
-                        Invoices $invoice): Response 
+                        Invoices $invoice): Response
     {
 
         $uploadHelper = $this->uploadHelper;
@@ -80,14 +80,15 @@ class UserFrontendReservationInvoicesController extends AbstractController
             $fileStream = $this->uploadHelper->readStream($invoice->getFilePath(), false);
             stream_copy_to_stream($fileStream, $outputStream);
         });
+
         $response->headers->set('Content-Type', 'application/pdf');
+
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
             $invoice->getOriginalFilename()
         );
 
         $response->headers->set('Content-Disposition', $disposition);
-
         return $response;
     }
 }
