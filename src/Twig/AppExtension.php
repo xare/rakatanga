@@ -64,7 +64,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('listDocumentsByReservationByUser', [$this, 'getDocumentsByReservationByUser']),
             new TwigFunction('listDocumentsByTraveller', [$this, 'getDocumentsByTraveller']),
             new TwigFunction('listDocumentsByUser', [$this, 'getDocumentsByUser']),
-            new TwigFunction('listDocumentsByReservationByTraveller', [$this, 'getDocumentsByTraveller']),
+            new TwigFunction('listDocumentsByReservationByTraveller', [$this, 'getDocumentsByReservationByTraveller']),
             new TwigFunction('hasDoctype', [$this, 'hasDoctype']),
             new TwigFunction('notPresentDoctypeUser', [$this, 'notPresentDoctypeUser']),
             new TwigFunction('notPresentDoctypeTraveller', [$this, 'notPresentDoctypeTraveller']),
