@@ -46,6 +46,7 @@ Encore
     .addEntry('popups', './assets/popups.js')
     .addEntry('readmore', './assets/readmore.js')
     .addEntry('cookie-notice', './assets/cookie-notice.js')
+    .addEntry('admin-reservation', './assets/admin-reservation.js')
 
 //.addStyleEntry('photogalleryStyle', './assets/styles/photogallery.css')
 .addStyleEntry('email', './assets/styles/email.scss')

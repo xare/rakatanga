@@ -1,12 +1,9 @@
 <table class="table">
 {% for traveller in reservation.travellers %}
-  <tr>
-    <td>{{ traveller.prenom }}</td>
-    <td>{{ traveller.nom }}</td>
-    <td>{{ traveller.email }}</td>
-    <td>{{ traveller.telephone }}</td>
-  </tr>
+{{ include('admin/reservation/partials/_row_traveller.html.twig',{'traveller':traveller})}}
 {% else %}
-  Todavía no se han asociado viajeros a esta reserva.
+  <tr>
+    <td>Todavía no se han asociado viajeros a esta reserva.</td>
+  </tr>
 {% endfor %}
 </table>

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Codespromo.
  */
 #[ORM\Table(name: 'codespromo')]
-#[ORM\Entity(repositoryClass: 'CodespromoRepository')]
+#[ORM\Entity(repositoryClass: CodespromoRepository::class)]
 class Codespromo
 {
     /**
@@ -76,7 +76,7 @@ class Codespromo
     #[ORM\Column(nullable: false)]
     private string $statut;
 
-  
+
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTime $dateAjout = null;
 
