@@ -233,14 +233,21 @@ class reservationApp {
         nbpilotes = 0,
         nbaccomp = 0,
         options = []) {
-        const data = { reservation, nbpilotes, nbaccomp, options };
+        const data = {
+            reservation,
+            nbpilotes,
+            nbaccomp,
+            options,
+            '_locale': this.locale
+        };
 
         (
             async() => {
                 try {
                     const response = await $.ajax({
                         url: Routing.generate('ajax-update-changes', {
-                            reservation
+                            reservation,
+                            '_locale': self.locale
                         }),
                         method: 'POST',
                         data
@@ -644,68 +651,6 @@ class reservationApp {
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return emailRegex.test(emailAddress);
         }
-        /* editTraveller(event) {
-            event.preventDefault();
-            const self = this;
-            const traveller = $(event.currentTarget).data('traveller');
-            (async() => {
-                try {
-                    const travellerFormResponse = await $.ajax({
-                        url: Routing.generate('ajax-edit-traveller', {
-                            traveller
-                        }),
-                        type: "GET",
-                    });
-                    console.info(travellerFormResponse);
-                    (async(travellerFormResponse) => {
-                        const { value: formValues } = await Swal.fire({
-                            title: "Edit Traveller",
-                            html: travellerFormResponse.swalHtml,
-                            focusConfirm: false,
-                            preConfirm: () => {
-                                return {
-                                    prenom: $('#traveller_prenom').val(),
-                                    nom: $('#traveller_nom').val(),
-                                    email: $('#traveller_email').val(),
-                                    telephone: $('#traveller_telephone').val(),
-                                    traveller
-                                }
-                            }
-                        });
-                        if (formValues) {
-                            const row = $(event.currentTarget).closest('tr');
-                            const response = self._handleSubmitTraveller(
-                                formValues,
-                                row);
-                        }
-                    })(travellerFormResponse);
-                } catch (jqXHR) {
-                    console.error(jqXHR);
-                }
-            })();
-        }
-
-        _handleSubmitTraveller(formData, row) {
-                const traveller = formData.traveller;
-                (
-                    async() => {
-                        try {
-                            const response = await $.ajax({
-                                type: 'POST',
-                                url: Routing.generate('ajax-save-traveller', {
-                                    traveller
-                                }),
-                                data: formData,
-                                datatype: "json",
-                                encode: true
-                            })
-                            row.html(response.html);
-                        } catch (error) {
-
-                        }
-                    }
-                )();
-            } */
         //activated by .js-assign-to-user in _card_add_travellers_data.html within reservationPayment.html.twig
     assignUserDataToTravellerForm(event) {
         event.preventDefault();
@@ -827,7 +772,8 @@ class reservationApp {
                 try {
                     const response = await $.ajax({
                         url: Routing.generate('ajax-update-changes', {
-                            'reservation': self.$wrapper.data('reservation')
+                            'reservation': self.$wrapper.data('reservation'),
+                            '_locale': self.locale
                         }),
 
                         data: {

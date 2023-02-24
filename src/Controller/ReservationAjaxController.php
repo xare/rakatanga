@@ -684,20 +684,31 @@ class ReservationAjaxController extends AbstractController
     /*} */
 
     #[Route(
-        path: 'ajax/update/changes/{reservation}',
+        path: 'ajax/{_locale}/update/changes/{reservation}',
         options: ['expose' => true],
         name: 'ajax-update-changes',
-        methods: ['POST'])]
+        methods: ['POST', 'GET'])]
+        #[Route(
+            path: [
+                'en' => '/ajax/{_locale}/update/changes/{reservation}',
+                'es' => '/ajax/{_locale}/update/changes/{reservation}',
+                'fr' => '/ajax/{_locale}/update/changes/{reservation}'],
+            methods: ['POST', 'GET'],
+            name: 'ajax-update-changes',
+            options: ['expose' => true])]
     public function ajaxUpdateChanges(
         Request $request,
         Reservation $reservation,
+        string $_locale = null,
+        string $locale = "es"
     ) {
+        $locale = $_locale ? $_locale : $locale;
+        //$request->getSession()->set('_locale', $locale);
         $reservationData = [
             'nbpilotes' => $request->request->get('nbpilotes'),
             'nbaccomp' => $request->request->get('nbaccomp'),
             'finalOptions' => $request->request->get('options')
         ];
-        dump($reservationData['finalOptions']);
         /**
           * @var User $user
           */
@@ -716,8 +727,11 @@ class ReservationAjaxController extends AbstractController
             $reservationData,
             $customerData,
             $request->getLocale());
-        dump($reservation);
-        $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', ['reservation' => $reservation]);
+
+        $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', [
+                'reservation' => $reservation,
+                '_locale' => $locale
+            ]);
 
         return $this->json([
             'html' => $html,

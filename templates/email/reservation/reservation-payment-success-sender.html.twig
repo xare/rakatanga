@@ -52,7 +52,7 @@
             <p><strong>{{'Pagos'|trans}}:</strong>
             <ul>
                 {% for payment in reservation.payments %}
-                    {{ payment.ammount|format_currency('eur', {locale: app.request.getLocale() }) }}
+                    {{ payment.ammount|format_currency('eur', {'locale': app.request.getLocale() }) }}
                 {% endfor %}
             </ul>
             </p>
