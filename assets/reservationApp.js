@@ -64,8 +64,8 @@ class reservationApp {
         )
         this.$wrapper.on(
             'click',
-            '.js-assign-to-user',
-            this.assignUserDataToTravellerForm.bind(this)
+            '[data-action="js-assign-to-user"]',
+            this.travellersApp.assignUserDataToTravellerForm.bind(this)
         );
 
         /* this.$wrapper.on(
@@ -162,7 +162,7 @@ class reservationApp {
         data.locale = $('html').attr('lang');
         $('[data-container="nb' + type + '"]').empty().html(nb);
         if (data.reservation) {
-            this._addTravellersForms(
+            this.travellersApp._addTravellersForms(
                 data.reservation,
                 data.nbpilotes,
                 data.nbaccomp);
@@ -202,7 +202,18 @@ class reservationApp {
         )();
     }
 
-    _addTravellersForms(reservation, nbpilotes, nbaccomp) {
+    /* _addTravellersForms(reservation, nbpilotes, nbaccomp) {
+        console.info(parseInt(nbpilotes) + parseInt(nbaccomp));
+        if (parseInt(nbpilotes) + parseInt(nbaccomp) == 1) {
+            $('#js-reservation-payment')
+                .removeAttr('title')
+                .removeAttr('data-bs-tooltip')
+                .removeClass('disabled');
+            console.info('disabled, should have been removed');
+            document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { '_locale': this.locale, 'reservation': reservation });
+            return false;
+        }
+        console.info('outside of reservation');
         const isInitialized = this.$calculator.data('isInitialized');
         const self = this;
         (
@@ -227,7 +238,7 @@ class reservationApp {
                 }
             }
         )();
-    }
+    } */
     _updateReservation(
         reservation,
         nbpilotes = 0,
@@ -545,7 +556,7 @@ class reservationApp {
                         }
                     })();
                 }
-                this._addTravellersForms(
+                this.travellersApp._addTravellersForms(
                     response.reservationId,
                     data.nbPilotes,
                     data.nbAccomp);
@@ -600,7 +611,7 @@ class reservationApp {
         const reservationId = this.$calculator.data('reservation');
         const $travellersForm = $('[data-container="js-travellers-form"]');
         const formData = $travellersForm.find('input').serialize();
-        const $travellersFormContainers = $travellersForm.find('.js-travellers-form-container');
+        const $travellersFormContainers = $travellersForm.find('[data-container="js-travellers-form-container"]');
         console.info(this._validateForm());
         if (!this._validateForm()) {
             const InvalidResponse = Swal.fire({
@@ -652,31 +663,31 @@ class reservationApp {
             return emailRegex.test(emailAddress);
         }
         //activated by .js-assign-to-user in _card_add_travellers_data.html within reservationPayment.html.twig
-    assignUserDataToTravellerForm(event) {
-        event.preventDefault();
-        const self = this;
-        const $formContainer = $(event.currentTarget).closest('.js-travellers-form-container');
+        /* assignUserDataToTravellerForm(event) {
+            event.preventDefault();
+            const self = this;
+            const $formContainer = $(event.currentTarget).closest('[data-container="js-travellers-form-container"]');
 
-        $formContainer
-            .siblings('.js-contains-button')
-            .find('.js-assign-to-user')
-            .remove();
-        (async() => {
-            try {
-                const response = await $.ajax({
-                    url: Routing.generate('ajax-assign-user'),
-                    type: "POST"
-                });
-                $formContainer.find('[name*="nom"]').val(response.user.nom);
-                $formContainer.find('[name*="prenom"]').val(response.user.prenom);
-                $formContainer.find('[name*="email"]').val(response.user.email);
-                $formContainer.find('[name*="telephone"]').val(response.user.telephone);
-            } catch (jqXHR) {
-                console.error(jqXHR);
-                this._notifyErrorToUser(jqXHR);
-            }
-        })();
-    }
+            $formContainer
+                .siblings('.js-contains-button')
+                .find('.js-assign-to-user')
+                .remove();
+            (async() => {
+                try {
+                    const response = await $.ajax({
+                        url: Routing.generate('ajax-assign-user'),
+                        type: "POST"
+                    });
+                    $formContainer.find('[name*="nom"]').val(response.user.nom);
+                    $formContainer.find('[name*="prenom"]').val(response.user.prenom);
+                    $formContainer.find('[name*="email"]').val(response.user.email);
+                    $formContainer.find('[name*="telephone"]').val(response.user.telephone);
+                } catch (jqXHR) {
+                    console.error(jqXHR);
+                    this._notifyErrorToUser(jqXHR);
+                }
+            })();
+        } */
 
     /*  setReservationStatus(event) {
          event.preventDefault();

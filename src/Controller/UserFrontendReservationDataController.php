@@ -46,11 +46,10 @@ class UserFrontendReservationDataController extends AbstractController
         name: 'frontend_user_reservation_data')]
       public function frontend_user_reservation_data(
                             Request $request,
-                            string $_locale = null,
                             Reservation $reservation,
-                            ReservationDataRepository $reservationDataRepository,
                             logHelper $logHelper,
-                            string $locale = 'es'
+                            string $locale = 'es',
+                            string $_locale = null,
         ) {
           $locale = $_locale ?: $locale;
 

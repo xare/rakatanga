@@ -867,13 +867,11 @@ class ReservationAjaxController extends AbstractController
             Request $request
         ){
             $reservationId = $request->request->get('reservation');
-            dump($reservationId);
             $renderArray = [];
             $renderArray['nbpilotes'] = $request->request->get('nbpilotes');
             $renderArray['nbaccomp'] = $request->request->get('nbaccomp');
             if(isset($reservationId) ) {
                 $reservation = $this->reservationRepository->find($reservationId);
-                dump(count($reservation->getTravellers()));
                 foreach ($reservation->getTravellers() as $traveller){
                     dump($traveller);
                 }

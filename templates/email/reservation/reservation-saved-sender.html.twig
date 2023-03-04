@@ -5,11 +5,11 @@
     <row class="welcome">
         <columns>
             <spacer size="35"></spacer>
-            <h4>
+            <h4 style="color:white;">
                 <center>
                     {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}],
                     {{ 'hemos recibido tu reserva'|trans}}. {{'Te agradecemos el haber hecho la reserva para el viaje'|trans }}:<br />
-                    "{{reservation.date.travel.mainTitle}}
+                    "{{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}
                 </center>
             </h4>
             <spacer size="10"></spacer>
@@ -25,7 +25,7 @@
                 </center>
             </h2>
             <p>{{ 'Recuerda que para formalizar todo el proceso de reserva necesitamos recibir los datos y la documentación relacionados con tu reserva. Así que si tienes a mano tus documentos de identidad (pasaporte, visado, permiso de conducir), y los datos de tu seguro de asistencia así como de tu transfer de aeropuerto te pedimos que vengas a este vínculo a rellenar los datos'|trans }}.</p>
-            <button href="{{absolute_url(path('frontend_user_reservation_data',{'reservation':reservation.id}))}}">{{ 'Añadir datos y documentación'|trans }}</button>
+            <button href="{{absolute_url(path('frontend_user_reservation_data',{'reservation':reservation.id,'_locale':app.request.getLocale()}))}}">{{ 'Añadir datos y documentación'|trans }}</button>
         </columns>
     </row>
     <spacer size="30"></spacer>
@@ -44,11 +44,11 @@
             <table>
                 <tr>
                     <td><strong>{{ 'País'|trans }}</strong>:</td>
-                    <td> {{ reservation.date.travel.category.name }}</td>
+                    <td> {{ renderLocalizedCategory(reservation.date.travel.category.id, app.request.getLocale()) }}</td>
                 </tr>
                 <tr>
                     <td><strong>{{ 'Viaje'|trans }}</strong>:</td>
-                    <td>{{reservation.date.travel.mainTitle}}</td>
+                    <td>{{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}</td>
                 </tr>
                 <tr>
                     <td><strong>{{ 'Fecha'|trans }}</strong>:</td>
@@ -209,10 +209,10 @@
         <columns>
             <p>
                 {{ 'La reserva implica la aceptación total de nuestras'|trans }}
-                <a href="{{ path( 'main-content',{
+                <a href="{{ absolute_url(path( 'main-content',{
                     '_locale': app.request.locale,
                     'slug' : 'cgv'
-                }) }}">{{ 'condiciones generales de venta'|trans }}</a>.
+                })) }}">{{ 'condiciones generales de venta'|trans }}</a>.
             </p>
         </columns>
     </row>
@@ -236,10 +236,10 @@
             <p>{{ 'Para evitar la comisión de gestión a través de la pasarela de pagos de Paypal, recomendamos el pago por transferencia bancaria'|trans }}.</p>
 
             <p>{{ 'Puede elegir pagar la reserva o la totalidad del viaje a través de nuestra página de pago'|trans }} :</p>
-            <button href="{{path('reservation_payment',{
+            <button href="{{absolute_url(path('reservation_payment',{
                 '_locale': app.request.locale,
                 'reservation':reservation.id
-            }) }}">{{'Pagar'|trans}}</button>
+            })) }}">{{'Pagar'|trans}}</button>
 
             <p> {{'Para acceder a los datos de la reserva es posible utilizando su cuenta de usuario donde puede acceder a su espacio personalizado y así añadir, corregir y actualizar datos de su reserva'|trans}}.</p>
             <p>{{'Nos comunicaremos con usted en breve para la organización del viaje'|trans}}.</p>

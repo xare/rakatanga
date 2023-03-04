@@ -72,7 +72,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $uploadedDocument,
             [
                 new NotBlank([
-                    'message' => 'Please select a file to upload',
+                    'message' => $this->translation->trans('Tu archivo no cumple las condiciones para ser subido al servidor') .'. '.$this->translation->trans('Este formulario se recargará automáticamente en 10 segundos, alternativamente, puedes dar a guardar y se salvarán los datos que has incluido en el formulario y se recargará la página.') ,
                 ]),
                 new File([
                     'maxSize' => '5M',
@@ -155,7 +155,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         ];
         $renderArray['documents'] = $documentsArray;
         $dropHtml = $this->renderView(
-            'user/_renderFile_in_dropzone.html.twig', $renderArray
+            'user/partials/_renderFile_in_dropzone.html.twig', $renderArray
         );
         $listHtml = $this->renderView('user/_documents_list.html.twig', $renderArray);
         if($travellerId != null) $listHtml = $this->renderView('user/_documents_list_traveller.html.twig', $renderArray);
@@ -359,7 +359,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
 
         $listHtml = $this->renderView('user/_documents_list.html.twig', $listHtmlRenderArray);
 
-        $dropHtml = $this->renderView('user/_dropzone_input.html.twig', $dropHtmlRenderArray);
+        $dropHtml = $this->renderView('user/partials/_dropzone_input.html.twig', $dropHtmlRenderArray);
 
         return $this->json(
             [

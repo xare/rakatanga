@@ -2,7 +2,7 @@ const routes = require('../public/build/fos_js_routes.json');
 import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.js';
 import Dropzone from 'dropzone';
 Routing.setRoutingData(routes);
-
+import Swal from 'sweetalert2';
 class DocumentsList {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
@@ -48,7 +48,6 @@ class DocumentsList {
 
     initializeDropzone(type, travellerId = null) {
         const self = this;
-        console.info(travellerId);
         $(`#js-${type}-dropzone`).dropzone({
             paramName: 'document',
             /* params: {
@@ -58,7 +57,6 @@ class DocumentsList {
             maxFiles: 1,
             init: function() {
                 this.on('sending', (file, xhr, data) => {
-                    console.info(travellerId);
                     data.append('type', type);
                     if (travellerId != null)
                         data.append('traveller', travellerId);
@@ -68,11 +66,26 @@ class DocumentsList {
                     $('.js-documents-list').html(response.listHtml);
                 });
                 this.on("maxfilesexceeded", function(file) {
-                    console.error("No more files please!");
+                    Swal.fire({
+                        'title': 'MaxFilesExceeded',
+                        'text': 'MaxFilesExceeded'
+                    });
                 });
-                this.on('error', (file, data) => {
-                    if (data.detail) {
-                        this.emit('error', file, data.detail);
+                this.on('error', (file, errorMessage) => {
+                    console.info(errorMessage.detail);
+                    Swal.fire({
+                        'title': 'Error',
+                        'html': errorMessage.detail
+                    });
+                    if (errorMessage.detail) {
+                        console.info(type);
+                        console.info('before setTimeout');
+                        this.emit('error', file, errorMessage);
+                        setTimeout(function() {
+                            console.info('inside setTimeout', type);
+                            window.location.reload();
+                            /* $(`#js-${type}-dropzone`).parent().html("error"); */
+                        }, 10000);
                     }
                 });
             }

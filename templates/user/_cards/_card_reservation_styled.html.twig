@@ -1,9 +1,9 @@
 {% set documentsByUser =  listDocumentsByReservationByUser( reservation ) %}
 
 {% macro showUsersDocumentsLine(documents, reservation) %}
-{% set doctypesArray = ['visa','drivers','passport'] %}
-{% set reservationUserDataFields = getUserReservationDataFields(reservation, reservation.user) %}
-{% set reservationUserRatio = ((reservationUserDataFields.filledFieldsCount/reservationUserDataFields.fieldsCount) * 100)|round(0) %}
+  {% set doctypesArray = ['visa','drivers','passport'] %}
+  {% set reservationUserDataFields = getUserReservationDataFields(reservation, reservation.user) %}
+  {% set reservationUserRatio = ((reservationUserDataFields.filledFieldsCount/reservationUserDataFields.fieldsCount) * 100)|round(0) %}
   <div class="tags has-addons">
     <span class="tag is-light">
       <i class="fas fa-motorcycle"></i>
@@ -53,6 +53,7 @@
 
 {% endmacro %}
 {% macro showTravellersDocumentsLine(documents, traveller,  reservation) %}
+  {% if traveller.email != app.user.email %}
   {% set doctypesArray = ['passport','visa','drivers'] %}
   {% set reservationTravellerDataFields = getTravellerReservationDataFields(reservation, traveller) %}
   {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}
@@ -102,11 +103,16 @@
     </span>
   </div>
   <br />
+  {% endif %}
 {% endmacro %}
 <div class="card mb-2">
   <div class="card-header">
+  <div class="row">
     {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
-    <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
+    <div class="col-2">
+      <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
+    </div>
+    <div class="col-10">
     <h2>{{ reservation.code }} - {{renderLocalizedTravel(reservation.date.travel.id,locale)}}
     <div class="tags has-addons me-1">
       <span class="tag is-danger is-light">{{reservation.date.debut|date('d/m/Y')}}</span>
@@ -132,6 +138,8 @@
     </div>
 
     </h2>
+    </div>
+  </div>
   </div>
   <div class="card-body reservation-container">
     <div class="reservationOptions box">

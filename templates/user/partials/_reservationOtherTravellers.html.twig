@@ -1,6 +1,6 @@
 <ul class="list-group">
   {% for travellerItem in reservation.travellers %}
-    {% if travellerItem != traveller %}
+    {% if traveller is defined and travellerItem != traveller %}
       <li class="list-group-item">
         {{ travellerItem.prenom}} {{travellerItem.nom}}
         <a

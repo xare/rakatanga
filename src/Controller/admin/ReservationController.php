@@ -7,27 +7,31 @@ use App\Entity\Reservation;
 use App\Form\ReservationType;
 use App\Repository\OptionsRepository;
 use App\Repository\ReservationRepository;
+use App\Repository\UserRepository;
 use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/admin/reservation')]
-class ReservationController extends MainadminController
+class ReservationController extends AbstractController
 {
-
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ReservationRepository $reservationRepository,
-        private PaginatorInterface $paginator)
+        private PaginatorInterface $paginator,
+        private UserRepository $userRepository)
     {
 
     }
 
-    #[Route(path: '/', name: 'reservation_index', methods: ['GET'])]
+    #[Route(
+        path: '/',
+        name: 'reservation_index',
+        methods: ['GET'])]
     public function index(
         Request $request
         ): Response {
@@ -144,14 +148,24 @@ class ReservationController extends MainadminController
         ]);
     }
 
-    #[Route(path: '/{id}/edit', name: 'reservation_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Reservation $reservation): Response
+    #[Route(
+        path: '/{id}/edit',
+        name: 'reservation_edit',
+        methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        Reservation $reservation): Response
     {
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
         // dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->userRepository->findOneBy(
+                ['email' => $request->request->get('user')]
+            );
+            $reservation->setUser($user);
+            $this->entityManager->persist($reservation);
             $this->entityManager->flush();
 
             return $this->redirectToRoute('reservation_index');

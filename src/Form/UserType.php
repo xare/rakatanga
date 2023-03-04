@@ -57,14 +57,18 @@ class UserType extends AbstractType
             )
             ->add(
                 'langue',
-                LanguageType::class,
+                ChoiceType::class,
                 [
-                    'preferred_choices' => [
+                    'choices' => [
                         'español' => 'es',
                         'francés' => 'fr',
                         'inglés' => 'en',
-                        'alemán' => 'de',
                     ],
+                    /* 'preferred_choices' => [
+                        'español' => 'es',
+                        'francés' => 'fr',
+                        'inglés' => 'en',
+                    ], */
                 ]
             )
             ->add('address', TextType::class)

@@ -17,13 +17,13 @@
             {% for article in articles %}
                 <div class="card card-default mb-5 shadow">
                     <div class="card-body">
-                        <div class="row"> 
-                            {{ include('blog/_article.html.twig',{ 'article' : article }) }} 
+                        <div class="row">
+                            {{ include('blog/_article.html.twig',{ 'article' : article }) }}
                         </div>
                     </div>
                 </div>
             {% else %}
-            <p>{{ 'Todavía no hemos iniciado nuestro blog pero puedes visitar el blog en español en '|trans }}
+            <p>{{ 'Todavía no hemos iniciado nuestro blog pero puedes visitar el blog en español en'|trans }}
                 <a href="{{path('blog',{_locale:'es'} )}}">Blog</a>
             </p>
             {% endfor %}
@@ -36,6 +36,6 @@
     </div>
 </div>
 
-    
+
 </div>
 {% endblock %}

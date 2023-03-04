@@ -69,6 +69,7 @@ class ReservationRepository extends ServiceEntityRepository
     public function listAll()
     {
         return $this->createQueryBuilder('r')
+            ->orderBy('r.date_ajout','DESC')
             ->getQuery();
     }
 

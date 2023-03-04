@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Options;
 use App\Entity\Reservation;
 use App\Entity\Travellers;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,7 +28,12 @@ class ReservationType extends AbstractType
             ->add('date_paiement', DateTimeType::class) */
             // ->add('options', TextType::class)
             ->add('date')
-            ->add('user', TextType::class)
+            /* ->add('user', EntityType::class, [
+                'class' => User::class,
+                'placeholder' => 'Elige Usuario: ',
+                'choice_label' => 'email',
+            ]) */
+            //->add('user', TextType::class)
             /* ->add('travellers', TextType::class) */
         ;
     }

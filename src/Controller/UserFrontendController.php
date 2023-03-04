@@ -117,24 +117,22 @@ class UserFrontendController extends AbstractController
         string $_locale = null,
         string $locale = 'es'
     ):Response {
-        dump("salut");
-        $locale = $_locale ?: $locale;
-
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        $locale = $user->getLangue() ? : $_locale;
+        dump($locale);
         // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
 
         $this->breadcrumbsHelper->frontendUserSettingsBreadcrumbs($locale);
 
         // Create User Form
-        /**
-         * @var User $user
-         */
-        $user = $this->getUser();
-        dump($user);
+
         $form = $this->createForm(UserType::class, $user);
-        dump($form);
         $form->handleRequest($request);
-        dump($authenticationUtils->getLastAuthenticationError());
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $userData = $form->getData();
@@ -152,7 +150,7 @@ class UserFrontendController extends AbstractController
         }
 
         return $this->render('user/user_settings.html.twig', [
-            'locale' => $locale,
+            '_locale' => $locale,
             'langs' => $urlArray,
             'form' => $form->createView(),
         ]);

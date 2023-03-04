@@ -13,9 +13,10 @@
                     {% endif %}
                 {% endif %}
                 <div
-                    class="js-travellers-form-container{% if i == 1 or i == (nbpilotes+1) %}
+                    class="{% if i == (nbpilotes+1) %}
                          js-contains-button
                     {% endif %}"
+                    data-container="js-traveller-form-container"
                     data-validation-title="{{'El formulario no está completo'|trans}}"
                     data-validation-message="{{'Faltan campos por rellenar correctamente'|trans}}"
                     >
@@ -32,9 +33,10 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            {% if i == 1 or i == (nbpilotes+1) %}
+                            {% if i == (nbpilotes+1) %}
                             <button
-                                class="btn btn-secondary small js-assign-to-user">
+                                class="btn btn-secondary small"
+                                data-action="js-assign-to-user">
                                     {{'Asignarme este puesto' | trans}}
                             </button>
                             {% endif %}
