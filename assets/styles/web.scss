@@ -762,13 +762,14 @@ footer hr {
     }
 }
 
-@media (max-width: 1200px) {
+
+/* @media (max-width: 1200px) {
     a.nav-link {
         font-size: 0.6rem !important;
         padding-left: 3px !important;
         padding-right: 3px !important;
     }
-}
+} */
 
 @media (max-width: 767px) {
     .navbar-default {
@@ -822,7 +823,7 @@ footer hr {
 /* ---------- Responsive Table ---------- */
 
 
-/* 
+/*
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.

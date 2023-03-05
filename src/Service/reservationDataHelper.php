@@ -84,21 +84,22 @@ class reservationDataHelper
 
         $totalDueAmmount = 0;
         foreach ($payments as $payment) {
-            $totalDueAmmount = +$payment->getAmmount();
+            $totalDueAmmount = $totalDueAmmount + $payment->getAmmount();
         }
 
         return $totalDueAmmount;
     }
 
-    public function getReservationDueAmmount(Reservation $reservation)
+    public function getReservationDuePayment(Reservation $reservation)
     {
         dump($reservation);
         dump($this->getReservationAmmount($reservation));
         $totalAmmount = $this->getReservationAmmount($reservation);
         $totalPayments = $this->getReservationTotalPayments($reservation);
-
+        dump($totalAmmount);
+        dump($totalPayments);
         $dueAmmount = $totalAmmount - $totalPayments;
-
+        dump($dueAmmount);
         return $dueAmmount;
     }
 

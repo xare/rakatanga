@@ -20,7 +20,7 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: Dates::class, inversedBy: 'reservations')]
     private ?Dates $date = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?User $user = null;
 

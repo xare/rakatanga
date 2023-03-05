@@ -22,8 +22,7 @@ class DatesType extends AbstractType
         $builder
             ->add('travel', EntityType::class, [
                 'class' => Travel::class,
-                'placeholder' => 'Elige Viaje: ',
-                'choice_label' => 'main_title',
+                'placeholder' => 'Elige Viaje: '
             ])
             ->add('debut', null, [
                 'widget' => 'single_text',

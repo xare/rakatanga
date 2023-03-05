@@ -9,10 +9,11 @@
 	{% set prixPilote = reservation.date.prixPilote %}
 	{% set prixAccomp = reservation.date.prixAccomp %}
 	{% set discount = 0 %}
+	{% set totalPayments = 0 %}
 	{% if reservation.payments|length > 0 %}
-		{% set payment = reservation.payments.first.ammount %}
-	{% else %}
-		{% set payment = 0 %}
+		{% for payment in reservation.payments %}
+			{% set totalPayments = totalPayments + payment.ammount %}
+		{% endfor %}
 	{% endif %}
 	{% set discountType = "ammount" %}
 	{% set discount = 0 %}
@@ -42,7 +43,7 @@
 	{% if prixAccomp is not defined %}
 		{% set prixAccomp = 0 %}
 	{% endif %}
-	{% set payment = 0 %}
+	{% set totalPayments = 0 %}
 	{% if optionsJson is not defined %}
 		{% set optionsJson = "" %}
 	{% endif %}
@@ -151,18 +152,18 @@
 									</tr>
 								</tbody>
 							{% if reservation != null %}
-								{% if payment > 0 %}
+								{% if totalPayments > 0 %}
 									<tbody class="js-payment-footer">
 										<tr>
 											<th>
 												{{ 'Total pagado'|trans|upper }}
 											</th>
 											<td align="right">
-												{{ payment|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+												{{ totalPayments|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
 											</td>
 										</tr>
 									</tbody>
-									{% set toBePaid = totalPrice - payment %}
+									{% set toBePaid = totalPrice - totalPayments %}
 										<tbody class="js-left-payment">
 											<tr>
 												<th>

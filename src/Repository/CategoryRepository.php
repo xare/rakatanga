@@ -158,6 +158,8 @@ class CategoryRepository extends ServiceEntityRepository
                 ->innerJoin(Lang::class, 'l', Join::WITH, 'l.id = ct.lang')
                 ->andWhere('l.iso_code = :locale')
                 ->setParameter('locale', $locale)
+                ->andWhere('c.status = :status')
+                ->setParameter('status', 'yes')
                 ->getQuery()
                 ->getResult();
     }

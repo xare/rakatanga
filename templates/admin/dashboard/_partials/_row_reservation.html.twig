@@ -38,10 +38,10 @@
     <br />
     {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}<br />
     <div class="tags has-addons">
-      <span class="tag is-dark">
+      <span class="tag">
         <i class="fas fa-receipt"></i>
       </span>
-      <span class="tag is-info">
+      <span class="tag">
         {{ reservation.invoice.invoiceNumber}}
       </span>
       <span class="tag is-light">
@@ -56,13 +56,17 @@
   </div>
   <div class="reservations-dashboard-grid-item">
     <div class="tags has-addons">
-      <span class="tag is-dark"><i class="fas fa-user"></i></span>
-      <span class="tag is-link">
+      <span class="tag"><i class="fas fa-user"></i></span>
+      <span class="tag is-light">
+          {{ reservation.user.prenom }} {{ reservation.user.nom }}
+        </a>
+      </span>
+      <span class="tag is-light">
         <a
           href="{{path('user_edit',{'id':reservation.user.id})}}"
           data-bs-toggle="tooltip"
           title="Visualizar los datos del usuario">
-          {{ reservation.user.prenom }} {{ reservation.user.nom }}[{{ reservation.user }}]
+          [{{ reservation.user }}]
         </a>
       </span>
     </div>
@@ -70,13 +74,13 @@
 
   <div class="reservations-dashboard-grid-item">
     <div class="tags has-addons">
-      <span class="tag is-dark"><i class="fas fa-motorcycle"></i></span>
-      <span class="tag is-info">{{reservation.nbpilotes}}</span>
+      <span class="tag"><i class="fas fa-motorcycle"></i></span>
+      <span class="tag">{{reservation.nbpilotes}}</span>
       <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
     </div>
     <div class="tags has-addons">
-      <span class="tag is-dark"><i class="fas fa-user"></i></span>
-      <span class="tag is-info">{{reservation.nbaccomp}}</span>
+      <span class="tag"><i class="fas fa-user"></i></span>
+      <span class="tag">{{reservation.nbaccomp}}</span>
       <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
     </div>
   </div>

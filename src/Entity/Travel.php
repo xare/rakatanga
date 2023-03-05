@@ -227,7 +227,7 @@ class Travel
 
     public function __toString()
     {
-        return $this->getCategory().' '.$this->main_title;
+        return $this->getCategory().' - '.$this->main_title;
     }
 
     /**

@@ -220,7 +220,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         return $this->container
             ->get(reservationDataHelper::class)
-            ->getReservationDueAmmount($reservation);
+            ->getReservationDuePayment($reservation);
     }
     public function getDocumentsByUser(User $user)
     {

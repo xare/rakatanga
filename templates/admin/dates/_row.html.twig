@@ -1,5 +1,5 @@
     {% set rowStyle = 'open' %}
-    
+
     {% if date.fin|date("U") < "now"|date("U") %}
         {% set rowStyle = 'full' %}
     {% endif %}
@@ -7,9 +7,9 @@
         {# <td>{{ date.id }}</td> #}
         <td>
             <a href="{{ path('dates_edit', {'id': date.id}) }}">
-                <strong>{{ date.travel.category }}</strong> <br /> 
+                <strong>{{ date.travel.category }}</strong> <br />
                 {{ date.travel }}
-            </a>        
+            </a>
         </td>
         <td>{{ date.debut ? date.debut|date('d-m-Y') : '' }}</td>
         <td>{{ date.fin ? date.fin|date('d-m-Y') : '' }}</td>
@@ -22,7 +22,7 @@
         <td>{{ date.prixAccomp|format_currency('EUR', {fraction_digit: 0}) }}</td>
         <td>{{ date.reservations|length + date.oldreservations|length }}</td>
         <td>
-            <span class="badge bg-{% if date.statut == "open" %}success{% elseif date.statut == "closed" or date.statut == "full" %}danger{% endif %}">
+            <span class="badge bg-{% if date.statut == "open" or date.statut == "abierto" %}success{% elseif date.statut == "closed" or date.statut == "full" %}danger{% endif %}">
                 {{ date.statut }}
             </span>
         </td>
@@ -31,7 +31,7 @@
                 <i class="fa fa-eye"></i>
             </a>
         </td> #}
-        {# <td>    
+        {# <td>
             <a href="{{ path('dates_edit', {'id': date.id}) }}" class="btn btn-info">
                 <i class="fa fa-edit"></i>
             </a>

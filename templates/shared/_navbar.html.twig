@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top"
+<nav class="navbar navbar-expand-xl navbar-light fixed-top"
 {{ is_granted('IS_IMPERSONATOR') ? 'style="background-color: #f4d38b !important"' }}>
   <div class="container">
       <a class="navbar-brand" href="{{path('index',{'_locale':app.request.getLocale()})}}">
@@ -8,11 +8,11 @@
       <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-    <div id="navbar" class="navbar-collapse collapse"> 
+    <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             {% for menuItem in menu %}
               <li class="nav-item">
-                <a class="nav-link" 
+                <a class="nav-link"
                     href="{{app.request.baseUrl ~ '/' ~ app.request.getLocale() ~ '/' ~ menuItem.slug ~ ''}}">
                     {{ menuItem.title }}
                 </a>
@@ -28,4 +28,4 @@
           {{ include('shared/_locale_switcher.html.twig') }}
         </div>
   </div>
-</nav> 
+</nav>

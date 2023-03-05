@@ -727,7 +727,7 @@ class ReservationAjaxController extends AbstractController
             $reservationData,
             $customerData,
             $request->getLocale());
-
+            dump($reservation);
         $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', [
                 'reservation' => $reservation,
                 '_locale' => $locale

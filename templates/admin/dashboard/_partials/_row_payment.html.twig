@@ -12,11 +12,11 @@
     </a></h4>
     {{payment.reservation.code}}<br />
     [{{ renderReservationAmmount(payment.reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}]
-    <div class="tags has-addons">
-      <span class="tag is-dark">
+    <div class="tags has-addons mt-2">
+      <span class="tag">
         <i class="fas fa-receipt"></i>
       </span>
-      <span class="tag is-info">
+      <span class="tag">
         {{ payment.reservation.invoice.invoiceNumber }}
       </span>
       <span class="tag is-light">
@@ -30,7 +30,8 @@
     </div>
   </div>
   <div class="payments-dashboard-grid-item">
-  {{ payment.reservation.user.prenom }} {{ payment.reservation.user.nom }} [{{ payment.reservation.user }}]
+  {{ payment.reservation.user.prenom }} {{ payment.reservation.user.nom }}<br />
+  <small>[{{ payment.reservation.user }}]</small>
     <h6 class="mb-0">
         {{ renderLocalizedCategory(payment.reservation.date.travel.category.id,'es') }}
     </h6>

@@ -380,6 +380,13 @@ fieldset {
 .payments-dashboard {
     display: grid;
     gap: 1rem;
+}
+
+.reservations-dashboard {
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+}
+
+.payments-dashboard {
     grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
 }
 
@@ -388,7 +395,7 @@ fieldset {
 }
 
 .payments-dashboard {
-    grid-auto-rows: 9.5rem;
+    grid-auto-rows: 10.5rem;
 }
 
 .reservations-dashboard a,
@@ -421,9 +428,9 @@ fieldset {
 }
 
 .payments-dashboard-item {
-    grid-template-columns: repeat(auto-fill, minmax(8.1rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
     grid-template-rows: auto;
-    grid-template-areas: 'left right right';
+    grid-template-areas: 'left left right right right';
 }
 
 .reservations-dashboard-grid-item>img {

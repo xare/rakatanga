@@ -244,12 +244,13 @@ class reservationApp {
         nbpilotes = 0,
         nbaccomp = 0,
         options = []) {
+        const locale = this.locale;
         const data = {
             reservation,
             nbpilotes,
             nbaccomp,
             options,
-            '_locale': this.locale
+            '_locale': locale
         };
 
         (
@@ -258,7 +259,7 @@ class reservationApp {
                     const response = await $.ajax({
                         url: Routing.generate('ajax-update-changes', {
                             reservation,
-                            '_locale': self.locale
+                            '_locale': locale
                         }),
                         method: 'POST',
                         data
