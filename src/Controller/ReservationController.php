@@ -195,7 +195,7 @@ class ReservationController extends AbstractController
 
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $totalAmmount = $this->reservationDataHelper->getReservationDueAmmount($reservation);
+        $totalAmmount = $this->reservationDataHelper->getReservationDuePayment($reservation);
 
         $ammount = $request->request->get('ammount') ? $request->request->get('ammount') : $totalAmmount;
 

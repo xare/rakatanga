@@ -43,7 +43,8 @@ class reservationHelper
                         array $data,
                         Dates $date,
                         User $user,
-                        string $locale
+                        string $locale,
+                        string $codepromoString = null
                         ): Reservation {
         $reservation = $this->_isReserved($user, $date);
 
@@ -52,16 +53,20 @@ class reservationHelper
             /**
              * @var Codespromo $codepromo
              */
-            $codepromo = $this->codespromoRepository
+            /* $codepromo = $this->codespromoRepository
                             ->findOneBy([
                                 'email' => $user->getEmail(),
-                            ]);
-            if (null == $codepromo) {
+                            ]); */
+            /* if (null == $codepromo) {
                 $codepromo = $this->codespromoRepository
                                 ->findOneBy([
                                     'user' => $user,
                                 ]);
-            }
+            } */
+            $codepromo = $this->codespromoRepository
+                                ->findOneBy([
+                                    'code' => $codepromoString,
+                                ]);
             dump($codepromo);
             $reservation->setNbpilotes($data['nbPilotes']);
             $reservation->setNbAccomp($data['nbAccomp']);
@@ -141,14 +146,14 @@ class reservationHelper
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
 
-            $this->invoiceHelper->cancelInvoice($reservation, [
+            $this->invoiceHelper->cancelInvoice($reservation, $locale, [
                 'name' => $user->getPrenom().' '.$user->getNom(),
                 'address' => $user->getAddress(),
                 'nif' => $user->getIdCard(),
                 'postalcode' => $user->getPostcode(),
                 'city' => $user->getCity(),
                 'country' => $user->getCountry(),
-            ], $locale);
+            ]);
         } catch (\Exception $exception) {
             error_log("{$exception->getFile()}: ln {$exception->getLine()} throw error message '{$exception->getMessage()}'");
             throw $exception;

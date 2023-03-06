@@ -112,6 +112,8 @@ class reservationDataHelper
 
         $filledFieldsCount = 0;
         $fieldsCount = count($getterMethods);
+        dump("FieldsCount:");
+        dump($fieldsCount);
         foreach ($getterMethods as $method) {
             $propertyName = lcfirst(substr($method->getName(), 3));
             if (
@@ -126,7 +128,10 @@ class reservationDataHelper
                 $filledFieldsCount++;
             }
         }
-
+        dump("FieldsCount After foreach:");
+        dump($fieldsCount);
+        dump("FilledFieldsCount:");
+        dump($filledFieldsCount);
         $array['filledFieldsCount'] = $filledFieldsCount;
         $array['fieldsCount'] = $fieldsCount;
     return $array;

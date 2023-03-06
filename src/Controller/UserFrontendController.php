@@ -122,6 +122,7 @@ class UserFrontendController extends AbstractController
          */
         $user = $this->getUser();
         $locale = $user->getLangue() ? : $_locale;
+        $request->setLocale($locale);
         dump($locale);
         // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
