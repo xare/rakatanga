@@ -62,7 +62,7 @@
 						class="btn btn-primary btn-lg"> #}
 						<a
 							class="btn btn-primary btn-lg{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %} disabled{% endif %}"
-							href="{{ path('reservation_payment',{ 'reservation': reservation.id })}}"
+							href="{{ path('reservation_payment',{ 'reservation': reservation.id, '_locale':app.request.getLocale() })}}"
 
 							id="js-reservation-payment"
 							{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}
@@ -72,7 +72,11 @@
 					  </a>
 				{% endif %}
 			{% endif %}
-			<a href="{{path('main-content',{'slug':'cgv','_locale':app.request.locale})}}" target="_blank">{{'Condiciones generales de venta'|trans}}</a>
+			<a
+				href="{{path('main-content',{'slug':'cgv','_locale':app.request.locale})}}"
+				target="_blank">
+				{{'Condiciones generales de venta'|trans}}
+			</a>
 		{% endif %}
 	</div>
 </div>

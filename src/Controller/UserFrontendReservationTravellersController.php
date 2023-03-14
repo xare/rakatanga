@@ -93,7 +93,7 @@ class UserFrontendReservationTravellersController extends AbstractController
         }
 
         $fieldsCompletion = $reservationData == null ? ['filledFieldsCount' => 0, 'fieldsCount'=>1] :$this->reservationDataHelper->getReservationDataFields($reservationData);
-
+        $otherTravellers = $this->travellersRepository->listOtherTravellers($traveller, $reservation);
         return $this->render('user/user_reservation_data.html.twig', [
             'langs' => $urlArray,
             'locale' => $locale,
@@ -102,6 +102,7 @@ class UserFrontendReservationTravellersController extends AbstractController
             'reservationData' => $reservationData,
             'fieldsCompletion' => $fieldsCompletion,
             'documents' => $documents,
+            'otherTravellers' => $otherTravellers,
             'form' => $form->createView(),
         ]);
     }

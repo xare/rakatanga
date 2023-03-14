@@ -6,6 +6,7 @@ use App\Entity\Payments;
 use App\Entity\Reservation;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Manager\ReservationManager;
 use App\Repository\CategoryTranslationRepository;
 use App\Repository\DatesRepository;
 use App\Repository\LangRepository;
@@ -54,6 +55,7 @@ class ReservationController extends AbstractController
         private languageMenuHelper $languageMenuHelper,
         private reservationDataHelper $reservationDataHelper,
         private travellersHelper $travellersHelper,
+        private ReservationManager $reservationManager,
         private string $stripePublicKey,
         private string $stripeSecretKey
     ) {
@@ -187,7 +189,7 @@ class ReservationController extends AbstractController
         }
         // LANG MENU
         $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale, $reservation);
-
+        dump($locale);
         $this->breadcrumbsHelper->reservationPaymentBreadcrumbs($locale, $reservation);
 
         $date = $reservation->getDate();
@@ -248,7 +250,7 @@ class ReservationController extends AbstractController
                 'iso_code' => $locale,
             ]); */
         $optionsArray = $this->reservationHelper->getReservationOptions($reservation, $locale);
-
+        $this->reservationManager->sendReservation($reservation);
         return $this->render('reservation/reservationPayment.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,

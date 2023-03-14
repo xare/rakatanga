@@ -106,32 +106,30 @@ class reservationDataHelper
     public function getReservationDataFields(ReservationData $reservationData){
         $reflection = new \ReflectionObject($reservationData);
 
-        $getterMethods = array_filter($reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) {
-            return substr($method->getName(), 0, 3) === 'get';
-        });
-
+        $getterMethods = array_filter(
+            $reflection->getMethods(\ReflectionMethod::IS_PUBLIC), function (\ReflectionMethod $method) {
+                return substr($method->getName(), 0, 3) === 'get';
+            }
+        );
         $filledFieldsCount = 0;
         $fieldsCount = count($getterMethods);
-        dump("FieldsCount:");
-        dump($fieldsCount);
         foreach ($getterMethods as $method) {
             $propertyName = lcfirst(substr($method->getName(), 3));
             if (
                 $propertyName == "reservation" ||
                 $propertyName == "documents"  ||
-                $propertyName == "user" ){
+                $propertyName == "user" ||
+                $propertyName == "traveller" ){
                 $fieldsCount --;
                 continue;
             }
-
             if ($reservationData->{$method->getName()}() !== null) {
                 $filledFieldsCount++;
             }
         }
-        dump("FieldsCount After foreach:");
-        dump($fieldsCount);
-        dump("FilledFieldsCount:");
-        dump($filledFieldsCount);
+
+        $porcentaje = (($filledFieldsCount*100)/$fieldsCount) ;
+
         $array['filledFieldsCount'] = $filledFieldsCount;
         $array['fieldsCount'] = $fieldsCount;
     return $array;

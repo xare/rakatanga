@@ -53,6 +53,65 @@ class travellersApp {
         )();
     }
 
+    handleAddTraveller(event) {
+        event.preventDefault();
+        console.info(this);
+        const reservationId = this.$calculator.data('reservation');
+        const $travellersForm = $('[data-container="js-travellers-form"]');
+        const formData = $travellersForm.find('input').serialize();
+        const $travellersFormContainers = $travellersForm.find('[data-container="js-travellers-form-container"]');
+        console.info($travellersFormContainers);
+        console.info(this);
+        console.info(this._validateForm());
+        if (!this._validateForm()) {
+            const InvalidResponse = Swal.fire({
+                title: $travellersFormContainers.data('validation-title'),
+                text: $travellersFormContainers.data('validation-message'),
+            });
+            console.info(InvalidResponse);
+            return false;
+        }
+        (async() => {
+            try {
+                const response = await $.ajax({
+                    url: Routing.generate('ajax-add-travellers', {
+                        'reservation': reservationId
+                    }),
+                    data: formData,
+                    method: "POST"
+                });
+                $('[data-container="js-travellers-form"]')
+                    .find('.card-body')
+                    .html(response.travellersTableHtml);
+                $('#js-reservation-payment')
+                    .removeAttr('title')
+                    .removeAttr('data-bs-tooltip')
+                    .removeClass('disabled');
+                document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { '_locale': this.locale, 'reservation': reservationId });
+            } catch (jqXHR) {
+                console.error(jqXHR);
+            }
+        })();
+    }
+    _validateForm() {
+        const form = document.querySelector('form[data-container="js-travellers-form"]');
+        console.info(form);
+        const inputTextElements = Array.from(form.elements).filter(element => element.type === "text");
+        const inputEmailElements = Array.from(form.elements).filter(element => element.type === "email");
+        const isTextEmpty = inputTextElements.some(element => element.value.trim() === "");
+        const isEmailEmpty = inputEmailElements.some(element => element.value.trim() === "");
+        if (isTextEmpty === true || isEmailEmpty === true) {
+            console.info('false');
+            return false;
+        } else {
+            console.info('true?');
+            return inputEmailElements.every(element => this._emailValidate(element.value));
+        }
+    }
+    _emailValidate(emailAddress) {
+        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegex.test(emailAddress);
+    }
     _handleSubmitTraveller(formData, row) {
         const traveller = formData.traveller;
         (

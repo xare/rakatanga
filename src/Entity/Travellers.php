@@ -60,6 +60,9 @@ class Travellers
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $email = null;
 
+    #[ORM\Column]
+    private ?bool $isReservationUser = false;
+
     public function __construct()
     {
         $this->date_ajout = new \DateTimeImmutable();
@@ -267,6 +270,18 @@ class Travellers
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function isIsReservationUser(): ?bool
+    {
+        return $this->isReservationUser;
+    }
+
+    public function setIsReservationUser(bool $isReservationUser): self
+    {
+        $this->isReservationUser = $isReservationUser;
 
         return $this;
     }

@@ -76,6 +76,7 @@ class Reservation
     private Collection $mailings;
 
     #[ORM\ManyToOne(targetEntity: Codespromo::class, inversedBy: 'reservations')]
+    #[ORM\JoinColumn(name:"codespromo_id", referencedColumnName:"id", nullable: true, onDelete:"SET NULL")]
     private ?Codespromo $codespromo = null;
 
     public function __construct()

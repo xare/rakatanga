@@ -23,22 +23,26 @@ class travellersHelper {
       array $travellerData,
       Reservation $reservation,
       User $user):mixed {
-        if(
+        /* if(
           $travellerData['email'] == $user->getEmail()
           &&
           $this->travellersRepository->findBy(['email' =>$travellerData['email']]) != null
         ) {
           return false;
-        }
-        if ($this->travellersRepository->find($travellerData['id']) != null ){
+        } */
+        /* if ($this->travellersRepository->find($travellerData['id']) != null ){
           $traveller =  $this->travellersRepository->find($travellerData['id']);
-        } else {
+        } else { */
             $traveller = new Travellers();
-        }
+        /* } */
         try {
           $traveller->setPrenom($travellerData['prenom']);
           $traveller->setNom($travellerData['nom']);
           $traveller->setEmail($travellerData['email']);
+          if($user->getEmail() == $travellerData['email']){
+            dump('linea43');
+            $traveller->setIsReservationUser(true);
+          }
           $traveller->setTelephone($travellerData['telephone']);
           $traveller->setPosition($travellerData['position']);
           $traveller->setUser($user);

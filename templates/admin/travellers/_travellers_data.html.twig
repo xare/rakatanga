@@ -1,1 +1,7 @@
-{{dump(traveller.reservationData)}}
+{% for reservationDatum in traveller.reservationData %}
+  {{include('admin/reservation/partials/_row_reservationData.html.twig',{'reservation': reservationDatum.reservation})}}
+{% else %}
+  Todavía no hay datos depositados para este usuario.
+{% endfor %}
+
+

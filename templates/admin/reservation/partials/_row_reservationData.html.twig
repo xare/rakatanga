@@ -1,0 +1,260 @@
+<div class="card col">
+            <div class="card-body">
+                <small>
+                    <table class="table">
+                    <tr>
+                        <th>Usuarior</th>
+                        <td>
+                            <a
+                            data-bs-toggle="tooltip"
+                            title="{{reservationDatum.user ? reservationDatum.user.prenom ~" "~ reservationDatum.user.nom ~" "~
+                            reservationDatum.user.telephone }}"
+                            href="{{ path('user_show',{'id':reservation.user.id}) }}">
+                                {{reservationDatum.user ? reservationDatum.user.email}}
+                            </a>
+                            <span class="badge bg-secondary">
+                                {{ reservationDatum.user ? reservationDatum.user.position|slice(0, 3) }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Viajero</th>
+                        <td>
+                            {{reservationDatum.traveller ? reservationDatum.traveller.email }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.passportNo %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Nº Pasaporte</th>
+                        <td>
+                            {{ reservationDatum.passportNo }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.passportIssueDate %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Expedición</th>
+                        <td>
+                            {{ reservationDatum.passportIssueDate|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.passportExpirationDate %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Caducidad</th>
+                        <td>
+                            {{ reservationDatum.passportExpirationDate|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.visaNumber %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Visado</th>
+                        <td>
+                            {{ reservationDatum.visaNumber }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.visaIssueDate %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Exp.</th>
+                        <td>
+                            {{ reservationDatum.visaIssueDate|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.visaExpirationDate %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Caducidad</th>
+                        <td>
+                            {{ reservationDatum.visaExpirationDate|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.driversNumber %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Carnet</th>
+
+                        <td>
+                            {{ reservationDatum.driversNumber }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.driversIssueDate %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Exp.</th>
+
+                        <td>
+                            {{ reservationDatum.driversIssueDate|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.driversExpirationDate %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Cad.</th>
+                        <td>
+                            {{ reservationDatum.driversExpirationDate|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert {% if reservationDatum.insuranceCompany %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Seguro</th>
+                        <td>
+                            {{ reservationDatum.insuranceCompany }}
+                        </td>
+                    </tr>
+                        <tr class="alert {% if reservationDatum.insuranceContractNumber %}
+                                alert-success
+                        {% else %}
+                            alert-danger
+                        {% endif %}">
+                        <th>Nº Seg.</th>
+                        <td>
+                            {{ reservationDatum.insuranceContractNumber }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.abroadPhoneNumber %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Tel</th>
+                        <td>
+                            {{ reservationDatum.abroadPhoneNumber }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.contactPersonName %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Contacto</th>
+                        <td>
+                            {{ reservationDatum.contactPersonName }}
+                        </td>
+                    </tr>
+                        <tr class="alert alert-{% if reservationDatum.contactPersonPhone %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Tel. Contacto</th>
+                        <td>
+                            {{ reservationDatum.contactPersonPhone }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.flightNumber %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Nº Vuelo</th>
+                        <td>
+                            {{ reservationDatum.flightNumber }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.flightArrival %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Llegada</th>
+                        <td>
+                            {{ reservationDatum.flightArrival|date('d-m-Y') }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.flightArrivalAirport %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Aeropuerto Llegada</th>
+                        <td>
+                            {{ reservationDatum.flightArrivalAirport }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.ArrivalHotel %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Hotel Llegada</th>
+                        <td>
+                            {{ reservationDatum.ArrivalHotel }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.flightDepartureNumber %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Nº vuelta</th>
+                        <td>
+                            {{ reservationDatum.flightDepartureNumber }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.flightDeparture %}success
+                        {% else %}danger
+                        {% endif %}">
+                        <th>Vuelta</th>
+                        <td>
+                            {{reservationDatum.flightDeparture? reservationDatum.flightDeparture|date('d-m-Y') }}
+
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.flightDepartureAirport %}success
+                        {% else %}
+                            danger
+                        {% endif %}">
+                        <th>Aeropuerto Salida</th>
+                        <td>
+                            {{ reservationDatum.flightDepartureAirport }}
+                        </td>
+                    </tr>
+                    <tr class="alert alert-{% if reservationDatum.departureHotel %}success{% else %}danger{% endif %}">
+                        <th>Hotel Salida</th>
+                        <td>
+                            {{ reservationDatum.departureHotel }}
+                        </td>
+                    </tr>
+                </table>
+            </small>
+                <span class="text-center">
+                    <a
+                        class="btn btn-info"
+                        data-bs-toggle="tooltip"
+                        href="#"
+                        style="color:white"
+                        title="Pedir los datos faltantes">
+                        <i class="fas fa-envelope"></i>
+                        Enviar Email Recordatorio
+                    </a>
+                </span>
+                <span class="text-center">
+                    <a
+                        class="btn btn-success"
+                        target="_blank"
+                        data-bs-toggle="tooltip"
+                        href="https://api.whatsapp.com/send?phone={{ reservationDatum.user.telephone}}&text={{'Enviar un mensaje'|url_encode }}"
+                        style="color:white"
+                        title="Pedir los datos faltantes">
+                        <i class="fab fa-whatsapp"></i>
+                        Enviar Whatsapp {{reservationDatum.user.telephone}}
+                    </a>
+                </span>
+            </div>
+        </div>

@@ -34,6 +34,7 @@ class UserFrontendReservationDataController extends AbstractController
         private languageMenuHelper $languageMenuHelper,
         private ReservationRepository $reservationRepository,
         private ReservationDataRepository $reservationDataRepository,
+        private TravellersRepository $travellersRepository,
         private reservationDataHelper $reservationDataHelper)
     {
     }
@@ -58,7 +59,8 @@ class UserFrontendReservationDataController extends AbstractController
            */
           $user = $this->getUser();
           // Swith Locale Loader
-
+            $userTraveller = $this->travellersRepository->findOneBy(['user'=>$user, 'reservation'=>$reservation]);
+        $otherTravellers = $this->travellersRepository->listOtherTravellers($userTraveller, $reservation);
           $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
           $this->breadcrumbsHelper->reservationTravellersBreadcrumbs('Inicio');
 
@@ -81,7 +83,7 @@ class UserFrontendReservationDataController extends AbstractController
             $reservationData->setDriversIssueDate($previousReservationData->getDriversIssueDate());
             $reservationData->setDriversExpirationDate($previousReservationData->getDriversExpirationDate());
         }
-          $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
+
           $documents = $reservationData->getDocuments();
           dump($documents);
           $form = $this->createForm(ReservationDataType::class, $reservationData);
@@ -104,7 +106,7 @@ class UserFrontendReservationDataController extends AbstractController
               $this->mailer->sendEmailonDataCompletionToUs($reservation);
               $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
           }
-
+          $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
           return $this->render('user/user_reservation_data.html.twig', [
               'langs' => $urlArray,
               'locale' => $locale,
@@ -113,6 +115,7 @@ class UserFrontendReservationDataController extends AbstractController
               'fieldsCompletion' => $fieldsCompletion,
               'reservation' => $reservation,
               'documents' => $documents,
+              'otherTravellers'=>$otherTravellers,
               'form' => $form->createView(),
           ]);
       }

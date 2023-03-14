@@ -165,10 +165,11 @@
           {{'Tus datos'|trans}}
         </h6>
           {{ _self.showUsersDocumentsLine(documentsByUser,reservation) }}
-        <h6 class="mt-1">
-          {{'Datos de tus acompañantes'|trans}}
-        </h6>
-
+        {% if reservation.travellers|length > 0 %}
+          <h6 class="mt-1">
+            {{'Datos de tus acompañantes'|trans}}
+          </h6>
+        {% endif %}
         {% for traveller in reservation.travellers %}
 
           {% set documentsByTraveller = listDocumentsByReservationByTraveller(reservation, traveller ) %}
@@ -266,8 +267,9 @@
                     - {{ reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
                     {% set discount = reservation.codespromo.montant %}
                   {% elseif reservation.codespromo.pourcentage != 0 %}
-                    - {{ reservation.codespromo.pourcentage }} %
-                    {% set discount = totalAmmount * discount / 100 %}
+                    - {{ reservation.codespromo.pourcentage }}%
+                    {% set discount = totalAmmount * reservation.codespromo.pourcentage / 100 %}
+                    {{discount|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() )}}
                   {% endif %}
                 </strong>
               </span>
@@ -297,7 +299,7 @@
               <br />
             {% set totalAmmount = totalAmmount - payment.ammount %}
           {% endfor %}
-          {% if totalAmmount != 0 %}
+          {% if totalAmmount > 0 %}
               <div class="tags has-addons">
                 <span class="tag is-light has-fontawesome"><i class="fas fa-coins"></i></span>
                 <span class="tag is-danger is-light">{{'Resto a pagar'|trans}}</span>

@@ -13,7 +13,9 @@
     class="container"
     id="js-admin-wrapper"
     data-container="js-reservation-admin-index"
-    data-reservation="{{latestReservation.id}}">
+    {% if latestReservation.id is defined %}
+        data-reservation="{{latestReservation.id}}"
+    {% endif %}>
 	{{ include ('admin/shared/_controlband.html.twig',{'entity':'reservation'})}}
     <div class="row">
         <div class="col-md-12 col-12">

@@ -143,7 +143,9 @@ class breadcrumbsHelper
     {
         $this->breadcrumbs->addRouteItem(
             $this->translator->trans('Nuestras rutas en moto'),
-            'destinations');
+            'destinations', [
+                '_locale' => $locale
+              ]);
         $this->breadcrumbs->addRouteItem(
             $this->localizationHelper->renderCategoryString(
                 $reservation->getDate()->getTravel()->getCategory()->getId(), $locale),
@@ -165,9 +167,9 @@ class breadcrumbsHelper
            'travel' => $this->slugifyHelper->slugify($this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(), $locale)),
            'date' => $reservation->getDate()->getId(),
         ]); */
-        $this->breadcrumbs->addRouteItem($this->translator->trans('Reservas'), 'frontend_user_reservations', ['_locale' => $locale,]);
+        $this->breadcrumbs->addRouteItem($this->translator->trans('Reservas'), 'frontend_user_reservations', ['_locale' => $locale]);
         $this->breadcrumbs->addItem($this->translator->trans('Revisión y pago'));
-        $this->breadcrumbs->prependRouteItem($this->translator->trans('Inicio'), 'index');
+        $this->breadcrumbs->prependRouteItem($this->translator->trans('Inicio'), 'index', ['_locale' => $locale]);
     }
 
     public function reservationTravellersBreadcrumbs(string $locale)

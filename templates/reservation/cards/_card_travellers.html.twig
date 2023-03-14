@@ -25,19 +25,19 @@
 					</div> #}
 					<div class="grid-cell">
 						<label for="nbpilotes">{{'Número de pilotos'|trans}}*</label>
-						{# <input 
+						{# <input
 							name="reservation_user[nbPilotes]"
-							value="{{nbpilotes}}"  
+							value="{{nbpilotes}}"
 							type="range" min="0" max="10" step="1"
-							class="form-range js-add-pilotes" 
-							data-action="handle-change-nb-pilotes" 
+							class="form-range js-add-pilotes"
+							data-action="handle-change-nb-pilotes"
 							data-bs-toggle="tooltip"
 							title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'pilotos'|trans}}"
 							required> #}
 						</div>
 						<div class="grid-cell">
 							<select name="reservation_user[nbPilotes]" class="form-select" data-action="handle-change-nb-pilotes">
-										{% for i in 0..9 %}
+										{% for i in nbpilotes..9 %}
 											<option value="{{i}}"{% if reservation is defined and reservation != null and reservation.nbpilotes == i %} selected{% endif%}>{{i}}</option>
 										{% endfor %}
 									</select>
@@ -56,23 +56,23 @@
 						<div class="grid-cell">
 							<label for="nbaccomp">{{'Número de pasajeros'|trans}}*</label>
 							</div>
-								{# <input 
+								{# <input
 									id="nbaccomp"
-									type="range" 
-									value="{{nbaccomp}}" 
-									class="form-range js-add-passagers" 
-									data-action="handle-change-nb-accomp" 
+									type="range"
+									value="{{nbaccomp}}"
+									class="form-range js-add-passagers"
+									data-action="handle-change-nb-accomp"
 									name="reservation_user[nbaccomp]"
 									min="0"
 									max="0"
 									step="1"
 									data-bs-toggle="tooltip"
-									title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'acompañantes'|trans}}" 
+									title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'acompañantes'|trans}}"
 									required> #}
 
 								<div class="grid-cell">
 									<select name="reservation_user[nbaccomp]" class="form-select" data-action="handle-change-nb-accomp">
-										{% for j in 0..9 %}
+										{% for j in nbaccomp..9 %}
 											<option value="{{j}}" {% if reservation is defined and reservation != null and reservation.nbaccomp == j %} selected{% endif%}>{{j}}</option>
 										{% endfor %}
 									</select>

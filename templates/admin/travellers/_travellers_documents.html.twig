@@ -1,1 +1,5 @@
-{{dump(traveller.documents)}}
+{% for document in traveller.documents %}
+  {{ include('admin/reservation/partials/_row_reservation_document.html.twig',{'document':document }) }}
+{% else %}
+  Todavía no hay documentos depositados para este usuario.
+{% endfor %}

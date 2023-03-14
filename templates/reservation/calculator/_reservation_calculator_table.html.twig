@@ -62,7 +62,7 @@
 		class="card card-tarif shadow mb-2"
     data-container="calculator"
 		data-waiting="{{'Cargando'|trans}}..."
-		data-date-id="{{date.id}}"
+		data-date="{{date.id}}"
 		{% if reservation != null %}
 			data-reservation="{{reservation.id}}"
 		{% endif %}
@@ -85,7 +85,8 @@
 									{{ 'piloto/a'|trans }}
                 </td>
                 <td align="right">
-									<span class="text-right">{{ (nbpilotes * date.prixPilote)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+									<span class="text-right">
+										{{ (nbpilotes * date.prixPilote)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
 									</span>
 								</td>
               </tr>

@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Reservation;
 use App\Entity\Travellers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -52,5 +54,16 @@ class TravellersRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->getQuery();
+    }
+
+    public function listOtherTravellers(Travellers $traveller, Reservation $reservation){
+        return $this->createQueryBuilder('t')
+            ->innerJoin(Reservation::class, 'r', Join::WITH, 'r = t.reservation')
+            ->andWhere('t.reservation = :reservation')
+            ->setParameter('reservation', $reservation)
+            ->andWhere('t.id != :traveller')
+            ->setParameter('traveller', $traveller->getId())
+            ->getQuery()
+            ->getResult();
     }
 }

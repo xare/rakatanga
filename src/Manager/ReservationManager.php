@@ -13,29 +13,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ReservationManager
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @var reservationHelper
-     */
-    protected $reservationHelper;
-
-    /**
-     * @param logHelper $reservationHelper
-     */
     public function __construct(
-    EntityManagerInterface $entityManager,
-    EventDispatcherInterface $eventDispatcher,
-    logHelper $logHelper,
-    reservationHelper $reservationHelper
+        protected EntityManagerInterface $entityManager,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected logHelper $logHelper,
+        protected reservationHelper $reservationHelper
   ) {
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
@@ -46,14 +29,26 @@ class ReservationManager
      /**
       * @return Reservation $reservation
       */
-     public function sendReservation(array $requestData, Dates $date, User $user, string $locale)
+     public function createReservation(
+                        array $requestData,
+                        Dates $date,
+                        User $user,
+                        string $locale)
      {
          $reservation = $this->reservationHelper->makeReservation($requestData, $date, $user, $locale);
          $this->logHelper->logReservationInitialize($reservation->getDate(), $reservation);
 
-         $event = new ReservationEvent($reservation);
-         $this->eventDispatcher->dispatch($event);
-
          return $reservation;
+     }
+
+     public function sendReservation(
+                        Reservation $reservation
+     ) {
+            $event = new ReservationEvent($reservation);
+            try  {
+                $this->eventDispatcher->dispatch($event);
+            } catch (\Exception $exception) {
+                dump($exception);
+            }
      }
 }
