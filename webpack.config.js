@@ -37,6 +37,7 @@ Encore
     .addEntry('reservation-payment', './assets/reservation-payment.js')
     .addEntry('reservation-data-manager', './assets/reservation-data-manager.js')
     .addEntry('reservation-dropzone', './assets/reservation-dropzone.js')
+    .addEntry('reservation-payment-transfer', './assets/reservation-payment-transfer.js')
     .addEntry('reservation-docs', './assets/reservation-docs.js')
     .addEntry('reservation-travellers', './assets/reservation-travellers.js')
     .addEntry('reservation-invoices', './assets/reservation-invoices.js')

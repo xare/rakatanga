@@ -60,16 +60,17 @@
 				{% if reservation is defined and reservation != null %}
 					{# <a href="{{ path('reservation_payment', { 'reservation': reservation.id, '_locale':app.request.getLocale() }) }}"
 						class="btn btn-primary btn-lg"> #}
-						<a
+						<form action="{{ path('reservation_payment',{ 'reservation': reservation.id, '_locale':app.request.getLocale() })}}"
+						method="POST"
+						data-action="js-open-payment-page">
+						<button
 							class="btn btn-primary btn-lg{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %} disabled{% endif %}"
-							href="{{ path('reservation_payment',{ 'reservation': reservation.id, '_locale':app.request.getLocale() })}}"
-
 							id="js-reservation-payment"
 							{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}
 							data-bs-toggle="tooltip"
 							title="{{'Esta tarjeta se activará en cuanto hayas rellenado los datos de todos los viajeros que participan en este viaje'|trans}}"{% endif %}>
 							{{ 'Continuar'|trans }}
-					  </a>
+					  </button>
 				{% endif %}
 			{% endif %}
 			<a

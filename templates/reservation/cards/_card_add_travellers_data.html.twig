@@ -104,7 +104,7 @@
                         <input
                             type="hidden"
                             name="traveller[{{i-1}}][position]"
-                            value="{% if i < nbpilotes %}pilote{% else %}passager{% endif %}" />
+                            value="{% if i <= nbpilotes %}pilote{% else %}passager{% endif %}" />
                         <input
                             type="hidden"
                             name="traveller[{{i-1}}][id]"

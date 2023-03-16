@@ -1,0 +1,38 @@
+{# {% set typeArray = type|split(' ') %}
+{% set typeWord = typeArray[0] %} #}
+
+<div
+      action="{{ path('frontend_payment_upload_banktransfer',{
+          'reservation':reservation.id
+      }) }}"
+      method="POST"
+      enctype="multipart/form-data"
+      class="dropzone"
+      id="js-payment-dropzone"
+      {# id="js-{{typeWord|lower}}-dropzone" #}>
+      <div class="dz-message" data-dz-message>
+          <span>
+              <i class="fa fa-file fa-3x"></i>
+              <br /><br />
+              {{'Arrastra el archivo hasta aquí o haz símplemente click, y se abrirá la ventana de selección de archivo'|trans}}.
+          </span>
+      </div>
+      <input
+        type="text"
+        class="form-control form-input"
+        name="paymentAmmount"
+        id="js-payment-ammount"
+        >
+      {# <input
+          type="hidden"
+          name="document[type]"
+          id="js-media-type"
+          value="{{type}}">
+    {% if traveller is defined and traveller != null %}
+        <input
+            type="hidden"
+            name="traveller"
+            value="{{traveller.id}}">
+    {% endif %} #}
+
+  </div>

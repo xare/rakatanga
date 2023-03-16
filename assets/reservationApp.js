@@ -103,6 +103,11 @@ class reservationApp {
             '[data-action="js-open-traveller-form"]',
             this.travellersApp.openTravellersSwalForm.bind(this.travellersApp)
         )
+        this.$wrapper.on(
+            'submit',
+            '[data-action="js-open-payment-page"]',
+            this.openPaymentPage.bind(this)
+        )
 
     }
 
@@ -722,6 +727,17 @@ class reservationApp {
                 }
             }
         )();
+    }
+    openPaymentPage(event) {
+        event.preventDefault();
+        const textarea = document.getElementById('reservation-comment');
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'comment';
+        input.value = textarea.value;
+        const form = event.currentTarget;
+        form.appendChild(input);
+        form.submit();
     }
 
     addCodesPromo(event) {

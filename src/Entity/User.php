@@ -118,6 +118,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $agreedTermsAt;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TransferDocument::class)]
+    private Collection $transferDocuments;
+
     public function __construct()
     {
         $this->date_ajout = new \DateTimeImmutable();
@@ -130,6 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reservations = new ArrayCollection();
         $this->reservationData = new ArrayCollection();
         $this->codespromos = new ArrayCollection();
+        $this->transferDocuments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -601,6 +605,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function agreeTerms(): self
     {
         $this->agreedTermsAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TransferDocument>
+     */
+    public function getTransferDocuments(): Collection
+    {
+        return $this->transferDocuments;
+    }
+
+    public function addTransferDocument(TransferDocument $transferDocument): self
+    {
+        if (!$this->transferDocuments->contains($transferDocument)) {
+            $this->transferDocuments->add($transferDocument);
+            $transferDocument->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransferDocument(TransferDocument $transferDocument): self
+    {
+        if ($this->transferDocuments->removeElement($transferDocument)) {
+            // set the owning side to null (unless already changed)
+            if ($transferDocument->getUser() === $this) {
+                $transferDocument->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Payments;
 use App\Entity\Reservation;
+use App\Entity\TransferDocument;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Manager\ReservationManager;
@@ -22,15 +23,19 @@ use App\Service\reservationDataHelper;
 use App\Service\reservationHelper;
 use App\Service\slugifyHelper;
 use App\Service\travellersHelper;
+use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
@@ -56,6 +61,7 @@ class ReservationController extends AbstractController
         private reservationDataHelper $reservationDataHelper,
         private travellersHelper $travellersHelper,
         private ReservationManager $reservationManager,
+        private UploadHelper $uploadHelper,
         private string $stripePublicKey,
         private string $stripeSecretKey
     ) {
@@ -165,6 +171,12 @@ class ReservationController extends AbstractController
     {
         $locale = $_locale ? $_locale : $locale;
         $reservationData = $request->request->all();
+        dump($reservationData);
+        if( isset($reservationData['comment']) && $reservationData['comment'] != '' ){
+            $reservation->setComment($reservationData['comment']);
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();
+        }
         dump($reservation);
         if (
             isset($reservationData['userEdit'])
@@ -250,7 +262,7 @@ class ReservationController extends AbstractController
                 'iso_code' => $locale,
             ]); */
         $optionsArray = $this->reservationHelper->getReservationOptions($reservation, $locale);
-        $this->reservationManager->sendReservation($reservation);
+        //$this->reservationManager->sendReservation($reservation);
         return $this->render('reservation/reservationPayment.html.twig', [
             'locale' => $locale,
             'langs' => $urlArray,
@@ -374,4 +386,40 @@ class ReservationController extends AbstractController
             'options' => $options,
         ], 200, [], ['groups' => 'main']);
     }
+
+    #[Route(
+        path: '/transferDocument/{transferDocument}/download',
+        name: 'download_transfer_document',
+        methods: ['GET'])]
+        public function downloadDocument(
+            TransferDocument $transferDocument,
+            AuthorizationCheckerInterface $authorization
+        ) {
+            $user = $transferDocument->getUser();
+            $currentUser = $this->getUser();
+            if(
+                $user->getUserIdentifier() == $currentUser->getUserIdentifier()
+                || $authorization->isGranted('ROLE_ADMIN'))
+            {
+                //$this->denyAccessUnlessGranted('ROLE_USER', $user);
+                $uploadHelper = $this->uploadHelper;
+                $response = new StreamedResponse(function () use ($transferDocument, $uploadHelper) {
+                    $outputStream = fopen('php://output', 'wb');
+                    $fileStream = $this->uploadHelper->readStream($transferDocument->getFilePath(), false);
+
+                    stream_copy_to_stream($fileStream, $outputStream);
+                });
+                $response->headers->set('Content-Type', $transferDocument->getMimeType());
+
+                $disposition = HeaderUtils::makeDisposition(
+                    HeaderUtils::DISPOSITION_ATTACHMENT,
+                    $transferDocument->getOriginalFilename()
+                );
+
+                $response->headers->set('Content-Disposition', $disposition);
+            } else {
+                $response = new Response($this->translator->trans('No estás autorizado a acceder a este archivo'));
+            }
+            return $response;
+        }
 }

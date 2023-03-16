@@ -141,7 +141,6 @@ class travellersApp {
                 .removeClass('disabled');
             console.info('disabled, should have been removed');
             document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { '_locale': this.locale, 'reservation': reservation });
-            return false;
         }
         console.info('outside of reservation');
         const isInitialized = this.$calculator.data('isInitialized');

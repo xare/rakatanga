@@ -114,6 +114,8 @@ class reservationHelper
         dump($reservationData);
         $reservation->setNbpilotes($reservationData['nbpilotes']);
         $reservation->setNbAccomp($reservationData['nbaccomp']);
+        if(isset($reservationData['comment']) && $reservationData['comment'] != '')
+            $reservation->setComment($reservationData['comment']);
         $reservation->setStatus('initialized');
         $this->_resetReservationOptions($reservation);
        // PERSIST OPTIONS TO RESERVATION

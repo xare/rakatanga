@@ -391,11 +391,11 @@ fieldset {
 }
 
 .reservations-dashboard {
-    grid-auto-rows: 16rem;
+    grid-auto-rows: 20rem;
 }
 
 .payments-dashboard {
-    grid-auto-rows: 10.5rem;
+    grid-auto-rows: 11.5rem;
 }
 
 .reservations-dashboard a,
@@ -424,7 +424,7 @@ fieldset {
 .reservations-dashboard-item {
     grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
     grid-template-rows: auto;
-    grid-template-areas: 'photo photo travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers' 'user user user user user user user';
+    grid-template-areas: 'photo photo travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers' 'user user user user user user user''comment comment comment comment comment comment comment';
 }
 
 .payments-dashboard-item {
@@ -482,6 +482,10 @@ fieldset {
 
 .reservations-dashboard-item>div:nth-child(5) {
     grid-area: travellers;
+}
+
+.reservations-dashboard-item>div:nth-child(6) {
+    grid-area: comment;
 }
 
 

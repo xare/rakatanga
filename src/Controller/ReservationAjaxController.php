@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Codespromo;
 use App\Entity\Invoices;
+use App\Entity\Payments;
 use App\Entity\Reservation;
 use App\Entity\ReservationOptions;
+use App\Entity\TransferDocument;
 use App\Entity\Travellers;
 use App\Entity\User;
 use App\Form\InvoicesType;
@@ -40,6 +42,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 use Symfony\Component\Security\Http\RememberMe\RememberMeHandlerInterface;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -58,7 +62,8 @@ class ReservationAjaxController extends AbstractController
         private DatesRepository $datesRepository,
         private reservationManager $reservationManager,
         private CodespromoRepository $codespromoRepository,
-        private travellersHelper $travellersHelper)
+        private travellersHelper $travellersHelper,
+        private UploadHelper $uploadHelper)
     {
     }
 
@@ -340,7 +345,7 @@ class ReservationAjaxController extends AbstractController
                                                     $date,
                                                     $user,
                                                     $request->getLocale());
-
+        $this->reservationManager->sendReservation($reservation);
         // GET TRANSLATION FOR TRAVEL $travelTranslation
         $lang = $this->langRepository->findOneBy(['iso_code' => $locale]);
         $travelTranslation = $this->travelTranslationRepository->findOneBy([
@@ -863,7 +868,6 @@ class ReservationAjaxController extends AbstractController
         $codespromo = $this->codespromoRepository->findByCode($codespromoText);
         $reservation = $this->reservationRepository->find($reservationId);
 
-
         if($codespromo[0]->getNombreTotal() < $codespromo[0]->getNombre()) {
             $reservation->setCodesPromo($codespromo[0]);
             $codespromo[0]->setNombreTotal($codespromo[0]->getNombreTotal() + 1);
@@ -966,5 +970,75 @@ class ReservationAjaxController extends AbstractController
         Reservation $reservation
     ) : Response {
         return new Response(true);
+    }
+
+    #[ROUTE(
+        path: "ajax/upload/banktransfer/{reservation}",
+        name:'frontend_payment_upload_banktransfer',
+        methods: ['POST'],
+        options: ["expose" => true ]
+    )]
+
+    public function frontendPaymentUploadBanktransfer(
+        Request $request,
+        Reservation $reservation,
+        ValidatorInterface $validator
+    ){
+        $uploadedTransferDocument = $request->files->get('file');
+
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        $violations = $validator->validate(
+            $uploadedTransferDocument,
+            [
+                new NotBlank([
+                    'message' => $this->translator->trans('Tu archivo no cumple las condiciones para ser subido al servidor') .'. '.$this->translator->trans('Este formulario se recargará automáticamente en 10 segundos, alternativamente, puedes dar a guardar y se salvarán los datos que has incluido en el formulario y se recargará la página.') ,
+                ]),
+                new File([
+                    'maxSize' => '5M',
+                    'mimeTypes' => [
+                        'image/*',
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                        'text/plain',
+                    ],
+                ]),
+            ]
+        );
+        if ($violations->count() > 0) {
+            return $this->json($violations, 400);
+        }
+
+        $filename = $this->uploadHelper->uploadTransferDocument($uploadedTransferDocument);
+        $transferDocument = new TransferDocument();
+        $transferDocument->setUser($this->getUser());
+        $transferDocument->setFilename($filename);
+        $transferDocument->setOriginalFilename($filename);
+        $payment = new Payments();
+        $payment->setAmmount($request->request->get('ammount'));
+        $payment->setReservation($reservation);
+        $payment->setTransferDocument($transferDocument);
+        $this->entityManager->persist($transferDocument);
+        $this->entityManager->persist($payment);
+        $this->entityManager->flush();
+        $dropHtml = $this->renderView('reservation/_partials/_renderFile_in_dropzone.html.twig',['document'=>$transferDocument,'reservation'=>$reservation]);
+        return $this->json(
+            [
+                'document' => $transferDocument,
+                'dropHtml' => $dropHtml,
+            ],
+            201,
+            [],
+            [
+                'groups' => ['main'],
+            ]
+        );
+        return new Response('Frontend Payment Upload Bank Transfer');
     }
 }

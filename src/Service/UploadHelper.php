@@ -18,6 +18,7 @@ class UploadHelper
     public const MEDIA_FOLDER = 'media';
     public const USER_FILE = 'user_file';
     public const DOCUMENT = 'document';
+    public const TRANSFER_DOCUMENT= 'transfer_document';
     public const TRAVEL = 'travel';
     public const INVOICES = 'invoices';
     public const INFODOCS = 'infodocs';
@@ -120,7 +121,10 @@ class UploadHelper
     {
         return $this->uploadFile($file, self::DOCUMENT, false);
     }
-
+    public function uploadTransferDocument(File $file): string
+    {
+        return $this->uploadFile($file, self::TRANSFER_DOCUMENT, false);
+    }
     public function uploadTravelImage(File $file): string
     {
         return $this->uploadFile($file, self::TRAVEL, true);

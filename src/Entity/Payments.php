@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PaymentsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PaymentsRepository::class)]
@@ -25,6 +27,10 @@ class Payments
 
     #[ORM\Column(nullable: true)]
     private ?string $stripeId = null;
+
+    #[ORM\OneToOne(mappedBy: 'payment', cascade: ['persist', 'remove'])]
+    private ?TransferDocument $transferDocument = null;
+
 
     public function __construct()
     {
@@ -76,4 +82,23 @@ class Payments
 
         return $this;
     }
+
+    public function getTransferDocument(): ?TransferDocument
+    {
+        return $this->transferDocument;
+    }
+
+    public function setTransferDocument(TransferDocument $transferDocument): self
+    {
+        // set the owning side of the relation if necessary
+        if ($transferDocument->getPayment() !== $this) {
+            $transferDocument->setPayment($this);
+        }
+
+        $this->transferDocument = $transferDocument;
+
+        return $this;
+    }
+
+
 }
