@@ -79,6 +79,7 @@
         </columns>
     </row>
 
+
     {% set subtotal = subtotal + reservation.nbpilotes * reservation.date.prixPilote %}
     <row>
         <columns>
@@ -88,6 +89,19 @@
              <p class="text-right">{{(reservation.nbaccomp * reservation.date.prixAccomp)|format_currency('EUR', {fraction_digit: 0})}}</p>
         </columns>
     </row>
+    {% if reservation.comment != '' %}
+        <row>
+            <columns>
+                <h3>{{ 'Comentarios'|trans }}</h3>
+            </columns>
+        </row>
+        <spacer size="10"></spacer>
+        <row>
+            <columns>
+                <p>{{reservation.comment}}</p>
+            </columns>
+        </row>
+    {% endif %}
     {% set subtotal = subtotal + reservation.nbaccomp * reservation.date.prixAccomp %}
 
     {% for option in reservation.reservationOptions %}
@@ -140,7 +154,7 @@
         <columns>
             <h2>
                 <center>
-                    3.- {{ 'La reserva'|trans }}
+                    4.- {{ 'Tus datos'|trans }}
                 </center>
             </h2>
         </columns>
@@ -155,21 +169,10 @@
             </ul>
         </columns>
     </row>
+
     <spacer size="10"></spacer>
     <row>
-        <columns>
-            <h3>{{ 'Comentarios'|trans }}</h3>
-        </columns>
-    </row>
-    <spacer size="10"></spacer>
-    <row>
-        <columns>
-            <p>{{reservation.comment}}</p>
-        </columns>
-    </row>
-    <spacer size="10"></spacer>
-    <row>
-        <columns><h2><center>4. {{ 'El Pago'|trans }}</center></h2></columns>
+        <columns><h2><center>5. {{ 'El Pago'|trans }}</center></h2></columns>
     </row>
     <row>
         <columns><p><strong>{{'Datos de la cuenta bancaria para efectuar el pago'|trans}}:</strong></p></columns>
@@ -187,8 +190,6 @@
     <row>
         <columns>
             <p>{{'Esta reserva será efectiva al abonar 500 € por persona, o si lo desea, del pago total de su viaje. El resto del pago deberá hacerse como muy tarde 30 días antes de la fecha de salida'|trans}}.</p>
-
-
         </columns>
     </row>
     <row>

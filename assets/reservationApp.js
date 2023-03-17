@@ -263,7 +263,7 @@ class reservationApp {
         event.preventDefault();
         const self = this;
         const previousData = this.$calculator.data() || "";
-        console.info(previousData);
+
         const optionInputName = $(event.currentTarget).attr('name'); //returns reservation_user[option][00]
         const ammount = parseInt($(event.currentTarget).val());
         const matches = optionInputName.match(/(\d+)/);
@@ -283,7 +283,6 @@ class reservationApp {
             title: optionTitle
         };
         let finalOptions = this._filterOptions(previousOptions, currentOption);
-        console.info(finalOptions);
         let requestData = {
             ...date,
             'options': finalOptions,
@@ -477,8 +476,8 @@ class reservationApp {
                 self._loadUserSwitch();
                 $("[data-container='js-card-user']").hide();
                 $('.card-codespromo, .card-comment').removeClass('d-none');
-                /*  */
-                /* $('.card-codespromo').html(response.codespromoHtml); */
+                console.info(response.codespromoHtml);
+                $('.card-codespromo').html(response.codespromoHtml);
                 /* if (swalResponse.isDismissed !== true && typeof response.codepromo !== 'undefined') {
                     let discount = response.codepromoMontant === null ? response.codepromoPourcentage : response.codepromoMontant;
                     let discountType = response.codepromoMontant === null ? 'pourcentage' : 'ammount';
@@ -625,7 +624,6 @@ class reservationApp {
                         },
                         type: 'POST'
                     })
-                    console.info(response);
 
                     $('[data-container="calculator-wrapper"]').append(response.html);
                 } catch (e) {
@@ -816,14 +814,16 @@ class reservationApp {
                             $('[data-container="calculator-wrapper"]').empty().append(response2);
                             $('.card-logged-user').removeClass('d-none');
                             self.$calculator.data('codespromo', codepromo);
-                        } catch (jqXHR) { console.info(jqXHR) }
+                        } catch (jqXHR) {
+                            console.error(jqXHR)
+                        }
                     })();
 
                     /* $('[data-container="total-calculator"]').before(response.rowCodePromoHtml); */
                     $(event.currentTarget).prop('disabled', true);
 
                 } catch (jqXHR) {
-                    console.info(jqXHR)
+                    console.error(jqXHR)
                 }
             }
         )();
@@ -872,7 +872,7 @@ class reservationApp {
                 $('#js-card-user').find('.card-body').html(response);
                 self._loadUserSwitch();
             } catch (jqXHR) {
-                console.log("loadloggedinuser Error", jqXHR);
+                console.error("loadloggedinuser Error", jqXHR);
                 this._notifyErrorToUser(jqXHR)
             }
         })(data);
@@ -922,9 +922,7 @@ class reservationApp {
     _notifyErrorTakenEmailToUser(jqXHR) {
         if (jqXHR.responseJSON.takenEmail == true) {
             try {
-
                 Swal.fire('Any fool can use a computer');
-
             } catch (error) {
                 console.error('catch: ', error)
             }

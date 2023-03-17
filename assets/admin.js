@@ -247,7 +247,6 @@ var itemsList = {
                     direction = "reverse";
 
                     if (x == null && y != null) {
-                        console.log('first null')
                         return -1;
                     } else if (x < y) {
                         return -1;

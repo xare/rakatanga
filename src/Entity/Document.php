@@ -60,9 +60,9 @@ class Document
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'documents')]
     private ?Reservation $reservation = null;
 
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+
         $this->date = new ArrayCollection();
         $this->reservationData = new ArrayCollection();
     }

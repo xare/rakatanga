@@ -77,14 +77,16 @@ class codespromoApp {
                             $('[data-container="calculator-wrapper"]').empty().append(response2);
                             $('.card-logged-user').removeClass('d-none');
                             self.$calculator.data('codespromo', codepromo);
-                        } catch (jqXHR) { console.info(jqXHR) }
+                        } catch (jqXHR) {
+                            console.error(jqXHR)
+                        }
                     })();
 
                     /* $('[data-container="total-calculator"]').before(response.rowCodePromoHtml); */
                     $(event.currentTarget).prop('disabled', true);
 
                 } catch (jqXHR) {
-                    console.info(jqXHR)
+                    console.error(jqXHR)
                 }
             }
         )();

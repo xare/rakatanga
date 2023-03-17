@@ -27,7 +27,6 @@ class adminInscriptionsApp {
                         url: Routing.generate('inscriptions_preadd_user', { inscription }),
                         type: 'POST'
                     });
-                    console.info(response1);
                     const swalResponse = await Swal.fire({
                         title: 'Convierte a esta inscripción en un usuario',
                         html: response1.message,
@@ -42,7 +41,6 @@ class adminInscriptionsApp {
                     });
                     console.log(swalResponse);
                     if (swalResponse.isConfirmed) {
-
                         (
                             async() => {
                                 try {
@@ -62,8 +60,6 @@ class adminInscriptionsApp {
                     } else {
                         console.info(swalResponse);
                     }
-
-
                 } catch (jqXHR) {
                     console.error(jqXHR);
                 }

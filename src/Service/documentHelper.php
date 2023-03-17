@@ -13,7 +13,7 @@ class documentHelper {
 
   }
 
-  public function getDocumentsByUser(User $user) {
+  public function getDocumentsByUser(?User $user) {
     return $this->documentRepository->getDocumentsByUser($user);
   }
   public function getDocumentsByReservationByUser(Reservation $reservation) {

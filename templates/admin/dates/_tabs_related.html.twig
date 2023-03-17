@@ -1,0 +1,106 @@
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li class="nav-item">
+                <button class="nav-link active"
+                    id="documentation-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#documentation"
+                    type="button"
+                    role="tab"
+                    aria-controls="documentation"
+                    aria-selected="true"
+                        >Documentación requerida
+                </button>
+            </li>
+            {% if date.reservations|length > 0 %}
+            <li class="nav-item">
+                <button class="nav-link"
+                        id="reservations-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#reservation"
+                        type="button"
+                        role="tab"
+                        aria-controls="#reservation"
+                        aria-selected="false"
+                >Reservas
+                <span class="badge badge-secondary">{{date.reservations|length}}</span>
+                </button>
+            </li>
+            {% endif %}
+            {% if date.reservations|length > 0 %}
+                <li class="nav-item">
+                    <button class="nav-link"
+                            id="travellers-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#travellers"
+                            type="button"
+                            role="tab"
+                            aria-controls="#travellers"
+                            aria-selected="false"
+                    >Viajeros/as
+                    </button>
+                </li>
+            {% endif %}
+            {% if date.oldreservations|length > 0 %}
+                <li class="nav-item">
+                    <button class="nav-link"
+                        id="oldreservations-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#oldreservations"
+                        type="button"
+                        role="tab"
+                        aria-controls="oldreservations"
+                        aria-selected="true"
+                            >Reservas anteriores<span class="badge badge-secondary">{{ date.oldreservations|length }}</span>
+                    </button>
+                </li>
+            {% endif %}
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div
+                class="tab-pane fade show active"
+                id="documentation"
+                role="tabpanel"
+                aria-labelledby="documentation-tab">
+                <div class="col-md-12 col-xs-12">
+                    {{ form_row(form.requestedDocs)}}
+                </div>
+            </div>
+
+            {% if date.reservations|length > 0 %}
+                <div
+                    class="tab-pane fade"
+                    id="reservation"
+                    role="tabpanel"
+                    aria-labelledby="reservation-tab">
+                    <h5 class="pb-3">Nº Reservas: {{date.reservations|length}} </h5>
+                    {# {{ include( 'admin/dates/_reservations_tab_content.html.twig',{'date': date } ) }} #}
+                    {% for reservation in date.reservations %}
+                        {{ include('admin/reservation/_row.html.twig', {'reservation': reservation}) }}
+                {% else %}
+                    No records found
+                {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if date.reservations|length > 0 %}
+                <div
+                    class="tab-pane fade"
+                    id="travellers"
+                    role="tabpanel"
+                    aria-labelledby="travellers-tab">
+                    {{include('admin/dates/_travellers_tab.html.twig',{'date':date})}}
+                </div>
+            {% endif %}
+
+            {% if date.oldreservations|length > 0 %}
+                <div
+                    class="tab-pane fade"
+                    id="oldreservations"
+                    role="tabpanel"
+                    aria-labelledby="oldreservations-tab">
+                    {{ include('admin/dates/_old_reservations_tab.html.twig',{'date':date}) }}
+                </div>
+            {% endif %}
+        </div>

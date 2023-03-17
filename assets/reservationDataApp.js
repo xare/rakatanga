@@ -16,8 +16,7 @@ class reservationDataApp {
         let inputDatepicker = this.$wrapper.find('input.datepicker');
         let notInputDatepicker = this.$wrapper.find('input:not(".datepicker")');
         this.filledElements = this.$wrapper.find('[data-filled="data-filled"]');
-        console.info(this.filledElements);
-        console.info(this.filledElements.length);
+
         this.$wrapper.on(
             'blur',
             'input',
@@ -32,19 +31,14 @@ class reservationDataApp {
 
     handleBlur(event) {
         event.preventDefault();
-        console.info("new value for", event.target.id, event.target.value);
         let self = this;
         let thisElement = event.currentTarget;
         let filledElements = [];
-        console.info(this.filledElements);
-        console.info($(thisElement).val());
+
         if ($(thisElement).val() != '') {
             $(thisElement).attr('data-filled', 'data-filled');
             filledElements = [thisElement, ...this.filledElements];
         }
-        console.info(this.filledElements);
-        console.info(filledElements);
-        console.info(filledElements.length);
         let type = $(thisElement).attr('data-type');
 
         if (undefined !== type) {
@@ -60,7 +54,6 @@ class reservationDataApp {
     }
     _checkList(type) {
         const self = this;
-        console.info(this.elements);
         this.elements.map((index, element) => {
             if (type == $(element).attr('data-type')) {;
                 $(element).attr('data-checked', true);
@@ -71,21 +64,9 @@ class reservationDataApp {
         })
     }
     _said_validate(value, type) {
-        /* if (type == "passportNo") {
-            var regsaid = /[a-zA-Z]{1,3}[0-9]{6,7}/;
-        } else */
-        if (type == "flightnumber") {
-            var regsaid = /([A-Z]{3}|[A-Z\d]{2})(?:\s?)(\d{1,4})/;
-        }
-        /* else if (
-                   type == "passportIssueDate" ||
-                   type == "passportExpirationDate" ||
-                   type == "passportIssueDate") {
-                   var regsaid = /(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}/;
-               } */
-        else {
-            var regsaid = /[\s\S]*/;
-        }
+        var regsaid = (type == "flightnumber") ?
+            /([A-Z]{3}|[A-Z\d]{2})(?:\s?)(\d{1,4})/ :
+            /[\s\S]*/;
         return regsaid.test(value);
     }
 
@@ -95,21 +76,23 @@ class reservationDataApp {
         let progressBar = $('#js-progress .progress .progress-bar');
         let progress = (eval(filledElements.length) / eval(total)) * 100;
         $('#js-progress .progress .progress-bar').css('width', progress + '%');
-        if (progress >= 0 && progress < 25) {
-            progressBar.addClass('bg-danger');
-        } else if (progress >= 25 && progress < 50) {
-            progressBar.removeClass('bg-danger').addClass('bg-warning');
-        } else if (progress >= 50 && progress < 75) {
-            progressBar.removeClass('bg-warning').addClass('bg-info');
-        } else if (progress >= 75 && progress <= 100) {
-            progressBar.removeClass('bg-info').addClass('bg-success');
+        switch (true) {
+            case (progress >= 0 && progress < 25):
+                progressBar.addClass('bg-danger');
+                break;
+            case (progress >= 25 && progress < 50):
+                progressBar.removeClass('bg-danger').addClass('bg-warning');
+                break;
+            case (progress >= 50 && progress < 75):
+                progressBar.removeClass('bg-warning').addClass('bg-info');
+                break;
+            case (progress >= 75 && progress <= 100):
+                progressBar.removeClass('bg-info').addClass('bg-success');
+                break;
+            default:
+                progressBar.removeClass();
         }
     }
-
-    /* render() {;
-        this.$elementListContainer.html('Hello');
-    } */
-
 
 }
 

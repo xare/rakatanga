@@ -47,7 +47,6 @@ class NotificationsApp {
         (async() => {
             try {
                 const isDifferentReservation = await this._isDifferentReservation();
-                console.info(isDifferentReservation);
                 if (isDifferentReservation) {
                     Swal.fire({
                         title: "New Reservation",

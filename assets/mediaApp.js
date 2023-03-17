@@ -170,7 +170,6 @@ class mediaApp {
                             }
                         }
                     }).then((result) => {
-                        console.info(result.value);
                         Swal.fire({
                             title: "Youtube Video thumbnail",
                             imageUrl: result.value.imgSrc,
@@ -189,7 +188,6 @@ class mediaApp {
                                             encode: true
                                         });
 
-                                        console.info(response3.html);
                                         $('#js-media-modal-blocks-container').prepend(response3.html);
 
                                     } catch (error) {

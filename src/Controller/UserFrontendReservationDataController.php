@@ -62,7 +62,7 @@ class UserFrontendReservationDataController extends AbstractController
             $userTraveller = $this->travellersRepository->findOneBy(['user'=>$user, 'reservation'=>$reservation]);
         $otherTravellers = $this->travellersRepository->listOtherTravellers($userTraveller, $reservation);
           $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
-          $this->breadcrumbsHelper->reservationTravellersBreadcrumbs('Inicio');
+          $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($locale);
 
           $reservationData = new ReservationData();
           if( $this->reservationDataRepository->findOneBy([
@@ -237,12 +237,12 @@ class UserFrontendReservationDataController extends AbstractController
         if($reservationData instanceOf ReservationData){
             $reservationDataFieldsArray = $this->reservationDataHelper->getReservationDataFields($reservationData);
             if ( $reservationDataFieldsArray['fieldsCount'] != $reservationDataFieldsArray['filledFieldsCount']) {
-                $ratio = ($reservationDataFieldsArray['filledFieldsCount']*100/$reservationDataFieldsArray['fieldsCount']);
-
+                $ratio = round(($reservationDataFieldsArray['filledFieldsCount']/$reservationDataFieldsArray['fieldsCount'])*100, 2);
+                $title = ($ratio == 100) ?'Los datos están completos':'Faltan datos y documentos';
                 $html = $this->renderView('user/partials/_swal_missing_reservationData.html.twig',['ratio'=>$ratio, 'locale'=>$locale]);
                 return $this->json([
                     'ratio' => $ratio,
-                    'title' => $this->translator->trans("Faltan datos y documentos", array(), null, $locale),
+                    'title' => $this->translator->trans($title, array(), null, $locale),
                     'message' => $html,
                     '_locale' => $locale
                 ], 200, [], []);

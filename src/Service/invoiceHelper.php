@@ -200,7 +200,25 @@ class invoiceHelper
             throw $exception;
         }
     }
+    public function createInvoiceFromNull(Invoices $invoice){
+        /**
+         * @var \DateTime $dateTime
+         */
+        $dateTime = new \DateTime();
+        $latestInvoiceNumber = $this->_getLatestInvoiceNumber();
 
+        /**
+         * @var int $invoiceNumber
+         */
+        $invoiceNumber = $latestInvoiceNumber + 1;
+        $invoice->setInvoiceNumber("{$dateTime->format('Y')}-{$invoiceNumber}");
+        $locale = 'es';
+        $status ="Factura independiente";
+        $invoiceFileName = $this->pdfHelper->createInvoicePdf($invoice, $locale, $status);
+        $invoice->setOriginalFilename($invoiceFileName);
+        $invoice->setFilename($invoiceFileName);
+        return $invoice;
+    }
     /**
      * _getLatestInvoiceNumber function.
      */

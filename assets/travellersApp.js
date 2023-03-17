@@ -159,6 +159,7 @@ class travellersApp {
                             reservation
                         }
                     });
+                    console.info(response.html);
                     $('[data-container="js-travellers-form"]').html(response.html);
 
                 } catch (error) {

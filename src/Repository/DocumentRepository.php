@@ -6,6 +6,7 @@ use App\Entity\Document;
 use App\Entity\Reservation;
 use App\Entity\ReservationData;
 use App\Entity\Travellers;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -57,13 +58,16 @@ class DocumentRepository extends ServiceEntityRepository
     }
     */
 
-    public function getDocumentsByUser($user) {
-        return $this->createQueryBuilder('d')
-        ->andWhere('d.user = :user')
-        ->andWhere('d.traveller IS NULL')
-        ->setParameter('user', $user)
-        ->getQuery()
-        ->getResult();
+    public function getDocumentsByUser(?User $user) {
+        if($user != null )
+            return $this->createQueryBuilder('d')
+            ->andWhere('d.user = :user')
+            ->andWhere('d.traveller IS NULL')
+            ->setParameter('user', $user->getId())
+            ->getQuery()
+            ->getResult();
+        else
+            return [];
     }
     public function getDocumentsByReservationByUser($reservation)
     {

@@ -1,0 +1,163 @@
+<!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="myTab">
+                <li class="nav-item">
+                    <button class="nav-link active"
+                            id="reservations-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#reservation"
+                            type="button"
+                            role="tab"
+                            aria-controls="#reservation"
+                            aria-selected="false"
+                    >Reservas
+                        <span class="badge badge-secondary">
+                            {{user.reservations|length}}
+                        </span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                        id="documentation-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#documentation"
+                        type="button"
+                        role="tab"
+                        aria-controls="documentation"
+                        aria-selected="true"
+                            >Documentación
+                            <span class="badge badge-secondary">
+                                {{ listDocumentsByUser(user)|length }}
+                            </span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                        id="payments-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#payments"
+                        type="button"
+                        role="tab"
+                        aria-controls="payments"
+                        aria-selected="true"
+                            >Pagos
+                            <span class="badge badge-secondary">
+                            {{paymentsCount|length}}
+                        </span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link"
+                        id="codespromos-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#codespromos"
+                        type="button"
+                        role="tab"
+                        aria-controls="codespromos"
+                        aria-selected="true"
+                            >Códigos de promoción
+                    </button>
+                </li>
+
+            </ul>
+
+            <div class="tab-content">
+                <div
+                    class="tab-pane fade show active"
+                    id="reservation"
+                    role="tabpanel"
+                    aria-labelledby="reservation-tab">
+                <ul class="list-group">
+                    {% for reservation in user.reservations %}
+                    <li class="list-group-item">
+                    <a href="{{ path('reservation_edit', { 'id':reservation.id } ) }}">
+                            <strong>{{ reservation.code}}</strong>
+                            {{ reservation.date.debut|date('d-m-Y') }}
+                            {{ reservation.date.fin|date('d-m-Y') }} - {{ reservation.date.travel }}
+
+                        </a>
+                        </li>
+                    {% else %}
+                        <li>Este usuario no tiene reservas realizadas.</li>
+                    {% endfor %}
+                    </ul>
+                    {# {{ include( 'admin/dates/_reservations_tab_content.html.twig',{'date': date } ) }} #}
+                </div>
+                <div
+                    class="tab-pane fade"
+                    id="documentation"
+                    role="tabpanel"
+                    aria-labelledby="documentation-tab">
+                    <div class="col-12 col-xs-12">
+                        <h4>Usuario</h4>
+
+                        {% for reservation in user.reservations %}
+                        <h5>{{reservation.code}} [{{reservation.date.debut|date('d/m/Y')}}]</h5>
+                        <ul class="list-group mb-3">
+                            {% for document in listDocumentsByReservationByUser(reservation,user) %}
+                                {{ include('admin/user/partials/_row_document.html.twig',{ 'document':document })}}
+                                {% else %}
+                            <li class="list-group-item">Documentos no registrados en esta reserva</li>
+                            {% endfor %}
+                        </ul>
+
+                        {% endfor %}
+
+                    {# <h4>Acompañante</h4> #}
+                        {# {% for reservation in user.reservations %}
+                            <h5>
+                                {{ reservation.code }}
+                                {{ reservation.date.debut|date('d/m/Y') }}
+                            </h5>
+                            {% for traveller in reservation.travellers %}
+                                <h6>{{traveller.prenom}} {{traveller.nom }}</h6>
+                                <ul class="list-group">
+                                    {% for document in listDocumentsByTraveller(traveller) %}
+                                        {{ include('admin/user/partials/_row_document.html.twig',{'document':document })}}
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                        {% endfor %} #}
+
+                    </div>
+                </div>
+                <div
+                    class="tab-pane fade"
+                    id="payments"
+                    role="tabpanel"
+                    aria-labelledby="payments-tab">
+                    <div class="col-12 col-xs-12">
+                    <table class="table">
+                        <thead>
+                            <th><strong>Código Reserva:</strong></th>
+                            <th><strong>Cantidad:</strong></th>
+                            <th><strong>Fecha del pago:</strong></th>
+                        </thead>
+                        <tbody>
+                        {% for reservation in user.reservations %}
+                            {% for payment in reservation.payments %}
+                                <tr>
+                                    <td><a href="{{path('reservation_edit',{'id':payment.reservation.id})}}">{{ payment.reservation.code}}</a></td>
+                                    <td><a href="{{path('payments_edit',{'id':payment.id})}}">{{ payment.ammount|format_currency('EUR', {fraction_digit: 0}) }}</a></td>
+                                    <td>{{ payment.dateAjout|date('d-m-Y')}}</td>
+                                </tr>
+                            {% else %}
+
+                            {% endfor %}
+
+                        {% else %}
+
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                    </div>
+                </div>
+                <div
+                    class="tab-pane fade"
+                    id="codespromos"
+                    role="tabpanel"
+                    aria-labelledby="codespromos-tab">
+                    <div class="col-12 col-xs-12">
+
+                    </div>
+                </div>
+            </div>

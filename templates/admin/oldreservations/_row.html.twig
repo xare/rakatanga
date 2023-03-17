@@ -16,7 +16,7 @@
     </td>
       <td{% if oldreservation.Dates == null %} class="bg-danger"{% endif %}>
         {% if oldreservation.Dates != null %}
-            <a href="{{ path('travel_edit', {'id':oldreservation.Dates.id } ) }}">
+            <a href="{{ path('dates_edit', {'id':oldreservation.Dates.id } ) }}">
                 {{ oldreservation.Dates.debut|date('d/m/Y') }} -
                 {{ oldreservation.Dates.fin|date('d/m/Y') }}
             </a>
@@ -25,9 +25,9 @@
     <td style="font-size:0.8rem">
         {{ oldreservation.log|u.truncate(200,'...')|raw }}
         <br />
-        <a 
-            href="#" 
-            data-action="read-more" 
+        <a
+            href="#"
+            data-action="read-more"
             data-content="{{ oldreservation.log|raw|escape }}"
             class="btn btn-primary btn-sm">
             Read more
@@ -39,15 +39,15 @@
     <td style="font-size:0.8rem">
         {{ oldreservation.commentaire|u.truncate(200,'...')|raw }}
         <br />
-        <a 
-            href="#" 
-            data-action="read-more" 
+        <a
+            href="#"
+            data-action="read-more"
             data-content="{{ oldreservation.commentaire|raw|escape }}"
             class="btn btn-primary btn-sm small">
             Read more
         <a>
         </td>
-    
+
     <td>{{ oldreservation.codepromo }}</td>
     <td>{{ oldreservation.montant }}</td>
     <td>{{ oldreservation.reduction }}</td>
@@ -57,17 +57,17 @@
     {# <td>{{ oldreservation.dateAjout ? oldreservation.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
     <td>{{ oldreservation.datePaiement1 ? oldreservation.datePaiement1|date('Y-m-d H:i:s') : '' }}</td>
     <td>{{ oldreservation.datePaiement2 ? oldreservation.datePaiement2|date('Y-m-d H:i:s') : '' }}</td> #}
-    
+
     <td>
-        <a 
-            href="{{ path('oldreservations_show', {'id': oldreservation.id}) }}" 
+        <a
+            href="{{ path('oldreservations_show', {'id': oldreservation.id}) }}"
             class="btn btn-primary">
             <i class="fa fa-eye"></i>
         </a>
     </td>
     <td>
-        <a 
-            href="{{ path('oldreservations_edit', {'id': oldreservation.id}) }}" 
+        <a
+            href="{{ path('oldreservations_edit', {'id': oldreservation.id}) }}"
             class="btn btn-info">
             <i class="fa fa-edit"></i>
         </a>

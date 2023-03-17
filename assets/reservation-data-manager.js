@@ -10,8 +10,6 @@ $(document).ready(function() {
     let $wrapper = $('#js-reservation-wrapper');
     var ReservationDataApp = new reservationDataApp($wrapper);
 
-
-
     var documentsList = new DocumentsList($wrapper);
     var types = [
         'passport', 'visa', 'drivers'
@@ -62,9 +60,9 @@ $(document).ready(function() {
 
     $('[data-action="next"]').on('click', function(event) {
         event.preventDefault();
+
         const $activeElement = $("#myTabContent div.active");
         const $activeTabLink = $("#myTabs li button.active");
-
         const $tabs = $('#myTabContent > div');
         const totalTabs = $tabs.length;
         let tabIndex = $activeElement.index();
@@ -110,6 +108,21 @@ $(document).ready(function() {
             $activeElement.prev().addClass('active');
             $activeTabLink.parent('li').prev().find('button').addClass('active');
             $('[data-action="next"]').show();
+        }
+    });
+    const tablinks = $('#myTabs li');
+    $('.nav-link').on('click', function(event) {
+        const linkIndex = $(event.currentTarget).parent().index();
+        if (linkIndex == 0) {
+            //FIRST TAB
+            $('[data-action="next"]').show();
+            $('[data-action="previous"]').hide();
+        } else if (linkIndex === tablinks.length - 1) {
+            $('[data-action="next"]').hide();
+            $('[data-action="previous"]').show();
+        } else {
+            $('[data-action="next"]').show();
+            $('[data-action="previous"]').show();
         }
     });
 });

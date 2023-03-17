@@ -113,7 +113,6 @@ class reservationsApp {
         event.preventDefault();
         const self = this;
         const locale = document.documentElement.lang;
-        console.info(locale);
         const invoiceId = $(event.currentTarget)
             .data("invoiceid");
         (async() => {
@@ -125,7 +124,6 @@ class reservationsApp {
                     type: "post",
                     data: { locale }
                 });
-                console.info(invoiceFormResponse);
                 (async(invoiceFormResponse) => {
                     const { value: formValues } = await Swal.fire({
                         title: invoiceFormResponse.title,
@@ -145,7 +143,6 @@ class reservationsApp {
                             }
                         }
                     });
-                    console.info(formValues);
                     if (formValues) {
                         const row = $(event.currentTarget).closest('tr');
                         const response = self._handleSubmitInvoice(formValues, row);
@@ -160,7 +157,6 @@ class reservationsApp {
 
     _handleSubmitInvoice(formData, row) {
         const invoiceId = formData.invoiceId;
-        console.info('handleSubmitInvoice', row);
         (async() => {
             try {
                 const response = await $.ajax({

@@ -15,6 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/invoices')]
 class InvoicesController extends AbstractController
 {
+
+    public function __construct(private invoiceHelper $invoiceHelper) {
+
+    }
     #[Route('/', name: 'invoices_index', methods: ['GET'])]
     public function index(InvoicesRepository $invoicesRepository): Response
     {
@@ -31,6 +35,7 @@ class InvoicesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $invoice = $this->invoiceHelper->createInvoiceFromNull($invoice);
             $entityManager->persist($invoice);
             $entityManager->flush();
 

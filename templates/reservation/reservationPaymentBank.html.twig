@@ -46,5 +46,6 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
+    {{  encore_entry_link_tags('tags')  }}
 	{{ encore_entry_script_tags('reservation-payment-transfer') }}
 {% endblock %}

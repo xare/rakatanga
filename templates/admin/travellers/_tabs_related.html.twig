@@ -1,0 +1,62 @@
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li class="nav-item">
+                <button class="nav-link active"
+                        id="reservations-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#reservations"
+                        type="button"
+                        role="tab"
+                        aria-controls="reservations"
+                        aria-selected="true"
+                            >Reservas
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+                        id="data-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#data"
+                        type="button"
+                        role="tab"
+                        aria-controls="data"
+                        aria-selected="true"
+                        >Datos
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+                        id="documents-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#documents"
+                        type="button"
+                        role="tab"
+                        aria-controls="documents"
+                        aria-selected="true"
+                        >Documentos
+                </button>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div
+                class="tab-pane fade show active"
+                id="reservations"
+                role="tabpanel"
+                aria-labelledby="reservations-tab">
+                    {{ include('admin/travellers/_travellers_reservations.html.twig') }}
+            </div>
+            <div
+                class="tab-pane fade show"
+                id="data"
+                role="tabpanel"
+                aria-labelledby="data-tab">
+                    {{ include('admin/travellers/_travellers_data.html.twig') }}
+            </div>
+            <div
+                class="tab-pane fade show"
+                id="documents"
+                role="tabpanel"
+                aria-labelledby="documents-tab">
+                    {{ include('admin/travellers/_travellers_documents.html.twig') }}
+            </div>
+        </div>

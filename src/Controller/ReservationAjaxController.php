@@ -365,10 +365,10 @@ class ReservationAjaxController extends AbstractController
                 'isInitialized' => true,
                 'reservationOptions' => $reservationOptions,
                 'reservation' => $reservation, ]);
-        /* $codespromoHtml = $this->renderView('reservation/cards/_card_codespromo.html.twig', [
+        $codespromoHtml = $this->renderView('reservation/cards/_card_codespromo.html.twig', [
             'user' => $this->getUser(),
 
-        ]); */
+        ]);
         $renderArray = [
             'code' => 200,
             'lang' => $lang->getId(),
@@ -382,8 +382,8 @@ class ReservationAjaxController extends AbstractController
             'user' => $user,
             'userId' => $user ? $user->getId() : '',
             'isInitialized' => true,
-            /* 'swalHtml' => $swalHtml,
-            'codespromoHtml' => $codespromoHtml, */
+            /* 'swalHtml' => $swalHtml,*/
+            'codespromoHtml' => $codespromoHtml,
             'html' => $renderHtml,
             'locale' => $locale,
         ];
@@ -552,7 +552,7 @@ class ReservationAjaxController extends AbstractController
                                         $this->getUser());
         }
 
-        $travellersTableHtml = $this->renderView('reservation/_travellers_table.html.twig', [
+        $travellersTableHtml = $this->renderView('reservation/_partials/_travellers_table.html.twig', [
             'travellers' => $reservation->getTravellers(),
         ]);
         dump($travellersTableHtml);
@@ -901,6 +901,10 @@ class ReservationAjaxController extends AbstractController
         function addTravellersForms(
             Request $request
         ){
+            /**
+             * @var $user
+             */
+            $user = $this->getUser();
             $reservationId = $request->request->get('reservation');
             $renderArray = [];
             $renderArray['nbpilotes'] = $request->request->get('nbpilotes');
@@ -914,10 +918,29 @@ class ReservationAjaxController extends AbstractController
             }
 
             $i = 0;
+            if(($renderArray['nbpilotes'] + $renderArray['nbaccomp']) == 1){
+                $traveller = new Travellers();
+                $traveller->setUser($user);
+                $traveller->setPrenom($user->getPrenom());
+                $traveller->setNom($user->getNom());
+                $traveller->setTelephone($user->getTelephone());
+                $traveller->setEmail($user->getEmail());
+                $traveller->isIsReservationUser(true);
+                $traveller->setReservation($reservation);
+                $traveller->setPosition('pilote');
+                $this->entityManager->persist($traveller);
+                $this->entityManager->flush();
+
+                $html = $this->renderView(
+                    'reservation/_partials/_card_travellers_table_container.html.twig',
+                    ['travellers'=> $traveller]
+                );
+            } else {
             $html = $this->renderView(
                     'reservation/cards/_card_add_travellers_data.html.twig',
                     $renderArray
                 );
+            }
             return $this->json(['html' => $html], 200, [],[]);
             //return new Response($html);
         }
@@ -955,7 +978,7 @@ class ReservationAjaxController extends AbstractController
     ) {
         $data = $request->request->all();
         $this->travellersHelper->updateTravellerData($traveller,$data );
-        $html = $this->renderView('reservation/_travellers_row.html.twig',['traveller' =>$traveller]);
+        $html = $this->renderView('reservation/_partials/_travellers_row.html.twig',['traveller' =>$traveller]);
         return $this->json(['html' => $html],200,[],[]);
     }
 

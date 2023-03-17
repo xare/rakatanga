@@ -1,0 +1,13 @@
+<table class="table table-stripped text-small">
+{% if travellers is iterable %}
+  {% for traveller in travellers %}
+    <tr>
+    {{ include('reservation/_partials/_travellers_row.html.twig',{ 'traveller': traveller }) }}
+    </tr>
+  {% endfor %}
+{% else %}
+  <tr>
+    {{ include('reservation/_partials/_travellers_row.html.twig',{ 'traveller': travellers }) }}
+  </tr>
+{% endif %}
+</table>

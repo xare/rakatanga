@@ -72,14 +72,11 @@ class DocumentsList {
                     });
                 });
                 this.on('error', (file, errorMessage) => {
-                    console.info(errorMessage.detail);
                     Swal.fire({
                         'title': 'Error',
                         'html': errorMessage.detail
                     });
                     if (errorMessage.detail) {
-                        console.info(type);
-                        console.info('before setTimeout');
                         this.emit('error', file, errorMessage);
                         setTimeout(function() {
                             console.info('inside setTimeout', type);
