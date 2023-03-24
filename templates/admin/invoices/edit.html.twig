@@ -2,6 +2,13 @@
 
 {% block title %}Edit Invoices{% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('reservations-admin') }}
+    {{ encore_entry_link_tags('admin_reservations') }}
+	{{ encore_entry_link_tags('tags') }}
+{% endblock %}
+
 {% block body %}
 <div class="container">
         <div class="row">

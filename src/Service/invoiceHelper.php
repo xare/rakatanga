@@ -119,6 +119,40 @@ class invoiceHelper
         return true;
     }
 
+    public function makeManualInvoice(
+        string $description,
+        int $ammount,
+        string $locale,
+        array $customerData,
+        string $status):Invoices {
+            $invoice = new Invoices();
+            /**
+         * @var \DateTime $dateTime
+         */
+        $dateTime = new \DateTime();
+        $latestInvoiceNumber = $this->_getLatestInvoiceNumber();
+
+        /**
+         * @var int $invoiceNumber
+         */
+        $invoiceNumber = $latestInvoiceNumber + 1;
+        $invoice->setInvoiceNumber("{$dateTime->format('Y')}-{$invoiceNumber}");
+
+        $this->_assignCustomerDataToInvoiceObject($invoice, $locale, $customerData);
+        /**
+         * @var string $invoiceFileName
+         */
+        $invoice->setDueAmmount($customerData['dueAmmount']);
+        $invoice->setDescription($description);
+        $invoiceFileName = $this->pdfHelper->createManualInvoicePdf($invoice, $locale, $status);
+        $invoice->setOriginalFilename($invoiceFileName);
+        $invoice->setFilename($invoiceFileName);
+        $invoice->setDueAmmount($ammount);
+        $this->entityManager->persist($invoice);
+        $this->entityManager->flush();
+
+        return $invoice;
+    }
     /**
      * _createInvoice function.
      */
@@ -225,7 +259,6 @@ class invoiceHelper
     private function _getLatestInvoiceNumber(): int
     {
         $latestInvoice = $this->invoicesRepository->findBy([], ['date_created' => 'DESC'], 1, 0);
-        dump($latestInvoice);
 
         return $latestInvoice == null ? 0 : $this->_getInvoiceNumber($latestInvoice[0]);
     }

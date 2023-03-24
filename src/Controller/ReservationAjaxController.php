@@ -555,7 +555,7 @@ class ReservationAjaxController extends AbstractController
         $travellersTableHtml = $this->renderView('reservation/_partials/_travellers_table.html.twig', [
             'travellers' => $reservation->getTravellers(),
         ]);
-        dump($travellersTableHtml);
+
         return $this->json([
             'travellersTableHtml' => $travellersTableHtml,
             'travellersByReservation' => $reservation->getTravellers(),
@@ -736,7 +736,7 @@ class ReservationAjaxController extends AbstractController
             $reservationData,
             $customerData,
             $request->getLocale());
-            dump($reservation);
+
         $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', [
                 'reservation' => $reservation,
                 '_locale' => $locale
@@ -817,7 +817,7 @@ class ReservationAjaxController extends AbstractController
         $locale = $_locale ? $_locale : $locale;
 
         $data = $request->request->all();
-        dump($data);
+
         $renderArray = [];
         if( $data['date'] != null ){
             $date = $this->datesRepository->find( $data['date'] );
@@ -826,29 +826,19 @@ class ReservationAjaxController extends AbstractController
 
         $renderArray['locale'] = $_locale;
         $renderArray['_locale'] = $locale;
-        dump($renderArray);
-
         $renderArray = $renderArray + $data;
-        dump($renderArray);
+
         if (isset($data['reservation'])) {
-            dump($data['reservation']);
             $reservation = $this->reservationRepository->find($data['reservation']);
-            dump($reservation);
             $renderArray['reservation'] = $reservation;
         }
 
-        /* if (isset($data['codepromo'])) {
-            dump($data['codepromo']);
-            $renderArray['codepromo'] = $data['codepromo'];
-
-        } */
 
         $renderArray['options'] = (isset($data['options'])) ? $data['options'] : '';
         $renderArray['reservationOptions'] = (isset($data['options'])) ? $data['options'] : '';
         $renderArray['optionsJson'] = (isset($data['options'])) ? json_encode($data['options']) : '';
         $renderArray['isInitialized'] = (isset($data['isInitialized'])) ? $data['isInitialized'] : '';
         $renderArray['userEdit'] = (isset($data['userEdit'])) ? $data['userEdit'] : '';
-        dump($renderArray);
         if(isset($data['isInitialized'])){
             $renderArray['isInitialized'] = ($data['isInitialized']!= null) ? $data['isInitialized'] : null;
         }
@@ -911,9 +901,6 @@ class ReservationAjaxController extends AbstractController
             $renderArray['nbaccomp'] = $request->request->get('nbaccomp');
             if(isset($reservationId) ) {
                 $reservation = $this->reservationRepository->find($reservationId);
-                foreach ($reservation->getTravellers() as $traveller){
-                    dump($traveller);
-                }
                 $renderArray['reservation'] = $reservation;
             }
 

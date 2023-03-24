@@ -1,0 +1,79 @@
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+  <li class="nav-item">
+    <button class="nav-link active"
+              id="invoice-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#invoice"
+              type="button"
+              role="tab"
+              aria-controls="invoice"
+              aria-selected="true"
+                  >Factura
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link"
+                id="reservation-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#reservation"
+                type="button"
+                role="tab"
+                aria-controls="reservation"
+                aria-selected="true"
+                    >Reserva
+        </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link"
+                id="reservation-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#payments"
+                type="button"
+                role="tab"
+                aria-controls="payments"
+                aria-selected="true"
+                    >pagos
+        </button>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div
+        class="tab-pane fade show active"
+        id="invoice"
+        role="tabpanel"
+        aria-labelledby="invoice-tab">
+        <ul class="list-group">
+          <li class="list-group-item">
+          <a href="{{ path('user-download-invoice', { 'invoice' : invoice.id } ) }}"
+            target="_blank">
+            {{ invoice.invoiceNumber}}
+            <i class="fa fa-download"></i>
+         </li>
+       </ul>
+        </a>
+        </ul>
+    </div>
+    <div
+        class="tab-pane fade show"
+        id="reservation"
+        role="tabpanel"
+        aria-labelledby="reservation-tab">
+        {{ include('admin/reservation/_row.html.twig', { 'reservation': invoice.reservation }) }}
+    </div>
+    <div
+        class="tab-pane fade show"
+        id="payments"
+        role="tabpanel"
+        aria-labelledby="payments-tab">
+        <ul class="list-group">
+        {% for payment in invoice.reservation.payments %}
+          <li class="list-group-item">
+            <a href="{{path('payments_edit',{'id': payment.id} )}}">
+              <strong>{{ payment.dateAjout|date('d/m/Y') }}</strong> -
+              {{ payment.ammount|format_currency('EUR', {fraction_digit: 0}) }}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+    </div>
+  </div>

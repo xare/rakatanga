@@ -119,6 +119,7 @@ class reservationApp {
         this._updateNbFromSelect(type, nbPilotes);
         const nbAccomp = this.$calculator.data('nbaccomp');
         $('[data-action="handle-change-nb-accomp"]').attr('max', nbPilotes);
+
         this._changeOptionsAmmount(
             nbPilotes,
             nbAccomp
@@ -292,8 +293,6 @@ class reservationApp {
             'nbaccomp': previousData.nbaccomp,
             'userEdit': previousData.userEdit
         };
-
-        console.info(requestData);
         (async() => {
             try {
                 const response = await $.ajax({
@@ -445,6 +444,9 @@ class reservationApp {
         const reservationData = this.$calculator.data();
 
         const comment = this.$wrapper.find('[name="reservation_comment]').val();
+        $("[data-action='handle-change-nb-pilotes']").prop("disabled", true);
+        $("[data-action='handle-change-nb-accomp']").prop("disabled", true);
+        $("tr.js-options-row-select select").prop("disabled", true);
         let self = this;
         let data = {
             dateId: reservationData.date,
@@ -476,56 +478,12 @@ class reservationApp {
                 self._loadUserSwitch();
                 $("[data-container='js-card-user']").hide();
                 $('.card-codespromo, .card-comment').removeClass('d-none');
-                console.info(response.codespromoHtml);
                 $('.card-codespromo').html(response.codespromoHtml);
-                /* if (swalResponse.isDismissed !== true && typeof response.codepromo !== 'undefined') {
-                    let discount = response.codepromoMontant === null ? response.codepromoPourcentage : response.codepromoMontant;
-                    let discountType = response.codepromoMontant === null ? 'pourcentage' : 'ammount';
-                    (async() => {
-                        try {
-                            const response2 = await $.ajax({
-                                url: Routing.generate('assign-codepromo', {
-                                    'codepromo': response.codepromoId,
-                                    'reservation': response.reservationId
-                                }),
-                                type: 'GET',
-                            });;
-                            self.$calculator.data('codepromo', response.codepromoId);
-                            self.$calculator.data('discount', discount);
-                            self.$calculator.data('discount-type', discountType);
-                            self.$calculator.data('reservation', response.reservationId);
-                            (async() => {
-                                try {
-
-                                    const response3 = await $.ajax({
-                                        url: Routing.generate('update-calculator', {
-                                            '_locale': self.locale
-                                        }),
-                                        type: 'POST',
-                                        beforeSend: () => {
-                                            $('[data-container="calculator"]').find('.card-body > div > table').hide();
-                                            let waitingText = $('[data-container="calculator"]').data('waiting');
-                                            $('[data-container="calculator"]').find('.card-body').append(`<div><i class="fas fa-spinner fa-spin"></i> ${waitingText}`);
-                                        },
-                                        data: self.$calculator.data()
-                                    });
-                                    $('[data-container="calculator-wrapper"]').empty().append(response3);
-                                    $('.card-logged-user').removeClass('d-none');
-                                } catch (jqXHR) {
-                                    console.info(jqXHR);
-                                }
-                            })();
-                        } catch (error) {
-                            console.info(error);
-                        }
-                    })();
-                } */
                 this.travellersApp._addTravellersForms(
                     response.reservationId,
                     data.nbPilotes,
                     data.nbAccomp);
             } catch (jqXHR) {
-                console.info(jqXHR);
                 if (jqXHR.status == 500) {
                     Swal.fire({
                         'text': 'Error del sistema intentanlo de nuevo. Lamentamos las molestias'
@@ -550,56 +508,9 @@ class reservationApp {
         })();
     }
 
-
-
-    /*  setReservationStatus(event) {
-         event.preventDefault();
-         const self = this
-         $('#js-reservation-status-statement').html('The reservation has been activated')
-         let $checkbox = $(event.currentTarget)
-         $(event.currentTarget).closest('.card').addClass('alert-danger')
-         const status = this.$wrapper.data('reservationStatus')
-         let newStatus = (status == 'cancelled') ? 'initialized' : 'cancelled';
-         if (newStatus == "cancelled") {
-             self.$wrapper.data('reservationStatus', 'cancelled')
-             $(event.currentTarget).closest('.card').addClass('alert-danger')
-             $('#js-card-travellers').fadeOut(1000)
-             $('.travel-options').fadeOut(1000)
-             $('.card-logged-user').fadeOut(1000)
-         } else {
-             self.$wrapper.data('reservationStatus', 'initialized')
-             $(event.currentTarget).closest('.card').removeClass('alert-danger')
-             $('#js-card-travellers').removeClass('d-none')
-             $('#js-card-travellers').fadeIn(1000)
-             $('.travel-options').removeClass('d-none')
-             $('.travel-options').fadeIn(1000)
-             $('.card-logged-user').fadeIn(1000)
-             $('.card-logged-user').closest('.row').removeClass('d-none')
-         }
-         const reservationId = this.$wrapper.data('reservation-id');
-         (async() => {
-             try {
-                 const response = await $.ajax({
-                     url: Routing.generate('ajax_reservation_set_status', {
-                         'reservation': reservationId
-                     }),
-                     data: {
-                         'status': newStatus
-                     },
-                     type: "POST"
-                 })
-                 $('#js-reservation-status-statement').html(response.message);
-                 $('.form-check-label').html(response.label);
-
-             } catch (jqXHR) {
-                 console.error(jqXHR)
-             }
-         })();
-     } */
-
     updateChanges(event) {
         event.preventDefault();
-        console.info(event.currentTarget);
+
         $(event.currentTarget).removeClass('d-block');
         $(event.currentTarget).hide();
         this._updateChanges();

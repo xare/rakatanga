@@ -171,13 +171,12 @@ class ReservationController extends AbstractController
     {
         $locale = $_locale ? $_locale : $locale;
         $reservationData = $request->request->all();
-        dump($reservationData);
+
         if( isset($reservationData['comment']) && $reservationData['comment'] != '' ){
             $reservation->setComment($reservationData['comment']);
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
         }
-        dump($reservation);
         if (
             isset($reservationData['userEdit'])
             && $reservationData['userEdit'] == true) {
@@ -201,7 +200,6 @@ class ReservationController extends AbstractController
         }
         // LANG MENU
         $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale, $reservation);
-        dump($locale);
         $this->breadcrumbsHelper->reservationPaymentBreadcrumbs($locale, $reservation);
 
         $date = $reservation->getDate();

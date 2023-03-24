@@ -13,23 +13,24 @@
                         <thead class="main-red">
                             <tr>
                                 <th>Id</th>
+                                <th>Nº factura</th>
                                 <th>Nombre</th>
                                 <th>Nif</th>
                                 <th>Dirección</th>
                                 <th>Código Postal</th>
                                 <th>Ciudad</th>
                                 <th>País</th>
-                                <th>Nº factura</th>
-                                <th>{{'Cantidad'|trans}}</th>
+                                <th>Cantidad</th>
                                 {# <th><i class="fa fa-eye"></i></th> #}
                                 {# <th><i class="fa fa-edit"></i></th> #}
+                                <th><i class="fa fa-download"></i></th>
                                 <th><i class="fa fa-trash"></i></th>
                             </tr>
                         </thead>
                     <tbody>
                         {% for invoice in invoices %}
                             {{ include('admin/invoices/_row.html.twig') }}
-                            
+
                         {% else %}
                             <tr>
                                 <td colspan="11">no records found</td>

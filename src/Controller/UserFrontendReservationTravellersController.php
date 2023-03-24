@@ -128,7 +128,7 @@ class UserFrontendReservationTravellersController extends AbstractController
         $locale = $request->request->get('locale');
         $travellersArray = $request->request->all();
         $reservationData = $this->reservationDataRepository->find($reservation->getId());
-        dump($travellersArray);
+
         foreach($travellersArray['traveller'] as $travellerElement) {
             $this->travellersHelper->addTravellerToReservation(
                 $travellerElement,

@@ -123,7 +123,6 @@ class UserFrontendController extends AbstractController
         $user = $this->getUser();
         $locale = $user->getLangue() ? : $_locale;
         $request->setLocale($locale);
-        dump($locale);
         // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
 
@@ -137,17 +136,17 @@ class UserFrontendController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $userData = $form->getData();
-            $user->setPassword(
+            /* $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form['password']->getData()
-                ));
-            $userData->setPassword($user->getPassword());
+                )); */
+            //$userData->setPassword($user->getPassword());
             $this->entityManager->persist($userData);
             $this->entityManager->flush();
             $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
 
-            return $this->redirectToRoute('frontend_user');
+            //return $this->redirectToRoute('frontend_user');
         }
 
         return $this->render('user/user_settings.html.twig', [

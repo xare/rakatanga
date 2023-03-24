@@ -35,7 +35,22 @@ class InvoicesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $invoice = $this->invoiceHelper->createInvoiceFromNull($invoice);
+            $formData = $form->getData();
+
+            $invoice = $this->invoiceHelper->makeManualInvoice(
+                $request->request->get('description'),
+                $formData->getDueAmmount(),
+                "es",
+                [
+                    'name' => $formData->getName(),
+                    'nif' => $formData->getNif(),
+                    'postalcode' => $formData->getPostalcode(),
+                    'city' => $formData->getcity(),
+                    'address' => $formData->getAddress(),
+                    'country' => $formData->getCountry(),
+                    'dueAmmount' =>$formData->getDueAmmount()
+                ],
+                "open");
             $entityManager->persist($invoice);
             $entityManager->flush();
 

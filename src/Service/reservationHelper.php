@@ -67,7 +67,7 @@ class reservationHelper
                                 ->findOneBy([
                                     'code' => $codepromoString,
                                 ]);
-            dump($codepromo);
+
             $reservation->setNbpilotes($data['nbPilotes']);
             $reservation->setNbAccomp($data['nbAccomp']);
             $reservation->setStatus('initialized');
@@ -111,7 +111,7 @@ class reservationHelper
         array $customerData,
         string $locale):Reservation
     {
-        dump($reservationData);
+
         $reservation->setNbpilotes($reservationData['nbpilotes']);
         $reservation->setNbAccomp($reservationData['nbaccomp']);
         if(isset($reservationData['comment']) && $reservationData['comment'] != '')
@@ -172,7 +172,6 @@ class reservationHelper
     {
         $optionItem = $this->optionsRepository->find($option['id']);
         $isAlready = $this->_isReservationOptionAlready($reservation, $option);
-        dump($isAlready);
         if( $isAlready == "true" ){
             return false;
         } elseif( $isAlready == "false"){
@@ -181,7 +180,7 @@ class reservationHelper
         } elseif ($isAlready == "newAmmount") {
             $reservationOptions = $this->reservationOptionsRepository->findOneBy(['reservation'=> $reservation]);
         }
-        dump($reservationOptions);
+
         $reservationOptions->setAmmount($option['ammount']);
         $reservation->addReservationOption($reservationOptions);
         $this->entityManager->persist($reservation);
@@ -193,10 +192,10 @@ class reservationHelper
         Reservation $reservation,
         array $selectedOption): string
     {
-        dump($selectedOption);
+
         $returnValue = "false";
         foreach ($reservation->getReservationOptions() as $reservedOption) {
-            dump($reservedOption);
+
             if ( $reservedOption->getOption()->getId() === $selectedOption['id'] ){
                 if($reservedOption->getAmmount() === $selectedOption['ammount']){
                     $returnValue = "true";
@@ -233,7 +232,6 @@ class reservationHelper
             $i++;
             }
         }
-        dump($optionsArray);
         return $optionsArray;
         /* if (count($travelOptions) > 0) {
             $i = 0;

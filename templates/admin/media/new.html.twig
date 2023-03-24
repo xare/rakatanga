@@ -3,8 +3,9 @@
 {% block title %}New Media{% endblock %}
 
 {% block body %}
- 
+
     <div class="container">
+        {{ include ('admin/shared/_controlband.html.twig',{'entity':'media'})}}
         <div class="row">
             <div class="col-md-12 col-sm-12">
                 <h1>Create new Media</h1>
@@ -22,5 +23,5 @@
             </div>
         </div>
     </div>
-  
+
 {% endblock %}

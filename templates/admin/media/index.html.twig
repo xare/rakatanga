@@ -4,30 +4,25 @@
 
 {% block body %}
     <div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'media'})}}
         <div class="row">
-            <div class="col-md-12 col-sm-12 js-index-container" 
-                 data-url="
-                    {% if pageNumber > 0 %}
-                        {{ path('media_items', { page: pageNumber }) }}
-                    {% else %}
-                        {{ path('media_items') }}
-                    {% endif %}
-                "
-                data-entity="media">
+            <div class="col-12 col-xs-12">
                 <h1>Media index</h1>
-            {# total items count #}
+
                 <div class="count">
-                    <strong>Media en total:</strong> 
-                    <span id="totalItemCount">{# {{ media.getTotalItemCount }} #}</span>
+                    <strong>Media en total:</strong>
+                    <span id="totalItemCount">{{ media.getTotalItemCount }} </span>
                 </div>
                 <br />
-                {# display navigation #}
+
                 <div class="navigation">
-                    {# {{ knp_pagination_render(media) }} #}
+                    {{ knp_pagination_render(media) }}
                 </div>
-                <div class="table-responsive js-entity-index-table">
-                    <table class="table table-striped table-hover small js-items-list">
-                        {# <thead class="main-red">
+                {# <div class="table-responsive js-entity-index-table"> #}
+                <div class="table-responsive">
+                    {# <table class="table table-striped table-hover small js-items-list"> #}
+                    <table class="table table-striped table-hover small">
+                        <thead class="main-red">
                             <tr>
                                 <th>{{ knp_pagination_sortable(media, 'Id', 'm.id',{'class':'text-decoration-none link-light'}) }}</th>
                                 <th{% if media.isSorted('m.type') %} class="sorted"{% endif %}>
@@ -39,86 +34,79 @@
                                 <th{% if media.isSorted('m.path') %} class="sorted"{% endif %}>
                                     {{ knp_pagination_sortable(media, 'Path', 'm.path',{'class':'text-decoration-none link-light'}) }}
                                 </th>
-                                {# <th>Url</th> #}
-                                {# <th{% if media.isSorted('m.filename') %} class="sorted"{% endif %}>
+                                <th>Url</th>
+                                <th{% if media.isSorted('m.filename') %} class="sorted"{% endif %}>
                                     {{ knp_pagination_sortable(media, 'Filename', 'm.filename',{'class':'text-decoration-none link-light'}) }}
                                 </th>
                                 <th>Thumbnail</th>
-                                <th><i class="fa fa-eye"></i></th>
+                                {# <th><i class="fa fa-eye"></i></th> #}
                                 <th><i class="fa fa-edit"></i></th>
                                 <th><i class="fa fa-trash"></i></th>
                             </tr>
-                        </thead> #}
-                        {# <tbody
-                            data-url="
-                                {% if pageNumber > 0 %}
-                                    {{ path('media_items', { page: pageNumber }) }}
-                                {% else %}
-                                    {{ path('media_items') }}
-                                {% endif %}
-                                    "> #}
-                        {# {% for medium in media %} #}
-                            {# {{ include('admin/media/_mediaRow.html.twig') }} #}
-                        {# {% else %}
+                        </thead>
+                        <tbody>
+                            {% for medium in media %}
+                                {{ include('admin/media/_mediaRow.html.twig') }}
+                            {% else %}
                             <tr>
                                 <td colspan="6">no records found</td>
                             </tr>
-                        {% endfor %} #}
-                       {#  </tbody> #}
+                        {% endfor %}
+                       </tbody>
                     </table>
                     <div class="navigation">
-                    {# {{ knp_pagination_render(media) }} #}
+                        {{ knp_pagination_render(media) }}
                     </div>
-                    <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    {# <ul class="nav nav-tabs" role="tablist" id="myTab">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active"
-                                    id="simple-form-tab" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#simple-form" 
-                                    type="button" 
-                                    role="tab" 
+                                    id="simple-form-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#simple-form"
+                                    type="button"
+                                    role="tab"
                                     aria-controls="#simple-form"
                                     aria-selected="true"
                             >Formulario Sencillo</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link"
-                                    id="dropzone-tab" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#dropzone" 
-                                    type="button" 
-                                    role="tab" 
+                                    id="dropzone-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#dropzone"
+                                    type="button"
+                                    role="tab"
                                     aria-controls="#dropzone"
                                     aria-selected="false"
                                     >
                                     Dropzone</button>
-                            </li>
-                        </ul>
-                            <div class="tab-content">
-                                <div 
-                                    class="tab-pane fade show active" 
-                                    id="simple-form" 
-                                    role="tabpanel" 
-                                    aria-labelledby="simple-form-tab">
-                                        <div class="js-new-item-table">
-                                            <div class="js-new-item-form-wrapper">
-                                                {{ include('admin/media/_dynamic_form.html.twig') }}
-                                            </div>
-                                        </div>
+                        </li>
+                    </ul> #}
+                    <div class="tab-content">
+                        <div
+                            class="tab-pane fade show active"
+                            id="simple-form"
+                            role="tabpanel"
+                            aria-labelledby="simple-form-tab">
+                                <div class="js-new-item-table">
+                                    <div class="js-new-item-form-wrapper">
+                                        {{ include('admin/media/_dynamic_form.html.twig') }}
+                                    </div>
                                 </div>
-                                <div 
-                                    class="tab-pane fade" 
-                                    id="dropzone" 
-                                    role="tabpanel" 
-                                    aria-labelledby="dropzone-tab">
-                                    {{ include('admin/media/_form_dropzone.html.twig') }}
-                                </div>
-                            </div>
+                        </div>
+                        <div
+                            class="tab-pane fade"
+                            id="dropzone"
+                            role="tabpanel"
+                            aria-labelledby="dropzone-tab">
+                            {{ include('admin/media/_form_dropzone.html.twig') }}
+                        </div>
+                    </div>
                     <a href="{{ path('media_new') }}" class="btn btn-primary">
                         <i class="fa fa-plus-circle"></i>
                         Create new
                     </a>
-                </div> 
+                </div>
             </div>
         </div>
     </div>

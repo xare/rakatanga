@@ -11,14 +11,18 @@
       id="js-payment-dropzone"
       {# id="js-{{typeWord|lower}}-dropzone" #}>
       <div class="dz-message" data-dz-message>
+          <h3> Justificante Bancario</h3>
           <span>
               <i class="fa fa-file fa-3x"></i>
+              <br /><br />
+              {{'Por favor, añade aquí la cantidad que decides aportar 500 € iniciales o la cantidad total del pago'|trans }}. {{'Y arrastra aquí (o haz click) el justificante de tu transferencia bancaria'|trans }}.
               <br /><br />
               {{'Arrastra el archivo hasta aquí o haz símplemente click, y se abrirá la ventana de selección de archivo'|trans}}.
           </span>
       </div>
+      <label for="js-payment-ammount">{{ 'Cantidad'|trans }}</label>
       <input
-        type="text"
+        type="number"
         class="form-control form-input"
         name="paymentAmmount"
         id="js-payment-ammount"

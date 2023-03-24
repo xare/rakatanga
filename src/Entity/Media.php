@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\MediaRepository;
 use App\Service\UploadHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

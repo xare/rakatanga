@@ -2,8 +2,11 @@ import './styles/admin.scss';
 import $ from 'jquery';
 import * as bootstrap from 'bootstrap';
 import "bootstrap-datepicker";
-import 'dropzone';
+import Dropzone from 'dropzone';
 
+const routes = require('../public/build/fos_js_routes.json');
+import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.js';
+Routing.setRoutingData(routes);
 
 import AdminTemplate from './admin-template.js';
 /************************ */

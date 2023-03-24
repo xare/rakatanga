@@ -21,8 +21,6 @@ class travellersApp {
                         }),
                         type: "GET"
                     });
-                    console.info(travellerFormResponse);
-
                     (
                         async(travellerFormResponse) => {
                             const { value: formValues } = await Swal.fire({
@@ -55,20 +53,15 @@ class travellersApp {
 
     handleAddTraveller(event) {
         event.preventDefault();
-        console.info(this);
         const reservationId = this.$calculator.data('reservation');
         const $travellersForm = $('[data-container="js-travellers-form"]');
         const formData = $travellersForm.find('input').serialize();
         const $travellersFormContainers = $travellersForm.find('[data-container="js-travellers-form-container"]');
-        console.info($travellersFormContainers);
-        console.info(this);
-        console.info(this._validateForm());
         if (!this._validateForm()) {
             const InvalidResponse = Swal.fire({
                 title: $travellersFormContainers.data('validation-title'),
                 text: $travellersFormContainers.data('validation-message'),
             });
-            console.info(InvalidResponse);
             return false;
         }
         (async() => {
@@ -95,16 +88,13 @@ class travellersApp {
     }
     _validateForm() {
         const form = document.querySelector('form[data-container="js-travellers-form"]');
-        console.info(form);
         const inputTextElements = Array.from(form.elements).filter(element => element.type === "text");
         const inputEmailElements = Array.from(form.elements).filter(element => element.type === "email");
         const isTextEmpty = inputTextElements.some(element => element.value.trim() === "");
         const isEmailEmpty = inputEmailElements.some(element => element.value.trim() === "");
         if (isTextEmpty === true || isEmailEmpty === true) {
-            console.info('false');
             return false;
         } else {
-            console.info('true?');
             return inputEmailElements.every(element => this._emailValidate(element.value));
         }
     }
@@ -133,16 +123,13 @@ class travellersApp {
     }
 
     _addTravellersForms(reservation, nbpilotes, nbaccomp) {
-        console.info(parseInt(nbpilotes) + parseInt(nbaccomp));
         if (parseInt(nbpilotes) + parseInt(nbaccomp) == 1) {
             $('#js-reservation-payment')
                 .removeAttr('title')
                 .removeAttr('data-bs-tooltip')
                 .removeClass('disabled');
-            console.info('disabled, should have been removed');
             document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { '_locale': this.locale, 'reservation': reservation });
         }
-        console.info('outside of reservation');
         const isInitialized = this.$calculator.data('isInitialized');
         const self = this;
         (
@@ -159,7 +146,7 @@ class travellersApp {
                             reservation
                         }
                     });
-                    console.info(response.html);
+
                     $('[data-container="js-travellers-form"]').html(response.html);
 
                 } catch (error) {
@@ -188,7 +175,6 @@ class travellersApp {
                     if ($(this).val() === response.user.email) {
                         // Get the parent container element that contains all the form fields
                         var parentContainer = $(this).closest('[data-container="js-traveller-form-container"]');
-                        console.info(event.currentTarget);
                         let buttonElement = $(event.currentTarget.outerHTML);
                         buttonElement.removeAttr('style');
                         parentContainer.find('h5').after(buttonElement[0].outerHTML);

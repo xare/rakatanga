@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-<div class="row">
+    <div class="row">
         <div class="col-3">
             {{ form_widget(form) }}
             <button class="btn btn-primary">
@@ -8,7 +8,7 @@
         </div>
         <div class="col-9">
             {% if payment.id != null %}
-                {{ include( 'admin/payments/_tabs_related.html.twig ' )}}
+                {{ include( 'admin/payments/_tabs_related.html.twig' )}}
             {% endif %}
         </div>
     </div>

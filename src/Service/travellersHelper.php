@@ -40,7 +40,6 @@ class travellersHelper {
           $traveller->setNom($travellerData['nom']);
           $traveller->setEmail($travellerData['email']);
           if($user->getEmail() == $travellerData['email']){
-            dump('linea43');
             $traveller->setIsReservationUser(true);
           }
           $traveller->setTelephone($travellerData['telephone']);

@@ -194,7 +194,7 @@ class Mailer
         string $verificationUrl,
         string $locale)
     {
-        dump($locale);
+
         $email = $this->sendToSender();
         $email->to(
             new Address(

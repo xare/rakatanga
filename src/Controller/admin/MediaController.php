@@ -32,6 +32,7 @@ class MediaController extends MainadminController
     protected $parameterBag;
     private $liipCache;
     private $entityManager;
+    private $imagineCacheManager;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
@@ -98,9 +99,7 @@ class MediaController extends MainadminController
         );
 
         $travels = $travelRepository->findAll();
-        $countries = $categoryRepository->findBy([
-            'type' => 'country',
-        ]);
+        $countries = $categoryRepository->findAll();
 
         if ($request->isXmlHttpRequest()) {
             $html = $this->renderView('admin/media/_dynamic_form.html.twig', [

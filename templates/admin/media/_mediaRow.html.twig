@@ -6,12 +6,12 @@
                     <td>{{ medium.url }}</td>
                     <td>{{ medium.filename }}</td>
                     <td><img src="{{ medium.mediaPath|imagine_filter('squared_thumbnail_small') }}" /></td>
-                    <td>
+                    {# <td>
                         <a href="{{ path('media_show', {'id': medium.id}) }}" class="btn btn-primary">
                             <i class="fa fa-eye"></i>
                         </a>
-                    </td>
-                    <td>    
+                    </td> #}
+                    <td>
                         <a href="{{ path('media_edit', {'id': medium.id}) }}" class="btn btn-info">
                             <i class="fa fa-edit"></i>
                         </a>

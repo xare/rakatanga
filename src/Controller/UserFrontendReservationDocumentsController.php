@@ -95,7 +95,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         $filename = $this->uploadHelper->uploadDocument($uploadedDocument);
         $traveller = null;
         $travellerId = null;
-        dump($request->request->get('traveller'));
+
         if ($request->request->get('traveller') != null) {
             $travellerId = $request->request->get('traveller');
 
@@ -105,7 +105,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
                 'traveller' => $traveller,
                 'user' => $user,
             ]);
-            dump($reservationData);
+
             if ($reservationData === null) {
                 $reservationData = new ReservationData();
                 $reservationData->setTraveller($traveller);
@@ -146,7 +146,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $documentsArray[$i] = $documentItem;
             ++$i;
         }
-        dump($documentsArray);
+
         $renderArray = [
             'reservation' => $reservation,
             'document' => $document,
@@ -350,7 +350,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             $dropHtmlRenderArray['traveller'] = $this->travellersRepository->find($travellerId);
             $listHtmldRenderArray['documents'] = $dropHtmlRenderArray['traveller']->getDocuments();
             $documents = $this->documentRepository->getDocumentsByReservationByTraveller($reservation, $dropHtmlRenderArray['traveller']);
-            //dump($documents);
+
         } else {
             $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation);
         }

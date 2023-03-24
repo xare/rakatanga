@@ -18,10 +18,10 @@
 		<table class="table table-condensed options">
 			<tbody>
 				{% for option in selectableOptions %}
-							<tr 
-								class="js-options-row-select" 
-								data-option-id="{{ option.id }}" 
-								data-option-price="{{ option.price }}" 
+							<tr
+								class="js-options-row-select"
+								data-option-id="{{ option.id }}"
+								data-option-price="{{ option.price }}"
 								data-option-title="{{ renderLocalizedOption(option.id, app.request.locale) }}">
 								{# <td class="col-1 col-xs-12" style="vertical-align: middle">
 									<span class="badge bg-secondary fs-6 fw-bold bg-opacity-75">
@@ -34,26 +34,30 @@
 								</td>
 								<td class="col-1 col-xs-12" style="vertical-align: middle">
 									{% if renderLocalizedOptionIntro(option.id,locale) != null %}
-											<span 
-													data-bs-toggle="tooltip" 
+											<span
+													data-bs-toggle="tooltip"
 													title="{{ renderLocalizedOptionIntro(option.id,locale)|striptags|raw}}">
 													<i class="fas fa-question"></i>
 											</span>
 									{% endif %}
 								</td>
 								<td class="col-2 col-xs-12" style="vertical-align: middle">
-									{# <input 
-										type="range" 
-										min="0" 
-										max="{{totalTravellers}}" class="form-control form-range"  name="reservation_user[option][{{ option.id }}]" 
+									{# <input
+										type="range"
+										min="0"
+										max="{{totalTravellers}}" class="form-control form-range"  name="reservation_user[option][{{ option.id }}]"
 										required{%if totalTravellers == 0 %} disabled{%endif%}
-										{% if reservation is defined and reservation != null %} 
-										value="{{option.ammount}}" 
+										{% if reservation is defined and reservation != null %}
+										value="{{option.ammount}}"
 										{% endif %}
 										data-bs-toggle="tooltip"
 										title="{{'Mueve la bola por la barra para alterar el número de'|trans}} {{'opciones'|trans}}"> #}
 										<select class="form-control form-select" name="reservation_user[option][{{ option.id }}]">
-											{% for i in 0..9 %}
+											{% set minimumOptionsAmmount = 0 %}
+											{% if reservation is defined and reservation != null %}
+												{% set minimumOptionsAmmount = option.ammount %}
+											{% endif %}
+											{% for i in minimumOptionsAmmount..9 %}
 											<option value="{{i}}" {% if reservation is defined and reservation != null %}{% if i == option.ammount %}selected{% endif %}{% endif %}>{{i}}</option>
 											{% endfor %}
 										</select>

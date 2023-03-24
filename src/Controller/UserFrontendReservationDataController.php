@@ -85,7 +85,7 @@ class UserFrontendReservationDataController extends AbstractController
         }
 
           $documents = $reservationData->getDocuments();
-          dump($documents);
+
           $form = $this->createForm(ReservationDataType::class, $reservationData);
           $form->handleRequest($request);
 
@@ -137,7 +137,7 @@ class UserFrontendReservationDataController extends AbstractController
      $user = $this->getUser();
 
      $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-     dump($this->reservationDataRepository->getUserLatestData($user));
+
 
      $reservationData = new ReservationData();
      $form = $this->createForm(ReservationDataType::class, $reservationData);

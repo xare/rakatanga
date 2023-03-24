@@ -756,6 +756,10 @@ footer hr {
     margin-top: 5px;
 }
 
+.dropzone.dz-clickable .dz-message {
+    margin-top: 1rem !important;
+}
+
 @media (min-width: 1025px) {
     body {
         padding-top: 100px;

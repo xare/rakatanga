@@ -92,14 +92,9 @@ class reservationDataHelper
 
     public function getReservationDuePayment(Reservation $reservation)
     {
-        dump($reservation);
-        dump($this->getReservationAmmount($reservation));
         $totalAmmount = $this->getReservationAmmount($reservation);
         $totalPayments = $this->getReservationTotalPayments($reservation);
-        dump($totalAmmount);
-        dump($totalPayments);
         $dueAmmount = $totalAmmount - $totalPayments;
-        dump($dueAmmount);
         return $dueAmmount;
     }
 
@@ -142,7 +137,7 @@ class reservationDataHelper
             'reservation'=>$reservation,
             'user'=>$user
         ]);
-        dump($reservationData);
+
         if($reservationData != null) {
             return $this->getReservationDataFields($reservationData);
         }
@@ -158,7 +153,6 @@ class reservationDataHelper
             'reservation'=>$reservation,
             'traveller'=>$traveller
         ]);
-        dump($reservationData);
         if($reservationData != null) {
             return $this->getReservationDataFields($reservationData);
         }

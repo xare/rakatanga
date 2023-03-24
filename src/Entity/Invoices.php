@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\InvoicesRepository;
 use App\Service\UploadHelper;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvoicesRepository::class)]
@@ -49,6 +50,9 @@ class Invoices
 
     #[ORM\OneToOne(targetEntity: Reservation::class, inversedBy: 'invoice', cascade: ['persist'])]
     private ?Reservation $reservation = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -185,12 +189,12 @@ class Invoices
         return $this;
     } */
 
-    public function getDueAmmount(): ?string
+    public function getDueAmmount(): ?float
     {
         return $this->dueAmmount;
     }
 
-    public function setDueAmmount(string $dueAmmount): self
+    public function setDueAmmount(float $dueAmmount): self
     {
         $this->dueAmmount = $dueAmmount;
 
@@ -208,6 +212,18 @@ class Invoices
     public function setReservation(?Reservation $reservation): self
     {
         $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

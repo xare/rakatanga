@@ -28,25 +28,22 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route(path: '/admin/travel')]
 class TravelController extends MainadminController
 {
-    private EntityManagerInterface $entityManager;
-    private TravelRepository $travelRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, TravelRepository $travelRepository)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private TravelRepository $travelRepository,
+        private PaginatorInterface $paginator )
     {
-        $this->entityManager = $entityManager;
-        $this->travelRepository = $travelRepository;
+
     }
 
     #[Route(path: '/', name: 'travel_index', methods: ['GET'])]
     public function index(
-        Request $request,
-        PaginatorInterface $paginator,
-        TravelRepository $travelRepository
+        Request $request
     ): Response {
-        $this->redirectToLogin($request);
-        $count = count($travelRepository->findAll());
-        $query = $travelRepository->listAll();
-        $travels = $paginator->paginate(
+        $count = count($this->travelRepository->findAll());
+        $query = $this->travelRepository->listAll();
+        $travels = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             10

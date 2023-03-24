@@ -75,7 +75,7 @@
                     </tr>
                     <tr>
                         <td><strong>{{ 'Viajeros'| trans }}</strong></td>
-                        <td>{{ include('reservation/_travellers_table.html.twig',{ 'travellers': reservation.travellers }) }}</td>
+                        <td>{{ include('reservation/_partials/_travellers_table.html.twig',{ 'travellers': reservation.travellers }) }}</td>
                 </table>
                 </div>
             {% endif %}
