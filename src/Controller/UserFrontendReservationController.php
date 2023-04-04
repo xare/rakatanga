@@ -67,7 +67,7 @@ class UserFrontendReservationController extends AbstractController
 
         $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale,$reservation);
 
-        $this->breadcrumbsHelper->frontendUserReservationBreadcrumbs($locale,$reservation);
+        $this->breadcrumbsHelper->frontendUserReservationBreadcrumbs($locale, $reservation);
 
         $options = $this->reservationHelper->getReservedOptions($reservation, $lang->getIsoCode());
 

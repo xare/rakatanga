@@ -3,10 +3,7 @@
       <a href="{{ path("download_document",{
                                   'id': document.id}
                                   )}}">
-          <strong>{{document.doctype|trans}}</strong>:
-          {{document.originalFilename}}
-          <span>
-            {% if document.mimetype == 'image/jpeg' or
+                                  {% if document.mimetype == 'image/jpeg' or
                 document.mimetype == 'image/jpg' or
                 document.mimetype == 'image/png' %}
               <img src="{{ path("download_document",{
@@ -14,6 +11,10 @@
                 )}}" style="width:50px; height:auto" />
             {% else %}
                     <span class="fa fa-download"></span> {% endif %}
+          <strong>{{document.doctype|trans}}</strong>:
+          {{document.originalFilename}}
+          <span>
+
       </a>
       </span>
       <button class="btn btn-link btn-sm" data-action="js-document-delete" data-type="{{document.doctype}}" data-document-id="{{document.id}}" data-traveller-id="{{traveller.id}}" data-reservation-id="{{reservation.id}}">

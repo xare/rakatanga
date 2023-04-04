@@ -15,7 +15,7 @@
 		{% endfor %}
 		{% set duePayment = duePayment + totalOptionsValue %}
 {% endif %}
-<div class="card card-default mb-4 shadow card-logged-user{% if isInitialized == false %} d-none{% endif %}">
+<div class="card card-default mb-4 card-logged-user{% if isInitialized == false %} d-none{% endif %}">
 	<div class="card-body">
 		<h4 class="text-center">{{'Hola'|trans}}
 			{{ app.user.prenom }}
@@ -23,13 +23,6 @@
 			[{{ app.user.email }}]</h4>
 
 		{% if isInitialized != false %}
-			{# <div class="text-center">
-				<button type="button" class="btn btn-success btn-lg" data-action="js-initialize-reservation-logged">
-					{{ 'Iniciar Reserva'|trans }}
-				</button>
-			</div>
-		{% else %} #}
-			 {# {% if (duePayment-TotalPayment) > 0 %} #}
 			 <p>{{ 'Hemos recibido los detalles de tu reserva'|trans}}. {{'Recibirás un mensaje de correo electrónico con los detalles más importantes, y con instrucciones para poder gestionar los datos'|trans }}.</p>
 			 <p>{{ 'A continuación puedes pasar a la página de prepago para comprobar bien todos los datos y elegir el modo de pago, o si deseas pagar más adelante'|trans }}.</p>
 
@@ -52,7 +45,9 @@
 							<input type="hidden" name="finalOptions[{{loop.index0}}][price]" value="{{option.price}}">
 						{% endfor %}
 					{% endif %}
-					<button class="btn btn-primary btn-lg" disabled>
+
+					<button class="btn btn-primary btn-lg" id="js-reservation-payment"
+					{% if travellersAdded is not defined or travellersAdded != true %}disabled{% endif %}>
 						{{ 'Continuar'|trans }}
 					</button>
 				</form>
@@ -64,7 +59,7 @@
 						method="POST"
 						data-action="js-open-payment-page">
 						<button
-							class="btn btn-primary btn-lg{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %} disabled{% endif %}"
+							class="btn btn-primary btn-lg{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}{% if travellersAdded is defined and travellersAdded == false %} disabled{% endif %}{% endif %}"
 							id="js-reservation-payment"
 							{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}
 							data-bs-toggle="tooltip"

@@ -8,7 +8,7 @@
       href="{{ path('payments_edit',{'id':payment.id}) }}"
       data-bs-toggle="tooltip"
       title="Visualizar los datos de la categoría">
-        {{payment.ammount|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}
+        {{payment.ammount|format_currency( 'EUR', {fraction_digit: 2}, 'es' ) }}
     </a></h4>
     {{payment.reservation.code}}<br />
     [{{ renderReservationAmmount(payment.reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}]

@@ -1,14 +1,14 @@
-{% set duePayment = 0 %} 
-    {% if reservation is defined and reservation != null %} 
-        {% set duePayment = (reservation.nbpilotes * reservation.date.prixPilote) + (reservation.nbaccomp * reservation.date.prixAccomp) %} {% set TotalPayment = 0 %} 
-        {% if reservation.payments|length > 0 %} 
-        {% for payment in reservation.payments %} 
-            {% set TotalPayment = TotalPayment + payment.ammount %} 
-        {% endfor %} 
-    {% endif %} 
+{% set duePayment = 0 %}
+    {% if reservation is defined and reservation != null %}
+        {% set duePayment = (reservation.nbpilotes * reservation.date.prixPilote) + (reservation.nbaccomp * reservation.date.prixAccomp) %} {% set TotalPayment = 0 %}
+        {% if reservation.payments|length > 0 %}
+        {% for payment in reservation.payments %}
+            {% set TotalPayment = TotalPayment + payment.ammount %}
+        {% endfor %}
+    {% endif %}
     {% set totalOptionsValue = 0 %} {% for option in reservationOptions %} {% if option.ammount > 0 %} {% set totalOptionsValue
 = totalOptionsValue + (option.ammount * option.price) %} {% endif %} {% endfor %} {% set duePayment = duePayment + totalOptionsValue %} {% endif %}
-<div class="card card-default mb-4 shadow card-logged-user{% if isInitialized == false %} d-none{% endif %}">
+<div class="card card-default mb-4 card-logged-user{% if isInitialized == false %} d-none{% endif %}">
     <div class="card-body">
         <h4 class="text-center">{{'Hola'|trans}} {{ app.user.prenom }} {{ app.user.nom }} [{{ app.user.email }}]</h4>
 

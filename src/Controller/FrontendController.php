@@ -45,13 +45,13 @@ class FrontendController extends AbstractController
     }
 
     #[Route(
-        path: '/', 
+        path: '/',
         name: 'index')]
     #[Route(
         path: [
-            'en' => '{_locale}/', 
-            'es' => '{_locale}/', 
-            'fr' => '{_locale}/'], 
+            'en' => '{_locale}/',
+            'es' => '{_locale}/',
+            'fr' => '{_locale}/'],
         name: 'index')]
     public function index(
         string $locale = 'es',
@@ -63,13 +63,13 @@ class FrontendController extends AbstractController
         $categories = $this->categoryRepository->findCategoriesForIndex(
             $this->continentsRepository->findOneBy(
                 ['code' => 'as']
-            ), 
+            ),
             $locale);
 
         $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex(
             $this->continentsRepository->findOneBy(
                 ['code' => 'as']
-            ), 
+            ),
             $locale);
 
 
@@ -108,9 +108,9 @@ class FrontendController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/trips/{category}/{travel}/', 
-            'es' => '{_locale}/destinos/{category}/{travel}/', 
-            'fr' => '{_locale}/destinations/{category}/{travel}/'], 
+            'en' => '{_locale}/trips/{category}/{travel}/',
+            'es' => '{_locale}/destinos/{category}/{travel}/',
+            'fr' => '{_locale}/destinations/{category}/{travel}/'],
         name: 'destination')]
     public function Destination(
         Request $request,
@@ -123,15 +123,15 @@ class FrontendController extends AbstractController
             ['slug' => $category]
         );
         $slug = $request->attributes->get('travel');
-        
+
         $urlArray = $this->languageMenuHelper->travelLanguageMenu($locale, $slug);
         $travel = $this->travelRepository->showTravelFromTranslationSlug($slug);
-        
+
         $travelTranslation = $this->travelTranslationRepository->findOneBy(
             ['url' => $slug]
           );
 
-        
+
         $travel = $this->travelRepository->showTravelFromTranslationSlug($slug);
         $travelObject = $this->travelRepository->find($travel['id']);
 
@@ -142,9 +142,9 @@ class FrontendController extends AbstractController
             'lang' => $this->langRepository->findOneBy(['iso_code' => $locale]),
         ]);
         $this->breadcrumbsHelper->destinationsByTravelDestinationBreadcrumbs(
-            $locale, 
-            $categoryTranslation, 
-            $categoryTranslation2, 
+            $locale,
+            $categoryTranslation,
+            $categoryTranslation2,
             $travelTranslation);
         // END BREADCRUMBS //
 
@@ -162,9 +162,9 @@ class FrontendController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/trips/{category}/', 
-            'es' => '{_locale}/destinos/{category}/', 
-            'fr' => '{_locale}/destinations/{category}/'], 
+            'en' => '{_locale}/trips/{category}/',
+            'es' => '{_locale}/destinos/{category}/',
+            'fr' => '{_locale}/destinations/{category}/'],
         name: 'destinations-by-category')]
     public function DestinationsByCategory(
         Request $request,
@@ -178,7 +178,7 @@ class FrontendController extends AbstractController
         $category = $categoryTranslation->getCategory();
         $urlArray = $this->languageMenuHelper->categoryLanguageMenu($locale, $category);
         $otherLangsArray = $this->langRepository->findOthers($locale);
-        
+
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
@@ -206,8 +206,8 @@ class FrontendController extends AbstractController
         ]);
 
         $this->breadcrumbsHelper->destinationsByCategoryBreadcrumbs(
-            $locale, 
-            $categoryTranslation, 
+            $locale,
+            $categoryTranslation,
             $categoryTranslation2);
 
         // 3. Get the travels for that category
@@ -236,9 +236,9 @@ class FrontendController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/trips/', 
-            'es' => '{_locale}/destinos/', 
-            'fr' => '{_locale}/destinations/'], 
+            'en' => '{_locale}/trips/',
+            'es' => '{_locale}/destinos/',
+            'fr' => '{_locale}/destinations/'],
         name: 'destinations')]
     public function Destinations(
         Request $request,
@@ -269,9 +269,9 @@ class FrontendController extends AbstractController
 
     #[Route(
         path: [
-            'en' => '{_locale}/calendar/', 
-            'es' => '{_locale}/calendario/', 
-            'fr' => '{_locale}/calendrier/'], 
+            'en' => '{_locale}/calendar/',
+            'es' => '{_locale}/calendario/',
+            'fr' => '{_locale}/calendrier/'],
         name: 'calendar')]
     public function Calendar(
         Request $request,
@@ -312,9 +312,9 @@ class FrontendController extends AbstractController
     }
 
     #[Route(path: [
-        'en' => '{_locale}/{slug}/', 
-        'es' => '{_locale}/{slug}/', 
-        'fr' => '{_locale}/{slug}/'], 
+        'en' => '{_locale}/{slug}/',
+        'es' => '{_locale}/{slug}/',
+        'fr' => '{_locale}/{slug}/'],
         name: 'main-content')]
     public function main(
         string $slug,
@@ -350,8 +350,8 @@ class FrontendController extends AbstractController
     }
 
     #[Route(
-        path: '/ajax/show-popup', 
-        options: ['expose' => true], 
+        path: '/ajax/show-popup',
+        options: ['expose' => true],
         name: 'ajax-show-popup')]
     public function showPopup()
     {

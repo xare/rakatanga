@@ -115,27 +115,33 @@
       {{'Por favor envíenos via email el justificante de la transferencia para validación de su reserva'|trans}}.
     </p>
     <p>
-      {{ 'Nota'|trans }}: {{ 'Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla  y ceder su plaza a otra persona en este viaje'|trans }}.
+      {{ 'Nota'|trans }}: {{ 'Le guardaremos su plaza un máximo de una semana (siete días) para realizar el pago de la reserva. Pasado este tiempo, podremos cancelarla y ceder su plaza a otra persona en este viaje'|trans }}.
     </p>
     <p>
       {{ 'La reserva implica la aceptación total de nuestras'|trans }}
-      <a href="#">{{ 'condiciones generales de venta'|trans }}</a>.
+      <a href="{{ absolute_url(path( 'main-content',{
+                    '_locale': app.request.locale,
+                    'slug' : 'cgv'
+                })) }}">{{ 'Condiciones generales de venta'|trans }}</a>.
     </p>
     <p>
-      <strong>{{ 'Importante: Comisiones utilizando la pasarela de pago Paypal'|trans }}</strong>
+      <strong>{{ 'Importante'|trans }}:{{' Comisiones utilizando la pasarela de pago Paypal'|trans }}</strong>
     </p>
     <p>{{ 'Todo pago que no sea por trasferencia bancaria tendrá una comisión según se detalla más abajo'|trans }}:</p>
     <ul>
-        <li>{{ 'Tarjetas de crédito dentro de la comunidad Europea'|trans }}: {{ ' Comisión del 2,9% del pago'|trans }}</li>.
-        <li>{{ 'Tarjetas de crédito fuera de la comunidad Europea: Comisión del 4,9% del pago'|trans }}</li>.
-        <li>{{ 'Cuenta Paypal directamente'|trans }}: {{ ' Comisión del 2,9% del pago'|trans }}</li>.
+        <li>{{ 'Tarjetas de crédito dentro de la comunidad Europea'|trans }}:   {{ 'Comisión del 2,9% del pago'|trans }}</li>.
+        <li>{{ 'Tarjetas de crédito fuera de la comunidad Europea'|trans }}: {{ 'Comisión del 4,9% del pago'|trans }}</li>.
+        <li>{{ 'Cuenta Paypal directamente'|trans }}: {{ 'Comisión del 2,9% del pago'|trans }}</li>.
     </ul>
     <p>{{ 'En el caso de utilizar Paypal o tarjeta de crédito se podrá pagar la comisión directamente a nuestro guía el día del inicio del viaje'|trans }}.</p>
 
     <p>{{ 'Para evitar la comisión de gestión a través de la pasarela de pagos de Paypal, recomendamos el pago por transferencia bancaria'|trans }}</p>
 
-    <p>{{ 'PayPalPuede elegir pagar la reserva o la totalidad del viaje a través de nuestra página de pago'|trans }} :</p>
-    <button href="#">{{'Pagar'|trans}}</button>
+    <p>{{ 'Puede elegir pagar la reserva o la totalidad del viaje a través de nuestra página de pago'|trans }} :</p>
+    <button href="{{absolute_url(path('reservation_payment',{
+                '_locale': app.request.locale,
+                'reservation':reservation.id
+            })) }}">{{'Pagar'|trans}}</button>
 
     <p> {{'Para acceder a los datos de la reserva es posible utilizando su cuenta de usuario donde puede acceder a su espacio personalizado y así añadir, corregir y actualizar datos de su reserva'|trans}}.</p>
     <p>{{'Nos comunicaremos con usted en breve para la organización del viaje'|trans}}.</p>

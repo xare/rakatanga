@@ -11,19 +11,19 @@
                     >Reservas
         </button>
     </li>
-    <li class="nav-item">
+   {#  <li class="nav-item">
         <button class="nav-link"
-                id="data-tab"
+                id="users-tab"
                 data-bs-toggle="tab"
-                data-bs-target="#data"
+                data-bs-target="#users"
                 type="button"
                 role="tab"
-                aria-controls="data"
+                aria-controls="users"
                 aria-selected="true"
-                >Datos
+                >Usuarios
         </button>
-    </li>
-    <li class="nav-item">
+    </li> #}
+    {# <li class="nav-item">
         <button class="nav-link"
                 id="documents-tab"
                 data-bs-toggle="tab"
@@ -34,29 +34,21 @@
                 aria-selected="true"
                 >Documentos
         </button>
-    </li>
+    </li> #}
 </ul>
-<!-- Tab panes -->
 <div class="tab-content">
     <div
         class="tab-pane fade show active"
         id="reservations"
         role="tabpanel"
         aria-labelledby="reservations-tab">
-            {{ include('admin/travellers/_travellers_reservations.html.twig') }}
+            {{ include('admin/codespromo/_codespromo_reservations.html.twig') }}
     </div>
-    <div
+     {# <div
         class="tab-pane fade show"
-        id="data"
+        id="users"
         role="tabpanel"
-        aria-labelledby="data-tab">
-            {{ include('admin/travellers/_travellers_data.html.twig') }}
-    </div>
-    <div
-        class="tab-pane fade show"
-        id="documents"
-        role="tabpanel"
-        aria-labelledby="documents-tab">
-            {{ include('admin/travellers/_travellers_documents.html.twig') }}
-    </div>
+        aria-labelledby="users-tab">
+            {{ include('admin/codespromo/_codespromo_users.html.twig') }}
+    </div> #}
 </div>

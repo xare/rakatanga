@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - PANEL DE ENTRADA{% endblock %}
+{% block title %}{{ parent() }} -  {{'¿Quiénes somos?'|trans}}{% endblock %}
 
 {% block header %}
   {{ parent() }}
@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block body %}
- 
+
 {# {{ message }} #}
 {{ parent() }}
-<div class="container">
+<div class="container container-presentacion">
 <div class="row">
         <div class="col-md-12 col-sm-12">
         {{ wo_render_breadcrumbs() }}

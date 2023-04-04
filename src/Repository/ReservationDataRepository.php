@@ -82,4 +82,8 @@ class ReservationDataRepository extends ServiceEntityRepository
         ->getQuery()
         ->getOneOrNullResult();
     }
+
+    /* public function listDocumentsByReservationData(ReservationData $reservationData){
+
+    } */
 }

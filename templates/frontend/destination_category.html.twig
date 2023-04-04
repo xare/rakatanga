@@ -22,14 +22,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-12">
         <h1>{{category.title}} - {{'Nuestras rutas en moto'|trans}}</h1>
             {% for travel in travels %}
             {% set MediaPath = '/media/' ~ travel.mainPhoto %}
-            <div class="card card-default shadow">
+            <div class="card card-default">
 		        <div class="card-body">
 		            <div class="row">
-                        <div class="col-md-3 col-sm-5">
+                        <div class="col-md-3 col-sm-5 col-sm-12">
                             <p>
                                 <a href="{{ path('destination',{
                                                     _locale: locale,
@@ -40,7 +40,7 @@
                                 </a>
                             </p>
                         </div>
-                        <div class="col-md-6 col-sm-7">
+                        <div class="col-lg-6 col-sm-7 col-sm-12">
                             <h2>{{ travel.title }}</h2>
                             <p class="infos">
                                 <i class="fas fa-clock" aria-hidden="true"></i>
@@ -58,8 +58,8 @@
                                         }) }}">{{'Ver este viaje'|trans}}</a>
                                 </p>
                         </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="card card-default panel-departs shadow">
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="card card-default panel-departs">
                                 <div class="card-heading ps-3 pe-3 pt-2 pb-2">
                                     {{'Próxima salida'|trans}}
                                 </div>

@@ -1,11 +1,14 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}Edit Codespromo{% endblock %}
-
+{% block stylesheets %}
+	{{ parent() }}
+    {{  encore_entry_link_tags('tags')  }}
+{% endblock %}
 {% block body %}
 <div class="container">
 {{ include ('admin/shared/_controlband.html.twig',{'entity':'codespromo'})}}
-    <div class="row">
+    <div class="row" data-container="js-reservation-admin-index">
         <div class="col-12">
         <h1>Edit Codespromo</h1>
 
@@ -16,4 +19,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin-send-message') }}
 {% endblock %}

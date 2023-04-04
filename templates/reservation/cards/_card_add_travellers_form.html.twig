@@ -1,0 +1,42 @@
+{% set totalTravellers = nbpilotes + nbaccomp %}
+{% set totalReservationTravellers = 0 %}
+{% if reservation is defined and reservation.travellers|length > 0%}
+    {% set totalReservationTravellers = reservation.travellers|length %}
+{% endif %}
+{% set totalTravellersExtraSlots = totalTravellers - totalReservationTravellers %}
+<div class="card">
+    <div class="card-body form-group">
+        <div class="container">
+            <form action="" method="POST" data-container="js-travellers-form">
+            {% for i in 1..totalTravellers %}
+                {% set value = null %}
+                {% set valueId = null %}
+                {% if i == 1 %}
+                    {% set value = reservation.user %}
+                    {% if (reservation is defined) %}
+                        {% for traveller in reservation.travellers %}
+                            {% if traveller.email == reservation.user.email %}
+                                {% set valueId = traveller.id %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% elseif i > 1 %}
+                    {% if totalReservationTravellers > 0 and i <= totalReservationTravellers %}
+                        {% if reservation is defined and reservation != null %}
+                            {% set value = attribute(reservation.travellers,i-1) %}
+                            {% set valueId = value.id %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                    {{include('reservation/cards/_row_travellers_form.html.twig',{'value':value})}}
+                {% endfor %}
+                <br />
+                <button
+                    data-action="js-add-travellers"
+                    class="btn btn-primary">
+                    {{'Guardar los datos de viajeros'|trans }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

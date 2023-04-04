@@ -324,6 +324,8 @@ class ReservationAjaxController extends AbstractController
             return $this->json([
                 'isReserved' => true,
                 'message' => $messageHtml,
+                'title' => $this->translator->trans('Error'),
+                'confirmButtonText' => $this->translator->trans('Ir a la reserva'),
                 'user' => $user,
                 'userId' => $user ? $user->getId() : '',
                 'reservationId' => $isReservedObject->getId(),
@@ -345,7 +347,7 @@ class ReservationAjaxController extends AbstractController
                                                     $date,
                                                     $user,
                                                     $request->getLocale());
-        $this->reservationManager->sendReservation($reservation);
+
         // GET TRANSLATION FOR TRAVEL $travelTranslation
         $lang = $this->langRepository->findOneBy(['iso_code' => $locale]);
         $travelTranslation = $this->travelTranslationRepository->findOneBy([
@@ -539,12 +541,16 @@ class ReservationAjaxController extends AbstractController
         name: 'ajax-add-travellers')]
     public function ajaxAddTravellers(
         Request $request,
-        Reservation $reservation
+        Reservation $reservation,
+        string $locale = 'es',
+        string $_locale = null
     ) {
+        $locale = $_locale ? $_locale : $locale;
         /**
          * @var array $travellersArray
          */
         $travellersArray = $request->request->all();
+        dump($travellersArray);
         foreach ($travellersArray['traveller'] as $travellerData) {
             $this->travellersHelper->addTravellerToReservation(
                                         $travellerData,
@@ -555,10 +561,18 @@ class ReservationAjaxController extends AbstractController
         $travellersTableHtml = $this->renderView('reservation/_partials/_travellers_table.html.twig', [
             'travellers' => $reservation->getTravellers(),
         ]);
+        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation,$locale);
+        $cardLoggedUser = $this->renderView('reservation/usercards/_card_logged_user.html.twig', [
+            'reservation' => $reservation,
+            'reservationOptions' => $reservationOptions,
+            'isInitialized' => true,
+            'locale'=>$locale]);
 
+        $this->reservationManager->sendReservation($reservation);
         return $this->json([
             'travellersTableHtml' => $travellersTableHtml,
             'travellersByReservation' => $reservation->getTravellers(),
+            'cardLoggedUser' => $cardLoggedUser
             ], 200, [], ['groups' => 'main']);
     }
 
@@ -697,14 +711,14 @@ class ReservationAjaxController extends AbstractController
         options: ['expose' => true],
         name: 'ajax-update-changes',
         methods: ['POST', 'GET'])]
-        #[Route(
-            path: [
-                'en' => '/ajax/{_locale}/update/changes/{reservation}',
-                'es' => '/ajax/{_locale}/update/changes/{reservation}',
-                'fr' => '/ajax/{_locale}/update/changes/{reservation}'],
-            methods: ['POST', 'GET'],
-            name: 'ajax-update-changes',
-            options: ['expose' => true])]
+    #[Route(
+        path: [
+            'en' => '/ajax/{_locale}/update/changes/{reservation}',
+            'es' => '/ajax/{_locale}/update/changes/{reservation}',
+            'fr' => '/ajax/{_locale}/update/changes/{reservation}'],
+        methods: ['POST', 'GET'],
+        name: 'ajax-update-changes',
+        options: ['expose' => true])]
     public function ajaxUpdateChanges(
         Request $request,
         Reservation $reservation,
@@ -716,8 +730,9 @@ class ReservationAjaxController extends AbstractController
         $reservationData = [
             'nbpilotes' => $request->request->get('nbpilotes'),
             'nbaccomp' => $request->request->get('nbaccomp'),
-            'finalOptions' => $request->request->get('options')
+            'finalOptions' => $request->request->get('options'),
         ];
+
         /**
           * @var User $user
           */
@@ -736,12 +751,18 @@ class ReservationAjaxController extends AbstractController
             $reservationData,
             $customerData,
             $request->getLocale());
-
-        $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', [
+        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation, $locale);
+        /* $html = $this->renderView('user/partials/_card_reservation_updated.html.twig', [
                 'reservation' => $reservation,
                 '_locale' => $locale
+            ]); */
+            $isInitialized = $request->request->get('isInitialized') ? $request->request->get('isInitialized') : '';
+        $html = $this->renderView('reservation/usercards/_card_logged_user.html.twig', [
+                'reservation' => $reservation,
+                'reservationOptions' => $reservationOptions,
+                'isInitialized' => $isInitialized,
+                '_locale' => $locale
             ]);
-
         return $this->json([
             'html' => $html,
         ], 200);
@@ -842,6 +863,9 @@ class ReservationAjaxController extends AbstractController
         if(isset($data['isInitialized'])){
             $renderArray['isInitialized'] = ($data['isInitialized']!= null) ? $data['isInitialized'] : null;
         }
+        dump($data);
+        $renderArray['travellersAdded'] = (isset($data['isTravellersAdded']))?$data['isTravellersAdded'] : false;
+        dump($renderArray);
         return $this->render('reservation/_wrapper_calculator_logged_user.html.twig', $renderArray);
     }
 
@@ -880,56 +904,55 @@ class ReservationAjaxController extends AbstractController
         methods: ['POST'],
         name: 'add-travellers-forms',
         options: ['expose' => true] )]
-        #[Route(
-            path: [
-                'en' => '/ajax/addTravellersForms/{_locale}',
-                'es' => '/ajax/addTravellersForms/{_locale}',
-                'fr' => '/ajax/addTravellersForms/{_locale}'],
-            options: ['expose' => true],
-            methods: ['POST'],
-            name: 'add-travellers-forms')]
-        function addTravellersForms(
+    #[Route(
+        path: [
+            'en' => '/ajax/addTravellersForms/{_locale}',
+            'es' => '/ajax/addTravellersForms/{_locale}',
+            'fr' => '/ajax/addTravellersForms/{_locale}'],
+        options: ['expose' => true],
+        methods: ['POST'],
+        name: 'add-travellers-forms')]
+    public function addTravellersForms(
             Request $request
-        ){
-            /**
-             * @var $user
-             */
-            $user = $this->getUser();
-            $reservationId = $request->request->get('reservation');
-            $renderArray = [];
-            $renderArray['nbpilotes'] = $request->request->get('nbpilotes');
-            $renderArray['nbaccomp'] = $request->request->get('nbaccomp');
-            if(isset($reservationId) ) {
-                $reservation = $this->reservationRepository->find($reservationId);
-                $renderArray['reservation'] = $reservation;
-            }
+        ) {
+        /**
+         * @var $user
+         */
+        $user = $this->getUser();
+        $reservationId = $request->request->get('reservation');
+        $renderArray = [];
+        $renderArray['nbpilotes'] = $request->request->get('nbpilotes');
+        $renderArray['nbaccomp'] = $request->request->get('nbaccomp');
+        if(isset($reservationId) ) {
+            $reservation = $this->reservationRepository->find($reservationId);
+            $renderArray['reservation'] = $reservation;
+        }
 
-            $i = 0;
-            if(($renderArray['nbpilotes'] + $renderArray['nbaccomp']) == 1){
-                $traveller = new Travellers();
-                $traveller->setUser($user);
-                $traveller->setPrenom($user->getPrenom());
-                $traveller->setNom($user->getNom());
-                $traveller->setTelephone($user->getTelephone());
-                $traveller->setEmail($user->getEmail());
-                $traveller->isIsReservationUser(true);
-                $traveller->setReservation($reservation);
-                $traveller->setPosition('pilote');
-                $this->entityManager->persist($traveller);
-                $this->entityManager->flush();
+        $i = 0;
+        if(($renderArray['nbpilotes'] + $renderArray['nbaccomp']) == 1){
+            $traveller = new Travellers();
+            $traveller->setUser($user);
+            $traveller->setPrenom($user->getPrenom());
+            $traveller->setNom($user->getNom());
+            $traveller->setTelephone($user->getTelephone());
+            $traveller->setEmail($user->getEmail());
+            $traveller->isIsReservationUser(true);
+            $traveller->setReservation($reservation);
+            $traveller->setPosition('pilote');
+            $this->entityManager->persist($traveller);
+            $this->entityManager->flush();
 
-                $html = $this->renderView(
-                    'reservation/_partials/_card_travellers_table_container.html.twig',
-                    ['travellers'=> $traveller]
-                );
-            } else {
             $html = $this->renderView(
-                    'reservation/cards/_card_add_travellers_data.html.twig',
+                'reservation/_partials/_card_travellers_table_container.html.twig',
+                ['travellers'=> $traveller]
+            );
+        } else {
+            $html = $this->renderView(
+                    'reservation/cards/_card_add_travellers_form.html.twig',
                     $renderArray
                 );
             }
             return $this->json(['html' => $html], 200, [],[]);
-            //return new Response($html);
         }
 
     #[Route(
@@ -983,7 +1006,17 @@ class ReservationAjaxController extends AbstractController
     }
 
     #[ROUTE(
-        path: "ajax/upload/banktransfer/{reservation}",
+        path: "{_locale}/ajax/upload/banktransfer/{reservation}",
+        name:'frontend_payment_upload_banktransfer',
+        methods: ['POST'],
+        options: ["expose" => true ]
+    )]
+    #[Route(
+        path: [
+            'en' => '{_locale}/ajax/upload/banktransfer/{reservation}',
+            'es' => '{_locale}/ajax/upload/banktransfer/{reservation}',
+            'fr' => '{_locale}/ajax/upload/banktransfer/{reservation}'
+        ],
         name:'frontend_payment_upload_banktransfer',
         methods: ['POST'],
         options: ["expose" => true ]
@@ -992,8 +1025,12 @@ class ReservationAjaxController extends AbstractController
     public function frontendPaymentUploadBanktransfer(
         Request $request,
         Reservation $reservation,
-        ValidatorInterface $validator
+        Mailer $mailer,
+        ValidatorInterface $validator,
+        string $_locale = null,
+        string $locale = 'es'
     ){
+        $locale = $_locale ? $_locale : $locale;
         $uploadedTransferDocument = $request->files->get('file');
 
         /**
@@ -1024,24 +1061,35 @@ class ReservationAjaxController extends AbstractController
         if ($violations->count() > 0) {
             return $this->json($violations, 400);
         }
-
+        $ammount = $request->request->get('ammount');
         $filename = $this->uploadHelper->uploadTransferDocument($uploadedTransferDocument);
         $transferDocument = new TransferDocument();
         $transferDocument->setUser($this->getUser());
         $transferDocument->setFilename($filename);
+        $transferDocument->setMimeType($uploadedTransferDocument->getMimeType() ?? 'application/octet-stream');
         $transferDocument->setOriginalFilename($filename);
         $payment = new Payments();
-        $payment->setAmmount($request->request->get('ammount'));
+        $payment->setAmmount($ammount);
         $payment->setReservation($reservation);
         $payment->setTransferDocument($transferDocument);
         $this->entityManager->persist($transferDocument);
         $this->entityManager->persist($payment);
         $this->entityManager->flush();
-        $dropHtml = $this->renderView('reservation/_partials/_renderFile_in_dropzone.html.twig',['document'=>$transferDocument,'reservation'=>$reservation]);
+        $mailer->sendReservationPaymentSuccessToUs($reservation, $locale);
+        $mailer->sendReservationPaymentSuccessToSender($reservation);
+
+        $dropHtml = $this->renderView('reservation/_partials/_renderFile_in_dropzone.html.twig', [
+            'ammount' => $ammount,
+            'document'=>$transferDocument,
+            'reservation'=>$reservation
+            ]
+        );
+        $reservationCardHtml = $this->renderView('user/_cards/_card_reservation_styled.html.twig', [ 'reservation' => $reservation, 'locale' => $locale ]);
         return $this->json(
             [
                 'document' => $transferDocument,
                 'dropHtml' => $dropHtml,
+                'reservationCardHtml' => $reservationCardHtml
             ],
             201,
             [],
@@ -1049,6 +1097,5 @@ class ReservationAjaxController extends AbstractController
                 'groups' => ['main'],
             ]
         );
-        return new Response('Frontend Payment Upload Bank Transfer');
     }
 }

@@ -37,7 +37,7 @@ class localizationHelper
 
     public function renderTravelString(int $id, string $locale):mixed
     {
-        $travel = $this->travelTranslationRepository->find($id);
+        $travel = $this->travelRepository->find($id);
         $lang = $this->_getLang($locale);
         $travelObject = $this->travelTranslationRepository->findOneBy(['travel' => $travel, 'lang' => $lang]);
 

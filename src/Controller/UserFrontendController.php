@@ -26,6 +26,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Form\UserSettingsType;
 
 
 class UserFrontendController extends AbstractController
@@ -130,7 +131,7 @@ class UserFrontendController extends AbstractController
 
         // Create User Form
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserSettingsType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

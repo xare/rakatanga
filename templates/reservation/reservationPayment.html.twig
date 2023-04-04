@@ -82,19 +82,21 @@
         </div>
         <div class="col-md-4 col-xs-12">
             {{ include('reservation/calculator/_reservation_calculator_table.html.twig',{'reservation':reservation}) }}
-            <div class="card mt-4">
-                <div class="card-body">
-                    {{ form_start(form, {attr: {id: form.vars.id}}) }}
-                        {{
-                            form_widget(form.paymentMethod,{'label':'Modalidad de pago'|trans})
-                        }}
-                        {{ form_widget(form.submit,{
-                            'label':'Pago'
-                        }) }}
+            {% if isPaid(reservation) == false %}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        {{ form_start(form, {attr: {id: form.vars.id}}) }}
+                            {{
+                                form_widget(form.paymentMethod,{'label':'Modalidad de pago'|trans})
+                            }}
+                            {{ form_widget(form.submit,{
+                                'label':'Pago'
+                            }) }}
 
-                    {{ form_end(form, {render_rest: false}) }}
+                        {{ form_end(form, {render_rest: false}) }}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             {# <h3>¿Tienes usuario y contraseña?</h3>
             <p>En primer lugar necesitamos conocer tus datos para poder seguir con tu reserva</p>
             <a class="btn btn-primary">Sí tengo un usuario creado</a>

@@ -38,7 +38,7 @@ class DatesRepository extends ServiceEntityRepository
         $q = $qb
             ->select('
                     d.id as id,
-                    d.debut as debut, 
+                    d.debut as debut,
                     d.fin as fin,
                     d.statut as statut,
                     d.prixPilote,
@@ -131,9 +131,12 @@ class DatesRepository extends ServiceEntityRepository
             ->setParameter('month', $month)
             ->andWhere('YEAR(d.debut) = :year')
             ->setParameter('year', $year)
+            ->andWhere('d.statut = :statut')
+            ->setParameter('statut', 'abierto')
             ->andwhere(
                 $qb->expr()->gt('d.debut', 'NOW()')
             )
+            ->orderBy('d.debut', 'ASC')
             ->getQuery();
 
         return $q->getResult();

@@ -79,7 +79,6 @@ class DocumentsList {
                     if (errorMessage.detail) {
                         this.emit('error', file, errorMessage);
                         setTimeout(function() {
-                            console.info('inside setTimeout', type);
                             window.location.reload();
                             /* $(`#js-${type}-dropzone`).parent().html("error"); */
                         }, 10000);

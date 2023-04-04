@@ -1,11 +1,7 @@
-<div class="card card-default panel-departs shadow">
+{% for date in dates %}
+  <div class="card card-default panel-departs mb-4">
     <div class="card-heading ps-3 pe-3 pt-2 pb-2">
-        {{'Próxima salida'|trans}}
-    </div>
-    <div class="card-body">
-      {% for date in dates %}
-        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-          {{'del'|trans}}
+        {{'del'|trans}}
           {{ date.debut|date('j') }}
           {{'al'|trans}}
           {{ date.fin|date('j') }}
@@ -13,6 +9,8 @@
           {{ date.debut|format_datetime(pattern="MMMM",locale=locale) }}
           {{'de'|trans}}
           {{ date.debut|date('Y')}}
+    </div>
+    <div class="card-body">
         <p>
           {{'Piloto moto'|trans}}:
           {{ date.prixPilote|format_currency('EUR', {fraction_digit: 0}) }}<br/>
@@ -21,14 +19,16 @@
             {{ date.prixAccomp|format_currency('EUR', {fraction_digit: 0}) }}
           {% endif %}
         </p>
-        <p>
-          <a class="btn btn-default btn-sm text-uppercase" href="{{ path ( 'reservation' ,{ 'travel': renderLocalizedTravel(travelObject.id,app.request.locale)|slugify, 'category': renderLocalizedCategory(travelObject.category.id,app.request.locale)|slugify, 'date': date.debut|date('Ymd') } )}}">
-            {{'Reserva'|trans}}
-          </a>
-        </p>
-    <br/>
-    {% else %}
-      {{ 'Este viaje, de momento, no tiene fechas programadas' | trans }}.
-    {% endfor %}
+        <a
+          class="btn btn-default btn-sm text-uppercase"
+          href="{{ path ( 'reservation' ,{
+            'travel': renderLocalizedTravel(travelObject.id, app.request.locale)|slugify, 'category': renderLocalizedCategory(travelObject.category.id, app.request.locale)|slugify,
+            'date': date.debut|date('Ymd') } )}}">
+          {{'Reserva'|trans}}
+        </a>
+
   </div>
 </div>
+{% else %}
+  {{ 'Este viaje, de momento, no tiene fechas programadas' | trans }}.
+{% endfor %}

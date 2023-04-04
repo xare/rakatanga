@@ -1,19 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - Descubre Asia en moto{% endblock %}
+{% block title %}{{ parent() }} - {{ 'Descubre Asia en moto'|trans }}{% endblock %}
 
 {% block body %}
-
 		{{ parent() }}
     <div class="container">
 		<div class="trailer">
-			<video class="img-responsive shadow" preload="auto" autoplay="autoplay" loop="loop" muted="muted">
+			<video class="img-responsive" preload="auto" autoplay="autoplay" loop="loop" muted="muted">
 			<source src="{{asset('videos/rakatanga.mp4')}}" type="video/mp4">
 			</video>
 		</div>
 
 		{% for message in app.flashes('success') %}
-		
+
 			<div class="row">
 			<div class="col-3"></div>
 				<div class="col-9">
@@ -23,19 +22,19 @@
 				</div>
 				</div>
 			</div>
-		
+
 		{% endfor %}
 
 		<div class="row">
-			<div class="col-9 col-xs-12">
+			<div class="col-lg-9 col-xs-12">
 				<div class="row">
 					<h2>{{'Descubre Asia en moto'|trans}} ...</h2>
-					
+
 					{% for category in categories %}
 						{{ include ('index/_destination.html.twig', {'category': category}) }}
 					{% endfor %}
 				</div>
-			
+
 				<div class="row">
 					<h2>{{'Otros destinos'|trans}}...</h2>
 					{% for otherCategory in otherCategories %}
@@ -43,21 +42,21 @@
 					{% endfor %}
 				</div>
 			</div>
-			<div class="col-3 col-xs-12">
+			<div class="col-lg-3 col-sm-12">
 				<h2>{{'Próximas salidas'|trans}}</h2>
-				<div class="card card-default shadow">
+				<div class="card card-default">
 					<div class="card-body">
 						<div class="departs">
-						
+
 						 {% set index = 0 %}
 							{% for year in dates %}
 									{% for month in year.year.months %}
 										{% for date in month.dates %}
 											{% if index < 5 %}
-											{{ date.debut|date('d M Y')|format_datetime(pattern="d MMMM yyyy",locale=locale) }}<br /> 
-											<a href="{{ path( 'destination' , { 
+											{{ date.debut|date('d M Y')|format_datetime(pattern="dd MMMM yyyy",locale=locale) }}<br />
+											<a href="{{ path( 'destination' , {
 																			'travel' : renderLocalizedTravel(date.travel.id, app.request.locale)|slugify,
-																			'category': renderLocalizedCategory(date.travel.category.id, app.request.locale)|slugify, 
+																			'category': renderLocalizedCategory(date.travel.category.id, app.request.locale)|slugify,
 																			'_locale' : app.request.locale }) }}">
 												{{ renderLocalizedCategory(date.travel.category.id, app.request.locale) }} -
 												{{ renderLocalizedTravel(date.id, app.request.locale) }}
@@ -70,8 +69,8 @@
 											{% endif %}
 										{% endfor %}
 									{% endfor %}
-									
-								
+
+
 							{% endfor %}
 							<a class="btn btn-default" href="{{path('calendar',{'_locale':app.request.getLocale()})}}">{{'Ver todas las salidas'|trans}}</a>
 						</div>
@@ -80,24 +79,24 @@
 		</div>
 	</div>
   <br />
-  	<div class="card card-services shadow">
+  	<div class="card card-services">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-4 col-xs-12">
+				<div class="col-lg-4 col-xs-12">
 					<h2>{{'Viajes privados a medida'|trans}}</h2>
 					<p>{{ show_text( {
 									locale: app.request.getLocale(),
 									section: "home",
 									acronym: "prive" } )|raw }}</p>
           		</div>
-				<div class="col-4 col-xs-12">
+				<div class="col-lg-4 col-xs-12">
 					<h2>{{'Viaja en total seguridad'|trans}}</h2>
 					<p>{{ show_text( {
 									locale: app.request.getLocale(),
 									section: "home",
 									acronym: "securite" } )|raw }}</p>
         		</div>
-				<div class="col-4 col-xs-12">
+				<div class="col-lg-4 col-xs-12">
 					<h2>{{'Nuestros clientes hablan'|trans}}</h2>
 					<p>{{ show_text( {
 									locale: app.request.getLocale(),
@@ -108,29 +107,29 @@
     	</div>
 	</div>
   <div class="row">
-		<div class="col-3 col-xs-12 text-center">
-			<div class="numbers shadow-sm">
+		<div class="col-sm-6 col-lg-3 col-xs-12 text-center">
+			<div class="numbers">
 				<strong>{{ "now"|date("Y")-2008 }}</strong><br>{{'años de existencia'|trans}}
 			</div>
 		</div>
-		<div class="col-3 col-xs-12 text-center">
-			<div class="numbers shadow">
+		<div class="col-sm-6 col-lg-3 col-xs-12 text-center">
+			<div class="numbers">
 				<strong>147</strong><br>{{'viajes organizados'|trans}}
 			</div>
 		</div>
-		<div class="col-3 col-xs-12 text-center">
-			
-			<div class="numbers shadow">
+		<div class="col-sm-6 col-lg-3 col-xs-12 text-center">
+
+			<div class="numbers">
 			<strong>1021</strong><br>{{'moteros satisfechos'|trans}}
 			</div>
-			
+
 		</div>
-		<div class="col-md-3 col-12 text-center">
-			
-			<div class="numbers shadow">
+		<div class="col-sm-6 col-lg-3 col-xs-12 text-center">
+
+			<div class="numbers">
 			<strong>152782</strong><br>{{'km recorridos'|trans}}
 			</div>
-			
+
 		</div>
 	</div>
 {% endblock %}

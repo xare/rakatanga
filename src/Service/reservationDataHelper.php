@@ -98,6 +98,10 @@ class reservationDataHelper
         return $dueAmmount;
     }
 
+    public function isPaid(Reservation $reservation) {
+        return ($this->getReservationDuePayment($reservation) > 0) ? false : true;
+    }
+
     public function getReservationDataFields(ReservationData $reservationData){
         $reflection = new \ReflectionObject($reservationData);
 

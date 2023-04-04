@@ -5,7 +5,7 @@
 import adminMessagesApp from './adminMessagesApp.js';
 
 $(document).ready(() => {
-    let $wrapper = $('#js-admin-wrapper');
+    let $wrapper = $('[data-container="js-reservation-admin-index"]');
 
     var AdminMessagesApp = new adminMessagesApp($wrapper);
 })

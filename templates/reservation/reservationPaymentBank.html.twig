@@ -37,7 +37,9 @@
     <div class="row">
         <div class="col-12">
         <p>{{'La reserva implica la aceptación total de nuestras condiciones generales de venta'|trans}}.</p>
+        <div data-container="js-payment-reservation">
             {{ include ('user/_cards/_card_reservation_styled.html.twig', {'reservation':reservation}) }}
+        </div>
             <a href="{{path('frontend_user_reservations')}}" class="btn btn-primary btn-lg">{{'Mis reservas'|trans}}</a>
             <a href="{{path('frontend_user_settings')}}" class="btn btn-info btn-lg">{{'Mis datos'|trans}}</a>
         </div>
@@ -48,4 +50,5 @@
 	{{ parent() }}
     {{  encore_entry_link_tags('tags')  }}
 	{{ encore_entry_script_tags('reservation-payment-transfer') }}
+    {{ encore_entry_script_tags('readmore')}}
 {% endblock %}

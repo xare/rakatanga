@@ -76,9 +76,14 @@ class travellersApp {
                 $('[data-container="js-travellers-form"]')
                     .find('.card-body')
                     .html(response.travellersTableHtml);
+                $('[data-container="calculator-wrapper"]').attr('data-travellers-added', 'yes');
+                if (document.getElementById('js-reservation-payment') === null) {
+                    $('[data-container="calculator-wrapper"]').append(response.cardLoggedUser);
+                }
                 $('#js-reservation-payment')
                     .removeAttr('title')
                     .removeAttr('data-bs-tooltip')
+                    .removeAttr('disabled')
                     .removeClass('disabled');
                 document.getElementById('js-reservation-payment').href = Routing.generate('reservation_payment', { '_locale': this.locale, 'reservation': reservationId });
             } catch (jqXHR) {

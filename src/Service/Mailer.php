@@ -281,7 +281,7 @@ class Mailer
         $this->mailer->send($email);
     }
 
-    public function sendReservationToSender(Reservation $reservation)
+    public function sendReservationToSender(Reservation $reservation, $locale = 'es')
     {
         $email = $this->sendToSender();
         $user = $reservation->getUser();
@@ -294,6 +294,7 @@ class Mailer
             ->context([
                 'reservation' => $reservation,
                 'reference' => $reservation->getCode(),
+                '_locale' => $locale
             ]);
         $path = $this->appKernel->getProjectDir().$this->pdfHelper::INVOICES_FOLDER;
         // $path = $this->pdfHelper::INVOICES_FOLDER;
@@ -311,6 +312,7 @@ class Mailer
                             'reservation' => $reservation,
                             'email' => null,
                             'reference' => strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(), 0, 3)).'-'.$reservation->getId(),
+                            '_locale' => $locale
                         ]);
         $mailing->setContent($template);
         $mailing->setReservation($reservation);

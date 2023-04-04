@@ -6,7 +6,7 @@
         {{ include('shared/_navbar.html.twig') }}
   {% endblock %}
 {% block body %}
- 
+
 {# {{ message }} #}
 {{ parent() }}
 <div class="container">
@@ -16,7 +16,7 @@
       </div>
   </div>
   <div class="row">
-    <div class="col-md-12 col-12">
+    <div class="col-md-12 col-xs-12">
     <h1>{{'Nuestras rutas en moto en Asia'|trans }}</h1>
     <p>{{'Rakatanga Tour os propone multiple tours en moto en'|trans}} {{categories|length}} {{'destinos diferentes de Asia'|trans}}.</p>
     <div class="row">
@@ -24,7 +24,7 @@
         {{ include ('destinations/_destination.html.twig', {'category': category}) }}
       {% endfor %}
     </div>
-    <h1>{{'Otros destinos'|trans}}...</h1>
+    <h2>{{'Otros destinos'|trans}}...</h2>
     <div class="row">
       {% for otherDestination in otherDestinations %}
         {{ include ('destinations/_destination.html.twig', {'category': otherDestination}) }}

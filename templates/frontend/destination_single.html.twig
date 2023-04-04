@@ -36,14 +36,14 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-9 col-xs-12">
+			<div class="col-md-8 col-lg-9 col-xs-12">
 				{{ travel.intro|raw }}
 			</div>
-			<div class="col-3 col-xs-12">
+			<div class="col-md-4 col-lg-3 col-xs-12">
 				{{ include('frontend/_reservation_box.html.twig',{'dates': dates}) }}
 			</div>
 			<div class="row">
-				<div class="col-9">
+				<div class="col-lg-9 col-md-12">
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item" role="presentation">
 							<button data-bs-target="#det" aria-controls="det" class="nav-link active" type="button" role="tab" data-bs-toggle="tab">

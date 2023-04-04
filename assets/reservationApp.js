@@ -219,6 +219,7 @@ class reservationApp {
             nbpilotes,
             nbaccomp,
             options,
+            isInitialized: this.$calculator.data('isInitialized'),
             '_locale': locale
         };
 
@@ -234,6 +235,7 @@ class reservationApp {
                         data
                     });
                     console.info(response);
+                    $('#calculator-wrapper').append(response);
                 } catch (error) {
                     console.error(error);
                 }
@@ -493,13 +495,14 @@ class reservationApp {
                     self.$calculator.attr('data-reservation', jqXHR.responseJSON.reservationId);
                     $('#js-card-user').find('.card-body').html(jqXHR.responseJSON.message);
                     const url = Routing.generate('frontend_user_reservation', {
-                        'reservation': jqXHR.responseJSON.reservationId
+                        'reservation': jqXHR.responseJSON.reservationId,
+                        '_locale': self.locale
                     });
                     Swal.fire({
-                        title: 'Error!',
+                        title: jqXHR.responseJSON.title,
                         html: jqXHR.responseJSON.message,
                         icon: 'error',
-                        confirmButtonText: `<a href="${url}">Ir a la reserva</a>`
+                        confirmButtonText: `<a href="${url}">${jqXHR.responseJSON.confirmButtonText}</a>`,
                     }).then(() => {
                         self._loadUserSwitch();
                     });
@@ -518,6 +521,7 @@ class reservationApp {
 
     _updateChanges() {
         const self = this;
+
         (
             async() => {
                 try {
@@ -531,12 +535,13 @@ class reservationApp {
                             'nbpilotes': self.$calculator.data('nbpilotes'),
                             'nbaccomp': self.$calculator.data('nbaccomp'),
                             'options': self.$calculator.data('options'),
-                            'codespromo': self.$calculator.data('codespromo')
+                            'codespromo': self.$calculator.data('codespromo'),
                         },
                         type: 'POST'
                     })
 
                     $('[data-container="calculator-wrapper"]').append(response.html);
+
                 } catch (e) {
                     console.error(e)
                 }
@@ -544,12 +549,17 @@ class reservationApp {
         )();
     }
     _updateCalculator() {
+        const self = this;
+        const isTravellersAdded = ($('[data-container="calculator-wrapper"]').data('travellers-added') === 'yes') ? true : false;
+        console.info(isTravellersAdded);
         (
             async() => {
                 try {
                     const response = await $.ajax({
-                        url: Routing.generate('update-calculator'),
-                        data: this.$calculator.data(),
+                        url: Routing.generate('update-calculator', {
+                            '_locale': self.locale,
+                        }),
+                        data: {...self.$calculator.data(), isTravellersAdded },
                         method: 'POST'
                     });
                     $('[data-container="calculator-wrapper"]').empty().append(response);

@@ -134,6 +134,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         if (null !== $traveller) {
             $document->setTraveller($traveller);
         }
+        $document->setUser($user);
         $document->addReservationData($reservationData);
         $reservationData->addDocument($document);
         $this->entityManager->persist($reservationData);

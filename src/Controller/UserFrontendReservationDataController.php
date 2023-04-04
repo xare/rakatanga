@@ -63,15 +63,19 @@ class UserFrontendReservationDataController extends AbstractController
         $otherTravellers = $this->travellersRepository->listOtherTravellers($userTraveller, $reservation);
           $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
           $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($locale);
-
-          $reservationData = new ReservationData();
+        $reservationData = new ReservationData();
           if( $this->reservationDataRepository->findOneBy([
               'reservation' => $reservation,
+              'user' => $user,
+              'traveller' => null
           ]) != null){
             $reservationData = $this->reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
+                'user' => $user,
+                'traveller' => null
             ]);
         } elseif ($this->reservationDataRepository->getUserLatestData($user)!= null) {
+
             $previousReservationData = $this->reservationDataRepository->getUserLatestData($user);
             $reservationData->setPassportNo($previousReservationData->getPassportNo());
             $reservationData->setPassportIssueDate($previousReservationData->getPassportIssueDate());

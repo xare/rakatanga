@@ -55,16 +55,6 @@ class DatesType extends AbstractType
                     'closed' => 'closed',
                 ],
             ])
-            ->add('requestedDocs', ChoiceType::class, [
-                'placeholder' => 'Selecciona los documentos requeridos: ',
-                'choices' => [
-                    $this->translator->trans('Pasaporte') => 'passport',
-                    $this->translator->trans('Permiso de conducir') => 'drivers_license',
-                    $this->translator->trans('Seguro') => 'insurance',
-                ],
-                'expanded' => true,
-                'multiple' => true,
-            ])
         ;
     }
 

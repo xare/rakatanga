@@ -19,11 +19,11 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-12">
+			<div class="col-lg-6 col-12">
 				<h1>{{ 'Contacto'|trans }}</h1>
 				{{form_start(form,{'attr':{'novalidate':'novalidate'}})}}
 				<p><em><strong>{{'Todos los campos marcados con el símbolo * son obligatorios'|trans}}.</em></strong></p>
-				{{form_row(form.firstname,{ 
+				{{form_row(form.firstname,{
 																		'label' : 'Nombre'|trans~' *' ,
 																		'attr':{'class':'form-control'}
 																		 })}}
@@ -31,21 +31,21 @@
 				{# {{form_row(form.country)}} #}
 				{{form_row(form.phone,{
                     'label': 'Teléfono'|trans,
-										
+
 										'help': 'Añade tu número de teléfono'|trans,
-                    'attr':{ 
+                    'attr':{
 											'class':'row',
-											'placeholder':'0000000000' 
+											'placeholder':'0000000000'
 										}
 									})
 				}}
-				{{ form_row(form.email,{ 
+				{{ form_row(form.email,{
 										'label':'Email'|trans~' *' ,
 										'attr':{ 'placeholder': 'usuario@dominio.dom'|trans } })
 				}}
 				{{ form_row(form.travel,{'label':'Viaje'|trans }) }}
-				{{ form_row(form.info,{ 'label' : 'Si sencillamente quieres información general sobre cualquier viaje haz click aquí, por favor.'|trans }) }}
-				{{ form_row(form.message,{ 
+				{{ form_row(form.info,{ 'label' : 'Si sencillamente quieres información general sobre cualquier viaje haz click aquí, por favor'|trans }) }}.
+				{{ form_row(form.message,{
 					'label':'Mensaje'|trans~' *' ,
 					'help': 'Este mensaje tiene que tener como mínimo 10 caracteres'|trans }) }}.
 				<br/>

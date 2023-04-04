@@ -23,18 +23,20 @@ class travellersHelper {
       array $travellerData,
       Reservation $reservation,
       User $user):mixed {
-        /* if(
-          $travellerData['email'] == $user->getEmail()
-          &&
-          $this->travellersRepository->findBy(['email' =>$travellerData['email']]) != null
-        ) {
-          return false;
-        } */
-        /* if ($this->travellersRepository->find($travellerData['id']) != null ){
-          $traveller =  $this->travellersRepository->find($travellerData['id']);
-        } else { */
+        dump($travellerData);
+        //TRAVELLER ALREADY EXISTS IN DB
+        if( $travellerData['id'] != null ||  $travellerData['id'] != '') {
+          $traveller = $this->travellersRepository->find($travellerData['id']);
+          dump('Traveller Repository');
+          dump($traveller);
+          if (!isset($traveller) || $traveller == null){
             $traveller = new Travellers();
-        /* } */
+          }
+        } else {
+          $traveller = new Travellers();
+        }
+        dump($traveller);
+
         try {
           $traveller->setPrenom($travellerData['prenom']);
           $traveller->setNom($travellerData['nom']);

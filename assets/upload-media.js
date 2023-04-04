@@ -33,6 +33,7 @@ function initializeDropzone() {
             });
             this.on('success', function(file, data) {;
                 $('#js-media-modal-blocks-container').html(data);
+                $('[data-container="js-media-grid"]').html(data);
             });
 
             this.on('error', function(file, data) {

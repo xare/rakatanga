@@ -40,9 +40,8 @@
         </div> #}
     </div>
     <div class="col-8">
-    {% if traveller.id != null %}
-        {{ include( 'admin/travellers/_tabs_related.html.twig' )}}
-
+        {% if traveller.id != null %}
+            {{ include( 'admin/travellers/_tabs_related.html.twig' )}}
         {% endif %}
     </div>
 </div>

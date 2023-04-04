@@ -1,0 +1,3 @@
+{% for reservation in codespromo.reservations %}
+  {{ include('admin/reservation/_row.html.twig', {'reservation': reservation}) }}
+{% endfor %}

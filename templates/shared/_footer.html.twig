@@ -5,14 +5,14 @@
   	<div class="footer-top">
 		<div class="container">
 			<div class="row">
-			    <div class="col-md-3 col-sm-4">
+			    <div class="col-md-3 col-sm-12">
 					<h4>{{'¿Quiénes somos?'|trans}}</h4>
 						<p>{{ show_text( {
 								locale: app.request.locale,
 								section: "footer",
 								acronym: "intro" } )|raw }}</p>
 			    </div>
-			    <div class="col-md-3 hidden-sm">
+			    <div class="col-md-3 col-sm-12">
 					<h4>{{'Los destinos'|trans}}</h4>
 						{% set categories = render_category_list({
 							locale: app.request.locale
@@ -31,7 +31,7 @@
 
 							{% endfor %}
 			    	</div>
-			    	<div class="col-md-3 hidden-sm">
+			    	<div class="col-md-3 col-sm-12">
 
 						<h4>{{'Más información'|trans}}</h4>
 

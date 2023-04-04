@@ -70,7 +70,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('notPresentDoctypeTraveller', [$this, 'notPresentDoctypeTraveller']),
             new TwigFunction('getReservationDataFields', [$this, 'getReservationDataFields']),
             new TwigFunction('getUserReservationDataFields',[$this, 'getUserReservationDataFields']),
-            new TwigFunction('getTravellerReservationDataFields',[$this, 'getTravellerReservationDataFields'])
+            new TwigFunction('getTravellerReservationDataFields',[$this, 'getTravellerReservationDataFields']),
+            new TwigFunction('isPaid', [$this, 'isPaid']),
+
         ];
     }
 
@@ -82,7 +84,6 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         }
 
         return $response;
-        /* return ["Hello!"]; */
     }
 
     public function getUploadedAssetPath(string $path): string
@@ -289,6 +290,12 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $this->container
             ->get(reservationDataHelper::class)
             ->getTravellerReservationDataFields($reservation, $traveller);
+    }
+
+    public function isPaid($reservation) {
+        return $this->container
+            ->get(reservationDataHelper::class)
+            ->isPaid($reservation);
     }
 
     public static function getSubscribedServices():array

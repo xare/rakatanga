@@ -9,6 +9,7 @@ let transferDropzone = new Dropzone("#js-payment-dropzone", {
         });
         this.on('success', (file, response) => {
             $('#js-payment-dropzone').html(response.dropHtml);
+            $('[data-container="js-payment-reservation"]').html(response.reservationCardHtml);
         });
     }
 });

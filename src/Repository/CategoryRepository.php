@@ -66,8 +66,10 @@ class CategoryRepository extends ServiceEntityRepository
 
     public function findCategoriesForIndex(Continents $continent, string $locale = 'es')
     {
+        $today = new \DateTime();
         return $this->createQueryBuilder('c')
              ->select('
+                c.id as id,
                 ct.title as title,
                 m.path as image,
                 tt.url as url,
@@ -86,7 +88,9 @@ class CategoryRepository extends ServiceEntityRepository
             ->andWhere('c.continents = :continent')
             ->setParameter('continent', $continent)
             ->andWhere('d.statut = :statut')
-            ->setParameter('statut', 'open')
+            ->setParameter('statut', 'abierto')
+            ->andWhere('d.debut > :today')
+            ->setParameter('today', $today)
             ->orderBy('ct.title', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
@@ -160,6 +164,7 @@ class CategoryRepository extends ServiceEntityRepository
                 ->setParameter('locale', $locale)
                 ->andWhere('c.status = :status')
                 ->setParameter('status', 'yes')
+                ->orderBy('ct.title', 'ASC')
                 ->getQuery()
                 ->getResult();
     }

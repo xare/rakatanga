@@ -32,7 +32,7 @@ class TravelController extends MainadminController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TravelRepository $travelRepository,
-        private PaginatorInterface $paginator )
+        private PaginatorInterface $paginator)
     {
 
     }

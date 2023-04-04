@@ -21,18 +21,20 @@
 {# <li class="list-group-item card clearfix{% if reservation.status == 'cancelled' %}
     raye alert-danger
 {% endif %}"> #}
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-header">
             <h3 class="list-group-item-heading">
                 <a
                     href="{{ path('reservation_edit', {'id': reservation.id}) }}"
                     data-bs-toggle="tooltip"
-                    title="Editar este viaje">
+                    title="Editar esta reserva">
                     {{ reservation.code }}
                 </a>
                 <a href="{{ path('travel_edit', {
                         'id' : reservation.date.travel.id
-                    }) }}">
+                    }) }}"
+                    data-bs-toggle="tooltip"
+                    title="Editar este viaje">
                     {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }} -
                     {{ renderLocalizedTravel(reservation.date.travel.id, 'es') }}
                 </a>
@@ -67,7 +69,7 @@
             </h3>
         </div>
         <div class="card-body">
-            <ul class="list-group">
+            <ul class="list-group mb-4">
                 <li class="list-group-item">
                     <span class="badge badge-rakatanga-reservations">Estatus Reserva/pago</span>
                     <div class="tags has-addons">
@@ -177,12 +179,12 @@
             </ul>
         <div class="btn-toolbar pull-right" role="toolbar" aria-label="">
             <button
-                class="btn btn-primary js-send-checkin-request"
+                class="btn btn-primary js-send-checkin-request me-3"
                 data-reservation-id="{{reservation.id}}"
                 data-action="send-checkin-request"
                 data-bs-toggle="tooltip"
                 data-swal-waiting-title="Enviando un email"
-                data-swal-waiting-text="Estamos enviando un email con in vínculo "
+                data-swal-waiting-text="Estamos enviando un email con un vínculo "
                 title="Enviar un email para pedir los datos">
                 <i class="fas fa-envelope"></i>
             </button>

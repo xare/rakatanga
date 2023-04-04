@@ -48,13 +48,13 @@ class UserType extends AbstractType
                     'required' => false,
                 ]
             )
-            /* ->add(
+            ->add(
                 'password',
                 PasswordType::class,
                 [
                     'empty_data' => '',
                 ]
-            ) */
+            )
             ->add(
                 'langue',
                 ChoiceType::class,
@@ -100,14 +100,14 @@ class UserType extends AbstractType
                     'XXL' => 'xxl',
                 ],
             ])
-            /* ->add('agreeTerms', CheckboxType::class, [
+            ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'I know, it\'s silly, but you must agree to our terms.',
                     ]),
                 ],
-            ]) */
+            ])
             ->add('Register', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-success',

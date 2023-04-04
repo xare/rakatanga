@@ -81,7 +81,10 @@ security:
         - { path: ^/user, roles: ROLE_USER }
         - { path: ^/es/usuario, roles: ROLE_USER }
         - { path: ^/en/user, roles: ROLE_USER }
-        - { path: ^/fr/utilisateur, roles: ROLE_USER }
+        - { path: "^/[a-z]{2}/reservation/\\d+/payment$", roles: ROLE_USER }
+        - { path: "^/[a-z]{2}/reservation/\\d+/paiement$", roles: ROLE_USER }
+        - { path: "^/[a-z]{2}/reserva/\\d+/pago$", roles: ROLE_USER }
+
 
 
 

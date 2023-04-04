@@ -222,6 +222,7 @@ class ReservationController extends AbstractController
                             'Stripe' => 'stripe',
                             'Stripe 500€' => 'stripe500',
                             $this->translator->trans('Transferencia Bancaria') => 'bankTransfer',
+                            $this->translator->trans('Transferencia Bancaria') .' 500€' => 'bankTransfer500',
                         ],
                         'expanded' => true,
                         'multiple' => false,
@@ -248,10 +249,14 @@ class ReservationController extends AbstractController
                     $session = $this->paymentHelper->createStripeCheckout($reservation, $locale, $formData, $ammount);
                     return $this->redirect($session->url, \Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER);
                 } else {
+                    if ($formData['paymentMethod'] == 'bankTransfer500') {
+                        $ammount = 500;
+                    }
                     return $this->render('reservation/reservationPaymentBank.html.twig', [
                         'locale'=>$locale,
                         'reservation'=> $reservation,
                         'langs' => $urlArray,
+                        'ammount' => $ammount
                     ]);
                 }
             }

@@ -42,9 +42,8 @@
     </div>
     <div class="col-8 col-xs-12">
     <!-- Nav tabs -->
-    {% if dates.id != null %}
+    {% if dates is defined and dates.id != null %}
     {{include('admin/dates/_tabs_related.html.twig')}}
-
     {% endif %}
     </div>
     <div class="row">
