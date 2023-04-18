@@ -97,10 +97,11 @@ class InvoicesController extends AbstractController
                             EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$invoice->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($invoice);
-            $entityManager->flush();
+            $invoiceHelper->deleteInvoice($invoice);
+            /* $entityManager->remove($invoice);
+            $entityManager->flush(); */
         }
-        $invoiceHelper->deleteInvoice($invoice);
+
 
         return $this->redirectToRoute('invoices_index');
     }

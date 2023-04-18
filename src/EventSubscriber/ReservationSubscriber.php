@@ -23,16 +23,27 @@ class ReservationSubscriber implements EventSubscriberInterface
     {
         // Get the current locale from the request
         $request = $this->requestStack->getCurrentRequest();
-        $locale = $request ? $request->getLocale() : 'es';
+        $locale = $request->getLocale() ?: 'es';
         $reservation = $event->getReservation();
         $this->mailer->sendReservationToSender($reservation, $locale);
         $this->mailer->sendReservationToUs($reservation, 'es');
+    }
+
+    public function onReservationUpdateEvent(ReservationEvent $event)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $locale = $request->getLocale() ?: 'es';
+        $reservation = $event->getReservation();
+        $this->mailer->sendReservationUpdateToSender($reservation, $locale);
+        $this->mailer->sendReservationUpdateToUs($reservation, 'es');
+
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
             ReservationEvent::class => 'onReservationEvent',
+            ReservationEvent::class => 'onReservationUpdateEvent',
         ];
     }
 }

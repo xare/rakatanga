@@ -63,7 +63,8 @@ class ReservationAjaxController extends AbstractController
         private reservationManager $reservationManager,
         private CodespromoRepository $codespromoRepository,
         private travellersHelper $travellersHelper,
-        private UploadHelper $uploadHelper)
+        private UploadHelper $uploadHelper,
+        private Mailer $mailer)
     {
     }
 
@@ -293,10 +294,9 @@ class ReservationAjaxController extends AbstractController
         name: 'initialize_reservation')]
     public function initializeReservation(
         Request $request,
-        string $_locale = null,
-        string $locale = 'es'): Response
+        string $_locale = 'es'
+        ): Response
     {
-        $locale = $_locale ? $_locale : $locale;
         $renderArray = [];
         $requestData = [
             'dateId' => $request->request->get('dateId'),
@@ -318,7 +318,7 @@ class ReservationAjaxController extends AbstractController
         if (null !== $isReservedObject) {
             $url = $this->generateUrl('frontend_user_reservation', [
                 'reservation' => $isReservedObject->getId(),
-                '_locale' => $locale,
+                '_locale' => $_locale,
             ]);
             $messageHtml = $this->renderView('reservation/_partials/_reservation_initialized.html.twig',['url'=> $url]);
             return $this->json([
@@ -347,15 +347,17 @@ class ReservationAjaxController extends AbstractController
                                                     $date,
                                                     $user,
                                                     $request->getLocale());
-
+        if ($request->request->get('nbPilotes') + $request->request->get('nbAccomp') == 1){
+            $this->reservationManager->sendReservation($reservation);
+        }
         // GET TRANSLATION FOR TRAVEL $travelTranslation
-        $lang = $this->langRepository->findOneBy(['iso_code' => $locale]);
+        $lang = $this->langRepository->findOneBy(['iso_code' => $_locale]);
         $travelTranslation = $this->travelTranslationRepository->findOneBy([
             'lang' => $lang,
             'travel' => $reservation->getDate()->getTravel(),
         ]);
         // CREATE RESERVATION OPTIONS ARRAY
-        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation, $locale);
+        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation, $_locale);
 
         /* $swalHtml = $this->renderView('reservation/_swal_confirmation_message.html.twig',
             [
@@ -387,7 +389,7 @@ class ReservationAjaxController extends AbstractController
             /* 'swalHtml' => $swalHtml,*/
             'codespromoHtml' => $codespromoHtml,
             'html' => $renderHtml,
-            'locale' => $locale,
+            'locale' => $_locale,
         ];
         if ($codepromo !== null) {
             $renderArray = array_merge($renderArray,
@@ -420,7 +422,7 @@ class ReservationAjaxController extends AbstractController
         string $_locale = null,
         string $locale = 'es'): Response
     {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         return $this->render('shared/_user_switch.html.twig',['locale' => $locale]);
     }
 
@@ -442,7 +444,7 @@ class ReservationAjaxController extends AbstractController
         string $_locale = null,
         string $locale = "es"
         ): Response {
-            $locale = $_locale ? $_locale : $locale;
+            $locale = $_locale ?: $locale;
         /**
          * @var User $user
          */
@@ -485,7 +487,7 @@ class ReservationAjaxController extends AbstractController
         path: '/ajax/invoice/{invoice}',
         methods: ["GET","POST"],
         options: ['expose' => true],
-        name: 'ajax_invoice')]
+        name: 'ajax-invoice')]
     public function ajaxInvoice(
         Request $request,
         Invoices $invoice
@@ -507,18 +509,20 @@ class ReservationAjaxController extends AbstractController
     }
 
     #[Route(
-        path: '/ajax/save-invoice/{invoice}',
+        path: '/ajax/{_locale}/save-invoice/{invoice}',
         options: ['expose' => true],
-        name: 'ajax_save_invoice')]
+        name: 'ajax-save-invoice')]
     public function ajaxSaveInvoice(
             Request $request,
-            Invoices $invoice):Response
+            Invoices $invoice,
+            string $_locale = 'es'):Response
     {
         $customerData = $request->request->all();
-        try { $invoiceStatus = $this->invoiceHelper->updateInvoiceBillingData(
-            $invoice,
-            'es',
-            $customerData);
+        try {
+            $invoiceStatus = $this->invoiceHelper->updateInvoiceBillingData(
+                                                        $invoice,
+                                                        $_locale,
+                                                        $customerData);
         } catch(\Exception $e) {
             echo $e->getMessage();
         }
@@ -528,24 +532,24 @@ class ReservationAjaxController extends AbstractController
 
         return $this->json([
             'status' => 200,
-            'message' => 'The pdf has been saved',
+            'message' => $this->translator->trans('The pdf has been saved'),
             'html' => $html,
         ], 200);
 
-        return new Response('The pdf has been saved');
+        return new Response($this->translator->trans('The pdf has been saved'));
     }
 
     #[Route(
-        path: '/ajax/add-travellers/{reservation}',
+        path: '/ajax/{_locale}/add-travellers/{reservation}',
         options: ['expose' => true],
         name: 'ajax-add-travellers')]
     public function ajaxAddTravellers(
         Request $request,
+        string $_locale = null,
         Reservation $reservation,
-        string $locale = 'es',
-        string $_locale = null
+        string $locale = 'es'
     ) {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         /**
          * @var array $travellersArray
          */
@@ -568,7 +572,9 @@ class ReservationAjaxController extends AbstractController
             'isInitialized' => true,
             'locale'=>$locale]);
 
-        $this->reservationManager->sendReservation($reservation);
+        /* $this->reservationManager->sendUpdateReservation($reservation); */
+        $this->mailer->sendReservationUpdateToSender($reservation, $locale);
+        $this->mailer->sendReservationUpdateToUs($reservation, 'es');
         return $this->json([
             'travellersTableHtml' => $travellersTableHtml,
             'travellersByReservation' => $reservation->getTravellers(),
@@ -725,7 +731,7 @@ class ReservationAjaxController extends AbstractController
         string $_locale = null,
         string $locale = "es"
     ) {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         //$request->getSession()->set('_locale', $locale);
         $reservationData = [
             'nbpilotes' => $request->request->get('nbpilotes'),
@@ -756,7 +762,7 @@ class ReservationAjaxController extends AbstractController
                 'reservation' => $reservation,
                 '_locale' => $locale
             ]); */
-            $isInitialized = $request->request->get('isInitialized') ? $request->request->get('isInitialized') : '';
+            $isInitialized = $request->request->get('isInitialized') ?: '';
         $html = $this->renderView('reservation/usercards/_card_logged_user.html.twig', [
                 'reservation' => $reservation,
                 'reservationOptions' => $reservationOptions,
@@ -818,10 +824,11 @@ class ReservationAjaxController extends AbstractController
     }
 
     #[Route(
-        path: 'ajax/update-calculator/{_locale}',
+        path: '{_locale}/ajax/update-calculator/',
         methods: ['POST', 'GET'],
         name: 'update-calculator',
-        options: ['expose' => true])]
+        options: ['expose' => true],
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     #[Route(
         path: [
             'en' => 'ajax/update-calculator/{_locale}',
@@ -832,10 +839,8 @@ class ReservationAjaxController extends AbstractController
         options: ['expose' => true])]
     public function updateCalculator(
         Request $request,
-        string $locale = 'es',
-        $_locale = null
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
 
         $data = $request->request->all();
 
@@ -846,7 +851,7 @@ class ReservationAjaxController extends AbstractController
         }
 
         $renderArray['locale'] = $_locale;
-        $renderArray['_locale'] = $locale;
+        $renderArray['_locale'] = $_locale;
         $renderArray = $renderArray + $data;
 
         if (isset($data['reservation'])) {
@@ -854,17 +859,16 @@ class ReservationAjaxController extends AbstractController
             $renderArray['reservation'] = $reservation;
         }
 
-
-        $renderArray['options'] = (isset($data['options'])) ? $data['options'] : '';
-        $renderArray['reservationOptions'] = (isset($data['options'])) ? $data['options'] : '';
+        //dd($data['options']);
+        $renderArray['options'] = (isset($data['options'])) ? $data['options']: '';
+        $renderArray['reservationOptions'] = (isset($data['options'])) ? $data['options']: '';
         $renderArray['optionsJson'] = (isset($data['options'])) ? json_encode($data['options']) : '';
-        $renderArray['isInitialized'] = (isset($data['isInitialized'])) ? $data['isInitialized'] : '';
+        $renderArray['isInitialized'] = ( isset( $data['isInitialized'] ) ) ? $data['isInitialized'] : '';
         $renderArray['userEdit'] = (isset($data['userEdit'])) ? $data['userEdit'] : '';
         if(isset($data['isInitialized'])){
-            $renderArray['isInitialized'] = ($data['isInitialized']!= null) ? $data['isInitialized'] : null;
+            $renderArray['isInitialized'] = ($data['isInitialized']!= null) ?: null;
         }
-        dump($data);
-        $renderArray['travellersAdded'] = (isset($data['isTravellersAdded']))?$data['isTravellersAdded'] : false;
+        $renderArray['travellersAdded'] = (isset($data['isTravellersAdded']))? $data['isTravellersAdded'] : false;
         dump($renderArray);
         return $this->render('reservation/_wrapper_calculator_logged_user.html.twig', $renderArray);
     }
@@ -1030,7 +1034,7 @@ class ReservationAjaxController extends AbstractController
         string $_locale = null,
         string $locale = 'es'
     ){
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         $uploadedTransferDocument = $request->files->get('file');
 
         /**

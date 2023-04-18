@@ -10,7 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FaqController extends AbstractController
 {
-    #[Route(path: ['en' => '{_locale}/_faq', 'es' => '{_locale}/_faq', 'fr' => '{_locale}/_faq'], name: 'faq')]
+    #[Route(path: [
+        'en' => '{_locale}/_faq',
+        'es' => '{_locale}/_faq',
+        'fr' => '{_locale}/_faq'],
+        name: 'faq')]
     public function index(
         Request $request,
         LangRepository $langRepository

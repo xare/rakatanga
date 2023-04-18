@@ -53,14 +53,12 @@ class ResetPasswordController extends AbstractController
                         Request $request,
                         MailerInterface $mailer,
                         LangRepository $langRepository,
-                        string $locale = 'es',
-                        string $_locale = null): Response
+                        string $_locale = 'es'): Response
     {
-        $locale = $_locale ? $_locale : $locale;
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
         // Lang switch array
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
@@ -78,7 +76,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
         ]);
     }
@@ -89,12 +87,10 @@ class ResetPasswordController extends AbstractController
     #[Route('/check-email', name: 'app_check_email')]
     public function checkEmail(
         LangRepository $langRepository,
-        string $locale = 'es',
-        string $_locale = null,
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
         // Lang switch array
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
@@ -111,7 +107,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
         ]);
     }
@@ -125,8 +121,7 @@ class ResetPasswordController extends AbstractController
                         UserPasswordHasherInterface $userPasswordHasher,
                         LangRepository $langRepository,
                         string $token = null,
-                        string $locale = 'es',
-                        string $_locale = null
+                        string $_locale = 'es'
                         ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -175,7 +170,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         // Lang switch array
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
@@ -186,7 +181,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/reset.html.twig', [
             'resetForm' => $form->createView(),
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
         ]);
     }

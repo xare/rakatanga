@@ -54,10 +54,8 @@ class UserFrontendController extends AbstractController
         name: 'frontend_user',
         priority: 2)]
     public function frontend_user(
-        string $_locale = null,
-        string $locale = 'es'
+        string $_locale = 'es',
     ) {
-        $locale = $_locale ? $_locale : $locale;
         /**
          * @var User $user
          */
@@ -70,7 +68,7 @@ class UserFrontendController extends AbstractController
         $reservations = $user->getReservations();
 
         return $this->render('user/index.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'dates' => $dates,
             'reservations' => $reservations,
@@ -78,7 +76,9 @@ class UserFrontendController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/user/reservations/', name: 'frontend_user_reservations')]
+    #[Route(
+        path: '/user/reservations/',
+        name: 'frontend_user_reservations')]
     #[Route(
         path: [
             'en' => '{_locale}/user/reservations/',
@@ -87,19 +87,17 @@ class UserFrontendController extends AbstractController
         name: 'frontend_user_reservations',
         priority: 2)]
     public function frontend_user_reservations(
-        string $_locale = null,
-        string $locale = 'es',
+        string $_locale = 'es'
     ) {
-        $locale = $_locale ? $_locale : $locale;
         $user = $this->getUser();
 
-        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
-        $this->breadcrumbsHelper->userFrontendReservationsBreadcrumbs($locale);
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($_locale);
+        $this->breadcrumbsHelper->userFrontendReservationsBreadcrumbs($_locale);
 
         $reservations = $this->reservationRepository->findBy(['user' => $user], ['date_ajout' => 'DESC']);
 
         return $this->render('/user/user_reservations.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'reservations' => $reservations,
         ]);
@@ -115,14 +113,13 @@ class UserFrontendController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         AuthenticationUtils $authenticationUtils,
-        string $_locale = null,
-        string $locale = 'es'
+        string $_locale = 'es'
     ):Response {
         /**
          * @var User $user
          */
         $user = $this->getUser();
-        $locale = $user->getLangue() ? : $_locale;
+        $locale = $user->getLangue() ?: $_locale;
         $request->setLocale($locale);
         // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);

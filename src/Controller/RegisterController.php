@@ -26,10 +26,10 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegisterController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private breadcrumbsHelper $breadcrumbsHelper)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private breadcrumbsHelper $breadcrumbsHelper)
     {
-        $this->entityManager = $entityManager;
-        $this->breadcrumbsHelper = $breadcrumbsHelper;
     }
 
     #[Route(
@@ -51,15 +51,13 @@ class RegisterController extends AbstractController
     EntityManagerInterface $em,
     LangRepository $langRepository,
     VerifyEmailHelperInterface $verifyEmailHelper,
-    string $_locale = null,
-    string $locale = 'es'
+    string $_locale = 'es'
   ): Response {
-        $locale = $_locale ? $_locale : $locale;
 
         $this->breadcrumbsHelper->registerBreadcrumbs();
 
         // Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
 
         $i = 0;
         $urlArray = [];
@@ -101,10 +99,10 @@ class RegisterController extends AbstractController
                     'user_verify_email',
                     $user->getId(),
                     $user->getEmail(),
-                    ['id' => $user->getId(),'locale'=>$locale]
+                    ['id' => $user->getId(),'locale'=>$_locale]
                 );
                 $verificationUrl = $signatureComponents->getSignedUrl();
-                $mailer->sendRegistrationVerificationToUser($user, $verificationUrl, $locale);
+                $mailer->sendRegistrationVerificationToUser($user, $verificationUrl, $_locale);
                 $mailer->sendRegistrationToUs($user);
 
                 $formVerification = $this->createFormBuilder()
@@ -123,7 +121,7 @@ class RegisterController extends AbstractController
                 }
 
                 return $this->render('security/verification.html.twig', [
-                  'locale' => $locale,
+                  'locale' => $_locale,
                   'langs' => $urlArray,
                   'form' => $formVerification->createView(),
                   'userId' => $user->getId(),
@@ -149,7 +147,7 @@ class RegisterController extends AbstractController
             }
 
             return $this->render('security/register.html.twig', [
-              'locale' => $locale,
+              'locale' => $_locale,
               'formRegister' => $form->createView(),
               'langs' => $urlArray,
               'static' => 'static',
@@ -166,13 +164,11 @@ class RegisterController extends AbstractController
                         UserAuthenticatorInterface $userAuthenticator,
                         FormLoginAuthenticator $formLoginAuthenticator,
                         RememberMeHandlerInterface $rememberMe,
-                        $_locale = null,
-                        string $locale = 'es'
+                        $_locale = 'es'
   ) {
-        $locale = $_locale ? $_locale : $locale;
 
         // Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
         $urlArray = [];
         $i = 0;
         foreach ($otherLangsArray as $otherLangArray) {
@@ -210,7 +206,7 @@ class RegisterController extends AbstractController
         }
 
         return $this->render('security/verification.html.twig', [
-          'locale' => $locale,
+          'locale' => $_locale,
           'langs' => $urlArray,
           'form' => $form->createView(),
           'userId' => $user->getId(),
@@ -224,10 +220,7 @@ class RegisterController extends AbstractController
         name: 'user_verify_email',
         priority: 10)]
     #[Route(
-        path: [
-            'en' => '{_locale}/verify/',
-            'es' => '{_locale}/verify/',
-            'fr' => '{_locale}/verify/'],
+        path: '{_locale}/verify/',
         name: 'user_verify_email',
         priority: 10
         )]
@@ -236,15 +229,14 @@ class RegisterController extends AbstractController
     VerifyEmailHelperInterface $verifyEmailHelper,
     LangRepository $langRepository,
     UserRepository $userRepository,
-    $_locale = null,
-    string $locale = 'es'
+    $_locale = 'es'
   ) {
         $user = $userRepository->find($request->query->get('id'));
         if (!$user) {
             throw $this->createNotFoundException();
         }
         // Swith Locale Loader
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
         $urlArray = [];
         $i = 0;
         foreach ($otherLangsArray as $otherLangArray) {

@@ -112,11 +112,21 @@
                     <tr>
                         <th>{{ 'Bono descuento'|trans}}</th>
                         <td>{{ invoice.reservation.codespromo.code }}</td>
-                        <td>{{ invoice.reservation.codespromo.libelle}}</td>
                         <td>{{ invoice.reservation.codespromo.commentaire}}</td>
-                        <td align="right">{{ invoice.reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
+                        <td>
+                        {% if invoice.reservation.codespromo.montant != 0 %}
+                            - {{ invoice.reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+                            {% set discount = discount + invoice.reservation.codespromo.montant %}
+                        {% elseif invoice.reservation.codespromo.pourcentage != 0 %}
+                            - {{ invoice.reservation.codespromo.pourcentage }} %
+                            {% set discount = total * invoice.reservation.codespromo.pourcentage / 100 %}
+                        {% endif %}
+                        </td>
+                        <td align="right">
+                            {{discount | format_currency('EUR', {fraction_digit: 2})}}
+                        </td>
                     </tr>
-                    {% set discount = discount + invoice.reservation.codespromo.montant %}
+
 				{% endif %}
                 {% set total = total - discount %}
                 <tr>

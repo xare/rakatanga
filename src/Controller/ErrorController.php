@@ -21,7 +21,7 @@ class ErrorController extends AbstractController
         string $locale = 'es',
         string $_locale = null): Response
     {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         // OTHER LANG MENU
         $otherLangsArray = $this->langRepository->findOthers($locale);
         $urlArray = [];

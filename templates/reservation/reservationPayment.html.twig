@@ -18,12 +18,12 @@
         </div>
         <!-- END BREADCRUMB -->
     <div class="row">
-        <div class="col-md-12 col-xs-12">
+        <div class="col-12 col-xs-12">
             <h1>{{'Reserva tu viaje'|trans}}</h1>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 col-xs-12" id="js-reservation-wrapper">
+        <div class="col-lg-8 col-md-12" id="js-reservation-wrapper">
             <h2>{{'Página de pago'|trans}}</h2>
             <p>{{'A continuación puedes ver todos los datos que hemos guardado sobre tu reserva'|trans}}.</p>
             <p>{{'Si por algún motivo deseas consultarlo con nosotros ponte en contacto con nosotros haciendo click'|trans}}<a href="{{path('contact')}}" target="_blank"> {{'aquí'|trans}}</a>, {{'y escribiendonos un mensaje rápido paa que podamos asistirte'|trans}}.</p>
@@ -80,7 +80,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="col-md-4 col-xs-12">
+        <div class="col-lg-4 col-sm-12">
             {{ include('reservation/calculator/_reservation_calculator_table.html.twig',{'reservation':reservation}) }}
             {% if isPaid(reservation) == false %}
                 <div class="card mt-4">

@@ -87,7 +87,7 @@ class reservationHelper
             /**
              * @var Invoices $invoice
              */
-            $invoice = $this->invoiceHelper->newInvoice($reservation, $locale, [
+            /* $invoice = $this->invoiceHelper->newInvoice($reservation, $locale, [
                 'name' => $user->getPrenom().' '.$user->getNom(),
                 'address' => $user->getAddress(),
                 'nif' => $user->getIdCard(),
@@ -95,7 +95,7 @@ class reservationHelper
                 'city' => $user->getCity(),
                 'country' => $user->getCountry(),
             ]);
-            $reservation->setInvoice($invoice);
+            $reservation->setInvoice($invoice); */
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
         } elseif ($reservation->getStatus() == 'cancelled') {
@@ -126,7 +126,7 @@ class reservationHelper
         }
         $this->entityManager->persist($reservation);
         $this->entityManager->flush();
-        $this->invoiceHelper->updateReservationInvoice($reservation, $locale, $customerData);
+        $this->invoiceHelper->updateReservationInvoice($reservation->getInvoice(), $locale);
 
         return $reservation;
     }

@@ -29,20 +29,21 @@ class SecurityController extends AbstractController
         options: ['expose' => true],
         name: 'app_login')]
     #[Route(
-        path: ['en' => '{_locale}/login/', 'es' => '{_locale}/login/', 'fr' => '{_locale}/login/'],
+        path: [
+            'en' => '{_locale}/login/', 
+            'es' => '{_locale}/login/', 
+            'fr' => '{_locale}/login/'],
         priority: 10,
         name: 'app_login')]
     public function login(
         AuthenticationUtils $authenticationUtils,
-        string $_locale = null,
         LangRepository $langRepository,
-        string $locale = 'es'
+        string $_locale = 'es'
         ): Response {
-        $locale = $_locale ? $_locale : $locale;
 
         $this->breadcrumbsHelper->loginBreadcrumbs();
 
-        $otherLangsArray = $langRepository->findOthers($locale);
+        $otherLangsArray = $langRepository->findOthers($_locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
@@ -58,7 +59,7 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('user/user_login.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'last_username' => $lastUsername,
             'error' => $error,
@@ -89,7 +90,7 @@ class SecurityController extends AbstractController
         $_locale = null
         )
     {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
 
        /*  $langArray = $this->langMenu($request, $locale);
         $navMenu = $this->showMenu($locale, $request);

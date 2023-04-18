@@ -60,7 +60,7 @@ class UserFrontendReservationController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         $lang = $this->langRepository->findOneBy([
             'iso_code' => $locale,
         ]);

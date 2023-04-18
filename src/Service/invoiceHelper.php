@@ -17,7 +17,7 @@ class invoiceHelper
         private pdfHelper $pdfHelper,
         private UploadHelper $uploadHelper,
         private reservationDataHelper $reservationDataHelper,
-        private ReservationOptionsRepository $reservationOptionsRepository
+        private ReservationOptionsRepository $reservationOptionsRepository,
     ) {
     }
 
@@ -81,10 +81,13 @@ class invoiceHelper
         string $invoiceStatus = 'updated Billing Data'
     ): bool {
         $this->pdfHelper->removeInvoicePdf($invoice);
-        $invoice = $this->_assignCustomerDataToInvoiceObject($invoice, $locale, $customerBillingData);
+        $invoice = $this->_assignCustomerDataToInvoiceObject(
+            $invoice,
+            $locale,
+            $customerBillingData);
             $this->entityManager->persist($invoice);
             $this->entityManager->flush();
-        $this->pdfHelper->createInvoicePdf($invoice, $locale, $invoiceStatus);
+        $this->_createInvoiceWithSameName($invoice, $locale, $invoiceStatus);
         return true;
     }
 
@@ -94,15 +97,21 @@ class invoiceHelper
      * @param array  $updatedReservationData
      * @param string $invoiceStatus
      */
-    public function updateReservationInvoice(
+    public function updateReservationInvoice($invoice, $locale){
+        //$this->deleteInvoice($invoice);
+        $this->pdfHelper->removeInvoicePdf($invoice);
+        $invoice->setDueAmmount($this->reservationDataHelper->getReservationAmmount($invoice->getReservation()));
+        $this->entityManager->persist($invoice);
+        $this->entityManager->flush();
+        $this->_createInvoiceWithSameName($invoice, $locale);
+    }
+    /* public function updateReservationInvoice(
         Reservation $reservation,
         string $locale,
         array $customerData
     ): bool {
-        /*
-         * \Exception $exception
-         */
-        try {
+
+        /*try {
             if ($reservation->getInvoice() != null) {
                 $this->_deleteInvoice($reservation->getInvoice());
             }
@@ -117,7 +126,7 @@ class invoiceHelper
         }
 
         return true;
-    }
+    } */
 
     public function makeManualInvoice(
         string $description,
@@ -152,6 +161,17 @@ class invoiceHelper
         $this->entityManager->flush();
 
         return $invoice;
+    }
+
+    private function _createInvoiceWithSameName(
+        Invoices $invoice,
+        string $locale = 'es',
+        string $status = ''
+    ){
+        dump($invoice);
+        $filename = $invoice->getFilename();
+        $this->pdfHelper->removeInvoicePdf($invoice);
+        $this->pdfHelper->createNamedInvoicePdf($invoice, $locale, $status);
     }
     /**
      * _createInvoice function.
@@ -217,6 +237,9 @@ class invoiceHelper
         return $invoice;
     }
 
+    public function deleteInvoice(Invoices $invoice) {
+        $this->_deleteInvoice($invoice);
+    }
     /**
      * _deleteInvoice function.
      */

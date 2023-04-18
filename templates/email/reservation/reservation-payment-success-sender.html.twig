@@ -13,7 +13,7 @@
     <spacer size="30"></spacer>
     <row>
         <columns>
-            <p><strong>{{'Viaje'|trans}}:</strong> {{reservation.date.travel.mainTitle}}.</p>
+            <p><strong>{{'Viaje'|trans}}:</strong> {{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}.</p>
         </columns>
     </row>
      <row>
@@ -28,7 +28,7 @@
     </row>
     <row>
         <columns>
-            <p><strong>{{'Número de Acompañantes'|trans}}:</strong> {{reservation.nbaccomp}}.</p>
+            <p><strong>{{'Número de acompañantes'|trans}}:</strong> {{reservation.nbaccomp}}.</p>
         </columns>
     </row>
     <row>

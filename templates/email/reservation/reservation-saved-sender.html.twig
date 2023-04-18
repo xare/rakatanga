@@ -9,11 +9,10 @@
                 <center>
                     {{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}],
                     {{ 'hemos recibido tu reserva'|trans}}. {{'Te agradecemos el haber hecho la reserva para el viaje'|trans }}:<br />
-                    "{{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}
+                    "{{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}"
                 </center>
             </h4>
             <spacer size="10"></spacer>
-
         </columns>
     </row>
     <spacer size="30"></spacer>
@@ -30,127 +29,143 @@
     </row>
     <spacer size="30"></spacer>
     <row>
-        <columns>
-            <h2>
-                <center>
-                    2.- {{ 'El viaje'|trans }}
-                </center>
-            </h2>
+        <columns small="12" large="6">
+            <row>
+                <columns>
+                    <h2>
+                        <center>
+                            2.- {{ 'El viaje'|trans }}
+                        </center>
+                    </h2>
+                </columns>
+            </row>
+            <row>
+                <columns>
+                    <table>
+                        <tr>
+                            <td><strong>{{ 'País'|trans }}</strong>:</td>
+                            <td> {{ renderLocalizedCategory(reservation.date.travel.category.id, app.request.getLocale()) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'Viaje'|trans }}</strong>:</td>
+                            <td>{{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'Fecha'|trans }}</strong>:</td>
+                            <td>{{reservation.date.debut|date('d/m/Y')}} - {{reservation.date.fin|date('d/m/Y')}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'Ref. reserva'|trans }}:</td>
+                            <td> {{ reference }}</td>
+                        </tr>
+                    </table>
+                </columns>
+            </row>
         </columns>
-    </row>
+        <columns small="12" large="6">
+            <row>
+                <columns>
+                    <h2>
+                        <center>
+                            3.- {{ 'La reserva'|trans }}
+                        </center>
+                    </h2>
+                </columns>
+            </row>
+            <row>
+                <columns>
+                    <p>
+                        <strong>
+                            {{reservation.nbpilotes}} x {{ 'piloto'|trans }}:
+                        </strong>
+                    </p>
+                </columns>
+                <columns>
+                    <p class="text-right">
+                        {{(reservation.nbpilotes * reservation.date.prixPilote)|format_currency('EUR', {fraction_digit: 0})}}
+                    </p>
+                </columns>
+                {% set subtotal = subtotal + reservation.nbpilotes * reservation.date.prixPilote %}
+            </row>
+            <row>
+                <columns>
+                    <p>
+                        <strong>
+                            {{reservation.nbaccomp}} x {{ 'acompañante'|trans }}:
+                        </strong>
+                    </p>
+                </columns>
+                <columns>
+                    <p class="text-right">
+                        {{(reservation.nbaccomp * reservation.date.prixAccomp)|format_currency('EUR', {fraction_digit: 0})}}
+                    </p>
+                </columns>
+            </row>
+            {% if reservation.comment != '' %}
+                <row>
+                    <columns>
+                        <h3>{{ 'Comentarios'|trans }}</h3>
+                    </columns>
+                </row>
+                <spacer size="10"></spacer>
+                <row>
+                    <columns>
+                        <p>{{reservation.comment}}</p>
+                    </columns>
+                </row>
+            {% endif %}
+            {% set subtotal = subtotal + reservation.nbaccomp * reservation.date.prixAccomp %}
+
+            {% for option in reservation.reservationOptions %}
+                <row>
+                    <columns>
+                        <p>
+                            {{ option.ammount }} x {{ renderLocalizedOption(option.option.id,app.request.locale) }}
+                        </p>
+                    </columns>
+                    <columns>
+                        <p class="text-right">
+                            {{ (option.ammount * option.option.price)|format_currency('EUR', {fraction_digit: 0}) }}
+                        </p>
+                    </columns>
+                </row>
+                {% set subtotal = subtotal + (option.ammount * option.option.price) %}
+            {% endfor %}
+                <row>
+                    <columns>
+                        <strong>{{ 'Subtotal'|trans }}</strong>
+                    </columns>
+                    <columns>
+                        <p class="text-right">{{ subtotal|format_currency('EUR', {fraction_digit: 0}) }}</p>
+                    </columns>
+                </row>
+            {% if reservation.codespromo is defined and reservation.codespromo != null %}
+                <row>
+                    <columns>
+                        {{ 'Descuento'|trans }}
+                            {{reservation.codespromo.code}} ({{reservation.codespromo.libelle}})
+                    </columns>
+                    <columns>
+                        <p class="text-right">{{reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 0})}}</p>
+                    </columns>
+                </row>
+                {% set subtotal = subtotal - reservation.codespromo.montant %}
+            {% endif %}
+                <row>
+                    <columns>
+                        <strong>{{ 'Total'|trans }}</strong>
+                    </columns>
+                    <columns>
+                        <p class="text-right"><strong>{{ subtotal|format_currency('EUR', {fraction_digit: 0}) }}</strong></p>
+                    </columns>
+                </row>
+            </columns>
+        </row>
     <spacer size="10"></spacer>
-    <row>
-        <columns>
-            <table>
-                <tr>
-                    <td><strong>{{ 'País'|trans }}</strong>:</td>
-                    <td> {{ renderLocalizedCategory(reservation.date.travel.category.id, app.request.getLocale()) }}</td>
-                </tr>
-                <tr>
-                    <td><strong>{{ 'Viaje'|trans }}</strong>:</td>
-                    <td>{{ renderLocalizedTravel(reservation.date.travel.id, app.request.getLocale()) }}</td>
-                </tr>
-                <tr>
-                    <td><strong>{{ 'Fecha'|trans }}</strong>:</td>
-                    <td>{{reservation.date.debut|date('d/m/Y')}} - {{reservation.date.fin|date('d/m/Y')}}</td>
-                </tr>
-                <tr><td><strong>{{ 'Ref. reserva'|trans }}:</td><td> {{ reference }}</td></tr>
-            </table>
-        </columns>
-    </row>
+    <!-- END TABLE -->
     <spacer size="10"></spacer>
-<!-- TABLE -->
-   <style>.columns {border: 1px solid #999;}</style>
+    <style>.columns {border: none; }</style>
     <row>
-        <columns>
-            <h2>
-                <center>
-                    3.- {{ 'La reserva'|trans }}
-                </center>
-            </h2>
-        </columns>
-    </row>
-     <row>
-        <columns>
-            <p><strong>{{reservation.nbpilotes}} x {{ 'piloto'|trans }}:</strong></p>
-        </columns>
-        <columns>
-             <p class="text-right">{{(reservation.nbpilotes * reservation.date.prixPilote)|format_currency('EUR', {fraction_digit: 0})}} </p>
-        </columns>
-    </row>
-
-
-    {% set subtotal = subtotal + reservation.nbpilotes * reservation.date.prixPilote %}
-    <row>
-        <columns>
-            <p><strong>{{reservation.nbaccomp}} x {{ 'acompañante'|trans }}:</strong></p>
-        </columns>
-        <columns>
-             <p class="text-right">{{(reservation.nbaccomp * reservation.date.prixAccomp)|format_currency('EUR', {fraction_digit: 0})}}</p>
-        </columns>
-    </row>
-    {% if reservation.comment != '' %}
-        <row>
-            <columns>
-                <h3>{{ 'Comentarios'|trans }}</h3>
-            </columns>
-        </row>
-        <spacer size="10"></spacer>
-        <row>
-            <columns>
-                <p>{{reservation.comment}}</p>
-            </columns>
-        </row>
-    {% endif %}
-    {% set subtotal = subtotal + reservation.nbaccomp * reservation.date.prixAccomp %}
-
-    {% for option in reservation.reservationOptions %}
-    <row>
-        <columns>
-            <p>
-                {{ option.ammount }} x {{ renderLocalizedOption(option.option.id,app.request.locale) }}
-            </p>
-        </columns>
-        <columns>
-             <p class="text-right">
-                {{ (option.ammount * option.option.price)|format_currency('EUR', {fraction_digit: 0}) }}
-            </p>
-        </columns>
-    </row>
-    {% set subtotal = subtotal + (option.ammount * option.option.price) %}
-    {% endfor %}
-    <row>
-        <columns>
-            <strong>{{ 'Subtotal'|trans }}</strong>
-        </columns>
-        <columns>
-            <p class="text-right">{{ subtotal|format_currency('EUR', {fraction_digit: 0}) }}</p>
-        </columns>
-    </row>
-    {% if reservation.codespromo is defined and reservation.codespromo != null %}
-        <row>
-            <columns>
-                {{ 'Descuento'|trans }}
-                    {{reservation.codespromo.code}} ({{reservation.codespromo.libelle}})
-            </columns>
-            <columns>
-                    <p class="text-right">{{reservation.codespromo.montant|format_currency('EUR', {fraction_digit: 0})}}</p>
-            </columns>
-        </row>
-        {% set subtotal = subtotal - reservation.codespromo.montant %}
-    {% endif %}
-    <row>
-        <columns>
-            <strong>{{ 'Total'|trans }}</strong>
-        </columns>
-        <columns>
-            <p class="text-right"><strong>{{ subtotal|format_currency('EUR', {fraction_digit: 0}) }}</strong></p>
-        </columns>
-    </row>
-   <!-- END TABLE -->
-   <spacer size="10"></spacer>
-   <style>.columns {border: none; }</style>
-   <row>
         <columns>
             <h2>
                 <center>
@@ -162,10 +177,10 @@
     <row>
         <columns>
             <ul>
-                <li>{{'Apellidos'|trans }}: {{ reservation.user.nom }}</li>
-                <li>{{'Nombre'|trans }}: {{ reservation.user.prenom }}</li>
-                <li>{{'Teléfono'|trans }}: {{ reservation.user.telephone }}</li>
-                <li>{{'E-mail'|trans }}: {{ reservation.user.email }}</li>
+                <li><strong>{{'Apellidos'|trans }}</strong>: {{ reservation.user.nom }}</li>
+                <li><strong>{{'Nombre'|trans }}</strong>: {{ reservation.user.prenom }}</li>
+                <li><strong>{{'Teléfono'|trans }}</strong>: {{ reservation.user.telephone }}</li>
+                <li><strong>{{'E-mail'|trans }}</strong>: {{ reservation.user.email }}</li>
             </ul>
         </columns>
     </row>
@@ -175,7 +190,13 @@
         <columns><h2><center>5. {{ 'El Pago'|trans }}</center></h2></columns>
     </row>
     <row>
-        <columns><p><strong>{{'Datos de la cuenta bancaria para efectuar el pago'|trans}}:</strong></p></columns>
+        <columns>
+            <p>
+                <strong>
+                    {{'Datos de la cuenta bancaria para efectuar el pago'|trans}}:
+                </strong>
+            </p>
+        </columns>
     </row>
     <row>
         <columns>

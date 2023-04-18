@@ -15,15 +15,6 @@
       </a>
       {% endfor %}
   </td>
-  <td>
-      <a href="{{ path('frontend_user', {'_switch_user': user.email}) }}"
-      class="btn btn-primary"
-      target="_blank"
-      data-bs-toggle="tooltip"
-      title="Visitar la web como si fueras {{user.prenom}} {{user.nom}} [{{user.email}}]">
-          <i class="fa fa-eye"></i>
-      </a>
-  </td>
   {# <td>
       <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-info">
           <i class="fa fa-edit"></i>

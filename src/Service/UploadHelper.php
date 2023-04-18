@@ -22,6 +22,9 @@ class UploadHelper
     public const TRAVEL = 'travel';
     public const INVOICES = 'invoices';
     public const INFODOCS = 'infodocs';
+    private $filesystem;
+    private $privateFilesystem;
+    private $publicAssetBaseUrl;
 
     public function __construct(
         private FilesystemOperator $publicUploadsFilesystem,
@@ -31,7 +34,7 @@ class UploadHelper
         private SluggerInterface $slugger,
         private LoggerInterface $logger,
         private string $uploadedAssetsBaseUrl,
-        protected ParameterBagInterface $parameterBag
+        protected ParameterBagInterface $parameterBag,
         ) {
         $this->filesystem = $publicUploadsFilesystem;
         $this->privateFilesystem = $privateUploadsFilesystem;
@@ -102,14 +105,38 @@ class UploadHelper
     public function deleteFile(string $path, bool $isPublic): bool
     {
         $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
-
-        $result = $filesystem->delete($path);
-
-        if ($result === false) {
-            throw new \Exception(sprintf('Error deleting "%s"', $path));
+        dump($filesystem);
+        dump($path);
+        if ( ! file_exists($path)) {
+            dump("file does not exist: " . $path);
+            $this->logger->error(sprintf('File at %s does not exist', $path));
         } else {
-            return true;
+            dump("file does exist: " . $path);
+            $this->logger->notice(sprintf('File at %s does exist', $path));
         }
+        try {
+            unlink($path);
+            return true;
+        } catch (\Throwable $e) {
+            dump($e);
+            return false;
+        }
+        /* try {
+            $result = $filesystem->delete($path);
+            if ($result !== null) {
+                if ($result) {
+                    $this->logger->info(sprintf('File "%s" was deleted.', $path));
+                } else {
+                    $this->logger->warning(sprintf('File "%s" could not be deleted.', $path));
+                }
+                return $result;
+            } else {
+                throw new \RuntimeException(sprintf('Error deleting file "%s". Result is null.', $path));
+            }
+        } catch(\Throwable $e) {
+            $this->logger->error(sprintf('An error occurred while deleting file "%s": %s', $path, $e->getMessage()));
+            return false;
+        } */
     }
 
     public function getTargetDirectory()

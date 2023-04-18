@@ -5,8 +5,24 @@
 
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="katakrak.net">
+        {% block seo %}
+            {% set seoTitle = "Rakatanga Tour. Descubre Asia en moto" %}
+            {% set seoDescription = 'Rakatanga Tour, viajes en moto por Asia, concretamente India, Nepal, Tailandia, Bután, Tíbet, Sri Lanka, Mongolia y Argentina' %}
+            {% set seoKeywords = 'Rakatanga Tour, viajes, viajes en grupo, viajes sobre ruedas, moto, motocicleta, Asia, India, Turquía, Nepal, Tailandia, Bután, Tíbet, Sri Lanka, Mongolia, Tanzania, Argentina, Rajastán' %}
+            <meta name="description" content="{{ seoDescription|trans }}" />
+            <meta property="og:title" content="{{ seoTitle|trans }}" />
+            <meta property="og:description" content="{{ seoDescription|trans }}" />
+            <meta property="keywords" content="{{ seoKeywords|trans }}" />
+            <meta property="og:image" content="{{ absolute_url(asset('images/rakatanga-tour.png'))}}" />
+            <meta property="og:url" content="https://www.rakatanga-tour.com" />
+            <meta property="og:site_name" content="{{ seoTitle }}" />
+            <meta name="twitter:title" content="{{ seoTitle }}">
+            <meta name="twitter:description" content="{{ seoDescription|trans }}">
+            <meta name="twitter:image" content="{{ absolute_url(asset('images/rakatanga-tour.png')) }}">
+
+        {% endblock %}
+        <meta name="robots" content="index, follow">
+        <meta name="author" content="xare@katakrak.net">
         <title>{% block title %}Rakatanga Tour{% endblock %}</title>
         {# <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>"> #}
         {% block stylesheets %}
@@ -19,7 +35,7 @@
         {% endblock %}
         {% block body %}
         {% endblock %}
-        
+
         {% block footer %}
             {{ include('shared/_footer.html.twig') }}
             {{ include('shared/_cookie-notice.html.twig') }}

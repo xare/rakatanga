@@ -1,3 +1,4 @@
+
 {% set duePayment = 0 %}
 {% if reservation is defined and reservation != null %}
 	{% set duePayment = (reservation.nbpilotes * reservation.date.prixPilote) + (reservation.nbaccomp * reservation.date.prixAccomp) %}
@@ -45,7 +46,6 @@
 							<input type="hidden" name="finalOptions[{{loop.index0}}][price]" value="{{option.price}}">
 						{% endfor %}
 					{% endif %}
-
 					<button class="btn btn-primary btn-lg" id="js-reservation-payment"
 					{% if travellersAdded is not defined or travellersAdded != true %}disabled{% endif %}>
 						{{ 'Continuar'|trans }}
@@ -59,7 +59,7 @@
 						method="POST"
 						data-action="js-open-payment-page">
 						<button
-							class="btn btn-primary btn-lg{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}{% if travellersAdded is defined and travellersAdded == false %} disabled{% endif %}{% endif %}"
+							class="btn btn-primary btn-lg{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}{% if travellersAdded is not defined or travellersAdded == false %} disabled{% endif %}{% endif %}"
 							id="js-reservation-payment"
 							{% if (reservation.nbpilotes + reservation.nbaccomp) > 1 %}
 							data-bs-toggle="tooltip"

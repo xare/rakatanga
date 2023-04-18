@@ -10,6 +10,7 @@ class reservationsApp {
     constructor($wrapper) {
 
         this.$wrapper = $wrapper;
+        this.locale = $('html').attr('lang');
         this.$wrapper.on(
             'click',
             '.js-cancel-reservation',
@@ -118,7 +119,7 @@ class reservationsApp {
         (async() => {
             try {
                 const invoiceFormResponse = await $.ajax({
-                    url: Routing.generate('ajax_invoice', {
+                    url: Routing.generate('ajax-invoice', {
                         'invoice': invoiceId
                     }),
                     type: "post",
@@ -156,13 +157,15 @@ class reservationsApp {
     }
 
     _handleSubmitInvoice(formData, row) {
+        const self = this;
         const invoiceId = formData.invoiceId;
         (async() => {
             try {
                 const response = await $.ajax({
                     type: "POST",
-                    url: Routing.generate('ajax_save_invoice', {
-                        'invoice': invoiceId
+                    url: Routing.generate('ajax-save-invoice', {
+                        'invoice': invoiceId,
+                        '_locale': self.locale
                     }),
                     data: formData,
                     datatype: "json",

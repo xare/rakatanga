@@ -4,7 +4,6 @@
 
 {% block body %}
 
-
 <div class="container container-presentacion">
     <div class="row">
         <div class="col-12 col-xs-12">
@@ -23,9 +22,9 @@
                     </div>
                 </div>
             {% else %}
-            <p>{{ 'Todavía no hemos iniciado nuestro blog pero puedes visitar el blog en español en'|trans }}
-                <a href="{{path('blog',{_locale:'es'} )}}">Blog</a>
-            </p>
+                <p>{{ 'Todavía no hemos iniciado nuestro blog pero puedes visitar el blog en español en'|trans }}
+                    <a href="{{path('blog',{_locale:'es'} )}}">Blog</a>
+                </p>
             {% endfor %}
         </div>
     </div>
@@ -34,8 +33,5 @@
             {{ knp_pagination_render(articles) }}
         </div>
     </div>
-</div>
-
-
 </div>
 {% endblock %}

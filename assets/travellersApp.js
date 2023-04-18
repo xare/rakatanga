@@ -68,10 +68,20 @@ class travellersApp {
             try {
                 const response = await $.ajax({
                     url: Routing.generate('ajax-add-travellers', {
-                        'reservation': reservationId
+                        'reservation': reservationId,
+                        '_locale': this.locale
                     }),
                     data: formData,
-                    method: "POST"
+                    method: "POST",
+                    beforeSend: () => {
+                        $('.card-logged-user')
+                            .find('.card-body')
+                            .empty();
+                        let waitingText = $('[data-container="calculator"]').data('waiting');
+                        $('.card-logged-user')
+                            .find('.card-body')
+                            .append(`<div><i class="fas fa-spinner fa-spin"></i> ${waitingText}`);
+                    }
                 });
                 $('[data-container="js-travellers-form"]')
                     .find('.card-body')
@@ -162,13 +172,13 @@ class travellersApp {
     }
     assignUserDataToTravellerForm(event) {
         event.preventDefault();
-        const $formContainer = $(event.currentTarget).closest('[data-container="js-traveller-form-container"]');
+        const $formContainer = $(event.currentTarget).closest('[data-container="js-travellers-form-container"]');
         $formContainer.find('button').hide();
         $formContainer
             .siblings('.js-contains-button')
-            .find('.js-assign-to-user')
+            .find('[data-action="js-assign-to-user"]')
             .remove();
-
+        console.info($formContainer);
         (async() => {
             try {
                 const response = await $.ajax({
@@ -179,7 +189,7 @@ class travellersApp {
                     // Check if the value of the email input field matches the user's email address
                     if ($(this).val() === response.user.email) {
                         // Get the parent container element that contains all the form fields
-                        var parentContainer = $(this).closest('[data-container="js-traveller-form-container"]');
+                        var parentContainer = $(this).closest('[data-container="js-travellers-form-container"]');
                         let buttonElement = $(event.currentTarget.outerHTML);
                         buttonElement.removeAttr('style');
                         parentContainer.find('h5').after(buttonElement[0].outerHTML);

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Invoices;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +20,14 @@ class InvoicesType extends AbstractType
             ->add('address')
             ->add('postalcode')
             ->add('city')
-            ->add('country')
+            ->add('country', CountryType::class,[
+                'preferred_choices' => [
+                        'España' => 'ES',
+                        'Francia' => 'FR',
+                        'Reino Unido' => 'GB',
+                        'Portugal' => 'PT',
+                    ]
+                ])
             /* ->add('reservation') */
         ;
     }

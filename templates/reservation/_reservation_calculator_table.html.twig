@@ -72,7 +72,8 @@
 									{{ 'piloto/a'|trans }}
 								</td>
 								<td align="right">
-									<span class="text-right">{{ (nbpilotes * prixPilote)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+									<span class="text-right">
+										{{ (nbpilotes * prixPilote)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
 									</span>
 								</td>
 							</tr>
@@ -83,7 +84,9 @@
 									{{ 'acompañante'|trans }}
 								</td>
 								<td align="right">
-									<span class="text-right">{{ (nbaccomp * prixAccomp)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</span>
+									<span class="text-right">
+									{{ (nbaccomp * prixAccomp)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}
+									</span>
 								</td>
 							</tr>
 						</tbody>

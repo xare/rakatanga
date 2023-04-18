@@ -45,6 +45,7 @@
         {{ reservation.invoice.invoiceNumber}}
       </span>
       <span class="tag is-light">
+
         <a
           href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
           title="{{ reservation.invoice.filename }}"

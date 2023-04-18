@@ -5,7 +5,11 @@
   {% endif %}
   <div class="col-8">
     <p class="mb-3 h6">
-      <a href="{{ path('blog-article',{'_locale':app.request.getLocale(), 'slug':article.title|slugify}) }}">{{ article.title }}</a>
+      <a href="{{ path('blog-article',{
+        '_locale':app.request.getLocale(),
+        'slug':article.title|slugify}) }}">
+          {{ article.title }}
+      </a>
     </p>
     <p class="mb-3">
       {{ article.publishedAt | date('d M Y')|format_datetime(pattern="d MMMM YYYY",locale=app.request.getLocale()) }}

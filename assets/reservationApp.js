@@ -7,7 +7,6 @@ import {
 } from 'jquery';
 import travellersApp from './travellersApp.js';
 Routing.setRoutingData(routes);
-
 class reservationApp {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
@@ -46,17 +45,6 @@ class reservationApp {
             this.initializeReservationLogged.bind(this)
         );
 
-        /*  this.$wrapper.on(
-             'click',
-             '#js-create-invoice',
-             this.openInvoiceForm.bind(this)
-         ) */
-
-        /* this.$wrapper.on(
-            'click',
-            '#js-add-travellers',
-            this.travellersApp.handleAddTraveller.bind(this)
-        ) */
         this.$wrapper.on(
             'click',
             '[data-action="js-add-travellers"]',

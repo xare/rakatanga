@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - {{ 'Descubre Asia en moto'|trans }}{% endblock %}
+{% block title %}
+	{{ parent() }} - {{ 'Descubre Asia en moto'|trans }}
+{% endblock %}
 
 {% block body %}
 		{{ parent() }}
@@ -28,7 +30,7 @@
 		<div class="row">
 			<div class="col-lg-9 col-xs-12">
 				<div class="row">
-					<h2>{{'Descubre Asia en moto'|trans}} ...</h2>
+					<h1 class="h2">{{'Descubre Asia en moto'|trans}} ...</h1>
 
 					{% for category in categories %}
 						{{ include ('index/_destination.html.twig', {'category': category}) }}

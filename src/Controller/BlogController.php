@@ -31,21 +31,16 @@ class BlogController extends AbstractController
     }
 
     #[Route(
-        path: [
-            'en' => '{_locale}/blog/', 
-            'fr' => '{_locale}/blog/', 
-            'es' => '{_locale}/blog/'], 
-        name: 'blog', 
+        path: '{_locale}/blog/',
+        name: 'blog',
         requirements: ['_locale' => '^[a-z]{2}$'])]
     public function index(
         Request $request,
-        string $locale = 'es',
-        string $_locale = null
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
         $this->breadcrumbsHelper->blogBreacrumbs();
         // LANG MENU
-        $otherLangsArray = $this->langRepository->findOthers($locale);
+        $otherLangsArray = $this->langRepository->findOthers($_locale);
         $i = 0;
         $urlArray = [];
         foreach ($otherLangsArray as $otherLangArray) {
@@ -56,7 +51,7 @@ class BlogController extends AbstractController
         // END LANG MENU
 
         $articles = $this->paginator->paginate(
-            $this->articlesRepository->listByLang($locale),
+            $this->articlesRepository->listByLang($_locale),
             $request->query->getInt('page', 1),
             10
         );
@@ -67,16 +62,17 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route(path: ['en' => '/{_locale}/blog/{slug}', 'es' => '/{_locale}/blog/{slug}', 'fr' => '/{_locale}/blog/{slug}'], name: 'blog-article', requirements: ['_locale' => '^[a-z]{2}$'])]
+    #[Route(
+        path: '/{_locale}/blog/{slug}',
+        name: 'blog-article',
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function blogArticle(
                 string $slug,
-                string $_locale = null,
-                $locale = 'es')
+                string $_locale = 'es')
     {
-        $locale = $_locale ? $_locale : $locale;
 
         // OTHER LANG MENU
-        $otherLangsArray = $this->langRepository->findOthers($locale);
+        $otherLangsArray = $this->langRepository->findOthers($_locale);
         $urlArray = [];
         $i = 0;
         foreach ($otherLangsArray as $otherLangArray) {
@@ -87,14 +83,13 @@ class BlogController extends AbstractController
         // END OTHER LANG MENU
         $article = $this->articlesRepository->showArticleFromSlug($slug);
         // BREADCRUMBS
-
-        // $breadcrumbs->addItem($this->translatorInterface->trans("Inicio"), $this->generateUrl("index"));
-        // END BREADCRUMBS
         $articleObject = $this->articlesRepository->find($article['id']);
         $this->breadcrumbsHelper->blogArticleBreadcrumbs($articleObject, $slug);
+        // END BREADCRUMBS
+
 
         return $this->render('blog/article.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'article' => $articleObject,
             'langs' => $urlArray,
         ]);

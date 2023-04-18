@@ -387,7 +387,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
         string $_locale = null,
         string $locale = 'es'
     ) {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         // Swith Locale Loader
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
 

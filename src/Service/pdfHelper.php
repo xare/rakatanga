@@ -18,21 +18,16 @@ class pdfHelper
         private KernelInterface $appKernel,
         private UploadHelper $uploadHelper)
     {
-        $this->twig = $twig;
-        $this->mPdf = $mPdf;
-        $this->appKernel = $appKernel;
-        $this->uploadHelper = $uploadHelper;
     }
 
     /**
      * createInvoicePdf function.
      */
-    public function createInvoicePdf(Invoices $invoice, string $locale, string $status = ''): string
+    public function createInvoicePdf(
+        Invoices $invoice,
+        string $locale,
+        string $status = ''): string
     {
-        /**
-         * @var string $path
-         */
-        $path = rtrim($_SERVER['DOCUMENT_ROOT'], '/');                         // C:/wamp64/www
 
         /**
          * @var array $twigVars
@@ -40,7 +35,7 @@ class pdfHelper
         $twigVars = [
             'invoice' => $invoice,
             'locale' => $locale,
-            'path' => $path,
+            'path' => rtrim($_SERVER['DOCUMENT_ROOT'], '/'),
             'status' => $status,
         ];
 
@@ -70,8 +65,52 @@ class pdfHelper
         return $filename;
     }
 
-    public function createManualInvoicePdf(Invoices $invoice, string $locale='es', string $status = ''){
-                /**
+    public function createNamedInvoicePdf(
+            Invoices $invoice,
+            string $locale= 'es',
+            string $status = '')
+    {
+        /**
+         * @var array $twigVars
+         */
+        $twigVars = [
+            'invoice' => $invoice,
+            'locale' => $locale,
+            'path' => rtrim($_SERVER['DOCUMENT_ROOT'], '/'),
+            'status' => $status,
+        ];
+
+        /**
+         * @var string $css
+         */
+        $css = $this->_getBootstrap_custom();
+
+        $filename = $invoice->getFilename();
+        $path = $this->appKernel->getProjectDir().self::INVOICES_FOLDER;
+        /**
+         * @var string $filepath
+         */
+        $filepath = $path.$filename;
+        try {
+            $this->mPdf->SetTopMargin('50');
+            $this->mPdf->SetHTMLHeader($this->twig->render('pdf/pdf_header.html.twig', $twigVars));
+            $this->mPdf->SetFooter($this->twig->render('pdf/pdf_footer.html.twig', $twigVars));
+            $this->mPdf->writeHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $this->mPdf->WriteHTML($this->twig->render('pdf/pdf_content.html.twig', $twigVars), \Mpdf\HTMLParserMode::HTML_BODY);
+            $this->mPdf->Output($filepath, 'F');
+        } catch (\Exception $exception) {
+            error_log("{$exception->getFile()}: ln {$exception->getLine()} throw error message '{$exception->getMessage()}'");
+            throw $exception;
+        }
+
+        return $filename;
+
+    }
+    public function createManualInvoicePdf(
+                                Invoices $invoice,
+                                string $locale='es',
+                                string $status = ''){
+        /**
          * @var string $path
          */
         $path = rtrim($_SERVER['DOCUMENT_ROOT'], '/');                         // C:/wamp64/www
@@ -120,6 +159,10 @@ class pdfHelper
         $path = $this->appKernel->getProjectDir()
                 .self::INVOICES_FOLDER
                 .$invoice->getFilename();
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        dump('Remove Invoice PDF');
+        dump($path);
         try {
             $this->uploadHelper->deleteFile($path, false);
         } catch (\Exception $exception) {

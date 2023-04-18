@@ -243,6 +243,11 @@ class Mailer
             ->context([
                 'reservation' => $reservation,
             ]);
+            $path = $this->appKernel->getProjectDir().$this->pdfHelper::INVOICES_FOLDER;
+            // $path = $this->pdfHelper::INVOICES_FOLDER;
+            $invoice = $reservation->getInvoice();
+            $file = fopen($path.$invoice->getFilename(), 'r');
+            $email->attach($file, $invoice->getFilename());
         $this->mailer->send($email);
 
         $mailing = new Mailings();
@@ -283,6 +288,7 @@ class Mailer
 
     public function sendReservationToSender(Reservation $reservation, $locale = 'es')
     {
+
         $email = $this->sendToSender();
         $user = $reservation->getUser();
         $subject = '['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('RESERVA REALIZADA', [], 'email')}]  {$this->translator->trans('Has realizado una reserva para el viaje', [], 'email')} {$reservation->getDate()->getTravel()->getMainTitle()} {$this->translator->trans('del ')} {$reservation->getDate()->getDebut()->format('d/m/Y')}";
@@ -296,11 +302,72 @@ class Mailer
                 'reference' => $reservation->getCode(),
                 '_locale' => $locale
             ]);
-        $path = $this->appKernel->getProjectDir().$this->pdfHelper::INVOICES_FOLDER;
+        /* $path = $this->appKernel->getProjectDir().$this->pdfHelper::INVOICES_FOLDER;
         // $path = $this->pdfHelper::INVOICES_FOLDER;
         $invoice = $reservation->getInvoice();
         $file = fopen($path.$invoice->getFilename(), 'r');
-        $email->attach($file, $invoice->getFilename());
+        $email->attach($file, $invoice->getFilename()); */
+
+        $mailing = new Mailings();
+        $mailing->setSubject($subject);
+        $mailing->setToAddresses($to->getAddress());
+
+        $template = $this
+                        ->twig
+                        ->render('email/reservation/render/reservation-saved-sender.html.twig', [
+                            'reservation' => $reservation,
+                            'email' => null,
+                            'reference' => strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(), 0, 3)).'-'.$reservation->getId(),
+                            '_locale' => $locale
+                        ]);
+        $mailing->setContent($template);
+        $mailing->setReservation($reservation);
+        $this->entityManager->persist($mailing);
+        $this->entityManager->flush();
+
+        $this->mailer->send($email);
+    }
+
+    public function sendReservationUpdateToUs(Reservation $reservation, string $locale)
+    {
+        $user = $reservation->getUser();
+        $email = $this->sendToUs(
+            $user->getEmail(),
+            $user->getPrenom(),
+            $user->getNom()
+        );
+
+        $email
+            ->subject('['.\App\Service\Mailer::MAIL_TITLE." - Reserva Actualizada]  {$user->getPrenom()} {$user->getNom()}")
+            ->htmlTemplate('email/reservation/reservation-saved-rakatanga.html.twig')
+            ->context([
+                'locale' => $locale,
+                'reservation' => $reservation,
+                'reference' => $reservation->getCode(),
+            ]);
+        $this->mailer->send($email);
+    }
+    public function sendReservationUpdateToSender(Reservation $reservation, $locale = 'es')
+    {
+        dump('SendReservationUpdate');
+        $email = $this->sendToSender();
+        $user = $reservation->getUser();
+        $subject = '['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('RESERVA ACTUALIZADA', [], 'email')}]  {$this->translator->trans('Has actualizado una reserva para el viaje', [], 'email')} {$reservation->getDate()->getTravel()->getMainTitle()} {$this->translator->trans('del ')} {$reservation->getDate()->getDebut()->format('d/m/Y')}";
+
+        $to = new Address($user->getEmail(), $user->getPrenom().' '.$user->getNom());
+        $email->to($to)
+            ->subject($subject)
+            ->htmlTemplate('email/reservation/reservation-saved-sender.html.twig')
+            ->context([
+                'reservation' => $reservation,
+                'reference' => $reservation->getCode(),
+                '_locale' => $locale
+            ]);
+        /* $path = $this->appKernel->getProjectDir().$this->pdfHelper::INVOICES_FOLDER;
+        // $path = $this->pdfHelper::INVOICES_FOLDER;
+        $invoice = $reservation->getInvoice();
+        $file = fopen($path.$invoice->getFilename(), 'r');
+        $email->attach($file, $invoice->getFilename()); */
 
         $mailing = new Mailings();
         $mailing->setSubject($subject);

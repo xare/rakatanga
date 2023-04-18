@@ -26,24 +26,32 @@ class ReservationManager
         $this->reservationHelper = $reservationHelper;
     }
 
-     /**
-      * @return Reservation $reservation
-      */
-     public function createReservation(
+    /**
+    * @return Reservation $reservation
+    */
+    public function createReservation(
                         array $requestData,
                         Dates $date,
                         User $user,
                         string $locale)
-     {
-         $reservation = $this->reservationHelper->makeReservation($requestData, $date, $user, $locale);
-         $this->logHelper->logReservationInitialize($reservation->getDate(), $reservation);
+    {
+        $reservation = $this->reservationHelper->makeReservation($requestData, $date, $user, $locale);
+        $this->logHelper->logReservationInitialize($reservation->getDate(), $reservation);
 
-         return $reservation;
-     }
+        return $reservation;
+    }
 
-     public function sendReservation(
-                        Reservation $reservation
-     ) {
+    public function modifyReservation(
+        Reservation $reservation,
+        array $reservationData,
+        array $customerData,
+        string $locale
+    ) {
+        $reservation = $this->reservationHelper->updateReservation($reservation, $reservationData, $customerData, $locale);
+        return $reservation;
+    }
+
+    public function sendReservation( Reservation $reservation ) {
             $event = new ReservationEvent($reservation);
             try  {
                 $this->eventDispatcher->dispatch($event);
@@ -51,4 +59,13 @@ class ReservationManager
                 dump($exception);
             }
      }
+
+    public function sendUpdateReservation( Reservation $reservation ) {
+        $event = new ReservationEvent($reservation);
+        try  {
+            $this->eventDispatcher->dispatch($event);
+        } catch (\Exception $exception) {
+            dump($exception);
+        }
+ }
 }

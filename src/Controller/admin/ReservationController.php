@@ -46,7 +46,7 @@ class ReservationController extends AbstractController
         );
         $latestReservation = $this->reservationRepository->getLatestReservation();
         $renderArray = [];
-        $renderArray['latestReservation'] = ($latestReservation!= null)? $latestReservation: '';
+        $renderArray['latestReservation'] = ($latestReservation!= null)?: '';
         $renderArray['reservations'] = $items;
         return $this->render('admin/reservation/index.html.twig', $renderArray);
     }

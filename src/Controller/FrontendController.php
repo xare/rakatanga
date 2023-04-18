@@ -48,29 +48,25 @@ class FrontendController extends AbstractController
         path: '/',
         name: 'index')]
     #[Route(
-        path: [
-            'en' => '{_locale}/',
-            'es' => '{_locale}/',
-            'fr' => '{_locale}/'],
-        name: 'index')]
+        path: '/{_locale}',
+        name: 'index',
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function index(
-        string $locale = 'es',
-        string $_locale = null
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
-        $urlArray = $this->languageMenuHelper->indexLanguageMenu($locale);
+        $urlArray = $this->languageMenuHelper->indexLanguageMenu($_locale);
 
         $categories = $this->categoryRepository->findCategoriesForIndex(
             $this->continentsRepository->findOneBy(
                 ['code' => 'as']
             ),
-            $locale);
+            $_locale);
 
         $otherCategories = $this->categoryRepository->findOtherCategoriesForIndex(
             $this->continentsRepository->findOneBy(
                 ['code' => 'as']
             ),
-            $locale);
+            $_locale);
 
 
         $calendarDates = [];
@@ -99,9 +95,9 @@ class FrontendController extends AbstractController
         return $this->render('index/index.html.twig', [
             'categories' => $categories,
             'otherCategories' => $otherCategories,
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
-            'destinations' => $destinations[$locale],
+            'destinations' => $destinations[$_locale],
             'dates' => $calendarDates,
         ]);
     }
@@ -111,20 +107,19 @@ class FrontendController extends AbstractController
             'en' => '{_locale}/trips/{category}/{travel}/',
             'es' => '{_locale}/destinos/{category}/{travel}/',
             'fr' => '{_locale}/destinations/{category}/{travel}/'],
-        name: 'destination')]
+        name: 'destination',
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function Destination(
         Request $request,
-        $locale = 'es',
-        string $_locale = null
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
         $category = $request->attributes->get('category');
         $categoryTranslation = $this->categoryTranslationRepository->findOneBy(
             ['slug' => $category]
         );
         $slug = $request->attributes->get('travel');
 
-        $urlArray = $this->languageMenuHelper->travelLanguageMenu($locale, $slug);
+        $urlArray = $this->languageMenuHelper->travelLanguageMenu($_locale, $slug);
         $travel = $this->travelRepository->showTravelFromTranslationSlug($slug);
 
         $travelTranslation = $this->travelTranslationRepository->findOneBy(
@@ -139,10 +134,10 @@ class FrontendController extends AbstractController
         // 2. Get the CategoryTranslation for that route
         $categoryTranslation2 = $this->categoryTranslationRepository->findOneBy([
             'title' => $categoryTranslation->getTitle(),
-            'lang' => $this->langRepository->findOneBy(['iso_code' => $locale]),
+            'lang' => $this->langRepository->findOneBy(['iso_code' => $_locale]),
         ]);
         $this->breadcrumbsHelper->destinationsByTravelDestinationBreadcrumbs(
-            $locale,
+            $_locale,
             $categoryTranslation,
             $categoryTranslation2,
             $travelTranslation);
@@ -151,7 +146,7 @@ class FrontendController extends AbstractController
         $dates = $this->datesRepository->showNextDates($travel);
 
         return $this->render('frontend/destination_single.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'travel' => $travel,
             'travelObject' => $travelObject,
@@ -165,19 +160,18 @@ class FrontendController extends AbstractController
             'en' => '{_locale}/trips/{category}/',
             'es' => '{_locale}/destinos/{category}/',
             'fr' => '{_locale}/destinations/{category}/'],
-        name: 'destinations-by-category')]
+        name: 'destinations-by-category',
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function DestinationsByCategory(
         Request $request,
-        string $_locale = null,
-        $locale = 'es'
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
         $categorySlug = $request->attributes->get('category');
         $categoryTranslation = $this->categoryTranslationRepository->findOneBy(['slug' => $categorySlug]);
 
         $category = $categoryTranslation->getCategory();
-        $urlArray = $this->languageMenuHelper->categoryLanguageMenu($locale, $category);
-        $otherLangsArray = $this->langRepository->findOthers($locale);
+        $urlArray = $this->languageMenuHelper->categoryLanguageMenu($_locale, $category);
+        $otherLangsArray = $this->langRepository->findOthers($_locale);
 
         $i = 0;
         $urlArray = [];
@@ -198,7 +192,7 @@ class FrontendController extends AbstractController
 
         // Get Content
         // 1. Get the lang object for $locale
-        $lang = $this->langRepository->findOneBy(['iso_code' => $locale]);
+        $lang = $this->langRepository->findOneBy(['iso_code' => $_locale]);
         // 2. Get the CategoryTranslation for that route
         $categoryTranslation2 = $this->categoryTranslationRepository->findOneBy([
             'title' => $categoryTranslation->getTitle(),
@@ -206,7 +200,7 @@ class FrontendController extends AbstractController
         ]);
 
         $this->breadcrumbsHelper->destinationsByCategoryBreadcrumbs(
-            $locale,
+            $_locale,
             $categoryTranslation,
             $categoryTranslation2);
 
@@ -214,7 +208,7 @@ class FrontendController extends AbstractController
         $travels = $this->travelRepository
             ->showByCategory(
                 $categoryTranslation->getCategory()->getId(),
-                $locale
+                $_locale
             );
 
         $items = [];
@@ -227,7 +221,7 @@ class FrontendController extends AbstractController
         // dd($urlArray);
 
         return $this->render('frontend/destination_category.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'travels' => $items,
             'category' => $categoryTranslation,
@@ -239,27 +233,27 @@ class FrontendController extends AbstractController
             'en' => '{_locale}/trips/',
             'es' => '{_locale}/destinos/',
             'fr' => '{_locale}/destinations/'],
-        name: 'destinations')]
+        name: 'destinations',
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function Destinations(
         Request $request,
-        string $_locale = null,
-        $locale = 'es'
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
+
         $route = $request->attributes->get('_route');
         $this->breadcrumbsHelper->destinationsBreadcrumbs();
-        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($_locale);
 
         // Get the category for that translation
         $continent = $this->continentsRepository->findOneBy(['code' => 'as']);
 
-        $categories = $this->categoryRepository->findCategoriesForIndex($continent, $locale);
-        $otherDestinations = $this->categoryRepository->findOtherCategoriesForIndex($continent, $locale);
+        $categories = $this->categoryRepository->findCategoriesForIndex($continent, $_locale);
+        $otherDestinations = $this->categoryRepository->findOtherCategoriesForIndex($continent, $_locale);
 
-        $slug = $this->menuTranslationRepository->findCorrespondingRoute($route, $locale);
+        $slug = $this->menuTranslationRepository->findCorrespondingRoute($route, $_locale);
 
         return $this->render('destinations/index.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'categories' => $categories,
             'route' => $slug,
@@ -272,18 +266,17 @@ class FrontendController extends AbstractController
             'en' => '{_locale}/calendar/',
             'es' => '{_locale}/calendario/',
             'fr' => '{_locale}/calendrier/'],
-        name: 'calendar')]
+        name: 'calendar',
+        requirements: ['_locale' => '^[a-z]{2}$'])]
     public function Calendar(
         Request $request,
-        string $locale = 'es',
-        string $_locale = null
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
         $this->breadcrumbsHelper->calendarBreadcrumbs();
 
         $slug = $request->attributes->get('slug');
 
-        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($_locale);
 
         // 1. get dates only by month/year
         // return months array
@@ -304,31 +297,30 @@ class FrontendController extends AbstractController
         }
 
         return $this->render('calendar/index.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'dates' => $calendarDates,
             'route' => $slug,
         ]);
     }
 
-    #[Route(path: [
-        'en' => '{_locale}/{slug}/',
-        'es' => '{_locale}/{slug}/',
-        'fr' => '{_locale}/{slug}/'],
-        name: 'main-content')]
+    #[Route(
+        path: '{_locale}/{slug}/',
+        name: 'main-content',
+        requirements: ['_locale' => '^[a-z]{2}$']
+        )]
     public function main(
         string $slug,
-        string $locale = 'es',
-        string $_locale = null
+        string $_locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
+
         $pageTranslation = $this->pageTranslationRepository->findOneBy(['slug' => $slug]);
         $page = $pageTranslation->getPage();
 
-        $this->breadcrumbsHelper->mainBreadcrumbs($locale, $page);
-        $urlArray = $this->languageMenuHelper->slugLanguageMenu($locale, $pageTranslation);
+        $this->breadcrumbsHelper->mainBreadcrumbs($_locale, $page);
+        $urlArray = $this->languageMenuHelper->slugLanguageMenu($_locale, $pageTranslation);
 
-        $lang = $this->langRepository->findOneBy(['iso_code' => $locale]);
+        $lang = $this->langRepository->findOneBy(['iso_code' => $_locale]);
         $menuTranslation = $this->menuTranslationRepository->findOneBy([
             'slug' => $slug,
             'lang' => $lang,
@@ -341,7 +333,7 @@ class FrontendController extends AbstractController
         ]);
 
         return $this->render('presentation/index.html.twig', [
-            'locale' => $locale,
+            'locale' => $_locale,
             'langs' => $urlArray,
             'contents' => $pageTranslation,
             'page' => $slug,

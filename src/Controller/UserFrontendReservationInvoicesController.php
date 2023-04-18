@@ -43,7 +43,7 @@ class UserFrontendReservationInvoicesController extends AbstractController
         string $_locale = null,
         string $locale = 'es'
     ) {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
 
         // BREADCRUMBS

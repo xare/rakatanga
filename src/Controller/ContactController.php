@@ -36,7 +36,7 @@ class ContactController extends AbstractController
         string $_locale = null,
         string $locale = 'es'
     ): Response {
-        $locale = $_locale ? $_locale : $locale;
+        $locale = $_locale ?: $locale;
 
         // LANG MENU
         $otherLangsArray = $langRepository->findOthers($locale);
