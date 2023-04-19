@@ -186,9 +186,10 @@ class reservationsApp {
             async() => {
                 try {
                     const response = await $.ajax({
-                        url: Routing.generate('check-reservation-data'),
+                        url: Routing.generate('check-reservation-data', {
+                            '_locale': locale
+                        }),
                         method: 'POST',
-                        data: { locale }
                     });
                     Swal.fire({
                         'title': response.title,

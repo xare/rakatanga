@@ -49,34 +49,41 @@ class UserFrontendReservationDataController extends AbstractController
                             Request $request,
                             Reservation $reservation,
                             logHelper $logHelper,
-                            string $locale = 'es',
-                            string $_locale = null,
+                            string $_locale = 'es'
         ) {
-          $locale = $_locale ?: $locale;
+
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($_locale, $reservation);
+        $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($_locale);
 
           /**
            * @var User $user
            */
           $user = $this->getUser();
-          // Swith Locale Loader
-            $userTraveller = $this->travellersRepository->findOneBy(['user'=>$user, 'reservation'=>$reservation]);
+
+        $userTraveller = $this->travellersRepository->findOneBy([
+            'user'=>$user,
+            'reservation'=>$reservation
+        ]);
+
+        dump($userTraveller);
         $otherTravellers = $this->travellersRepository->listOtherTravellers($userTraveller, $reservation);
-          $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale, $reservation);
-          $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($locale);
+
         $reservationData = new ReservationData();
-          if( $this->reservationDataRepository->findOneBy([
-              'reservation' => $reservation,
-              'user' => $user,
-              'traveller' => null
-          ]) != null){
+
+        if( $this->reservationDataRepository->findOneBy([
+            'reservation' => $reservation,
+            'user' => $user,
+            'traveller' => $userTraveller
+        ]) != null){
             $reservationData = $this->reservationDataRepository->findOneBy([
                 'reservation' => $reservation,
                 'user' => $user,
-                'traveller' => null
+                'traveller' => $userTraveller
             ]);
-        } elseif ($this->reservationDataRepository->getUserLatestData($user)!= null) {
+        } elseif ($this->reservationDataRepository->getUserLatestData($user, $userTraveller)!= null) {
+            $previousReservationData = $this->reservationDataRepository->getUserLatestData($user, $userTraveller);
 
-            $previousReservationData = $this->reservationDataRepository->getUserLatestData($user);
+            $reservationData->setTraveller($userTraveller);
             $reservationData->setPassportNo($previousReservationData->getPassportNo());
             $reservationData->setPassportIssueDate($previousReservationData->getPassportIssueDate());
             $reservationData->setPassportExpirationDate($previousReservationData->getPassportExpirationDate());
@@ -95,6 +102,7 @@ class UserFrontendReservationDataController extends AbstractController
 
           if ($form->isSubmitted() && $form->isValid()) {
               $reservationData = $form->getData();
+              $reservationData->setTraveller($userTraveller);
               $reservationData->setReservation($reservation);
               $reservationData->setUser($this->getUser());
               $this->entityManager->persist($reservationData);
@@ -113,7 +121,7 @@ class UserFrontendReservationDataController extends AbstractController
           $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
           return $this->render('user/user_reservation_data.html.twig', [
               'langs' => $urlArray,
-              'locale' => $locale,
+              'locale' => $_locale,
               'user' => $this->getUser(),
               'reservationData' => $reservationData,
               'fieldsCompletion' => $fieldsCompletion,
@@ -227,33 +235,36 @@ class UserFrontendReservationDataController extends AbstractController
      }
 
      #[Route(
-        path: "check/reservation/data",
+        path: "{_locale}/check/reservation/data",
         methods: ["GET","POST"],
         name: "check-reservation-data",
         options: ['expose' => true]
      )]
      public function checkReservationData(
-        Request $request
+        Request $request,
+        string $_locale = "es"
      ):Response {
-        $locale = $request->request->get('locale');
         $reservation = $this->reservationRepository->getLatestReservation();
         $reservationData = $this->reservationDataRepository->getUserLatestData($this->getUser());
+        dump("HELLO");
         if($reservationData instanceOf ReservationData){
             $reservationDataFieldsArray = $this->reservationDataHelper->getReservationDataFields($reservationData);
+            dump($reservationDataFieldsArray);
             if ( $reservationDataFieldsArray['fieldsCount'] != $reservationDataFieldsArray['filledFieldsCount']) {
                 $ratio = round(($reservationDataFieldsArray['filledFieldsCount']/$reservationDataFieldsArray['fieldsCount'])*100, 2);
+                dump($ratio);
                 $title = ($ratio == 100) ?'Los datos están completos':'Faltan datos y documentos';
-                $html = $this->renderView('user/partials/_swal_missing_reservationData.html.twig',['ratio'=>$ratio, 'locale'=>$locale]);
+                $html = $this->renderView('user/partials/_swal_missing_reservationData.html.twig',['ratio'=>$ratio, 'locale'=>$_locale]);
                 return $this->json([
                     'ratio' => $ratio,
-                    'title' => $this->translator->trans($title, array(), null, $locale),
+                    'title' => $this->translator->trans($title, array(), null, $_locale),
                     'message' => $html,
-                    '_locale' => $locale
+                    '_locale' => $_locale
                 ], 200, [], []);
             }
         }
         return $this->json([
-                'message' => $this->translator->trans("Faltan datos y documentos", array(), null, $locale)
+                'message' => $this->translator->trans("Faltan datos y documentos", array(), null, $_locale)
         ], 200, [], []);
     }
 }

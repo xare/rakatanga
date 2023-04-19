@@ -1,5 +1,5 @@
 <ul class="list-group travellers-list">
-
+{{dump(otherTravellers)}}
   {% for travellerItem in otherTravellers %}
     {% set reservationTravellerDataFields = getTravellerReservationDataFields(reservation, travellerItem) %}
     {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}

@@ -72,11 +72,12 @@ class ReservationDataRepository extends ServiceEntityRepository
         ->getResult();
     }
 
-    public function getUserLatestData($user) {
+    public function getUserLatestData($user, $traveller) {
         return $this->createQueryBuilder('rd')
         ->andWhere('rd.user = :user')
         ->setParameter('user', $user)
-        ->andWhere('rd.traveller IS NULL')
+        ->andWhere('rd.traveller = :traveller')
+        ->setParameter('traveller', $traveller)
         ->orderBy('rd.id','DESC')
         ->setMaxResults(1)
         ->getQuery()

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -15,52 +15,52 @@ class paymentHelper {
     private string $stripeSecretKey,
   )
   {
-    
+
   }
 
-  public function createStripeCheckout( 
-                        Reservation $reservation, 
+  public function createStripeCheckout(
+                        Reservation $reservation,
                         string $locale,
-                        $formData, 
+                        $formData,
                         $ammount){
     \Stripe\Stripe::setApiKey($this->stripeSecretKey);
 
     return CheckoutSession::create([
-                  'payment_method_types' => ['card'],
-                  'mode' => 'payment',
-                  'locale' => $locale,
-                  'line_items' => [
-                      [
-                          'price_data' => [
-                              'currency' => 'eur',
-                              'product_data' => [
-                                  'name' => $this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(),$locale),
-                                  'metadata' => [
-                                      'paymentType' => $formData['paymentMethod'],
-                                  ],
-                              ],
+                'payment_method_types' => ['card'],
+                'mode' => 'payment',
+                'locale' => $locale,
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => $this->localizationHelper->renderTravelString($reservation->getDate()->getTravel()->getId(),$locale),
+                                'metadata' => [
+                                    'paymentType' => $formData['paymentMethod'],
+                                ],
+                            ],
                               'unit_amount' => $ammount * 100,
-                          ],
-                          'quantity' => 1,
-                      ],
-                  ],
+                        ],
+                        'quantity' => 1,
+                    ],
+                ],
 
-                  'success_url' => $this->UrlGenerator->generate(
-                      'success_url',
-                      [
-                          'reservation' => $reservation->getId(),
-                          'ammount' => $ammount,
-                          '_locale' => $locale,
+                'success_url' => $this->UrlGenerator->generate(
+                    'success_url',
+                    [
+                        'reservation' => $reservation->getId(),
+                        'ammount' => $ammount,
+                        '_locale' => $locale,
                           // 'session_id'=>'{CHECKOUT_SESSION_ID}'
-                      ],
-                      UrlGeneratorInterface::ABSOLUTE_URL).'&session_id={CHECKOUT_SESSION_ID}',
-                  'cancel_url' => $this->UrlGenerator->generate(
-                      'cancel_url',
-                      [
-                          'reservation' => $reservation->getId(),
-                          '_locale' => $locale,
-                      ],
-                      UrlGeneratorInterface::ABSOLUTE_URL),
+                    ],
+                    UrlGeneratorInterface::ABSOLUTE_URL).'&session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => $this->UrlGenerator->generate(
+                    'cancel_url',
+                    [
+                        'reservation' => $reservation->getId(),
+                        '_locale' => $locale,
+                    ],
+                    UrlGeneratorInterface::ABSOLUTE_URL),
                 ]);
   }
 }

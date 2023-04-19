@@ -157,6 +157,7 @@ class reservationDataHelper
             'reservation'=>$reservation,
             'traveller'=>$traveller
         ]);
+        dump($reservationData);
         if($reservationData != null) {
             return $this->getReservationDataFields($reservationData);
         }
