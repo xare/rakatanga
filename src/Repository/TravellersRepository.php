@@ -49,7 +49,14 @@ class TravellersRepository extends ServiceEntityRepository
         ;
     }
     */
-
+    public function findWithoutProxy($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     public function listAll()
     {
         return $this->createQueryBuilder('t')

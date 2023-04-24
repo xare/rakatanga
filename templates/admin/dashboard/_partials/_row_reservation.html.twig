@@ -4,48 +4,41 @@
     <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }}">
   </div>
   <div class="reservations-dashboard-grid-item">
-    <strong>
-      <a
-        href="{{ path('category_edit',{'id':reservation.id}) }}"
-        data-bs-toggle="tooltip"
-        title="Visualizar los datos de la categoría">
-        {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }}
-      </a>
-    </strong>
-    <br />
-    <a
-      href="{{ path('dates_edit',{'id':reservation.date.id}) }}"
-      >
-      {{ renderLocalizedTravel(reservation.date.travel.id,'es') }}
-      <br />
-      <em data-bs-toggle="tooltip"
-      title="Visualizar los datos de la fecha">{{ reservation.date.debut|date('d/m/Y') }}</em>
-      <strong
-      data-bs-toggle="tooltip"
-      title="Número de reservas para esta fecha">
-      <i class="fas fa-hashtag"></i> {{reservation.date.reservations|length}}
-      </strong>
-    </a>
 
-  </div>
-  <div class="reservations-dashboard-grid-item">
     <a
       href="{{path('reservation_edit',{'id':reservation.id})}}"
       data-bs-toggle="tooltip"
       title="Visualizar los datos de la reserva">
-        {{reservation.code}}
+        <strong>{{reservation.code}}</strong>
+        {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }}
+        <br />
+        {{ renderLocalizedTravel(reservation.date.travel.id,'es') }}
+        <br />
+        {{ reservation.date.debut|date('d/m/Y') }} - {{ reservation.date.fin|date('d/m/Y') }}
       </a>
-    <br />
+
+
+
+      <strong
+      data-bs-toggle="tooltip"
+      title="Número de reservas TOTAL para esta fecha">
+      <i class="fas fa-hashtag"></i> {{reservation.date.reservations|length}}
+      </strong>
+    </a>
+  </div>
+  <div class="reservations-dashboard-grid-item">
     {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}<br />
+    {% if reservation.invoice != null %}
     <div class="tags has-addons">
       <span class="tag">
         <i class="fas fa-receipt"></i>
       </span>
       <span class="tag">
+
         {{ reservation.invoice.invoiceNumber}}
+
       </span>
       <span class="tag is-light">
-
         <a
           href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
           title="{{ reservation.invoice.filename }}"
@@ -54,6 +47,7 @@
         </a>
       </span>
     </div>
+    {% endif %}
   </div>
   <div class="reservations-dashboard-grid-item">
     <div class="tags has-addons">
@@ -72,7 +66,6 @@
       </span>
     </div>
   </div>
-
   <div class="reservations-dashboard-grid-item">
     <div class="tags has-addons">
       <span class="tag"><i class="fas fa-motorcycle"></i></span>
@@ -85,7 +78,6 @@
       <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
     </div>
   </div>
-
   <div class="reservations-dashboard-grid-item">
     <p>{{reservation.comment}}</p>
   </div>

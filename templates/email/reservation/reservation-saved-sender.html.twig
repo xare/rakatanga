@@ -233,7 +233,7 @@
                 {{ 'La reserva implica la aceptación total de nuestras'|trans }}
                 <a href="{{ absolute_url(path( 'main-content',{
                     '_locale': app.request.locale,
-                    'slug' : 'cgv'
+                    'slug' : 'cgv'|trans
                 })) }}">{{ 'condiciones generales de venta'|trans }}</a>.
             </p>
         </columns>

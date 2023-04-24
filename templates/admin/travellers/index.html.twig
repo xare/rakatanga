@@ -13,35 +13,38 @@
     <div class="row mb-4">
         <div class="col-12 col-md-12 ">
             <h1>Travellers index</h1>
+                <div class="table-data">
+                    <div>
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="main-red">Id</th>
+                                <th class="main-red">Langue</th>
+                                <th class="main-red">Nom</th>
+                                <th class="main-red">Prenom</th>
+                                <th class="main-red">Telephone</th>
+                                <th class="main-red">Position</th>
+                                {# <th class="main-red">Assurance</th>
+                                <th class="main-red">Vols</th> #}
+                                <th class="main-red">Date_ajout</th>
+                                <th class="main-red">Email</th>
+                                <th class="main-red"><i class="fa fa-edit"></i></th>
+                                <th class="main-red"><i class="fa fa-trash"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for traveller in travellers %}
+                            {{ include('admin/travellers/_row.html.twig',{'traveller': traveller} )}}
 
-            <table class="table">
-                <thead class="main-red">
-                    <tr>
-                        <th>Id</th>
-                        <th>Langue</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>Telephone</th>
-                        <th>Position</th>
-                        <th>Assurance</th>
-                        <th>Vols</th>
-                        <th>Date_ajout</th>
-                        <th>Email</th>
-                        <th><i class="fa fa-edit"></i></th>
-                        <th><i class="fa fa-trash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for traveller in travellers %}
-                    {{ include('admin/travellers/_row.html.twig',{'traveller': traveller} )}}
-
-                {% else %}
-                    <tr>
-                        <td colspan="11">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                        {% else %}
+                            <tr>
+                                <td colspan="11">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
         </div>
     </div>
     <div class="row">

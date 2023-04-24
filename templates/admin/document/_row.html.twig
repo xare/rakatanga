@@ -1,27 +1,21 @@
 <tr>
-  <td>{{ document.id }}</td>
-  <td><a href="{{ path("download_document",{
-          'id': document.id}
-        )}}">{{ document.filename }}</a></td>
-  <td><a href="{{ path('document_edit', {'id': document.id}) }}">{{ document.originalFilename }}</a></td>
-  <td>{{ document.mimeType }}</td>
-  <td>
-      {{ document.user.prenom }} {{ document.user.nom }}<br />
-      {{ document.user.email }}
-  </td>
-  {# <td>
-      <a href="{{ path('document_show', {'id': document.id}) }}"
-      class="btn btn-primary">
-          <i class="fa fa-eye"></i>
-      </a>
-  </td>
-  <td>
-      <a href="{{ path('document_edit', {'id': document.id}) }}"
-      class="btn btn-info">
-          <i class="fa fa-edit"></i>
-      </a>
-  </td> #}
-  <td>
-      {{ include('admin/document/_delete_form.html.twig') }}
-  </td>
+    <td data-cell="Id">{{ document.id }}</td>
+    <td data-cell="Nombre de archivo único">
+        <a href="{{ path("download_document",{
+            'id': document.id}
+            )}}">{{ document.filename }}</a>
+    </td>
+    <td data-cell="Nombre del archivo original">
+        <a href="{{ path('document_edit', {'id': document.id}) }}">
+            {{ document.originalFilename }}
+        </a>
+    </td>
+    <td data-cell="Tipo de documento">{{ document.mimeType }}</td>
+    <td data-cell="Usuario">
+        {{ document.user.prenom }} {{ document.user.nom }}<br />
+        {{ document.user.email }}
+    </td>
+    <td data-cell="Borrar">
+        {{ include('admin/document/_delete_form.html.twig') }}
+    </td>
 </tr>

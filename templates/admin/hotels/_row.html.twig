@@ -1,14 +1,14 @@
 <tr>
-  <td>{{ hotel.id }}</td>
-  <td><a href="{{ path('hotels_edit', {'id': hotel.id}) }}">{{ hotel.Name }}</a></td>
-  <td>{{ hotel.city }}</td>
-  <td>{{ hotel.country }}</td>
-  <td>{{ hotel.website }}</td>
-  <td>{{ hotel.category }}</td>
-  <td>{{ hotel.travel }}</td>
-  <td>
-      {# <a href="{{ path('hotels_show', {'id': hotel.id}) }}">show</a>
-      <a href="{{ path('hotels_edit', {'id': hotel.id}) }}">edit</a> #}
+  <td data-cell="Id">{{ hotel.id }}</td>
+  <td data-cell="Nombre">
+    <a href="{{ path('hotels_edit', {'id': hotel.id}) }}">{{ hotel.Name }}</a>
+  </td>
+  <td data-cell="Ciudad">{{ hotel.city }}</td>
+  <td data-cell="País">{{ hotel.country }}</td>
+  <td data-cell="Web">{{ hotel.website }}</td>
+  <td data-cell="Categoría">{{ hotel.category }}</td>
+  <td data-cell="Viaje">{{ hotel.travel }}</td>
+  <td data-cell="Borrar">
       {{ include('admin/hotels/_delete_form.html.twig') }}
   </td>
 </tr>

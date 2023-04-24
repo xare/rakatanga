@@ -6,10 +6,13 @@ use App\Entity\Dates;
 use App\Entity\Logs;
 use App\Entity\Reservation;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class logHelper
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private LoggerInterface $logger)
     {
         $this->entityManager = $entityManager;
     }
@@ -24,6 +27,7 @@ class logHelper
         $this->entityManager->persist($log);
         $this->entityManager->flush();
 
+        $this->logger->notice(sprintf("Action: %s, entity: %s, content %s", $action, $content, $entity));
         return true;
     }
 

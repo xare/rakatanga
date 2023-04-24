@@ -62,7 +62,7 @@ class UserFrontendController extends AbstractController
         $user = $this->getUser();
 
         // Swith Locale Loader
-        $urlArray = $this->languageMenuHelper->basicLanguageMenu($locale);
+        $urlArray = $this->languageMenuHelper->basicLanguageMenu($_locale);
 
         $dates = $this->datesRepository->listNextDates();
         $reservations = $user->getReservations();

@@ -9,6 +9,7 @@ use App\Entity\Reservation;
 use App\Entity\Travel;
 use App\Entity\TravelTranslation;
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -129,5 +130,21 @@ class ReservationRepository extends ServiceEntityRepository
         ->setMaxResults(1)
         ->getQuery()
         ->getOneOrNullResult();
+    }
+
+    public function getTotalReservationsForCurrentYear() {
+        $currentYear = (new DateTime())->format('Y');
+        $startDate = new DateTime("{$currentYear}-01-01 00:00:00");
+        $endDate = new DateTime("{$currentYear}-12-31 23:59:59");
+
+        $qb = $this->createQueryBuilder('r');
+        $query = $qb->select('COUNT(r.id) as totalREservations')
+                ->where('r.date_ajout >= :startDate')
+                ->andWhere('r.date_ajout <= :endDate')
+                ->setParameter('startDate', $startDate)
+                ->setParameter('endDate', $endDate)
+                ->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result ? (int) $result : 0;
     }
 }

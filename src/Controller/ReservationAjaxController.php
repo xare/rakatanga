@@ -545,11 +545,9 @@ class ReservationAjaxController extends AbstractController
         name: 'ajax-add-travellers')]
     public function ajaxAddTravellers(
         Request $request,
-        string $_locale = null,
         Reservation $reservation,
-        string $locale = 'es'
+        string $_locale = 'es'
     ) {
-        $locale = $_locale ?: $locale;
         /**
          * @var array $travellersArray
          */
@@ -565,15 +563,15 @@ class ReservationAjaxController extends AbstractController
         $travellersTableHtml = $this->renderView('reservation/_partials/_travellers_table.html.twig', [
             'travellers' => $reservation->getTravellers(),
         ]);
-        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation,$locale);
+        $reservationOptions = $this->reservationHelper->getReservationOptions($reservation,$_locale);
         $cardLoggedUser = $this->renderView('reservation/usercards/_card_logged_user.html.twig', [
             'reservation' => $reservation,
             'reservationOptions' => $reservationOptions,
             'isInitialized' => true,
-            'locale'=>$locale]);
+            'locale'=>$_locale]);
 
         /* $this->reservationManager->sendUpdateReservation($reservation); */
-        $this->mailer->sendReservationUpdateToSender($reservation, $locale);
+        $this->mailer->sendReservationUpdateToSender($reservation, $_locale);
         $this->mailer->sendReservationUpdateToUs($reservation, 'es');
         return $this->json([
             'travellersTableHtml' => $travellersTableHtml,
@@ -991,8 +989,11 @@ class ReservationAjaxController extends AbstractController
         Travellers $traveller
     ) {
         $data = $request->request->all();
-        $this->travellersHelper->updateTravellerData($traveller,$data );
-        $html = $this->renderView('reservation/_partials/_travellers_row.html.twig',['traveller' =>$traveller]);
+        $this->travellersHelper->updateTravellerData($traveller, $data );
+        $html = $this->renderView(
+            'reservation/_partials/_travellers_row.html.twig',[
+                'traveller' => $traveller
+            ]);
         return $this->json(['html' => $html],200,[],[]);
     }
 

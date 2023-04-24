@@ -321,6 +321,7 @@ class FrontendController extends AbstractController
         $urlArray = $this->languageMenuHelper->slugLanguageMenu($_locale, $pageTranslation);
 
         $lang = $this->langRepository->findOneBy(['iso_code' => $_locale]);
+
         $menuTranslation = $this->menuTranslationRepository->findOneBy([
             'slug' => $slug,
             'lang' => $lang,

@@ -153,6 +153,7 @@ class reservationDataHelper
     public function getTravellerReservationDataFields(
         Reservation $reservation,
         Travellers $traveller){
+            
         $reservationData = $this->reservationDataRepository->findOneBy([
             'reservation'=>$reservation,
             'traveller'=>$traveller

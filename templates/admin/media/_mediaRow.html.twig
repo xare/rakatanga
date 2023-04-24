@@ -1,22 +1,19 @@
 <tr>
-                    <td>{{ medium.id }}</td>
-                    <td>{{ medium.type }}</td>
-                    <td>{{ medium.name }}</td>
-                    <td>{{ medium.path }}</td>
-                    <td>{{ medium.url }}</td>
-                    <td>{{ medium.filename }}</td>
-                    <td><img src="{{ medium.mediaPath|imagine_filter('squared_thumbnail_small') }}" /></td>
-                    {# <td>
-                        <a href="{{ path('media_show', {'id': medium.id}) }}" class="btn btn-primary">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                    </td> #}
-                    <td>
-                        <a href="{{ path('media_edit', {'id': medium.id}) }}" class="btn btn-info">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        {{ include('admin/media/_delete_form.html.twig') }}
-                    </td>
-                </tr>
+    <td data-cell="Id">{{ medium.id }}</td>
+    <td data-cell="Tipo">{{ medium.type }}</td>
+    <td data-cell="Nombre">{{ medium.name }}</td>
+    <td data-cell="Archivo">{{ medium.path }}</td>
+    <td data-cell="Url">{{ medium.url }}</td>
+    <td data-cell="Nombre del archivo">{{ medium.filename }}</td>
+    <td data-cell="Imagen">
+        <img src="{{ medium.mediaPath|imagine_filter('squared_thumbnail_small') }}" />
+    </td>
+    <td data-cell="Editar">
+        <a href="{{ path('media_edit', {'id': medium.id}) }}" class="btn btn-info">
+            <i class="fa fa-edit"></i>
+        </a>
+    </td>
+    <td data-cell="Borrar">
+        {{ include('admin/media/_delete_form.html.twig') }}
+    </td>
+</tr>

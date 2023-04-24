@@ -55,10 +55,10 @@ class UserFrontendReservationDataController extends AbstractController
         $urlArray = $this->languageMenuHelper->basicLanguageMenu($_locale, $reservation);
         $this->breadcrumbsHelper->reservationTravellersBreadcrumbs($_locale);
 
-          /**
-           * @var User $user
-           */
-          $user = $this->getUser();
+        /**
+        * @var User $user
+        */
+        $user = $this->getUser();
 
         $userTraveller = $this->travellersRepository->findOneBy([
             'user'=>$user,
@@ -95,42 +95,42 @@ class UserFrontendReservationDataController extends AbstractController
             $reservationData->setDriversExpirationDate($previousReservationData->getDriversExpirationDate());
         }
 
-          $documents = $reservationData->getDocuments();
+        $documents = $reservationData->getDocuments();
+        dump($documents);
+        $form = $this->createForm(ReservationDataType::class, $reservationData);
+        $form->handleRequest($request);
 
-          $form = $this->createForm(ReservationDataType::class, $reservationData);
-          $form->handleRequest($request);
-
-          if ($form->isSubmitted() && $form->isValid()) {
-              $reservationData = $form->getData();
-              $reservationData->setTraveller($userTraveller);
-              $reservationData->setReservation($reservation);
-              $reservationData->setUser($this->getUser());
-              $this->entityManager->persist($reservationData);
-              $this->entityManager->flush();
-              $logHelper->logThis(
-                  'Datos aportados a una reserva',
-                  "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] ha depositados datos para una reserva para el viaje
-              {$reservation->getDate()->getTravel()->getMainTitle()} en
-              {$reservation->getDate()->getDebut()->format('d/m/Y')} with reference
-              {$reservation->getId()} ".strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(), 0, 3)).'',
-                  [],
-                  'reservation');
-              $this->mailer->sendEmailonDataCompletionToUs($reservation);
-              $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
-          }
-          $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
-          return $this->render('user/user_reservation_data.html.twig', [
-              'langs' => $urlArray,
-              'locale' => $_locale,
-              'user' => $this->getUser(),
-              'reservationData' => $reservationData,
-              'fieldsCompletion' => $fieldsCompletion,
-              'reservation' => $reservation,
-              'documents' => $documents,
-              'otherTravellers'=>$otherTravellers,
-              'form' => $form->createView(),
-          ]);
-      }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $reservationData = $form->getData();
+            $reservationData->setTraveller($userTraveller);
+            $reservationData->setReservation($reservation);
+            $reservationData->setUser($this->getUser());
+            $this->entityManager->persist($reservationData);
+            $this->entityManager->flush();
+            $logHelper->logThis(
+                'Datos aportados a una reserva',
+                "{$user->getPrenom()} {$user->getNom()}[{$user->getEmail()}] ha depositados datos para una reserva para el viaje
+            {$reservation->getDate()->getTravel()->getMainTitle()} en
+            {$reservation->getDate()->getDebut()->format('d/m/Y')} with reference
+            {$reservation->getId()} ".strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(), 0, 3)).'',
+            [],
+            'reservation');
+            $this->mailer->sendEmailonDataCompletionToUs($reservation);
+            $this->addFlash('success', $this->translator->trans('Gracias, hemos guardado tus datos correctamente'));
+        }
+        $fieldsCompletion = $this->reservationDataHelper->getReservationDataFields($reservationData);
+        return $this->render('user/user_reservation_data.html.twig', [
+            'langs' => $urlArray,
+            'locale' => $_locale,
+            'user' => $this->getUser(),
+            'reservationData' => $reservationData,
+            'fieldsCompletion' => $fieldsCompletion,
+            'reservation' => $reservation,
+            'documents' => $documents,
+            'otherTravellers'=>$otherTravellers,
+            'form' => $form->createView(),
+        ]);
+    }
 
     #[Route(
         path: 'user/reservationData/new/{reservation}/{traveller}/',

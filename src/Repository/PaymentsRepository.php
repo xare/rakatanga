@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Payments;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -52,5 +53,22 @@ class PaymentsRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->getQuery();
+    }
+
+    public function getTotalAmountForCurrentYear() {
+        $currentYear = (new DateTime())->format('Y');
+        $startDate = new DateTime("{$currentYear}-01-01 00:00:00");
+        $endDate = new DateTime("{$currentYear}-12-31 23:59:59");
+
+        $qb = $this->createQueryBuilder('p');
+        $query = $qb->select('SUM(p.ammount) as totalAmmount')
+                ->where('p.date_ajout >= :startDate')
+                ->andWhere('p.date_ajout <= :endDate')
+                ->setParameter('startDate', $startDate)
+                ->setParameter('endDate', $endDate)
+                ->getQuery();
+
+        $result = $query->getSingleScalarResult();
+        return $result ? (float) $result : 0;
     }
 }

@@ -22,10 +22,33 @@
 		<div class="row mb-4">
 			<div class="col-12">
 				<div class="row mb-2">
-					<div class="col-9">
+
+				<ul class="box-info">
+					<li>
+						<i class='bx bxs-calendar-check' ></i>
+						<span class="text">
+							<h3>{{totalReservations}}</h3>
+							<p>Total Reservas</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-dollar-circle' ></i>
+						<span class="text">
+							<h3>
+								{{ totalPayments|format_currency('EUR', {fraction_digit: 2}, 'es' )
+								}}
+							</h3>
+							<p>Total Ventas</p>
+						</span>
+					</li>
+				</ul>
+
+				</div>
+				<div class="row mb-2">
+					<div class="col-7 col-xs-12">
 						<h3>Últimas Reservas</h3>
 					</div>
-					<div class="col-3 text-right">
+					<div class="col-5 col-xs-12 text-end">
 						<a
 							class="btn btn-secondary float-right d-block"
 							href="{{ path('reservation_index') }}">
@@ -37,73 +60,35 @@
 				<div class="small reservations-dashboard">
 					{{ include('admin/dashboard/_partials/_block_reservations.html.twig') }}
 				</div>
-				{# <strong>Total de reservas: {{reservations|length}}</strong>
-				<a href="{{path('reservation_index')}}"><i class="fa fa-eye"></i></a> #}
 			</div>
 		</div>
 		<div class="row mb-4">
 			<div class="col-12">
 					<div class="row mb-2">
-					<div class="col-9">
+					<div class="col-7 col-xs-12">
 						<h3>Últimos Pagos</h3>
 					</div>
-					<div class="col-3 text-right">
+					<div class="col-5 col-xs-12 text-end">
 						<a
 							class="btn btn-secondary float-right d-block"
 							href="{{ path('payments_index') }}">
 							<i class="fa fa-eye"></i>
-							Ver todas las reservas [{{payments|length}}]
+							Ver todos los pagos [{{payments|length}}]
 						</a>
 					</div>
 				</div>
 					<div class="small payments-dashboard">
 						{{ include('admin/dashboard/_partials/_block_payments.html.twig') }}
 					</div>
-					{# <table class="table table-striped small">
-						{% for payment in payments %}
-							<tr>
-								<td>
-									<a href="{{ path('payments_edit',{'id':payment.id}) }}">
-											<i class="fas fa-eye"></i>
-											{{ payment.ammount|format_currency('EUR') }}
-									</a>
-								</td>
-								<td>
-									<a href="{{ path('payments_edit',{'id':payment.id}) }}">
-										{{ payment.dateAjout | date('d/m/Y') }}
-									</a>
-								</td>
-								<td>
-									<a href="{{ path('payments_edit',{'id':payment.id}) }}">
-										{{ renderLocalizedTravel(payment.reservation.date.travel.id,'es') }}
-									</a>
-								</td>
-							</tr>
-						{% else %}
-							<tr>
-								<td colspan="3">
-									Todavía no hay pagos guardados en el sistema.
-								</td>
-							</tr>
-						{% endfor %}
-							<tr>
-								<td colspan="2">
-										<strong>Total de pagos: {{ payments|length }}</strong>
-								</td>
-								<td class="fit">
-										<a href="{{path('payments_index')}}"><i class="fa fa-eye"></i></a>
-								</td>
-							</tr>
-					</table> #}
 				</div>
 			</div>
 		<div class="row mb-4">
-			<div class="col-6">
+			<div class="col-6 table-data">
 				<div class="row mt-2">
-					<div class="col-8">
-						<h3>Últimos Usuario registrados</h3>
+					<div class="col-7">
+						<h5>Últimos Usuario registrados</h5>
 					</div>
-					<div class="col-4 text-right">
+					<div class="col-5 text-end">
 						<a
 							class="btn btn-secondary float-right d-block"
 							href="{{ path('user_index') }}">
@@ -111,33 +96,34 @@
 							Ver todos [{{users|length}}]
 						</a>
 					</div>
+
+					<table class="small">
+						{% for user in users %}
+							<tr>
+								<td>{{ user.prenom }}</td>
+								<td>{{ user.nom }}</td>
+								<td class="fit">
+									<a href="{{ path('user_edit',{'id':user.id}) }}">
+										[{{ user.email }}]
+									</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="3">
+									Todavía no hay usuarios guardados en el sistema.
+								</td>
+							</tr>
+						{% endfor %}
+					</table>
 				</div>
-				<table class="table table-striped small">
-					{% for user in users %}
-						<tr>
-							<td>{{ user.prenom }}</td>
-							<td>{{ user.nom }}</td>
-							<td class="fit">
-								<a href="{{ path('user_edit',{'id':user.id}) }}">
-									[{{ user.email }}]
-								</a>
-							</td>
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="3">
-								Todavía no hay usuarios guardados en el sistema.
-							</td>
-						</tr>
-					{% endfor %}
-				</table>
 			</div>
-			<div class="col-6">
+			<div class="col-6 table-data">
 				<div class="row mt-2">
-					<div class="col-8">
-						<h3>Últimos Acompañantes añadidos</h3>
+					<div class="col-7">
+						<h5>Últimos Viajeros añadidos</h5>
 					</div>
-					<div class="col-4 text-right">
+					<div class="col-5 text-end">
 						<a
 							class="btn btn-secondary float-right d-block"
 							href="{{ path('travellers_index') }}">
@@ -145,33 +131,40 @@
 							Ver todos [{{travellers|length}}]
 						</a>
 					</div>
-				</div>
-				<table class="table table-striped small">
+
+				<table class="small">
 					{% for traveller in travellers %}
 						<tr>
-							<td><a href="{{path('travellers_edit',{'id':traveller.id})}}">{{ traveller.prenom }}</a></td>
-							<td><a href="{{path('travellers_edit',{'id':traveller.id})}}">{{ traveller.nom }}</a></td>
 							<td>
-								<a href="{{path('travellers_edit',{'id':traveller.id})}}">[{{ traveller.email|u.truncate(20,'...') }}]</a></td>
+								{{ traveller.prenom }}
+							</td>
+							<td>
+								{{ traveller.nom }}
+							</td>
+							<td>
+								<a href="{{path('travellers_edit',{'id':traveller.id})}}">
+									[{{ traveller.email|u.truncate(20,'...') }}]
+								</a>
 							</td>
 						</tr>
-					{% else %}
-						<tr>
-							<td colspan="3">
-								Todavía no hay viajeros guardados en el sistema.
-							</td>
-						</tr>
-					{% endfor %}
-				</table>
+						{% else %}
+							<tr>
+								<td colspan="3">
+									Todavía no hay viajeros guardados en el sistema.
+								</td>
+							</tr>
+						{% endfor %}
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-6">
+			<div class="col-6 table-data">
 				<div class="row mt-2">
-					<div class="col-8">
-						<h3>Últimos Documentos añadidos</h3>
+					<div class="col-7">
+						<h5>Últimos Documentos añadidos</h5>
 					</div>
-					<div class="col-4 text-right">
+					<div class="col-5 text-end">
 						<a
 							class="btn btn-secondary float-right d-block"
 							href="{{ path('document_index') }}">
@@ -179,8 +172,8 @@
 								Ver todos [{{documents|length}}]
 						</a>
 					</div>
-				</div>
-				<table class="table table-striped small">
+
+				<table class="small">
 					{% for document in documents %}
 						<tr>
 							<td>
@@ -206,13 +199,14 @@
 						</tr>
 					{% endfor %}
 				</table>
+				</div>
 			</div>
-			<div class="col-6">
+			<div class="col-6 table-data">
 				<div class="row mt-2">
-					<div class="col-8">
-						<h3>Últimas facturas añadidas</h3>
+					<div class="col-7">
+						<h5>Últimas facturas añadidas</h5>
 					</div>
-					<div class="col-4 text-right">
+					<div class="col-5 text-end">
 						<a
 							class="btn btn-secondary float-right d-block"
 							href="{{ path('invoices_index') }}">
@@ -220,8 +214,8 @@
 								Ver todas [{{invoices|length}}]
 						</a>
 					</div>
-				</div>
-				<table class="table table-striped small">
+
+				<table class="small">
 					{% for invoice in invoices %}
 						<tr>
 							<td>{{ invoice.invoiceNumber }}</td>
@@ -240,6 +234,7 @@
 						</tr>
 					{% endfor %}
 				</table>
+				</div>
 			</div>
 		</div>
 	</div>

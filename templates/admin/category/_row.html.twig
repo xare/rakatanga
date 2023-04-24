@@ -1,26 +1,26 @@
 <tr>
-                        <td>{{ category.id }}</td>
-                        <td>
-                          <a href="{{ path('category_edit', {'id': category.id}) }}">
-                            {{ category.name }}
-                          </a>
-                        </td>
-                        <td>{% if category.continents %}{{ category.continents.code }}{% endif %}</td>
-                        <td>{{ category.status }}</td>
-                        <td>
-                            <div class="row">
-                                {% for categoryTranslation in category.categoryTranslations %}
-                                    <div class="col-4">
-                                        <span class="badge bg-secondary">{{ categoryTranslation.lang.isoCode }}</span>
-                                        {{ categoryTranslation.title }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </td>
-                        <td>
-                            {{category.travel|length}}
-                        </td>
-                        <td>
-                            {{ include('admin/category/_delete_form.html.twig') }}
-                        </td>
-                    </tr>
+    <td data-cell="Id">{{ category.id }}</td>
+    <td data-cell="País">
+        <a href="{{ path('category_edit', {'id': category.id}) }}">
+        {{ category.name }}
+        </a>
+    </td>
+    <td data-cell="Continente">{% if category.continents %}{{ category.continents.code }}{% endif %}</td>
+    <td data-cell="Estatus">{{ category.status }}</td>
+    <td data-cell="Traducciones">
+        <div class="row">
+            {% for categoryTranslation in category.categoryTranslations %}
+                <div class="col-4">
+                    <span class="badge bg-secondary">{{ categoryTranslation.lang.isoCode }}</span>
+                    {{ categoryTranslation.title }}
+                </div>
+            {% endfor %}
+        </div>
+    </td>
+    <td data-cell="Travel">
+        {{category.travel|length}}
+    </td>
+    <td data-cell="Borrar">
+        {{ include('admin/category/_delete_form.html.twig') }}
+    </td>
+</tr>

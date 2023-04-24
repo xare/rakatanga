@@ -1,14 +1,14 @@
  <tr>
-    <td>{{ mailing.id }}</td>
-    <td>
+    <td data-cell="Id">{{ mailing.id }}</td>
+    <td data-cell="Fecha de envío">
         {{ mailing.dateSent|date('d/m/Y H:m:s')}}
     </td>
-    <td>
+    <td data-cell="Título">
         <a href="{{ path('mailings_edit', {'id': mailing.id}) }}">
             {{ mailing.subject }}
         </a>
     </td>
-    <td>
+    <td data-cell="contenido">
         <p>{{ mailing.content|u.truncate(200,'...')|striptags }}</p>
         <a
             href="#"
@@ -16,19 +16,13 @@
             data-title="{{ mailing.subject }}"
             data-content="{{ mailing.content }}"
             class="btn btn-primary btn-sm">
-            Read more
+            Leer más
         </a>
     </td>
-    <td>{{ mailing.ToAddresses }}</td>
-    <td>{{ mailing.attachment }}</td>
-    <td>{{ mailing.category }}</td>
-    {# <td>
-        <a href="{{ path('mailings_show', {'id': mailing.id}) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-    </td>
-    <td>
-        <a href="{{ path('mailings_edit', {'id': mailing.id}) }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-    </td>#}
-    <td>
+    <td data-cell="Para">{{ mailing.ToAddresses }}</td>
+    <td data-cell="Adjunto?">{{ mailing.attachment }}</td>
+    <td data-cell="Categoría">{{ mailing.category }}</td>
+    <td data-cell="Borrar">
         {{ include('admin/mailings/_delete_form.html.twig') }}
     </td>
 </tr>

@@ -1,23 +1,22 @@
 <tr>
-  <td>{{ page.id }}</td>
-  <td>
-      <a href="{{ path('pages_edit', {'id': page.id}) }}">
-          {{ page.defaultSlug }}
-      </a>
-  </td>
-  <td>{{ page.dateCreated ? page.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
-  <td>{{ page.dateModified ? page.dateModified|date('Y-m-d H:i:s') : '' }}</td>
-  <td>{% for pageTranslation in page.pageTranslations %}
-          <span class="badge bg-secondary">
-          {{ pageTranslation.lang.isoCode|upper }}
-          </span> {{ pageTranslation.title }}
-          <br />
-      {% endfor %}
-  </td>
-  {#  <td>    
-      <a href="{{ path('pages_edit', {'id': page.id}) }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
-  </td> #}
-  <td>
+    <td data-cell="Id">{{ page.id }}</td>
+    <td data-cell="Default Slug">
+        <a href="{{ path('pages_edit', {'id': page.id}) }}">
+            {{ page.defaultSlug }}
+        </a>
+    </td>
+    <td data-cell="Creada">{{ page.dateCreated ? page.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+    <td data-cell="Última modificación">{{ page.dateModified ? page.dateModified|date('Y-m-d H:i:s') : '' }}</td>
+    <td data-cell="Traducciones">
+    {% for pageTranslation in page.pageTranslations %}
+        <div>
+            <span class="badge bg-secondary">
+                {{ pageTranslation.lang.isoCode|upper }}
+            </span> {{ pageTranslation.title }}
+        </div>
+    {% endfor %}
+    </td>
+  <td data-cell="Borrar">
       {{ include('admin/pages/_delete_form.html.twig') }}
   </td>
 </tr>

@@ -26,30 +26,38 @@
         </div>
     <div class="row ">
         <div class="col-12">
-            <table class="table">
-                <thead class="main-red">
-                    <tr>
-                        <th>Id</th>
-                        <th>Viaje</th>
-                        <th>Precio</th>
-                        <th>Traducciones</th>
-                        <th>¿Es estensión?</th>
-                        <th><i class="fa fa-copy"></i></th>
-                        <th><i class="fa fa-trash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for option in options %}
-                    {{ include('admin/options/_row.html.twig',{'option':option}) }}
-                {% else %}
-                    <tr>
-                        <td colspan="6">No se han encontrado opciones.</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-data">
+               <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="main-red">Id</th>
+                                <th class="main-red">Viaje</th>
+                                <th class="main-red">Precio</th>
+                                <th class="main-red">Traducciones</th>
+                                <th class="main-red">¿Es estensión?</th>
+                                <th class="main-red">
+                                    <i class="fa fa-copy"></i>
+                                </th>
+                                <th class="main-red">
+                                    <i class="fa fa-trash"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for option in options %}
+                            {{ include('admin/options/_row.html.twig',{'option':option}) }}
+                        {% else %}
+                            <tr>
+                                <td colspan="6">No se han encontrado opciones.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="navigation">
+        <div class="navigation mt-4">
 			{{ knp_pagination_render(options) }}
 		</div>
     </div>

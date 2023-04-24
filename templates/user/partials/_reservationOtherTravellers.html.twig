@@ -1,5 +1,4 @@
 <ul class="list-group travellers-list">
-{{dump(otherTravellers)}}
   {% for travellerItem in otherTravellers %}
     {% set reservationTravellerDataFields = getTravellerReservationDataFields(reservation, travellerItem) %}
     {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}
@@ -20,24 +19,9 @@
           data-bs-toggle="tooltip"
           >
       {% endif %}
-            <i class="fas fa-arrow-up-right-from-square "></i>
-          </a>
-        </li>
-
-      {# {% endif %}
-      {% else %}
-      <li class="list-group-item">
-          {{ travellerItem.prenom}} {{travellerItem.nom}}
-          <a
-            href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller':travellerItem.id }) }}"
-            target="_blank"
-            title="{{'Editar datos del viaje y añadir documentación'|trans}}"
-            data-bs-toggle="tooltip"
-          >
-            <i class="fas fa-arrow-up-right-from-square "></i>
-          </a>
-        </li>
-    {% endif %} #}
+      <i class="fas fa-arrow-up-right-from-square "></i>
+    </a>
+  </li>
   {% else %}
   {% endfor %}
 </ul>

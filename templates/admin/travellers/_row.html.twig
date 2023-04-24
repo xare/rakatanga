@@ -1,19 +1,19 @@
 <tr>
-    <td>{{ traveller.id }}</td>
-    <td>{{ traveller.langue }}</td>
-    <td>{{ traveller.nom }}</td>
-    <td>{{ traveller.prenom }}</td>
-    <td>{{ traveller.telephone }}</td>
-    <td>{{ traveller.position }}</td>
-    <td>{{ traveller.assurance }}</td>
-    <td>{{ traveller.vols }}</td>
-    <td>{{ traveller.dateAjout ? traveller.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
-    <td>{{ traveller.email }}</td>
-    <td>
+    <td data-cell="Id">{{ traveller.id }}</td>
+    <td data-cell="Lengua">{{ traveller.langue }}</td>
+    <td data-cell="Apellidos">{{ traveller.nom }}</td>
+    <td data-cell="Nombre">{{ traveller.prenom }}</td>
+    <td data-cell="Teléfono">{{ traveller.telephone }}</td>
+    <td data-cell="Posición">{{ traveller.position }}</td>
+    {# <td data-cell="Seguro">{{ traveller.assurance }}</td>
+    <td data-cell="">{{ traveller.vols }}</td> #}
+    <td data-cell="Fecha">{{ traveller.dateAjout ? traveller.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+    <td data-cell="Email">{{ traveller.email }}</td>
+    <td data-cell="Editar">
         {# <a href="{{ path('travellers_show', {'id': traveller.id}) }}">show</a> #}
         <a class="btn btn-primary" href="{{ path('travellers_edit', {'id': traveller.id}) }}"><i class="fa fa-edit"></i></a>
     </td>
-    <td>
+    <td data-cell="Borrar">
         {{ include('admin/travellers/_delete_form.html.twig') }}
     </td>
 </tr>

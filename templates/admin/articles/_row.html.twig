@@ -1,50 +1,39 @@
 <tr>
-  <td>{{ article.id }}</td>
-  <td>{{ article.blog.name }}</td>
-  <td><a href="{{ path('articles_edit', {'id': article.id}) }}">{{ article.title }}</a></td>
-  <td>{{ article.intro|raw|slice(0,200) ~ '...' }} <br />
-        <a 
-            href="#" 
-            data-action="read-more" 
+  <td data-cell="Id">{{ article.id }}</td>
+  <td data-cell="Nombre del blog">{{ article.blog.name }}</td>
+  <td data-cell="Título"><a href="{{ path('articles_edit', {'id': article.id}) }}">{{ article.title }}</a></td>
+  <td data-cell="Intro">{{ article.intro|raw|slice(0,200) ~ '...' }} <br />
+        <a
+            href="#"
+            data-action="read-more"
             data-content="{{ article.intro|raw|escape }}"
-            class="btn btn-primary btn-sm">
-            Read more
+            class="btn btn-rakatanga btn-sm">
+            Leer más
         <a>
   </td>
-  <td>{{ article.body|raw|slice(0,200) ~ '...'  }} <br />
-        <a 
-            href="#" 
-            data-action="read-more" 
+  <td data-cell="Contenido">{{ article.body|raw|slice(0,200) ~ '...'  }} <br />
+        <a
+            href="#"
+            data-action="read-more"
             data-content="{{ article.body|raw|escape }}"
-            class="btn btn-primary btn-sm">
-            Read more
+            class="btn btn-rakatanga btn-sm">
+            Leer más
         <a>
   </td>
-  <td>
+  <td data-cell="Foto">
     {% if article.mainPhoto %}
-            <img 
-                title="{{ article.mainPhoto.filename }}" 
-                alt="{{ article.mainPhoto.filename }}" 
+            <img
+                title="{{ article.mainPhoto.filename }}"
+                alt="{{ article.mainPhoto.filename }}"
                 src="{{ article.mainPhoto.MediaPath|imagine_filter('squared_thumbnail_small') }}"
-            /> 
+            />
         {% endif %}
         <div class="clearfix"></div>
     {{ article.media|length }}
   </td>
-  <td>{{ article.publishedAt ? article.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
-  {# <td>
-      <a href="{{ path('articles_show', {'id': article.id}) }}"
-      class="btn btn-primary">
-        <i class="fa fa-eye"></i>
-      </a>
-  </td>
-  <td>
-      <a href="{{ path('articles_edit', {'id': article.id}) }}"
-      class="btn btn-info">
-        <i class="fa fa-edit"></i>
-      </a>
-  </td> #}
-  <td>
+  <td data-cell="Fecha de publicación">{{ article.publishedAt ? article.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
+
+  <td data-cell="Borrar">
     {{ include('admin/articles/_delete_form.html.twig') }}
   </td>
 </tr>

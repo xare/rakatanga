@@ -1,29 +1,19 @@
 <tr>
-  <td>{{ codespromo.id }}</td>
-  <td><a href="{{ path('codespromo_edit', {'id': codespromo.id}) }}" class="btn btn-info">{{ codespromo.code }}</a></td>
-  <td>{{ codespromo.libelle }}</td>
-  <td>{{ codespromo.commentaire }}</td>
-  <td>{{ codespromo.montant }}</td>
-  <td>{{ codespromo.pourcentage }}</td>
-  <td>{{ codespromo.type }}</td>
-  <td>{{ codespromo.nombre }}</td>
-  <td>{{ codespromo.debut ? codespromo.debut|date('Y-m-d') : '' }}</td>
-  <td>{{ codespromo.fin ? codespromo.fin|date('Y-m-d') : '' }}</td>
-  <td>{{ codespromo.email }}</td>
-  <td>{{ codespromo.statut }}</td>
-  <td>{{ codespromo.dateAjout ? codespromo.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
-  <td>{{ codespromo.user }}</td>
-  {# <td>
-      <a href="{{ path('codespromo_show', {'id': codespromo.id}) }}" class="btn btn-primary">
-          <i class="fa fa-eye"></i>
-      </a>
-  </td>
-  <td>
-      <a href="{{ path('codespromo_edit', {'id': codespromo.id}) }}" class="btn btn-info">
-          <i class="fa fa-edit"></i>
-      </a>
-  </td> #}
-  <td>
+  {# <td data-cell="Id">{{ codespromo.id }}</td> #}
+  <td data-cell="Código"><a href="{{ path('codespromo_edit', {'id': codespromo.id}) }}" class="btn btn-info">{{ codespromo.code }}</a></td>
+  {# <td data-cell="">{{ codespromo.libelle }}</td> #}
+  <td data-cell="Comentario">{{ codespromo.commentaire }}</td>
+  <td data-cell="Cantidad">{{ codespromo.montant }}</td>
+  <td data-cell="Porcentaje">{{ codespromo.pourcentage }}</td>
+  <td data-cell="Tipo">{{ codespromo.type }}</td>
+  <td data-cell="Número">{{ codespromo.nombre }}</td>
+  <td data-cell="Fechas">{{ codespromo.debut ? codespromo.debut|date('Y-m-d') : '' }}<br />
+  {{ codespromo.fin ? codespromo.fin|date('Y-m-d') : '' }}</td>
+  <td data-cell="Email">{{ codespromo.email }}</td>
+  <td data-cell="Estatus">{{ codespromo.statut }}</td>
+  <td data-cell="Fecha de Creación">{{ codespromo.dateAjout ? codespromo.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+  <td data-cell="Usuario">{{ codespromo.user }}</td>
+  <td data-cell="Borrar">
       {{ include('admin/codespromo/_delete_form.html.twig') }}
   </td>
 </tr>

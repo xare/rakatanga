@@ -24,55 +24,53 @@
 			<div class="navigation">
 				{{ knp_pagination_render(dates) }}
 			</div>
-			<div class="table-responsive">
-				<table class="table table-striped table-hover small">
-					<thead class="main-red">
-						<tr>
-							<th>
-								<a href="#">Viaje</a>
-							</th>
-							<th {% if dates.isSorted('d.debut') %} class="sorted" {% endif %}>
-								{{ knp_pagination_sortable(dates, 'Inicio', 'd.debut',{'class':'text-decoration-none link-light'}) }}
-							</th>
-							<th>
-								<a href="#">Fin</a>
-							</th>
-							<th>
-								<a href="#">Dias</a>
-							</th>
-							<th>
-								<a href="#">Piloto</a>
-							</th>
-							<th>
-								<a href="#">Acompañante</a>
-							</th>
-							<th>
-								<a href="#">Reservas</a>
-							</th>
-							<th>
-								<a href="#">Estatus</a>
-							</th>
-							{# <th><i class="fa fa-eye"></i></th> #}
-							{# <th>
-								<i class="fa fa-edit"></i>
-							</th> #}
-							<th>
-								<i class="fa fa-trash"></i>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for date in dates %}
-							{{ include('admin/dates/_row.html.twig') }}
-						{% else %}
+			<div class="table-data">
+				<div>
+					<table class="table table-hover small">
+						<thead>
 							<tr>
-								<td colspan="10">no records found</td>
+								<th class="main-red">
+									Viaje
+								</th>
+								<th class="main-red{% if dates.isSorted('d.debut') %} sorted{% endif %}">
+									{{ knp_pagination_sortable(dates, 'Inicio', 'd.debut',{'class':'text-decoration-none link-light'}) }}
+								</th>
+								<th class="main-red">
+									Fin
+								</th>
+								<th class="main-red">
+									Dias
+								</th>
+								<th class="main-red">
+									Piloto
+								</th>
+								<th class="main-red">
+									Acompañante
+								</th>
+								<th class="main-red">
+									Reservas
+								</th>
+								<th class="main-red">
+									Estatus
+								</th>
+								<th class="main-red">
+									<i class="fa fa-trash"></i>
+								</th>
 							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{% for date in dates %}
+								{{ include('admin/dates/_row.html.twig') }}
+							{% else %}
+								<tr>
+									<td colspan="10">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<div class="navigation">
+			<div class="navigation mt-4">
 				{{ knp_pagination_render(dates) }}
 			</div>
 		</div>

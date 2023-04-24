@@ -2,60 +2,65 @@
 {% if travel.dates|length == 0 %}
     raye
 {% endif %}
-">                    
-    <td>
+">
+    <td data-cell="País">
         {% if travel.category != null %}
             {{ travel.category.categoryTranslations|first }}
         {% endif %}
     </td>
-    <td>
+    <td data-cell="Viaje">
         <a href="{{ path('travel_edit', {'id': travel.id}) }}">
             {{ renderLocalizedTravel(travel.id,'es')}}
         </a>
     </td>
-    <td>
+    <td data-cell="Duración">
     {{ travel.duration }}
    </td>
-    <td>
+    <td data-cell="Fechas">
         {% for date in travel.dates %}
             {% if date.debut > date() %}
-            <a class="smallerfont" href="{{ path('dates_edit', {'id': date.id}) }}">
-                {{date.debut|date("d/m/Y")}} - {{date.fin|date("d/m/Y")}}
-            </a><span class="badge bg-primary">{{date.reservations|length}}</span><br />
+            <div>
+                <a class="smallerfont" href="{{ path('dates_edit', {'id': date.id}) }}">
+                    {{date.debut|date("d/m/Y")}} - {{date.fin|date("d/m/Y")}}
+                </a><span class="badge bg-primary">{{date.reservations|length}}</span><br />
+            </div>
             {% endif %}
         {% endfor %}
     </td>
-     
-    <td>{{ travel.status }}</td>
-    <td>
+
+    <td data-cell="Visibilidad">{{ travel.status }}</td>
+    <td data-cell="Fotos">
         {% if travel.mainPhoto %}
-            <img 
-                title="{{ travel.mainPhoto.filename }}" 
-                alt="{{ travel.mainPhoto.filename }}" 
+            <img
+                title="{{ travel.mainPhoto.filename }}"
+                alt="{{ travel.mainPhoto.filename }}"
                 src="{{ travel.mainPhoto.MediaPath|imagine_filter('squared_thumbnail_small') }}"
-            /> 
+            />
         {% endif %}
         <div class="clearfix"></div>
-        Total Media: {{ travel.media|length }}<br />
+        Total: {{ travel.media|length }}<br />
     </td>
-    <td class="smallerfont">
+    <td data-cell="Traducciones" class="smallerfont">
         {% if travel.travelTranslation %}
             {% for travelTranslation in travel.travelTranslation %}
+                <div>
                 <span class="badge bg-secondary">
                     {{ travelTranslation.lang.isoCode|upper }}
                 </span>
                 {{ travelTranslation.title }}
-                <br />
+                </div>
             {% endfor %}
         {% endif %}
     </td>
-    <td>
+    <td data-cell="Plantilla?">
     {% if travel.mainTitle == "PLANTILLA" %}
         <a href="{{path('travel_new_from_template',{'travel': travel.id})}}" class="btn btn-primary"> Duplicar desde plantilla</a>
+    {% else %}
+    No
     {% endif %}
 
     </td>
-    <td>
+    <td data-cell="Borrar">
         {{ include('admin/travel/_delete_form.html.twig') }}
     </td>
 </tr>

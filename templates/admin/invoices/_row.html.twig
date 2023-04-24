@@ -1,40 +1,28 @@
 <tr>
-    <td>{{ invoice.id }}</td>
-    <td>
+    <td data-cell="Id">{{ invoice.id }}</td>
+    <td data-cell="Número de factura">
         <a href="{{ path('invoices_edit', {'id': invoice.id}) }}"
             class="btn btn-info">{{ invoice.invoiceNumber }}</a>
     </td>
-    <td>{{ invoice.name }}</td>
-    <td>{{ invoice.nif }}</td>
-    <td>{{ invoice.address }}</td>
-    <td>{{ invoice.postalcode }}</td>
-    <td>{{ invoice.city }}</td>
-    <td>{{ invoice.country }}</td>
-    <td>
+    <td data-cell="Nombre del cliente">{{ invoice.name }}</td>
+    <td data-cell="Nif">{{ invoice.nif }}</td>
+    <td data-cell="Dirección">{{ invoice.address }}</td>
+    <td data-cell="Código postal">{{ invoice.postalcode }}</td>
+    <td data-cell="Ciudad">{{ invoice.city }}</td>
+    <td data-cell="País">{{ invoice.country }}</td>
+    <td data-cell="Cantidad facturada">
         <strong>
             {{ invoice.dueAmmount|format_currency('EUR', {fraction_digit: 0}) }}
         </strong>
     </td>
-    <td>
+    <td data-cell="Descarga la factura">
         <a href="{{path('user-download-invoice',{'invoice':invoice.id})}}"
         target="_blank">
             {{ invoice.invoiceNumber }}
             <i class="fa fa-download"></i>
         </a>
     </td>
-  {# <td>
-      <a href="{{ path('invoices_show', {'id': invoice.id}) }}"
-      class="btn btn-primary">
-          <i class="fa fa-eye"></i>
-      </a>
-  </td>
-  <td>
-      <a href="{{ path('invoices_edit', {'id': invoice.id}) }}"
-      class="btn btn-info">
-          <i class="fa fa-edit"></i>
-      </a>
-  </td> #}
-    <td>
+    <td data-cell="">
         {{ include('admin/invoices/_delete_form.html.twig') }}
     </td>
 </tr>

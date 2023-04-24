@@ -2,12 +2,56 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-datepicker/dist/css/bootstrap-datepicker3";
 @import "~font-awesome/scss/font-awesome";
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+:root {
+    --poppins: 'Poppins', sans-serif;
+    --lato: 'Lato', sans-serif;
+    --light: #F9F9F9;
+    --blue: #3C91E6;
+    --light-blue: #CFE8FF;
+    --grey: #eee;
+    --dark-grey: #AAAAAA;
+    --dark: #342E37;
+    --red: #DB504A;
+    --yellow: #FFCE26;
+    --light-yellow: #FFF2C6;
+    --orange: #FD7238;
+    --light-orange: #FFE0D3;
+    --main-red: #a90000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background: var(--grey);
+    overflow-x: hidden;
+    /* 8px margin either side */
+}
+
 a {
     text-decoration: none;
+    color: #cc6363;
 }
 
 a:hover {
     text-decoration: underline;
+}
+
+li {
+    list-style: none;
+}
+
+.btn-rakatanga {
+    background: var(--main-red);
+    color: white;
 }
 
 
@@ -26,14 +70,19 @@ a:hover {
 
 header {
     display: block;
+    font-family: var(--lato);
+}
+
+.container {
+    font-family: var(--poppins);
 }
 
 
 /* ---------- COLORS TABLES ------ */
 
 .main-red {
-    background-color: #a90000;
-    color: white;
+    background-color: #a90000 !important;
+    color: white !important;
 }
 
 .main-red tr th {
@@ -383,11 +432,11 @@ fieldset {
 }
 
 .reservations-dashboard {
-    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(48%, 1fr));
 }
 
 .payments-dashboard {
-    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(48%, 1fr));
 }
 
 
@@ -396,7 +445,7 @@ fieldset {
 } */
 
 .payments-dashboard {
-    grid-auto-rows: 11.5rem;
+    grid-auto-rows: 13.5rem;
 }
 
 .reservations-dashboard a,
@@ -415,35 +464,27 @@ fieldset {
     display: grid;
     grid-gap: 0.5rem;
     margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.4rem;
+    border-radius: 1.4rem;
     background: rgb(250, 250, 250);
-    -webkit-box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
-    box-shadow: 1px 2px 20px -5px rgba(0, 0, 0, 0.39);
+    padding: 1.4rem;
 }
 
 .reservations-dashboard-item {
-    grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(2.6rem, 1fr));
     grid-template-rows: auto;
-    grid-template-areas: 'photo photo travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers' 'user user user user user user user''comment comment comment comment comment comment comment';
+    grid-template-areas: 'photo photo travel travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers travellers' 'user user user user user user user user' 'comment comment comment comment comment comment comment comment';
 }
 
 .payments-dashboard-item {
-    grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(4.2rem, 1fr));
     grid-template-rows: auto;
-    grid-template-areas: 'left left right right right';
+    grid-template-areas: 'left left right right right right right';
 }
 
 .reservations-dashboard-grid-item>img {
     width: 80px;
     height: 80px;
-    border-radius: 100%;
-    margin-top: 1rem;
-}
-
-.reservations-dashboard-item>div,
-.payments-dashboard-item>div {
-    padding-inline: 1rem;
+    border-radius: 1rem;
 }
 
 .reservations-dashboard-item>div:nth-child(1) {
@@ -454,27 +495,20 @@ fieldset {
     grid-area: left;
 }
 
-.payments-dashboard-item>div:nth-child(1) {
-    padding-inline-start: 1rem;
-    padding-top: 1rem;
-}
-
 .reservations-dashboard-item>div:nth-child(2) {
     grid-area: travel;
     padding-inline-start: 0;
-    padding-top: 1rem;
+    font-size: 1.1rem;
 }
 
 .payments-dashboard-item>div:nth-child(2) {
     grid-area: right;
     padding-inline-start: 0;
-    padding-top: 1rem;
 }
 
 .reservations-dashboard-item>div:nth-child(3) {
     grid-area: reservation;
     font-size: 1.1rem;
-    font-weight: bold;
 }
 
 .reservations-dashboard-item>div:nth-child(4) {
@@ -496,3 +530,189 @@ fieldset {
         ;
     }
 } */
+
+
+/* DASHBOARD */
+
+.box-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-gap: 1.5rem;
+    margin-top: 2.2rem;
+}
+
+.box-info li {
+    padding: 24px;
+    background: var(--light);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    grid-gap: 24px;
+}
+
+.box-info li .bx {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-info li:nth-child(1) .bx {
+    background: var(--light-blue);
+    color: var(--blue);
+}
+
+.box-info li:nth-child(2) .bx {
+    background: var(--light-yellow);
+    color: var(--yellow);
+}
+
+.box-info li:nth-child(3) .bx {
+    background: var(--light-orange);
+    color: var(--orange);
+}
+
+.box-info li .text h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.box-info li .text p {
+    color: var(--dark);
+}
+
+@media screen and (max-width: 576px) {
+    .box-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+.table-data {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 2rem;
+    margin-top: 1rem;
+    color: var(--dark);
+    align-items: flex-start;
+    padding-right: 2rem;
+    font-family: var(--poppins);
+}
+
+.table-data>div {
+    border-radius: 20px;
+    background: var(--light);
+    padding: 24px;
+    overflow-x: auto;
+}
+
+.table-data .head h3 {
+    margin-right: auto;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.table-data div {
+    flex-grow: 1;
+}
+
+.table-data table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-data table th {
+    padding-bottom: 12px;
+    font-size: 13px;
+    text-align: left;
+    border-bottom: 1px solid var(--grey);
+    border-radius: 8px;
+    margin-right: 6px;
+}
+
+.table-data table td {
+    padding: 16px 12px;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.table-data table tr:last-child td {
+    border-bottom: none !important;
+}
+
+@include media-breakpoint-down(lg) {
+    .table-data table th {
+        display: none;
+    }
+    .table-data table tr {
+        margin-bottom: 1rem;
+        display: block;
+    }
+    .table-data table td {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: 15ch auto;
+        padding: 0.5rem 1rem;
+    }
+    .table-data table td:first-child {
+        padding-top: 2rem;
+    }
+    .table-data table td:last-child {
+        padding-bottom: 1rem;
+    }
+    .table-data table td::before {
+        content: attr(data-cell) ': ';
+        font-weight: 700;
+        text-transform: capitalize;
+        min-width: 13ch;
+    }
+    .table-data table td[data-cell="Traducciones"] {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .table-data table td[data-cell="Traducciones"] div {
+        min-width: 7rem;
+        float: left;
+        margin-right: 1rem;
+    }
+    .badge {
+        display: block;
+        width: 2rem;
+        float: left;
+        margin-right: 6px;
+    }
+    .table-data table br {
+        clear: both;
+    }
+}
+
+// PAGINATION
+.pagination>li>a {
+    background-color: white;
+    color: var(--main-red);
+}
+
+.pagination>li>a:focus,
+.pagination>li>a:hover,
+.pagination>li>span:focus,
+.pagination>li>span:hover {
+    color: #5a5a5a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination>.active>span {
+    color: white;
+    background-color: var(--main-red)!Important;
+    border: solid 1px var(--main-red)!Important;
+}
+
+.pagination>.active>span:hover {
+    background-color: var(--light) !Important;
+    border: 1px solid var(--main-red);
+}

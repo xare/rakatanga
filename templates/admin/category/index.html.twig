@@ -9,7 +9,7 @@
         <div class="col-md-12 col-12">
             <h1>Indice Categorías</h1>
         </div>
-    </div>     
+    </div>
     <div class="row mb-4">
         <div class="count col-md-3 col-xs-12">
             <strong>Categorias en total:</strong> {{ categories.getTotalItemCount }}
@@ -26,38 +26,39 @@
         </div>
     </div>
     <div class="row">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="main-red">
-                    <tr>
-                        <th>{{ knp_pagination_sortable(categories, 'Id', 'c.id',{'class':'text-decoration-none link-light'}) }}</th>
-                        <th{% if categories.isSorted('c.name') %} class="sorted"{% endif %}>
-                            {{ knp_pagination_sortable(categories, 'Nombre', 'c.name',{'class':'text-decoration-none link-light'}) }}
-                        </th>
-                        <th{% if categories.isSorted('c.continent') %} class="sorted"{% endif %}>
-                            {{ knp_pagination_sortable(categories, 'Continente', 'c.continent',{'class':'text-decoration-none link-light'}) }}
-                        </th>
-                        
-                        <th{% if categories.isSorted('c.status') %} class="sorted"{% endif %}>
-                            {{ knp_pagination_sortable(categories, 'Estatus', 'c.status',{'class':'text-decoration-none link-light'}) }}
-                        </th>
-                        <th>Traducciones</th>
-                        <th>Nº viajes</th>
-                        <th><i class="fa fa-trash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                
-                {% for category in categories %}
-                {{include('admin/category/_row.html.twig')}}
-                    
-                {% else %}
-                    <tr>
-                        <td colspan="3">no records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="table-data">
+            <div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="main-red">{{ knp_pagination_sortable(categories, 'Id', 'c.id',{'class':'text-decoration-none link-light'}) }}</th>
+                            <th class="main-red{% if categories.isSorted('c.name') %} sorted{% endif %}">
+                                {{ knp_pagination_sortable(categories, 'Nombre', 'c.name',{'class':'text-decoration-none link-light'}) }}
+                            </th>
+                            <th class="main-red{% if categories.isSorted('c.continent') %} sorted{% endif %}">
+                                {{ knp_pagination_sortable(categories, 'Continente', 'c.continent',{'class':'text-decoration-none link-light'}) }}
+                            </th>
+                            <th class="main-red{% if categories.isSorted('c.status') %} sorted{% endif %}">
+                                {{ knp_pagination_sortable(categories, 'Estatus', 'c.status',{'class':'text-decoration-none link-light'}) }}
+                            </th>
+                            <th class="main-red">Traducciones</th>
+                            <th class="main-red">Nº viajes</th>
+                            <th class="main-red"><i class="fa fa-trash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for category in categories %}
+                    {{include('admin/category/_row.html.twig')}}
+
+                    {% else %}
+                        <tr>
+                            <td colspan="3">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
             {# display navigation #}
             <div class="navigation">

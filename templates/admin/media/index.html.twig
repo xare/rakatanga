@@ -18,71 +18,48 @@
                 <div class="navigation">
                     {{ knp_pagination_render(media) }}
                 </div>
-                {# <div class="table-responsive js-entity-index-table"> #}
-                <div class="table-responsive">
-                    {# <table class="table table-striped table-hover small js-items-list"> #}
-                    <table class="table table-striped table-hover small">
-                        <thead class="main-red">
-                            <tr>
-                                <th>{{ knp_pagination_sortable(media, 'Id', 'm.id',{'class':'text-decoration-none link-light'}) }}</th>
-                                <th{% if media.isSorted('m.type') %} class="sorted"{% endif %}>
-                                    {{ knp_pagination_sortable(media, 'Type', 'm.type',{'class':'text-decoration-none link-light'}) }}
-                                </th>
-                                <th{% if media.isSorted('m.name') %} class="sorted"{% endif %}>
-                                    {{ knp_pagination_sortable(media, 'Name', 'm.name',{'class':'text-decoration-none link-light'}) }}
-                                </th>
-                                <th{% if media.isSorted('m.path') %} class="sorted"{% endif %}>
-                                    {{ knp_pagination_sortable(media, 'Path', 'm.path',{'class':'text-decoration-none link-light'}) }}
-                                </th>
-                                <th>Url</th>
-                                <th{% if media.isSorted('m.filename') %} class="sorted"{% endif %}>
-                                    {{ knp_pagination_sortable(media, 'Filename', 'm.filename',{'class':'text-decoration-none link-light'}) }}
-                                </th>
-                                <th>Thumbnail</th>
-                                {# <th><i class="fa fa-eye"></i></th> #}
-                                <th><i class="fa fa-edit"></i></th>
-                                <th><i class="fa fa-trash"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for medium in media %}
-                                {{ include('admin/media/_mediaRow.html.twig') }}
-                            {% else %}
-                            <tr>
-                                <td colspan="6">no records found</td>
-                            </tr>
-                        {% endfor %}
-                       </tbody>
-                    </table>
-                    <div class="navigation">
+
+                <div class="table-data">
+                    <div>
+                        <table class="table table-striped table-hover small">
+                            <thead>
+                                <tr>
+                                    <th class="main-red">{{ knp_pagination_sortable(media, 'Id', 'm.id',{'class':'text-decoration-none link-light'}) }}</th>
+                                    <th class="main-red{% if media.isSorted('m.type') %} sorted{% endif %}">
+                                        {{ knp_pagination_sortable(media, 'Type', 'm.type',{'class':'text-decoration-none link-light'}) }}
+                                    </th>
+                                    <th class="main-red{% if media.isSorted('m.name') %} sorted{% endif %}">
+                                        {{ knp_pagination_sortable(media, 'Name', 'm.name',{'class':'text-decoration-none link-light'}) }}
+                                    </th>
+                                    <th class="main-red{% if media.isSorted('m.path') %} sorted{% endif %}">
+                                        {{ knp_pagination_sortable(media, 'Path', 'm.path',{'class':'text-decoration-none link-light'}) }}
+                                    </th>
+                                    <th class="main-red">Url</th>
+                                    <th class="main-red{% if media.isSorted('m.filename') %} sorted{% endif %}">
+                                        {{ knp_pagination_sortable(media, 'Filename', 'm.filename',{'class':'text-decoration-none link-light'}) }}
+                                    </th>
+                                    <th class="main-red">Thumbnail</th>
+                                    <th class="main-red"><i class="fa fa-edit"></i></th>
+                                    <th class="main-red"><i class="fa fa-trash"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for medium in media %}
+                                    {{ include('admin/media/_mediaRow.html.twig') }}
+                                {% else %}
+                                <tr>
+                                    <td colspan="6">no records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    <div class="navigation mt-4">
                         {{ knp_pagination_render(media) }}
                     </div>
-                    {# <ul class="nav nav-tabs" role="tablist" id="myTab">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active"
-                                    id="simple-form-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#simple-form"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="#simple-form"
-                                    aria-selected="true"
-                            >Formulario Sencillo</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link"
-                                    id="dropzone-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#dropzone"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="#dropzone"
-                                    aria-selected="false"
-                                    >
-                                    Dropzone</button>
-                        </li>
-                    </ul> #}
-                    <div class="tab-content">
+
+                    {# <div class="tab-content">
                         <div
                             class="tab-pane fade show active"
                             id="simple-form"
@@ -105,7 +82,7 @@
                     <a href="{{ path('media_new') }}" class="btn btn-primary">
                         <i class="fa fa-plus-circle"></i>
                         Create new
-                    </a>
+                    </a> #}
                 </div>
             </div>
         </div>

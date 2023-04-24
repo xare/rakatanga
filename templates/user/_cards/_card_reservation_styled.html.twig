@@ -53,57 +53,57 @@
 
 {% endmacro %}
 {% macro showTravellersDocumentsLine(documents, traveller,  reservation) %}
-  {% if traveller.email != app.user.email %}
-  {% set doctypesArray = ['passport','visa','drivers'] %}
-  {% set reservationTravellerDataFields = getTravellerReservationDataFields(reservation, traveller) %}
-  {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}
+  {# {% if traveller.email != app.user.email %} #}
+    {% set doctypesArray = ['passport','visa','drivers'] %}
+    {% set reservationTravellerDataFields = getTravellerReservationDataFields(reservation, traveller) %}
+    {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}
 
-  <div class="tags has-addons">
-    <span class="tag is-light">
-      <i class="fas fa-user"></i>
-    </span>
-    <span class="tag tag-name">{{traveller.prenom}} {{traveller.nom}}</span>
-    <span class="tag{% if reservationTravellerRatio < 100 %} is-danger is-light{% endif %}" title="{{'Nivel de compleción de datos de viajero'|trans }}" data-bs-toggle="tooltip">{{ reservationTravellerRatio }} %</span>
-    {% for doctype in doctypesArray %}
+    <div class="tags has-addons">
       <span class="tag is-light">
-        <i class="fa fa-{% if doctype == "passport" %}passport{% endif %}{% if doctype == "drivers" %}id-card{% endif %}{% if doctype == "visa" %}book{% endif %}"></i>
+        <i class="fas fa-user"></i>
       </span>
-    {% for document in documents %}
-      {% if hasDoctype(document, doctype) == true %}
+      <span class="tag tag-name">{{traveller.prenom}} {{traveller.nom}}</span>
+      <span class="tag{% if reservationTravellerRatio < 100 %} is-danger is-light{% endif %}" title="{{'Nivel de compleción de datos de viajero'|trans }}" data-bs-toggle="tooltip">{{ reservationTravellerRatio }} %</span>
+      {% for doctype in doctypesArray %}
         <span class="tag is-light">
-          <a href="{{ path("download_document",{
-                          'id': document.id}
-                          )}}"
-              title="{{document.doctype|trans}} {{document.filename}}"
-              data-bs-toggle="tooltip"
-              class="text-success">
-                <span class="fa fa-check-circle"></span>
-            </a>
+          <i class="fa fa-{% if doctype == "passport" %}passport{% endif %}{% if doctype == "drivers" %}id-card{% endif %}{% if doctype == "visa" %}book{% endif %}"></i>
+        </span>
+      {% for document in documents %}
+        {% if hasDoctype(document, doctype) == true %}
+          <span class="tag is-light">
+            <a href="{{ path("download_document",{
+                            'id': document.id}
+                            )}}"
+                title="{{document.doctype|trans}} {{document.filename}}"
+                data-bs-toggle="tooltip"
+                class="text-success">
+                  <span class="fa fa-check-circle"></span>
+              </a>
+            </span>
+          {% endif %}
+        {% endfor %}
+        {% if notPresentDoctypeTraveller(reservation, traveller, doctype) == true %}
+          <span class="tag is-light text-danger">
+            <i class="fa fa-x"></i>
           </span>
         {% endif %}
       {% endfor %}
-      {% if notPresentDoctypeTraveller(reservation, traveller, doctype) == true %}
-        <span class="tag is-light text-danger">
-          <i class="fa fa-x"></i>
-        </span>
-      {% endif %}
-    {% endfor %}
-    <span class="tag is-info is-light">
-      <a
-        href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller':traveller.id }) }}"
-        title="{{'Editar datos del viaje y documentación'|trans}}"
-        data-bs-toggle="tooltip"
-      >
-        <i class="fa fa-edit "></i>
-      </a>
-    </span>
-    <span class="tag is-light">
-      <i class="fas fa-arrow-left" style="font-size:0.8rem"></i>
-      &nbsp;&nbsp;{{'Editar'|trans}}
-    </span>
-  </div>
-  <br />
-  {% endif %}
+      <span class="tag is-info is-light">
+        <a
+          href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller':traveller.id }) }}"
+          title="{{'Editar datos del viaje y documentación'|trans}}"
+          data-bs-toggle="tooltip"
+        >
+          <i class="fa fa-edit "></i>
+        </a>
+      </span>
+      <span class="tag is-light">
+        <i class="fas fa-arrow-left" style="font-size:0.8rem"></i>
+        &nbsp;&nbsp;{{'Editar'|trans}}
+      </span>
+    </div>
+    <br />
+  {# {% endif %} #}
 {% endmacro %}
 <div class="card mb-2">
   <div class="card-header">
@@ -143,35 +143,20 @@
   </div>
   <div class="card-body reservation-container">
     <div class="reservationOptions box">
-      {# <h5>{{'Datos de la reserva'|trans}}</h5>
-        <div class="tags has-addons">
-          <span class="tag is-dark"><i class="fas fa-suitcase"></i></span>
-          <span class="tag is-info">{{ reservation.status }}</span>
-        </div>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <a
-            class="btn btn-sm btn-rakatanga-blue{% if reservation.status == 'cancelled' %} d-none{% endif %}"
-            href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}">
-            <i class="fa fa-edit "></i>
-              {{'Editar los datos de la reserva'|trans}}
-          </a>
-        </div>
-        <br /> #}
-
         <h5>
           {{'Datos y documentación'|trans}}
         </h5>
-        <h6>
-          {{'Tus datos'|trans}}
-        </h6>
-          {{ _self.showUsersDocumentsLine(documentsByUser,reservation) }}
+        {# <h6> #}
+          {# {{'Tus datos'|trans}} #}
+        {# </h6> #}
+          {# {{ _self.showUsersDocumentsLine(documentsByUser,reservation) }} #}
+
         {% if reservation.travellers|length > 0 %}
           <h6 class="mt-1">
-            {{'Datos de tus acompañantes'|trans}}
+            {{'Datos de los viajeros'|trans}}
           </h6>
         {% endif %}
         {% for traveller in reservation.travellers %}
-
           {% set documentsByTraveller = listDocumentsByReservationByTraveller(reservation, traveller ) %}
           {{ _self.showTravellersDocumentsLine(documentsByTraveller, traveller, reservation) }}
         {% endfor %}

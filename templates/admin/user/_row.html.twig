@@ -1,12 +1,12 @@
 <tr{% if user.reservations|length > 0 %} class="alert alert-info"{% endif %}>
-  <td>{{ user.id }}</td>
-  <td><a href="{{path('user_edit',{'id':user.id})}}">{{ user.email }}</a></td>
+  <td data-cell="id">{{ user.id }}</td>
+  <td data-cell="Email"><a href="{{path('user_edit',{'id':user.id})}}">{{ user.email }}</a></td>
   {# <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
-  <td>{{ user.langue }}</td>
-  <td>{{ user.nom }}</td>
-  <td>{{ user.prenom }}</td>
-  <td>{{ user.telephone }}</td>
-  <td>{% for reservation in user.reservations %}
+  <td data-cell="Idioma">{{ user.langue }}</td>
+  <td data-cell="Apellidos">{{ user.nom }}</td>
+  <td data-cell="Nombre">{{ user.prenom }}</td>
+  <td data-cell="Teléfono">{{ user.telephone }}</td>
+  <td data-cell="Reservas">{% for reservation in user.reservations %}
       <a
         href="{{path('reservation_edit',{id:reservation.id})}}"
         data-bs-toggle="tooltip"
@@ -15,12 +15,7 @@
       </a>
       {% endfor %}
   </td>
-  {# <td>
-      <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-info">
-          <i class="fa fa-edit"></i>
-      </a>
-  </td> #}
-  <td>
+  <td data-cell="Borrar">
       {{ include('admin/user/_delete_form.html.twig') }}
   </td>
 </tr>

@@ -40,25 +40,23 @@ class UserFrontendReservationDocumentsController extends AbstractController
         private languageMenuHelper $languageMenuHelper
     )
     {
-
+        $this->travellersRepository = $travellersRepository;
     }
     #[Route(
         path: '/user/upload/document/{reservation}',
         name: 'frontend_user_upload_document')]
     #[Route(
         path: [
-            'en' => '{_locale}/upload/document/{reservation}',
-            'es' => '{_locale}/upload/document/{reservation}',
-            'fr' => '{_locale}/upload/document/{reservation}'],
+            'en' => '{_locale}/user/upload/document/{reservation}',
+            'es' => '{_locale}/user/upload/document/{reservation}',
+            'fr' => '{_locale}/user/upload/document/{reservation}'],
         name: 'frontend_user_upload_document')]
     public function frontend_user_upload_document(
         Request $request,
         Reservation $reservation,
         ValidatorInterface $validator,
-        string $_locale = null,
-        string $locale = 'es'
+        string $_locale = 'es',
     ) {
-        $locale = $_locale ?: $locale;
         $uploadedDocument = $request->files->get('document');
         /**
          * @var User $user
@@ -346,16 +344,22 @@ class UserFrontendReservationDocumentsController extends AbstractController
             'reservation' => $reservation,
             'user' => $user,
         ];
+
         if ($request->request->get('travellerId') !== null && $request->request->get('travellerId') != $user->getId()) {
             $travellerId = $request->request->get('travellerId');
-            $dropHtmlRenderArray['traveller'] = $this->travellersRepository->find($travellerId);
-            $listHtmldRenderArray['documents'] = $dropHtmlRenderArray['traveller']->getDocuments();
-            $documents = $this->documentRepository->getDocumentsByReservationByTraveller($reservation, $dropHtmlRenderArray['traveller']);
+            dump($travellerId);
+            $travellerProxy = $this->travellersRepository->find($travellerId);
+            $traveller = $this->entityManager->merge($travellerProxy);
+            dump($traveller);
+            $dropHtmlRenderArray['traveller'] = $traveller;
+            //$listHtmldRenderArray['documents'] = $traveller->getDocuments();
 
+            $documents = $this->documentRepository->getDocumentsByReservationByTraveller($reservation, $traveller);
+            dump($documents);
         } else {
             $documents = $this->documentRepository->getDocumentsByReservationByUser($reservation);
         }
-
+        dump($documents);
         $listHtmlRenderArray['documents'] = $documents;
 
         $listHtml = $this->renderView('user/_documents_list.html.twig', $listHtmlRenderArray);

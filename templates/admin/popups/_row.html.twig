@@ -1,24 +1,14 @@
 <tr>
-  <td>{{ popup.id }}</td>
-  <td><a href="{{ path('popups_edit', {'id': popup.id}) }}">{{ popup.title }}</a></td>
-  <td>
+  <td data-cell="Id">{{ popup.id }}</td>
+  <td data-cell="Título"><a href="{{ path('popups_edit', {'id': popup.id}) }}">{{ popup.title }}</a></td>
+  <td data-cell="Traducciones">
       {% for popupTranslation in popup.popupsTranslations %}
           {{ popupTranslation.title }}<br />
       {% endfor %}
   </td>
-  <td>{{ popup.dateStart ? popup.dateStart|date('d-m-Y') : '' }}</td>
-  <td>{{ popup.dateEnd ? popup.dateEnd|date('d-m-Y') : '' }}</td>
-  {# <td>
-      <a href="{{ path('popups_show', {'id': popup.id}) }}" class="btn btn-primary">
-          <i class="fa fa-eye"></i>
-      </a>
-  </td>
-  <td>
-      <a href="{{ path('popups_edit', {'id': popup.id}) }}" class="btn btn-info">
-          <i class="fa fa-edit"></i>
-      </a>
-  </td> #}
-  <td>
-      {{ include('admin/popups/_delete_form.html.twig') }}
+  <td data-cell="Comienzo">{{ popup.dateStart ? popup.dateStart|date('d-m-Y') : '' }}</td>
+  <td data-cell="Final">{{ popup.dateEnd ? popup.dateEnd|date('d-m-Y') : '' }}</td>
+  <td data-cell="Borrar">
+    {{ include('admin/popups/_delete_form.html.twig') }}
   </td>
 </tr>

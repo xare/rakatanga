@@ -8,31 +8,34 @@
         <div class="row">
             <div class="col-12">
                 <h1>Hotels index</h1>
+                <div class="table-data">
+                    <div>
+                        <table class="table small">
+                            <thead>
+                                <tr>
+                                    <th class="main-red">Id</th>
+                                    <th class="main-red">Name</th>
+                                    <th class="main-red">City</th>
+                                    <th class="main-red">Country</th>
+                                    <th class="main-red">Website</th>
+                                    <th class="main-red">Category</th>
+                                    <th class="main-red">Travel</th>
+                                    <th class="main-red">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for hotel in hotels %}
+                            {{include('admin/hotels/_row.html.twig')}}
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th>Website</th>
-                            <th>Category</th>
-                            <th>Travel</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for hotel in hotels %}
-                    {{include('admin/hotels/_row.html.twig')}}
-                        
-                    {% else %}
-                        <tr>
-                            <td colspan="7">no records found</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

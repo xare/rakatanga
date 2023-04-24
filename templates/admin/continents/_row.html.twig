@@ -1,11 +1,11 @@
 <tr>
-  <td>{{ continent.id }}</td>
-  <td>
+  <td data-cell="Id">{{ continent.id }}</td>
+  <td data-cell="Abreviatura">
       <a href="{{ path('continents_edit', {'id': continent.id}) }}">
           {{ continent.code }}
       </a>
   </td>
-  <td>
+  <td data-cell="Traducciones">
       <div class="row">
           {% for continentTranslation in continent.continentTranslation %}
               <div class="col-4">
@@ -16,13 +16,7 @@
           {% endfor %}
       </div>
   </td>
-  {# <td>
-      <a href="{{ path('continents_show', {'id': continent.id}) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-  </td>
-  <td>    
-      <a href="{{ path('continents_edit', {'id': continent.id}) }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-  </td> #}
-  <td>    
+  <td data-cell="Borrar">
       <a href="{{ path('continents_delete', {'id': continent.id}) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
   </td>
 </tr>

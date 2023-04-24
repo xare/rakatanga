@@ -38,6 +38,8 @@ class DashboardController extends AbstractController
         return $this->render(
             'admin/dashboard/index.html.twig',
             [
+                'totalPayments' => $paymentsRepository->getTotalAmountForCurrentYear(),
+                'totalReservations' => $reservationRepository->getTotalReservationsForCurrentYear(),
                 'users' => $userRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'reservations' => $reservationRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'payments' => $paymentsRepository->findBy([], ['date_ajout' => 'DESC'], 10),
