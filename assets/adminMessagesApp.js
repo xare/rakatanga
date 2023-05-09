@@ -7,10 +7,6 @@ Routing.setRoutingData(routes);
 class AdminMessagesApp {
     constructor($wrapper) {
         this.$wrapper = $wrapper;
-        /* this.$wrapper.on(
-            'click',
-            '.js-send-checkin-request',
-            this.handleSendCheckInRequest.bind(this)); */
         this.$wrapper.on(
             'click',
             '[data-action="send-checkin-request"]',

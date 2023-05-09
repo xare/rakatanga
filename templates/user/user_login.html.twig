@@ -32,7 +32,8 @@
 						</div>
 					{% endif %}
 
-					<h3 class="h3 mb-3 font-weight-normal">{{'Por favor, entrar'|trans}}</h3>
+					{# <h3 class="h3 mb-3 font-weight-normal">{{'Por favor, entrar'|trans}}</h3> #}
+					<p>{{ 'Introduce tus datos para acceder a tu espacio'|trans }}.</p>
 					<div class="mb-3">
 						<label for="inputEmail" class="form-label">{{'Email'|trans}}</label>
 						<input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" placeholder="example@domain.com" required autofocus>

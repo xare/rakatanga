@@ -53,21 +53,19 @@ class UserFrontendReservationController extends AbstractController
         name: 'frontend_user_reservation')]
     public function frontend_user_reservation(
         Reservation $reservation,
-        string $_locale = null,
-        string $locale = 'es'
+        string $_locale = 'es'
     ) {
         /**
          * @var User $user
          */
         $user = $this->getUser();
-        $locale = $_locale ?: $locale;
         $lang = $this->langRepository->findOneBy([
-            'iso_code' => $locale,
+            'iso_code' => $_locale,
         ]);
 
-        $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($locale,$reservation);
+        $urlArray = $this->languageMenuHelper->reservationPaymentMenuLanguage($_locale,$reservation);
 
-        $this->breadcrumbsHelper->frontendUserReservationBreadcrumbs($locale, $reservation);
+        $this->breadcrumbsHelper->frontendUserReservationBreadcrumbs($_locale, $reservation);
 
         $options = $this->reservationHelper->getReservedOptions($reservation, $lang->getIsoCode());
 
@@ -76,7 +74,7 @@ class UserFrontendReservationController extends AbstractController
         return $this->render('reservation/index.html.twig', [
             'date' => $reservation->getDate(),
             'langs' => $urlArray,
-            'locale' => $locale,
+            'locale' => $_locale,
             'reservation' => $reservation,
             'selectableOptions' => $selectableOptions,
             'options' => $options,

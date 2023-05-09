@@ -246,6 +246,7 @@ class UserFrontendReservationDocumentsController extends AbstractController
             || $authorization->isGranted('ROLE_ADMIN'))
         {
             //$this->denyAccessUnlessGranted('ROLE_USER', $user);
+
             $uploadHelper = $this->uploadHelper;
             $response = new StreamedResponse(function () use ($document, $uploadHelper) {
             $outputStream = fopen('php://output', 'wb');

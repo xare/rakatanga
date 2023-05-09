@@ -1,6 +1,7 @@
  {% if reservation.reservationData|length > 0 %}
-    <div class="row row-cols-auto">
-
+    <div class="row">
+    <h3>Datos recogidos</h3>
+    <p>Aquí figuran los datos recogidos hasta el momento</p>
         {% for reservationDatum in reservation.reservationData %}
             {{include('admin/reservation/partials/_row_reservationData.html.twig')}}
        {% endfor %}

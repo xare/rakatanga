@@ -3,7 +3,7 @@
     <div class="col-4">
         <div class="row">
             <div class="col-6">
-                {{ form_row(form.langue) }}
+                {{ form_row(form.email) }}
             </div>
             <div class="col-6">
                 {{ form_row(form.nom) }}
@@ -21,23 +21,23 @@
             <div class="col-6">
                 {{ form_row(form.position) }}
             </div>
-            <div class="col-6">
+            {# <div class="col-6">
                 {{ form_row(form.assurance) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
+            </div> #}
+        {# </div>
+        <div class="row"> #}
+            {# <div class="col-6">
                 {{ form_row(form.vols) }}
-            </div>
+            </div> #}
             <div class="col-6">
                 {{ form_row(form.user) }}
             </div>
         </div>
-        {# <div class="row">
+        <div class="row">
             <div class="col-6">
-                {{ form_row(form.date) }}
+                {{ form_row(form.langue) }}
             </div>
-        </div> #}
+        </div>
     </div>
     <div class="col-8">
         {% if traveller.id != null %}
@@ -47,8 +47,11 @@
 </div>
     <br /><br />
     <div class="row">
-        <div class="col-4">
-            <button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
+        <div class="col-1">
+            <button class="btn btn-success"><i class="fa fa-edit"></i>{# {{ button_label|default('Guardar') }} #}</button>
+        </div>
+        <div class="col-1">
+            {{ include('admin/travellers/_delete_form.html.twig') }}
         </div>
     </div>
 {{ form_end(form) }}

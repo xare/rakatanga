@@ -40,6 +40,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ReservationController extends AbstractController
 {
@@ -134,10 +135,10 @@ class ReservationController extends AbstractController
             $introMessage = $this->translator->trans(
                 'Ya has comenzado tu reserva para este viaje').'.';
             $linkMessage = $this->translator->trans('Ver reserva');
-            $link = sprintf('<a href="%s">'.$linkMessage.'</a>', $url);
+            $link = sprintf('<a href="%s">'.' '.$linkMessage.'</a>', $url);
             $this->addFlash(
                 'error',
-                $link
+                $introMessage.' '.$link
             );
         }
 
@@ -161,6 +162,7 @@ class ReservationController extends AbstractController
         requirements: ['reservation' => '\d+'],
         methods: ['POST', 'GET'],
         options: ['expose' => true])]
+    #[IsGranted('ROLE_USER')]
     public function reservationPayment(
         Request $request,
         Reservation $reservation,
@@ -308,6 +310,7 @@ class ReservationController extends AbstractController
         priority: 10,
         name: 'success_url',
         requirements: ['reservation' => '\d+'])]
+    #[IsGranted('ROLE_USER')]
     public function successUrl(
         Request $request,
         Reservation $reservation,
@@ -315,7 +318,7 @@ class ReservationController extends AbstractController
         string $_locale = 'es'
         ):Response
     {
-
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $urlArray = $this->languageMenuHelper->paymentSuccessReservationMenuLanguage($_locale, $reservation);
 
         \Stripe\Stripe::setApiKey($this->stripeSecretKey);
@@ -372,6 +375,7 @@ class ReservationController extends AbstractController
         priority: 10,
         name: 'cancel_url',
         requirements: ['reservation' => '\d+'])]
+    #[IsGranted('ROLE_USER')]
     public function cancelUrl(
                         Reservation $reservation,
                         string $_locale = 'es'
@@ -425,6 +429,7 @@ class ReservationController extends AbstractController
 
                     stream_copy_to_stream($fileStream, $outputStream);
                 });
+
                 $response->headers->set('Content-Type', $transferDocument->getMimeType());
 
                 $disposition = HeaderUtils::makeDisposition(
@@ -433,6 +438,7 @@ class ReservationController extends AbstractController
                 );
 
                 $response->headers->set('Content-Disposition', $disposition);
+
             } else {
                 $response = new Response($this->translator->trans('No estás autorizado a acceder a este archivo'));
             }

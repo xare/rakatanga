@@ -23,25 +23,26 @@ class TravellersType extends AbstractType
             ])
             ->add('nom')
             ->add('prenom')
+            ->add('email')
             ->add('telephone')
             ->add('position', ChoiceType::class, [
                 'choices' => [
-                    'Driver' => 'driver',
-                    'Co-Driver' => 'codriver',
+                    'Driver' => 'pilote',
+                    'Co-Driver' => 'passager',
                 ],
             ])
-            ->add('assurance', ChoiceType::class, [
+            /* ->add('assurance', ChoiceType::class, [
                 'choices' => [
                     'Yes' => 'yes',
                     'No' => 'no',
                 ],
             ])
-            ->add('vols')
+            ->add('vols') */
             /* ->add('date_ajout', DateType::class, [
                 'empty_data' => '',
             ]) */
             ->add('user')
-            ->add('reservation')
+            //->add('reservation')
         ;
     }
 

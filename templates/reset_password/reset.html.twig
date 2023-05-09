@@ -9,7 +9,9 @@
             <h1>{{'Reinicia tu contraseña'|trans}}</h1>
 
             {{ form_start(resetForm) }}
-                {{ form_row(resetForm.plainPassword) }}
+                {{ form_row(resetForm.plainPassword,
+                            {'label':'Tu contraseña'|trans}
+                            ) }}
                 <button class="btn btn-primary">{{'Reinicia tu contraseña'|trans}}</button>
             {{ form_end(resetForm) }}
         </div>

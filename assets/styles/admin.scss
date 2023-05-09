@@ -439,13 +439,15 @@ fieldset {
     grid-template-columns: repeat(auto-fill, minmax(48%, 1fr));
 }
 
-
-/* .reservations-dashboard {
-    grid-auto-rows: 20rem;
-} */
-
 .payments-dashboard {
     grid-auto-rows: 13.5rem;
+}
+
+@media (max-width: 768px) {
+    .reservations-dashboard,
+    .payments-dashboard {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
 }
 
 .reservations-dashboard a,
@@ -470,7 +472,7 @@ fieldset {
 }
 
 .reservations-dashboard-item {
-    grid-template-columns: repeat(auto-fill, minmax(2.6rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(4.2rem, 1fr));
     grid-template-rows: auto;
     grid-template-areas: 'photo photo travel travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers travellers' 'user user user user user user user user' 'comment comment comment comment comment comment comment comment';
 }

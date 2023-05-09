@@ -154,7 +154,9 @@ class Reservation
     public function addTraveller(Travellers $traveller): self
     {
         if (!$this->travellers->contains($traveller)) {
-            $this->travellers[] = $traveller;
+            //$this->travellers[] = $traveller;
+            $this->travellers->add($traveller);
+            $traveller->setReservation($this);
         }
 
         return $this;

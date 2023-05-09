@@ -58,4 +58,10 @@ class InvoicesRepository extends ServiceEntityRepository
         ->setParameter('user', $user)
         ->getQuery();
     }
+
+    public function listAll()
+    {
+        return $this->createQueryBuilder('i')
+            ->getQuery();
+    }
 }

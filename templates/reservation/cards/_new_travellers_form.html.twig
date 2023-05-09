@@ -1,0 +1,48 @@
+{% if i < nbpilotes %}
+<h5>{{'Piloto'|trans}}</h5>
+{# This is a pilote form #}
+
+  {% if i < totalReservationPilotes %}
+    {# This pilote form is filled #}
+    <label
+        for="traveller_{{i-1}}_prenom">{{ 'Nombre'|trans }}
+    </label>
+    <input
+          name="traveller[{{i-1}}][prenom]"
+          id="traveller_{{i-1}}_prenom"
+          type="text"
+          class="form-control"
+          {% if value != null %}
+            value="{{ value.prenom }}"
+          {% endif %}
+        />
+  {% else %}
+    EMPTY PILOTE
+    <input
+          name="traveller[{{i-1}}][prenom]"
+          id="traveller_{{i-1}}_prenom"
+          type="text"
+          class="form-control"
+        />
+    {# This pilotes form has to be empty #}
+  {% endif %}
+{% else %}
+<h5>{{'Pasajero'|trans}}</h5>
+  {% if i < (nbpilotes+totalReservationPassagers) %}
+    {# This pilote form is filled #}
+    FILLED PASSAGER
+    <input
+          name="traveller[{{i-1}}][prenom]"
+          id="traveller_{{i-1}}_prenom"
+          type="text"
+          class="form-control"
+          {% if value != null %}
+            value="{{ value.prenom }}"
+          {% endif %}
+        />
+  {% else %}
+    EMPTY PASSAGER
+    {# This pilotes form has to be empty #}
+  {% endif %}
+{% endif %}
+

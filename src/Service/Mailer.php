@@ -352,7 +352,7 @@ class Mailer
         dump('SendReservationUpdate');
         $email = $this->sendToSender();
         $user = $reservation->getUser();
-        $subject = '['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('RESERVA ACTUALIZADA', [], 'email')}]  {$this->translator->trans('Has actualizado una reserva para el viaje', [], 'email')} {$reservation->getDate()->getTravel()->getMainTitle()} {$this->translator->trans('del ')} {$reservation->getDate()->getDebut()->format('d/m/Y')}";
+        $subject = '['.\App\Service\Mailer::MAIL_TITLE." - {$this->translator->trans('RESERVA', [], 'email')}]  {$this->translator->trans('Tu reserva para el viaje', [], 'email')} {$reservation->getDate()->getTravel()->getMainTitle()} {$this->translator->trans('del ')} {$reservation->getDate()->getDebut()->format('d/m/Y')}";
 
         $to = new Address($user->getEmail(), $user->getPrenom().' '.$user->getNom());
         $email->to($to)
@@ -467,7 +467,7 @@ class Mailer
 
         $template = $this
                         ->twig
-                        ->render('email/render/send_pdf.html.twig', [
+                        ->render('email/reservation/render/reservation-checkin-message.html.twig', [
                             'reservation' => $reservation,
                             'email' => null,
                             'reference' => strtoupper(substr($reservation->getDate()->getTravel()->getMainTitle(), 0, 3)).'-'.$reservation->getId(),
@@ -476,5 +476,20 @@ class Mailer
         $mailing->setReservation($reservation);
         $this->entityManager->persist($mailing);
         $this->entityManager->flush();
+    }
+
+    public function sendPasswordEmail(User $user, $resetToken){
+
+        $email = (new TemplatedEmail())
+            ->from(new Address('webmaster@rakatanga-tour.com', 'RAKATANGA TOUR'))
+            ->to($user->getEmail())
+            ->subject($this->translator->trans('Tu petición de renovación de contraseña', [], 'email'))
+            ->htmlTemplate('reset_password/email.html.twig')
+            ->context([
+                'resetToken' => $resetToken,
+            ])
+        ;
+
+        $this->mailer->send($email);
     }
 }

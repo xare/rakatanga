@@ -105,35 +105,36 @@
     <br />
   {# {% endif %} #}
 {% endmacro %}
-<div class="card mb-2">
+
+<div class="card mb-2{% if date(reservation.date.debut) <= date() %} disable{% endif %}">
   <div class="card-header">
   <div class="row">
     {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
-    <div class="col-2">
+    <div class="col-1 col-xs-12">
       <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }} " alt="">
     </div>
-    <div class="col-10">
-    <h2>{{ reservation.code }} - {{renderLocalizedTravel(reservation.date.travel.id,locale)}}
-    <div class="tags has-addons me-1">
+    <div class="col-11 col-xs-12">
+      <h2>{{ reservation.code }} - {{renderLocalizedTravel(reservation.date.travel.id,locale)}}
+      <div class="tags has-addons me-1">
       <span class="tag is-danger is-light">{{reservation.date.debut|date('d/m/Y')}}</span>
       <span class="tag">
         <i class="fas fa-arrow-right" style="font-size:0.8rem"></i>
       </span>
      </div>
-    <div class="tags has-addons">
+      <div class="tags has-addons">
       <span class="tag is-danger is-light">{{reservation.date.fin|date('d/m/Y')}}</span>
-    </div>
-    <div class="tags has-addons">
-      <span class="tag"><i class="fas fa-suitcase"></i></span>
-      <span class="tag  is-danger is-light">{{ reservation.status }}</span>
-      <span class="tag is-info is-light">
-      <a
-        href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}"
-        title="{{'Editar datos de la reserva'|trans}}"
-        data-bs-toggle="tooltip"
-      >
-        <i class="fa fa-edit "></i>
-      </a>
+      </div>
+      <div class="tags has-addons">
+        {# <span class="tag"><i class="fas fa-suitcase"></i></span>
+        <span class="tag  is-danger is-light">{{ reservation.status }}</span> #}
+        <span class="tag is-info is-light">
+        <a
+          href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}"
+          title="{{'Editar datos de la reserva'|trans}}"
+          data-bs-toggle="tooltip"
+        >
+          <i class="fa fa-edit "></i>
+        </a>
     </span>
     </div>
 
@@ -194,5 +195,16 @@
 
     <div class="box reservationCalculator">
       {{ include( 'user/_cards/_card_reservation_calculator_styled.html.twig' )}}
+    </div>
+    <div class="card-footer reservation">
+      <a
+          href="{{ path('frontend_user_reservation', {'reservation':reservation.id}) }}"
+          title="{{'Editar datos de la reserva'|trans}}"
+          data-bs-toggle="tooltip"
+          class="btn btn-secondary"
+        >
+          {{'EDITAR'|trans}}
+          <i class="fa fa-edit "></i>
+        </a>
     </div>
 </div>

@@ -146,7 +146,8 @@
                 </li>
                 <li class="list-group-item">
                 <span class="badge badge-rakatanga-reservations">Participantes</span>
-                    <div class="tags has-addons">
+                <div class="tags has-addons">
+                    {#
                         <span class="tag"><i class="fas fa-user"></i></span>
                         <span class="tag is-danger is-light">
                             <a
@@ -155,12 +156,12 @@
                                 title="Visualizar los datos del usuario">
                                 {{ reservation.user.prenom }} {{ reservation.user.nom }}[{{ reservation.user }}]
                             </a>
-                        </span>
-                    {% if reservation.travellers|length == 0 %}
+                        </span> #}
+                    {# {% if reservation.travellers|length == 0 %}
                     </div>
-                    {% endif %}
+                    {% endif %} #}
                     {% for traveller in reservation.travellers %}
-                        {% if traveller.email != reservation.user.email %}
+                        {# {% if traveller.email != reservation.user.email %} #}
                             <span class="tag">
                                 <a
                                     class="traveller-tag-content"
@@ -170,7 +171,7 @@
                                         {{ traveller.prenom }} {{ traveller.nom }}
                                 </a>
                             </span>
-                        {% endif %}
+                        {# {% endif %} #}
                     {% endfor %}
                     {% if reservation.travellers|length > 0 %}
                         </div>

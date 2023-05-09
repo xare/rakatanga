@@ -1,5 +1,6 @@
+
 <div
-    class="{% if i == (nbpilotes+1) %}
+    class="{% if i == (nbpilotes) %}
       js-contains-button
     {% endif %}"
     data-container="js-travellers-form-container"
@@ -8,18 +9,18 @@
     <div class="row{% if i > 1 %} mt-4{% endif %}">
       <div class="col-12">
         <h5>
-        {% if valueId != null %}{{ valueId }}{% endif %}
-          {% if i < (nbpilotes+1) %}
-            {{'Piloto'|trans}} {{(i)}}
+        {# {% if valueId != null %}{{ valueId }}{% endif %} #}
+          {% if i < (nbpilotes) %}
+            {{ 'Piloto'|trans }} {{ (i+1) }}
           {% else %}
-            {{'Pasajero'|trans}} {{(i-nbpilotes)}}
+            {{ 'Pasajero'|trans }} {{ (i+1-nbpilotes) }}
           {% endif %}
         </h5>
       </div>
     </div>
     <div class="row">
       <div class="col-12">
-        {% if i == (nbpilotes+1) %}
+        {% if i == (nbpilotes) %}
           <button
             class="btn btn-secondary small"
             data-action="js-assign-to-user">
@@ -31,25 +32,25 @@
     <div class="row">
       <div class="col-6">
         <label
-            for="traveller_{{i-1}}_prenom">{{ 'Nombre'|trans }}
+            for="traveller_{{i}}_prenom">{{ 'Nombre'|trans }}
         </label>
         <input
-          name="traveller[{{i-1}}][prenom]"
-          id="traveller_{{i-1}}_prenom"
+          name="traveller[{{i}}][prenom]"
+          id="traveller_{{i}}_prenom"
           type="text"
           class="form-control"
-          {% if value != null %}
-            value="{{ value.prenom }}"
-          {% endif %} />
+           {% if value != null %}
+              value="{{ value.prenom }}"
+            {% endif %} />
       </div>
       <div class="col-6">
         <label
-          for="traveller_{{i-1}}_nom">
+          for="traveller_{{i}}_nom">
             {{ 'Apellidos'|trans }}
         </label>
         <input
-          name="traveller[{{i-1}}][nom]"
-          id="traveller_{{i-1}}_nom"
+          name="traveller[{{i}}][nom]"
+          id="traveller_{{i}}_nom"
           type="text"
           class="form-control"
           {% if value != null %}
@@ -59,12 +60,12 @@
     </div>
     <div class="row">
       <div class="col-6">
-        <label for="traveller_{{i-1}}_email">
+        <label for="traveller_{{i}}_email">
           {{ 'Email'|trans }}
         </label>
         <input
-          name="traveller[{{i-1}}][email]"
-          id="traveller_{{i-1}}_email"
+          name="traveller[{{i}}][email]"
+          id="traveller_{{i}}_email"
           type="email"
           class="form-control"
           placeholder="{{'usuario'|trans}}@{{'dominio.com'|trans}}"
@@ -73,12 +74,12 @@
             {% endif %} />
       </div>
       <div class="col-6">
-        <label for="traveller_{{i-1}}_telephone">
+        <label for="traveller_{{i}}_telephone">
           {{ 'Teléfono'|trans }}
         </label>
         <input
-          name="traveller[{{i-1}}][telephone]"
-          id="traveller_{{i-1}}_telephone"
+          name="traveller[{{i}}][telephone]"
+          id="traveller_{{i}}_telephone"
           type="tel"
           class="form-control"
           placeholder="+00 000000000"
@@ -89,13 +90,15 @@
       </div>
       <input
           type="hidden"
-          name="traveller[{{i-1}}][position]"
-          value="{% if i <= nbpilotes %}pilote{% else %}passager{% endif %}" />
+          name="traveller[{{i}}][position]"
+          value="{% if i < nbpilotes %}pilote{% else %}passager{% endif %}" />
       <input
           type="hidden"
-          name="traveller[{{i-1}}][id]"
+          name="traveller[{{i}}][id]"
           {% if valueId != null %}
               value="{{ valueId }}"
+              {% elseif value != null %}
+              value="{{ value.id }}"
           {% endif %} />
     </div>
 </div>

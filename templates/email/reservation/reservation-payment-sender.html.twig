@@ -47,4 +47,12 @@
             </p>
         </columns>
     </row>
+    <row>
+        <columns>
+            <p><strong>{{'Pagos'|trans}}:</strong>
+            {% for payment in reservation.payments %}
+                {{payment.amount|format_currency('EUR', {attr: app.request.locale()}) }} <br />
+            {% endfor %}
+        <columns>
+    </row>
 {% endblock %}

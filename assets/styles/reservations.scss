@@ -1,4 +1,4 @@
-#js-user-reservations_wrapper .card-header>img {
+#js-user-reservations_wrapper .card-header img {
     width: 6rem !important;
     float: left;
     margin-right: 1rem;
@@ -95,6 +95,34 @@
 .btn-rakatanga-blue:hover,
 .btn-rakatanga-secondary:hover {
     color: white;
+}
+
+.card-footer.reservation {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+#js-user-reservations_wrapper .card {
+    position: relative;
+}
+
+#js-user-reservations_wrapper .card.disable {
+    pointer-events: none;
+}
+
+#js-user-reservations_wrapper .card.disable::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.2);
+    /* Change the last value (0.5) to adjust the opacity */
+    z-index: 10;
+    border-radius: 6px;
+    /* Make the overlay non-clickable */
 }
 
 

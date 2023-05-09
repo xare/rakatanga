@@ -1,6 +1,13 @@
 <tr>
     <td data-cell="Id">{{ traveller.id }}</td>
     <td data-cell="Lengua">{{ traveller.langue }}</td>
+    <td data-cell="Editar">
+    {% if traveller.reservation is not empty %}
+        <a href="{{path('reservation_edit',{id: traveller.reservation.id})}}" target="_blank">
+            {{ traveller.reservation.code}}
+        </a>
+    {% endif %}
+    </td>
     <td data-cell="Apellidos">{{ traveller.nom }}</td>
     <td data-cell="Nombre">{{ traveller.prenom }}</td>
     <td data-cell="Teléfono">{{ traveller.telephone }}</td>

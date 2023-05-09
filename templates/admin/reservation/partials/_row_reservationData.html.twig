@@ -1,56 +1,72 @@
-<div class="card col">
-            <div class="card-body">
-                <small>
-                    <table class="table">
-                    <tr>
-                        <th>Usuarior</th>
-                        <td>
-                            <a
+<div class="card mb-4">
+    <div class="card-body">
+        <small>
+            <table class="table">
+                <tr>
+                    <th>Usuario Responsable</th>
+                    <td>
+                        <a
                             data-bs-toggle="tooltip"
                             title="{{reservationDatum.user ? reservationDatum.user.prenom ~" "~ reservationDatum.user.nom ~" "~
                             reservationDatum.user.telephone }}"
                             href="{{ path('user_show',{'id':reservation.user.id}) }}">
                                 {{reservationDatum.user ? reservationDatum.user.email}}
-                            </a>
-                            <span class="badge bg-secondary">
-                                {{ reservationDatum.user ? reservationDatum.user.position|slice(0, 3) }}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Viajero</th>
-                        <td>
-                            {{reservationDatum.traveller ? reservationDatum.traveller.email }}
-                        </td>
-                    </tr>
-                    <tr class="alert {% if reservationDatum.passportNo %}
+                        </a>
+
+                            {% if reservationDatum.reservation.user.position == "pilote" %}
+                                <span class="badge bg-secondary">
+                                <i class="fa fa-motorcycle"></i>
+                                </span>
+                            {% endif %}
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Nombre y apellido</th>
+                    <td>
+                        {{reservationDatum.user.prenom}} {{reservationDatum.user.nom}}
+                    </td>
+
+                </tr>
+                <tr>
+                    <th>Viajero</th>
+                    <td>
+                        {{reservationDatum.traveller ? reservationDatum.traveller.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nombre y apellidos</th>
+                    <td>{{reservationDatum.traveller ? reservationDatum.traveller.prenom}} {{reservationDatum.traveller ? reservationDatum.traveller.nom}}</td>
+                </tr>
+                <tr class="alert {% if reservationDatum.passportNo %}
                                 alert-success
-                        {% else %}
-                            alert-danger
-                        {% endif %}">
-                        <th>Nº Pasaporte</th>
-                        <td>
-                            {{ reservationDatum.passportNo }}
-                        </td>
-                    </tr>
-                    <tr class="alert {% if reservationDatum.passportIssueDate %}
-                                alert-success
-                        {% else %}
-                            alert-danger
-                        {% endif %}">
-                        <th>Expedición</th>
-                        <td>
-                            {{ reservationDatum.passportIssueDate|date('d-m-Y') }}
-                        </td>
-                    </tr>
-                    <tr class="alert {% if reservationDatum.passportExpirationDate %}
-                                alert-success
+                    {% else %}
+                        alert-danger
+                {% endif %}">
+                    <th>Nº Pasaporte</th>
+                    <td>
+                        {{ reservationDatum.passportNo }}
+                    </td>
+                </tr>
+                <tr class="alert {% if reservationDatum.passportIssueDate %}
+                            alert-success
+                    {% else %}
+                        alert-danger
+                    {% endif %}">
+                    <th>Expedición</th>
+                    <td>
+                        {{ reservationDatum.passportIssueDate is empty ? "" : reservationDatum.passportIssueDate|date('d-m-Y') }}
+                    </td>
+                </tr>
+                <tr class="alert {% if reservationDatum.passportExpirationDate %}
+                            alert-success
                         {% else %}
                             alert-danger
                         {% endif %}">
                         <th>Caducidad</th>
                         <td>
-                            {{ reservationDatum.passportExpirationDate|date('d-m-Y') }}
+                            {{ reservationDatum.passportExpirationDate is empty ? "" :  reservationDatum.passportExpirationDate|date('d-m-Y') }}
                         </td>
                     </tr>
                     <tr class="alert {% if reservationDatum.visaNumber %}
@@ -70,7 +86,7 @@
                         {% endif %}">
                         <th>Exp.</th>
                         <td>
-                            {{ reservationDatum.visaIssueDate|date('d-m-Y') }}
+                            {{ reservationDatum.visaIssueDate is empty ? "" : reservationDatum.visaIssueDate|date('d-m-Y') }}
                         </td>
                     </tr>
                     <tr class="alert {% if reservationDatum.visaExpirationDate %}
@@ -80,7 +96,7 @@
                         {% endif %}">
                         <th>Caducidad</th>
                         <td>
-                            {{ reservationDatum.visaExpirationDate|date('d-m-Y') }}
+                            {{ reservationDatum.visaExpirationDate is empty ? "" :  reservationDatum.visaExpirationDate|date('d-m-Y') }}
                         </td>
                     </tr>
                     <tr class="alert {% if reservationDatum.driversNumber %}
@@ -102,7 +118,7 @@
                         <th>Exp.</th>
 
                         <td>
-                            {{ reservationDatum.driversIssueDate|date('d-m-Y') }}
+                            {{ reservationDatum.driversIssueDate is empty ? "" : reservationDatum.driversIssueDate|date('d-m-Y') }}
                         </td>
                     </tr>
                     <tr class="alert {% if reservationDatum.driversExpirationDate %}
@@ -112,7 +128,7 @@
                         {% endif %}">
                         <th>Cad.</th>
                         <td>
-                            {{ reservationDatum.driversExpirationDate|date('d-m-Y') }}
+                            {{ reservationDatum.driversExpirationDate is empty ? "" :  reservationDatum.driversExpirationDate|date('d-m-Y') }}
                         </td>
                     </tr>
                     <tr class="alert {% if reservationDatum.insuranceCompany %}
@@ -177,7 +193,7 @@
                         {% endif %}">
                         <th>Llegada</th>
                         <td>
-                            {{ reservationDatum.flightArrival|date('d-m-Y') }}
+                            {{ reservationDatum.flightArrival is empty ? "" : reservationDatum.flightArrival|date('d-m-Y') }}
                         </td>
                     </tr>
                     <tr class="alert alert-{% if reservationDatum.flightArrivalAirport %}success
@@ -212,7 +228,7 @@
                         {% endif %}">
                         <th>Vuelta</th>
                         <td>
-                            {{reservationDatum.flightDeparture? reservationDatum.flightDeparture|date('d-m-Y') }}
+                            {{ reservationDatum.flightDeparture is empty ? "" : reservationDatum.flightDeparture|date('d-m-Y') }}
 
                         </td>
                     </tr>
@@ -235,9 +251,10 @@
             </small>
                 <span class="text-center">
                     <a
-                        class="btn btn-info"
+                        class="btn btn-primary"
                         data-bs-toggle="tooltip"
                         href="#"
+                        data-action="send-checkin-request"
                         style="color:white"
                         title="Pedir los datos faltantes">
                         <i class="fas fa-envelope"></i>

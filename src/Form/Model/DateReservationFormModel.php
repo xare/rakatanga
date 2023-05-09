@@ -8,7 +8,6 @@ class DateReservationFormModel
     public $nom;
     public $prenom;
     public $telephone;
-    public $position;
     public $langue;
     public $idcard;
     public $address;

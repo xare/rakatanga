@@ -103,6 +103,7 @@ class travellersApp {
     }
     _validateForm() {
         const form = document.querySelector('form[data-container="js-travellers-form"]');
+        console.info(form.elements);
         const inputTextElements = Array.from(form.elements).filter(element => element.type === "text");
         const inputEmailElements = Array.from(form.elements).filter(element => element.type === "email");
         const isTextEmpty = inputTextElements.some(element => element.value.trim() === "");

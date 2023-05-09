@@ -23,7 +23,13 @@
           <li>{{'Permiso de circulación'|trans}}</li>
         </ul>
         <p>{{'Haciendo click en el vínculo que te ofrecemos a continuación te trasladaremos a un asistente para que nos deposites tus documentos y los documentos asociados a tu reserva. Este proceso nos permitirá gestionar tu viaje de un modo más eficiente y podremos asistirte mejor durante tu viaje'|trans}}.</p>
-        <p><button class="radius" href="{{ absolute_url( path('frontend_user_reservation_data',{'reservation':reservation.id})) }}">{{'Realizar el check-in'|trans}}</button></p>
+        <spacer size="30"></spacer>
+        <center><h2>{{'Viajeros'|trans}}</h2></center>
+      <ul>
+        {% for traveller in reservation.travellers %}
+          <li>{{traveller.prenom}} {{traveller.nom}} <button class="radius" href="{{ absolute_url( path('frontend_user_reservation_data_traveller',{'reservation':reservation.id , 'traveller': traveller.id})) }}">{{'Realizar el check-in'|trans}}</button></li>
+        {% endfor %}
+      </ul>
       <spacer size="10"></spacer>
     </columns>
   </row>

@@ -25,14 +25,13 @@ class travellersHelper {
       User $user):mixed {
 
         //TRAVELLER ALREADY EXISTS IN DB
-        if( $travellerData['id'] != null ||  $travellerData['id'] != '') {
+        if( $travellerData['id'] == null ||  $travellerData['id'] == '') {
+          $traveller = new Travellers();
+        } else{
           $traveller = $this->travellersRepository->find($travellerData['id']);
-
           if (!isset($traveller) || $traveller == null){
             $traveller = new Travellers();
           }
-        } else {
-          $traveller = new Travellers();
         }
 
         try {
@@ -52,6 +51,23 @@ class travellersHelper {
         } catch(Exception $error) {
           return $error->getMessage();
         }
+    }
+
+    public function addUserToReservationAsTraveller(
+      User $user,
+      Reservation $reservation ):Reservation {
+      $traveller = new Travellers();
+      $traveller->setPrenom($user->getPrenom());
+      $traveller->setNom($user->getNom());
+      $traveller->setEmail($user->getEmail());
+      $traveller->setTelephone($user->getTelephone());
+      $traveller->setUser($user);
+      $traveller->setPosition('pilote');
+      $traveller->setIsReservationUser(true);
+      $reservation->addTraveller($traveller);
+      $this->entityManager->persist($reservation);
+      $this->entityManager->flush();
+      return $reservation;
     }
 
     public function removeTravellerFromReservation(

@@ -9,7 +9,7 @@
 	{{  encore_entry_link_tags('tags')  }}
 {% endblock %}
 {% block body %}
-<div class="container" id="js-admin-dates-wrapper">
+<div class="container" id="js-admin-dates-wrapper"  data-container="js-reservation-admin-index">
 {{ include ('admin/shared/_controlband.html.twig',{'entity':'dates'}) }}
     <div class="row">
         <div class="col-12">
@@ -25,4 +25,5 @@
     {{ parent() }}
     {{ encore_entry_script_tags('datepicker') }}
     {{ encore_entry_script_tags('admin-dates-reservation-data') }}
+    {{ encore_entry_script_tags('admin-send-message') }}
 {% endblock %}

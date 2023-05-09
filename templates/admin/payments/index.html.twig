@@ -10,12 +10,10 @@
                 <h1>Índice de Pagos</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="navigation col-md-2 col-xs-12">
-                {{ knp_pagination_render(payments) }}
-            </div>
-        </div>
     <div class="row">
+        <div class="navigation col-md-2 col-xs-12">
+            {{ knp_pagination_render(payments) }}
+        </div>
         <div class="col-12">
             <div class="table-data">
                 <div>
@@ -45,11 +43,10 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="navigation col-md-2 col-xs-12">
+            <div class="navigation mt-4">
                 {{ knp_pagination_render(payments) }}
             </div>
         </div>
+
     </div>
 {% endblock %}

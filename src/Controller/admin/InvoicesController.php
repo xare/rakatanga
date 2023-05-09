@@ -7,6 +7,7 @@ use App\Form\InvoicesType;
 use App\Repository\InvoicesRepository;
 use App\Service\invoiceHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,14 +17,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class InvoicesController extends AbstractController
 {
 
-    public function __construct(private invoiceHelper $invoiceHelper) {
+    public function __construct(
+        private invoiceHelper $invoiceHelper,
+        private InvoicesRepository $invoicesRepository,
+        private PaginatorInterface $paginator ) {
 
     }
     #[Route('/', name: 'invoices_index', methods: ['GET'])]
-    public function index(InvoicesRepository $invoicesRepository): Response
+    public function index(
+        Request $request): Response
     {
+        $query = $this->invoicesRepository->listAll();
+        $invoices = $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('admin/invoices/index.html.twig', [
-            'invoices' => $invoicesRepository->findAll(),
+            'invoices' => $invoices,
         ]);
     }
 

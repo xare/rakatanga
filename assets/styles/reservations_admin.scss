@@ -69,7 +69,7 @@
  *  Responsive Grid Media Queries - 1280, 1024, 768, 480
  *   1280-1024   - desktop (default grid)
  *   1024-768    - tablet landscape
- *   768-480     - tablet 
+ *   768-480     - tablet
  *   480-less    - phone landscape & smaller
  * --------------------------------------------
  */
@@ -174,7 +174,6 @@ only screen and (min-device-pixel-ratio: 1.5) {}
 
 .tags .tag {
     margin-bottom: 0.5rem;
-    font-weight: bold;
 }
 
 .tags.has-addons .tag:not(:last-child) {

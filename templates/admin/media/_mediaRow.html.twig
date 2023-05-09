@@ -1,7 +1,11 @@
 <tr>
     <td data-cell="Id">{{ medium.id }}</td>
     <td data-cell="Tipo">{{ medium.type }}</td>
-    <td data-cell="Nombre">{{ medium.name }}</td>
+    <td data-cell="Nombre">
+        <a href="{{ path('media_edit',{'id':medium.id }) }}">
+            {{ medium.name }}
+        </a
+    </td>
     <td data-cell="Archivo">{{ medium.path }}</td>
     <td data-cell="Url">{{ medium.url }}</td>
     <td data-cell="Nombre del archivo">{{ medium.filename }}</td>

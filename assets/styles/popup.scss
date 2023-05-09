@@ -1,0 +1,16 @@
+.swal2-html-container {
+    h1 {
+        text-align: center;
+    }
+    p {
+        font-size: 14px;
+        font-weight: 400;
+        text-align: center;
+    }
+}
+
+.swal2-confirm {
+    background: var(--light) !important;
+    color: var(--main-red) !important;
+    border: 1px solid var(--dark-grey) !important;
+}

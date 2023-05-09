@@ -36,12 +36,6 @@ class ReservationUserType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('position', ChoiceType::class, [
-                'choices' => [
-                    'Pilot' => 'pilot',
-                    'Passenger' => 'passenger',
-                ],
-            ])
             ->add('travellers', CollectionType::class, [
                 'entry_type' => TravellersType::class,
                 'entry_options' => [

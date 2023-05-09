@@ -53,7 +53,6 @@ class OptionsController extends MainadminController
             $request->query->getInt('page', 1),
             10
         );
-        dd($options);
         return $this->render('admin/options/index.html.twig', [
             'options' => $options,
             'count' => 10,

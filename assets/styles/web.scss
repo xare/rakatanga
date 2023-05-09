@@ -23,6 +23,12 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
     font-style: normal;
 }
 
+:root {
+    --dark-grey: #AAAAAA;
+    --light: #F9F9F9;
+    --main-red: #a90000;
+}
+
 * {
     outline: none;
 }
@@ -164,6 +170,19 @@ body {
     background-color: transparent;
 }
 
+
+/* .navbar-nav>li.active>a::after {
+    content: "";
+    height: 2px;
+    left: 15px;
+    bottom: 10px;
+    width: 0;
+    position: absolute;
+    transition: all .3s ease-in-out;
+    background-color: #c20000;
+    width: 30%;
+} */
+
 .navbar-nav>li.nav-item {
     position: relative !important;
     display: block !important;
@@ -172,7 +191,7 @@ body {
 .navbar-nav>li.active>a::after {
     content: "";
     height: 2px;
-    left: 8px;
+    left: 15px;
     bottom: 5px;
     width: 0;
     position: absolute;

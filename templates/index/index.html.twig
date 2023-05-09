@@ -3,6 +3,10 @@
 {% block title %}
 	{{ parent() }} - {{ 'Descubre Asia en moto'|trans }}
 {% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+  {{ encore_entry_link_tags('popup') }}
+{% endblock %}
 
 {% block body %}
 		{{ parent() }}

@@ -1,5 +1,22 @@
 <table class="table">
   <tr>
+      <td><strong>Viaje:</strong></td>
+      <td>{{renderLocalizedCategory(reservation.date.travel.category.id, 'es')}}
+      - {{renderLocalizedTravel(reservation.date.travel.id, 'es')}}</td>
+    </tr>
+    <tr>
+      <td><strong>Usuario:</strong></td>
+      <td>{{reservation.user.prenom}} {{reservation.user.nom}} [{{reservation.user.email}}]</td>
+    </tr>
+    <tr>
+      <td><strong>Fecha de salida</strong></td>
+      <td> {{reservation.date.debut|date('d/m/Y')}}</td>
+    </tr>
+    <tr>
+      <td><strong>Fecha de regreso</strong></td>
+      <td>{{reservation.date.fin|date('d/m/Y')}}</td>
+    </tr>
+  <tr>
     <td>Nº pilotos</td>
     <td>{{reservation.nbPilotes}}</td>
     <td>{{(reservation.nbPilotes * reservation.date.prixPilote)|format_currency('EUR', {fraction_digit: 2}) }}</td>
@@ -17,5 +34,9 @@
       <td>{{ (reservationOption.ammount * reservationOption.option.price)|format_currency('EUR', {fraction_digit: 2}, locale=app.request.getLocale() ) }}</td>
     </tr>
     {% endfor %}
-
 </table>
+
+
+
+
+

@@ -38,6 +38,7 @@ class ReservationController extends AbstractController
         /* if(!$pageNumber = $request->query->get('page')){
             $pageNumber = 0;
         } */
+
         $query = $this->reservationRepository->listAll();
         $items = $this->paginator->paginate(
             $query,
@@ -155,7 +156,9 @@ class ReservationController extends AbstractController
         Request $request,
         Reservation $reservation): Response
     {
+
         $form = $this->createForm(ReservationType::class, $reservation);
+        //dd($form);
         $form->handleRequest($request);
         // dd($form);
 
@@ -167,7 +170,7 @@ class ReservationController extends AbstractController
             $this->entityManager->persist($reservation);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('reservation_index');
+            //return $this->redirectToRoute('reservation_index');
         }
 
         return $this->render('admin/reservation/edit.html.twig', [
@@ -187,7 +190,10 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('reservation_index');
     }
 
-    #[Route(path: 'ajax/reservation/send-checkin-message/{reservation}', options: ['expose' => true], name: 'ajax-reservation-send-checkin-message')]
+    #[Route(
+        path: 'ajax/reservation/send-checkin-message/{reservation}',
+        options: ['expose' => true],
+        name: 'ajax-reservation-send-checkin-message')]
     public function ajaxReservationSendCheckinMessage(
         Reservation $reservation,
         Mailer $mailer

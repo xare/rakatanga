@@ -28,15 +28,13 @@
   </div>
   <div class="reservations-dashboard-grid-item">
     {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}<br />
-    {% if reservation.invoice != null %}
+    {% if reservation.invoice is defined and reservation.invoice != null %}
     <div class="tags has-addons">
       <span class="tag">
         <i class="fas fa-receipt"></i>
       </span>
       <span class="tag">
-
         {{ reservation.invoice.invoiceNumber}}
-
       </span>
       <span class="tag is-light">
         <a
@@ -50,6 +48,7 @@
     {% endif %}
   </div>
   <div class="reservations-dashboard-grid-item">
+  {% if reservation.user is defined and reservation.user != null %}
     <div class="tags has-addons">
       <span class="tag"><i class="fas fa-user"></i></span>
       <span class="tag is-light">
@@ -65,6 +64,7 @@
         </a>
       </span>
     </div>
+    {% endif %}
   </div>
   <div class="reservations-dashboard-grid-item">
     <div class="tags has-addons">

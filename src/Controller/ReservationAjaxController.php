@@ -950,7 +950,7 @@ class ReservationAjaxController extends AbstractController
             );
         } else {
             $html = $this->renderView(
-                    'reservation/cards/_card_add_travellers_form.html.twig',
+                    'reservation/cards/_new_card_add_travellers_form.html.twig',
                     $renderArray
                 );
             }

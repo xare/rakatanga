@@ -52,6 +52,7 @@ class Travellers
     private Collection $documents;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'travellers')]
+    #[ORM\JoinColumn(name:"reservation_id", referencedColumnName:"id",nullable:true)]
     private ?Reservation $reservation = null;
 
     #[ORM\OneToMany(targetEntity: ReservationData::class, mappedBy: 'traveller')]

@@ -5,14 +5,15 @@
 {% block body %}
 <div class="container">
     {{ include ('admin/shared/_controlband.html.twig',{'entity':'travellers'})}}
-    <div class="row">
-        <div class="navigation col-2 col-xs-12">
-            {{ knp_pagination_render(travellers) }}
-        </div>
-    </div>
+
     <div class="row mb-4">
         <div class="col-12 col-md-12 ">
             <h1>Travellers index</h1>
+            <div class="row">
+                <div class="navigation col-2 col-xs-12">
+                    {{ knp_pagination_render(travellers) }}
+                </div>
+            </div>
                 <div class="table-data">
                     <div>
                         <table class="table">
@@ -20,6 +21,7 @@
                             <tr>
                                 <th class="main-red">Id</th>
                                 <th class="main-red">Langue</th>
+                                <th class="main-red">Reseration</th>
                                 <th class="main-red">Nom</th>
                                 <th class="main-red">Prenom</th>
                                 <th class="main-red">Telephone</th>

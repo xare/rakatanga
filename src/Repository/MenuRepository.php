@@ -61,7 +61,8 @@ class MenuRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('m')
                 ->select(
-                    'mt.title as title, 
+                    'm.id as id,
+                    mt.title as title, 
                     mt.slug as slug,
                     m.routeName as routeName')
             ->innerJoin('m.menuLocations', 'ml', 'm.ml = ml.m')

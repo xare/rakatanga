@@ -1,17 +1,34 @@
 {% set totalTravellers = nbpilotes + nbaccomp %}
+{# TOTAL TRAVELLERS : {{totalTravellers}}<br /> #}
 {% set totalReservationTravellers = 0 %}
+{% set totalReservationPilotes = 0 %}
+{% set totalReservationPassagers = 0 %}
 {% if reservation is defined and reservation.travellers|length > 0%}
     {% set totalReservationTravellers = reservation.travellers|length %}
+    {% for traveller in reservation.travellers %}
+        {% if traveller.position == "pilote" %}
+            {% set totalReservationPilotes = totalReservationPilotes +1 %}
+        {% endif %}
+        {% if traveller.position == "passager" %}
+            {% set totalReservationPassagers = totalReservationPassagers + 1 %}
+        {% endif %}
+    {% endfor %}
 {% endif %}
+{# TOTAL RESERVATION PILOTES: {{totalReservationPilotes}}<br />
+TOTAL RESERVATION PASSAGERS: {{totalReservationPassagers}}<br />
+
+TOTAL RESERVATION TRAVELLERS : {{totalReservationTravellers}}<br /> #}
 {% set totalTravellersExtraSlots = totalTravellers - totalReservationTravellers %}
+{# EXTRAS SLOTS : {{totalTravellersExtraSlots}} #}
 <div class="card">
     <div class="card-body form-group">
         <div class="container">
             <form action="" method="POST" data-container="js-travellers-form">
-            {% for i in 1..totalTravellers %}
+            {% for i in 0..(totalTravellers-1) %}
+            {# {{dump(i)}} #}
                 {% set value = null %}
                 {% set valueId = null %}
-                {% if i == 1 %}
+                {% if i == 0 %}
                     {% set value = reservation.user %}
                     {% if (reservation is defined) %}
                         {% for traveller in reservation.travellers %}
@@ -20,15 +37,17 @@
                             {% endif %}
                         {% endfor %}
                     {% endif %}
-                {% elseif i > 1 %}
-                    {% if totalReservationTravellers > 0 and i <= totalReservationTravellers %}
+                {% elseif i > 0 %}
+                    {% if totalReservationTravellers > 0 and i <= (totalReservationTravellers-1) %}
                         {% if reservation is defined and reservation != null %}
-                            {% set value = attribute(reservation.travellers,i-1) %}
+                            {# {% set value = attribute(reservation.travellers,i-1) %} #}
+                            {% set value = attribute(reservation.travellers,i) %}
+                            {# {{dump(value)}} #}
                             {% set valueId = value.id %}
                         {% endif %}
                     {% endif %}
                 {% endif %}
-                    {{include('reservation/cards/_row_travellers_form.html.twig',{'value':value})}}
+                    {{include('reservation/cards/_new_travellers_form.html.twig',{'value':value})}}
                 {% endfor %}
                 <br />
                 <button

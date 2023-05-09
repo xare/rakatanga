@@ -8,6 +8,9 @@
         <div class="row">
             <div class="col-12">
                 <h1>Invoices index</h1>
+                <div class="navigation">
+                    {{ knp_pagination_render(invoices) }}
+                </div>
                 <div class="table-data">
                     <div>
                         <table class="table table-hover small">
@@ -37,6 +40,9 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="navigation mt-2">
+                    {{ knp_pagination_render(invoices) }}
                 </div>
             </div>
         </div>

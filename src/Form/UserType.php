@@ -84,16 +84,16 @@ class UserType extends AbstractType
                     'Portugal' => 'PT',
                 ],
             ])
-            ->add('position', ChoiceType::class, [
+            /* ->add('position', ChoiceType::class, [
                 'choices' => [
                     $this->translator->trans('Piloto') => 'pilot',
                     $this->translator->trans('Acompañante') => 'passenger',
                 ],
-            ])
+            ]) */
             ->add('sizes', ChoiceType::class, [
                 'choices' => [
-                    'SL' => 'xl',
-                    'S' => 'sl',
+                    'XS' => 'xs',
+                    'S' => 's',
                     'M' => 'm',
                     'L' => 'l',
                     'XL' => 'xl',

@@ -18,7 +18,9 @@ function loadPopup() {
                 if (null === response.html) return;
 
                 Swal.fire({
-                    'html': response.html
+                    html: response.html,
+                    timer: 15000,
+                    timerProgressBar: true,
                 });
             } catch (error) {
                 console.error('error', error);

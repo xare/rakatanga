@@ -109,14 +109,6 @@
 					</div>
 					<div class="row mb-3">
 						<div class="col-4 col-xs-12">
-							{{ form_row(form.position, {
-															'label':'Posición'|trans,
-															'attr':{
-																	'class':'form-select'
-																	}
-															}) }}
-						</div>
-						<div class="col-4 col-xs-12">
 							{{ form_row(form.sizes, {
 															'label':'Tamaños de camiseta'|trans,
 															'attr':{
@@ -124,21 +116,13 @@
 																	}
 															}) }}
 						</div>
+						<div class="col-4 col-xs-12">
+							
+						</div>
+						<div class="col-4 col-xs-12">
+							
+						</div>
 					</div>
-					{# <div class="row mb-3">
-						<div class="col-6 col-xs-12">
-							{{ form_row(form.password, {
-															'label':'Contraseña'|trans
-															}) }}
-						</div>
-					</div> #}
-					{# <div class="row">
-						<div class="col-12">
-							{{ form_row(form.agreeTerms, {
-								'label':'Estoy de acuerdo con los términos'|trans
-							}) }}
-						</div>
-					</div> #}
 					<div class="row">
 						<div class="col-12">
 							{{ form_row(form.Register,{
@@ -148,7 +132,7 @@
 					</div>
 					{{ form_row(form._token) }}
 					<input type="hidden" name="_remember_me" id="id_remember_me" value="true">
-					{# <input type="hidden" name="token" value="{{ csrf_token('user') }}"/> #}
+					
 					{{ form_end(form,{'render_rest': false})}}
 				</div>
 				</div>

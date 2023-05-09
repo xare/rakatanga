@@ -71,9 +71,19 @@
 					</li>
 					{% if travelObject.infodocs|length > 0 %}
 						<li class="nav-item" role="infodocs">
-								<button data-bs-target="#inf" class="nav-link" type="button" aria-controls="inf" role="tab" data-bs-toggle="tab">
-									<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Documentación informativa'|trans}}</span>
-									<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">{{'Documentación'|trans}}</span>
+								<button
+									data-bs-target="#inf"
+									class="nav-link"
+									type="button"
+									aria-controls="inf"
+									role="tab"
+									data-bs-toggle="tab">
+									<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">
+										{{'Documentación informativa'|trans}}
+									</span>
+									<span class="d-xs-block d-sm-none d-md-none d-lg-none d-xl-none">
+										{{'Documentación'|trans}}
+									</span>
 								</button>
 						</li>
 					{% endif %}
@@ -81,7 +91,9 @@
 					{% if extensionsCounter > 0 %}
 						<li class="nav-item" role="extensions">
 								<button data-bs-target="#ext" class="nav-link" type="button" aria-controls="ext" role="tab" data-bs-toggle="tab">
-									<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">{{'Extensiones'|trans}}</span>
+									<span class="d-xs-none d-sm-block d-md-block d-lg-block d-xl-block">
+										{{'Extensiones'|trans}}
+									</span>
 								</button>
 						</li>
 					{% endif %}

@@ -63,10 +63,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $telephone = null;
 
     #[Groups('main')]
-    #[ORM\Column(type: 'string', length: 15, nullable: true)]
-    private ?string $position = null;
-
-    #[Groups('main')]
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $date_ajout;
 
@@ -269,18 +265,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelephone(?string $telephone): self
     {
         $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getPosition(): ?string
-    {
-        return $this->position;
-    }
-
-    public function setPosition(?string $position): self
-    {
-        $this->position = $position;
 
         return $this;
     }

@@ -47,9 +47,9 @@
                                 >Viajeros
                                 </button>
                 </li>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link"
+                {% if reservation.invoice != null %}
+                    <li class="nav-item">
+                        <button class="nav-link"
                             id="invoices-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#invoices"
@@ -58,8 +58,9 @@
                             aria-controls="invoices"
                             aria-selected="true"
                                 >Facturas
-                                </button>
-                </li>
+                        </button>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <button class="nav-link"
                             id="payments-tab"
@@ -104,13 +105,15 @@
                     aria-labelledby="travellers-tab">
                         {{ include('admin/reservation/_reservation_travellers.html.twig',{'reservation': reservation} )}}
                 </div>
-                <div
-                    class="tab-pane fade show"
-                    id="invoices"
-                    role="tabpanel"
-                    aria-labelledby="invoices-tab">
-                        {{ include('admin/reservation/_reservation_invoices.html.twig',{'reservation': reservation} )}}
-                </div>
+                {% if reservation.invoice != null %}
+                    <div
+                        class="tab-pane fade show"
+                        id="invoices"
+                        role="tabpanel"
+                        aria-labelledby="invoices-tab">
+                            {{ include('admin/reservation/_reservation_invoices.html.twig',{'reservation': reservation} )}}
+                    </div>
+                {% endif %}
                 <div
                     class="tab-pane fade show"
                     id="payments"
