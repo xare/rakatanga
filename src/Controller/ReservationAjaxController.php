@@ -941,6 +941,7 @@ class ReservationAjaxController extends AbstractController
             $traveller->isIsReservationUser(true);
             $traveller->setReservation($reservation);
             $traveller->setPosition('pilote');
+            dump($traveller);
             $this->entityManager->persist($traveller);
             $this->entityManager->flush();
 

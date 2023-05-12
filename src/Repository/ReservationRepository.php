@@ -138,7 +138,7 @@ class ReservationRepository extends ServiceEntityRepository
         $endDate = new DateTime("{$currentYear}-12-31 23:59:59");
 
         $qb = $this->createQueryBuilder('r');
-        $query = $qb->select('COUNT(r.id) as totalREservations')
+        $query = $qb->select('COUNT(r.id) as totalReservations')
                 ->where('r.date_ajout >= :startDate')
                 ->andWhere('r.date_ajout <= :endDate')
                 ->setParameter('startDate', $startDate)

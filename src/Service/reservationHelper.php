@@ -75,7 +75,7 @@ class reservationHelper
             $reservation->setDate($date);
             $reservation->setUser($user);
             $reservation->setCodespromo($codepromo);
-            $reservation = $this->travellersHelper->addUserToReservationAsTraveller($user,$reservation);
+            /* $reservation = $this->travellersHelper->addUserToReservationAsTraveller($user,$reservation); */
             // PERSIST OPTIONS TO RESERVATION
             if ($data['options'] != null && count($data['options']) > 0) {
                 foreach ($data['options'] as $option) {

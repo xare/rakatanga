@@ -173,10 +173,10 @@ class ReservationController extends AbstractController
     {
         $reservationData = $request->request->all();
         /**
-            * @var User $user
-            */
-            $user = $this->getUser();
-
+        * @var User $user
+        */
+        $user = $this->getUser();
+        dump($reservationData);
         if( isset($reservationData['comment']) && $reservationData['comment'] != '' ){
             $reservation->setComment($reservationData['comment']);
             $this->entityManager->persist($reservation);

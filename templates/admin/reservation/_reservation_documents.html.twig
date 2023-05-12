@@ -1,9 +1,12 @@
+{% for traveller in reservation.travellers %}
+<h3>{{traveller.nom}} {{traveller.prenom}}</h3>
 <ul class="list-group">
-{% for document in reservation.documents %}
+{% for document in traveller.documents %}
   {{include('admin/reservation/partials/_row_reservation_document.html.twig')}}
 {% else %}
-<li class="list-group-item">
-  Todavía no se han asociado documentos a esta reserva.
-</li>
+  <li class="list-group-item">
+    Todavía no se han asociado documentos a esta reserva.
+  </li>
 {% endfor %}
 </ul>
+{% endfor %}

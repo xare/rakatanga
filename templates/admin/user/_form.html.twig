@@ -56,10 +56,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 col-xs-12">
-                    {{ form_row( form.position, {'label':'Posición'} ) }}
-                </div>
-                <div class="col-6 col-xs-12">
+                <div class="col-12 col-xs-12">
                     {{ form_row( form.sizes, {'label':'Tamaño de la camiseta'} ) }}
                 </div>
             </div>
@@ -79,4 +76,4 @@
             {{ include('admin/user/partials/_tabs_related.html.twig') }}
         {% endif %}
     </div>
-{{ form_end(form) }}
+{{ form_end(form,{'render_rest': false}) }}

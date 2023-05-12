@@ -73,4 +73,11 @@ class TravellersRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getTotalTravellers(){
+        $qb = $this->createQueryBuilder('t');
+        $query = $qb->select('COUNT(t.id) as totalTravellers')->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result ? (int) $result : 0;
+    }
 }

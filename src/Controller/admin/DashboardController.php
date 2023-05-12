@@ -40,6 +40,8 @@ class DashboardController extends AbstractController
             [
                 'totalPayments' => $paymentsRepository->getTotalAmountForCurrentYear(),
                 'totalReservations' => $reservationRepository->getTotalReservationsForCurrentYear(),
+                'totalUsers' =>$userRepository->getTotalUsers(),
+                'totalTravellers'=> $travellersRepository->getTotalTravellers(),
                 'users' => $userRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'reservations' => $reservationRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'payments' => $paymentsRepository->findBy([], ['date_ajout' => 'DESC'], 10),

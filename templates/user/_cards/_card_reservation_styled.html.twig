@@ -97,16 +97,20 @@
           <i class="fa fa-edit "></i>
         </a>
       </span>
-      <span class="tag is-light">
+      <span class="tag is-link is-light">
         <i class="fas fa-arrow-left" style="font-size:0.8rem"></i>
-        &nbsp;&nbsp;{{'Editar'|trans}}
+        &nbsp;&nbsp;<a
+          href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller':traveller.id }) }}"
+          title="{{'Editar datos del viaje y documentación'|trans}}"
+          data-bs-toggle="tooltip"
+        >{{'Editar'|trans}}</a>
       </span>
     </div>
     <br />
   {# {% endif %} #}
 {% endmacro %}
 
-<div class="card mb-2{% if date(reservation.date.debut) <= date() %} disable{% endif %}">
+<div class="card mb-4{% if date(reservation.date.debut) <= date() %} disable{% endif %}">
   <div class="card-header">
   <div class="row">
     {% set MediaPath = '/media/' ~ reservation.date.travel.mainPhoto.Path %}
@@ -186,6 +190,19 @@
               ... {{ mailing.subject|slice(17,20) }}...
               </a>
           </span>
+          <span class="tag is-link is-light">
+                <i class="fas fa-arrow-left" style="font-size:0.8rem"></i> &nbsp;
+                <a
+              href="#"
+              target="_blank"
+              title="{{mailing.subject}}"
+              data-action="read-more"
+              data-title="{{mailing.subject}}"
+              data-content="{{ mailing.content|raw|escape }}"
+              data-bs-toggle="tooltip">
+                {{'Ver el mensaje'|trans }}
+                </a>
+              </span>
         </div>
         <br />
           {% else %}
@@ -203,7 +220,7 @@
           data-bs-toggle="tooltip"
           class="btn btn-secondary"
         >
-          {{'EDITAR'|trans}}
+          {{'EDITAR ESTA RESERVA'|trans}}
           <i class="fa fa-edit "></i>
         </a>
     </div>

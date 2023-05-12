@@ -90,6 +90,24 @@
     color: #296fa8;
 }
 
+.tag:not(body).is-link.is-light,
+.tag:not(body).is-link.is-light a {
+    background-color: #eff1fa;
+    color: #3850b7;
+}
+
+.tag:not(body).is-link.is-light:hover,
+.tag:not(body).is-link.is-light:hover a {
+    background-color: #c1ccfa;
+    color: #2a40a1;
+}
+
+.tag:not(body).is-link.is-light a:hover {
+    text-decoration: underline;
+    background-color: #c1ccfa;
+    color: #2a40a1;
+}
+
 .tag-name {
     width: 11rem;
 }

@@ -75,4 +75,13 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getTotalUsers(){
+        $qb = $this->createQueryBuilder('u');
+        $query = $qb->select('COUNT(u.id) as totalUsers')->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result ? (int) $result : 0;
+    }
+
+
 }

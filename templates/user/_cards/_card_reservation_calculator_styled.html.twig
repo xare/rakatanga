@@ -105,7 +105,6 @@
                   {{ totalAmmount|format_currency('EUR') }}
               </span>
               <span class="tag is-danger is-light has-creditcard">
-
                 <a
                   href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
                   data-bs-toggle="tooltip"
@@ -113,6 +112,14 @@
                   ><i class="fas fa-credit-card"></i>
                 </a>
               </span>
+              <span class="tag is-link is-light">
+                <a
+                  href="{{ path('reservation_payment',{'reservation':reservation.id}) }}"
+                  data-bs-toggle="tooltip"
+                  title="{{ 'Realizar el pago'|trans }}"
+                  ><i class="fas fa-arrow-left" style="font-size:0.8rem"></i> &nbsp;
+                {{'Realizar el pago'|trans }}</a>
+              </span> 
             </div><br />
           {% endif %}
           <h5 class="mt-1">{{ 'Facturas'|trans }}</h5>
@@ -130,6 +137,15 @@
                       <i class="fas fa-download"></i>
                   </a>
                 </span>
+                <span class="tag is-link is-light">
+                <i class="fas fa-arrow-left" style="font-size:0.8rem"></i> &nbsp;
+                <a
+                    href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
+                    title="{{ reservation.invoice.filename }}"
+                    data-bs-toggle="tooltip">
+                {{'Ver la factura'|trans }}
+                </a>
+              </span>
               </div>
             {% else %}
               <p>{{ 'No se han generado facturas para esta reserva'|trans }}.</p>

@@ -147,10 +147,10 @@ class RegisterController extends AbstractController
             }
 
             return $this->render('security/register.html.twig', [
-              'locale' => $_locale,
-              'formRegister' => $form->createView(),
-              'langs' => $urlArray,
-              'static' => 'static',
+                'locale' => $_locale,
+                'formRegister' => $form->createView(),
+                'langs' => $urlArray,
+                'static' => 'static',
             ]);
         }
     }

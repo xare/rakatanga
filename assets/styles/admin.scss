@@ -577,6 +577,11 @@ fieldset {
     color: var(--orange);
 }
 
+.box-info li:nth-child(4) .bx {
+    background: var(--grey);
+    color: var(--dark-grey);
+}
+
 .box-info li .text h3 {
     font-size: 24px;
     font-weight: 600;

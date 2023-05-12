@@ -12,12 +12,13 @@
                             href="{{ path('user_show',{'id':reservation.user.id}) }}">
                                 {{reservationDatum.user ? reservationDatum.user.email}}
                         </a>
-
-                            {% if reservationDatum.reservation.user.position == "pilote" %}
-                                <span class="badge bg-secondary">
-                                <i class="fa fa-motorcycle"></i>
-                                </span>
-                            {% endif %}
+                            {% for traveller in reservationDatum.reservation.travellers %}
+                                {% if traveller.position == "pilote" %}
+                                    <span class="badge bg-secondary">
+                                        <i class="fa fa-motorcycle"></i>
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
 
                     </td>
                 </tr>
