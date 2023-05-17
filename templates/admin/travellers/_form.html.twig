@@ -45,16 +45,16 @@
         {% endif %}
     </div>
 </div>
-    <br /><br />
-    <div class="row">
-        <div class="col-2">
-            <button class="btn btn-success">
-                <i class="fa fa-edit"></i>
+    <div class="admin-buttons-container mt-4">
+        <button class="btn btn-success">
+            <i class="fa fa-save"></i>
+            {% if form.vars.value.id == null %}
                 {{ button_label|default('Guardar') }}
-            </button>
-        </div>
-        <div class="col-2">
-            {{ include('admin/travellers/_delete_form.html.twig') }}
-        </div>
+            {% else %}
+                {{ button_label|default('Actualizar') }}
+            {% endif %}
+        </button>
+        {{ include('admin/travellers/_delete_form.html.twig') }}
     </div>
+        
 {{ form_end(form) }}

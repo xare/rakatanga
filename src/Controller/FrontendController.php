@@ -289,13 +289,14 @@ class FrontendController extends AbstractController
             $calendarDates[$j]['year']['months'] = $this->datesRepository->getMonthedDates($year);
             $k = 0;
             foreach ($calendarDates[$j]['year']['months'] as $month) {
-                $calendarDates[$j]['year']['months'][$k] = $month;
+                $calendarDates[$j]['year']['months'][$k]['month'] = $month;
                 $calendarDates[$j]['year']['months'][$k]['dates'] = $this->datesRepository->showDatesByMonth($month, $year);
+                
                 ++$k;
             }
             ++$j;
         }
-
+        dump($calendarDates);
         return $this->render('calendar/index.html.twig', [
             'locale' => $_locale,
             'langs' => $urlArray,

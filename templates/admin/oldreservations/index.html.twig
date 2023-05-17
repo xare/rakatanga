@@ -11,24 +11,26 @@
                 <div class="navigation">
 				    {{ knp_pagination_render(oldreservations) }}
 			    </div>
-                <table class="table table-sm" style="font-size: 0.8rem">
+                <div class="table-data mb-4">
+               <div>
+                <table class="table table-sm table-hover table-striped" style="font-size: 0.8rem">
                     <thead class="main-red">
                         <tr>
                             <th>Id</th>
+                            <th>Code</th>
                             <th>Email</th>
                             <th>Travel</th>
                             <th>Date</th>
                             <th>Log</th>
                             <th>Langue</th>
-                            <th>Nº pil</th>
-                            <th>Nº acom</th>
-                            <th>Commentaire</th>
+                            <th>Viajeros</th>
+                            <th>Comm.</th>
                             <th>Codepromo</th>
                             <th>Montant</th>
-                            <th>Reduction</th>
+                            <th>Red.</th>
                             <th>Totalttc</th>
                             <th>Notes</th>
-                            <th>Statut</th>
+                            {# <th>Statut</th> #}
                             <th><i class="fa fa-eye"></i></th>
 							<th>
 								<i class="fa fa-edit"></i>
@@ -48,6 +50,8 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                </div>
+            </div>
                 <div class="navigation">
 				    {{ knp_pagination_render(oldreservations) }}
 			    </div>

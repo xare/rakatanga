@@ -1,19 +1,29 @@
 <tr>
-  <td>{{ inscription.id }}</td>
-  <td>{{ inscription.nom }}</td>
-  <td>{{ inscription.prenom }}</td>
-  <td>{{ inscription.telephone }}</td>
-  <td><a href="{{ path('inscriptions_edit', {'id': inscription.id}) }}" class="btn btn-info">{{ inscription.email }}</a></td>
-  <td>{{ inscription.position }}</td>
-  <td>{{ inscription.arrhes }}</td>
-  <td>{{ inscription.solde }}</td>
-  <td>{{ inscription.assurance }}</td>
-  <td>{{ inscription.vols }}</td>
-  <td>{{ inscription.statut }}</td>
-  <td>{{ inscription.remarque }}</td>
-  <td>{{ inscription.dateAjout ? inscription.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
-  <td>{{ inscription.langue }}</td>
-  <td>
+  <td data-cell="id">{{ inscription.id }}</td>
+  <td data-cell="Nom">{{ inscription.nom }}</td>
+  <td data-cell="Prenom">{{ inscription.prenom }}</td>
+  <td data-cell="Telephone">{{ inscription.telephone }}</td>
+  <td data-cell="Email"><a href="{{ path('inscriptions_edit', {'id': inscription.id}) }}">{{ inscription.email }}</a></td>
+  <td data-cell="Position">{{ inscription.position }}</td>
+  <td data-cell="Arrhes">{{ inscription.arrhes }}</td>
+  <td data-cell="Solde">{{ inscription.solde }}</td>
+  <td data-cell="Seguro">{{ inscription.assurance }}</td>
+  <td data-cell="Vuelo">{{ inscription.vols }}</td>
+  <td data-cell="Statut">{{ inscription.statut }}</td>
+  <td data-cell="Remarque">
+    {% if inscription.remarque != '' %}
+        <a
+            href="#"
+            data-action="read-more"
+            data-content="{{ inscription.remarque|raw|escape }}"
+            class="btn btn-secondary btn-sm">
+                <i class="fa fa-eye"></i>
+        <a>
+    {% endif %}
+  </td>
+  <td data-cell="Date">{{ inscription.dateAjout ? inscription.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
+  <td data-cell="Langue">{{ inscription.langue }}</td>
+  <td data-cell="Convertir a usuario">
       <a 
           href="{{ path('inscriptions_add_user', {'inscription': inscription.id}) }}" 
           class="btn btn-info" 
@@ -28,7 +38,7 @@
   <td>
       <a href="{{ path('inscriptions_edit', {'id': inscription.id}) }}" class="btn btn-danger"><i class="fa fa-edit"></i></a>
   </td> #}
-  <td>
+  <td data-cell="Borrar">
       {{ include('admin/inscriptions/_delete_form.html.twig') }}
   </td>
 </tr>

@@ -25,6 +25,7 @@ class OldreservationsType extends AbstractType
 
         $builder
             ->add('langue')
+            ->add('code')
             ->add('nbpilotes')
             ->add('nbAccomp')
             ->add('commentaire')

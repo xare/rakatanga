@@ -101,7 +101,6 @@
                                     entity_id: travel.id,
                                     entityTranslation_data_property: travelTranslation.vars.data.practicalInfo}) }}
 				</div>
-
 			</div>
 		</div>
 		<input type="hidden" name="travel[travelTranslation][{{loop.index0}}][lang]" {% if travel.id != null %} value="{{travelTranslation.vars.data.lang.id}}" {% endif %}/>
@@ -121,9 +120,7 @@
 </div>
 <div class="tab-pane fade" id="dates" role="tabpanel" aria-labelledby="dates-tab">
 	{{ include('admin/travel/_dates_tab_content.html.twig', { 'dates': form.vars.data.dates }) }}
-
 </div>
 <div class="tab-pane fade" id="documentation" role="tabpanel" aria-labelledby="documentation-tab">
 	{{ include('admin/travel/_documentation_tab_content.html.twig', { 'travel': travel }) }}
-
 </div>

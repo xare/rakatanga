@@ -67,9 +67,22 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    {{ form_row( form.Register, {'label':'Guardar'} ) }}
+                    {{ form_row( form.isAgency, {'label':'¿Agencia?'} ) }}
                 </div>
             </div>
+            <div class="admin-buttons-container mt-4">
+        <button class="btn btn-success">
+            <i class="fa fa-save"></i>
+            {% if form.vars.value.id == null %}
+                {{ button_label|default('Guardar') }}
+            {% else %}
+                {{ button_label|default('Actualizar') }}
+            {% endif %}
+        </button>
+        {% if form.vars.value.id != null %}
+            {{ include('admin/user/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
         </div>
         <div class="col-8 col-xs-12">
         {% if user is defined and user.id != null %}

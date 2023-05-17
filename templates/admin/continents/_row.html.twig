@@ -17,6 +17,6 @@
       </div>
   </td>
   <td data-cell="Borrar">
-      <a href="{{ path('continents_delete', {'id': continent.id}) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+      {{ include('admin/continents/_delete_form.html.twig') }}
   </td>
 </tr>

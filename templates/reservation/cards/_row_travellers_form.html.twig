@@ -5,7 +5,9 @@
     {% endif %}"
     data-container="js-travellers-form-container"
     data-validation-title="{{'El formulario no está completo'|trans}}"
-    data-validation-message="{{'Faltan campos por rellenar correctamente'|trans}}">
+    data-validation-message="{{'Faltan campos por rellenar correctamente'|trans}}"
+    data-position="{% if i < (nbpilotes+1) %}pilote{% else %}passager{% endif %}"
+    data-index="{{i}}">
     <div class="row{% if i > 1 %} mt-4{% endif %}">
       <div class="col-12">
         <h5>
@@ -21,11 +23,11 @@
     <div class="row">
       <div class="col-12">
         {% if i == (nbpilotes) %}
-          <button
+          {# <button
             class="btn btn-secondary small"
             data-action="js-assign-to-user">
-                {{'Asignarme este puesto' | trans}}
-          </button>
+                {{'Cambiar de puesto piloto a pasajero o viceversa' | trans}}
+          </button> #}
         {% endif %}
       </div>
     </div>

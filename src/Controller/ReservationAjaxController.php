@@ -881,18 +881,25 @@ class ReservationAjaxController extends AbstractController
     ):Response{
         $reservationId = $request->request->get('reservationId');
         $codespromoText = $request->request->get('codespromo');
-        $codespromo = $this->codespromoRepository->findByCode($codespromoText);
+        $codespromo = $this->codespromoRepository->findBy(['code'=>$codespromoText]);
+        dump($codespromo);
         $reservation = $this->reservationRepository->find($reservationId);
-
-        if($codespromo[0]->getNombreTotal() < $codespromo[0]->getNombre()) {
-            $reservation->setCodesPromo($codespromo[0]);
-            $codespromo[0]->setNombreTotal($codespromo[0]->getNombreTotal() + 1);
-            $this->entityManager->persist($reservation);
-            $this->entityManager->flush();
+        if(!$codespromo) {
             return $this->json([
-                'message' => "Codepromo applyed",
-                'codeStatus' => "success"
+                'message' => "This code promo does not exist in our DataBase",
+                'codeStatus' => "fail"
             ],200,[],[]);
+        } else {
+            if($codespromo[0]->getNombreTotal() < $codespromo[0]->getNombre()) {
+                $reservation->setCodesPromo($codespromo[0]);
+                $codespromo[0]->setNombreTotal($codespromo[0]->getNombreTotal() + 1);
+                $this->entityManager->persist($reservation);
+                $this->entityManager->flush();
+                return $this->json([
+                    'message' => "Codepromo applyed",
+                    'codeStatus' => "success"
+                ],200,[],[]);
+            }
         }
         return $this->json([
             'message' => "Codepromo NOT applyed",

@@ -978,3 +978,8 @@ ul.travellers-list li:after {
     z-index: -1;
     width: calc((100% - 20px) * (attr(data-percent) / 100));
 }
+
+.agree-terms {
+    width: 40%;
+    float:left;
+}

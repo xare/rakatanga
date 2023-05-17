@@ -36,26 +36,6 @@
 					</span>
 				</div>
 				{{ include('admin/travel/_form.html.twig', {'button_label': 'Actualizar'}) }}
-				<br/>
-				<div class="row">
-					<div class="col-6">
-						<div class="row">
-							<div class="col-1">
-								<a href="{{ path('travel_index') }}" class="btn btn-primary">
-									<i class="fa fa-list"></i>
-								</a>
-							</div>
-							<div class="col-1">
-								{{ include('admin/travel/_delete_form.html.twig') }}
-							</div>
-							<div class="col-1">
-								<a target="_blank" href="{{ path('destination',{ _locale: 'es', category: renderLocalizedCategory(travel.category.id,'es')|slugify, travel: renderLocalizedTravelUrl(travel.id,'es') }) }}" class="btn btn-info">
-									<i class="fa fa-eye"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

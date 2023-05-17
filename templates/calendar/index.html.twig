@@ -28,9 +28,9 @@
             {% for date in month.dates %}
               <p>{{ date.debut|date('d M')|format_datetime(pattern="dd MMMM",locale=locale) }} :
                 <a href="{{path('destination',{
-                                                'category':renderLocalizedCategory(date.travel.category.id, app.request.locale)|slugify,
-                                                'travel':renderLocalizedTravel(date.travel.id,app.request.locale)|slugify})}}">
-                  {{renderLocalizedCategory(date.travel.category.id, app.request.locale)}} -
+                                                'category':renderLocalizedCategory(date.cid, app.request.locale)|slugify,
+                                                'travel':renderLocalizedTravel(date.id,app.request.locale)|slugify})}}">
+                  {{renderLocalizedCategory(date.cid, app.request.locale)}} -
                   {{renderLocalizedTravel(date.id,app.request.locale)}}
                 </a>{% set difference = date(date.fin).diff(date(date.debut)) %}
                 ({{ difference.days }} {{'días'|trans}})

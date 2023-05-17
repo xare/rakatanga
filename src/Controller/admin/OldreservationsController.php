@@ -33,7 +33,7 @@ class OldreservationsController extends AbstractController
         $oldreservations = $paginator->paginate(
             $oldreservationsRepository->listIndex(),
             $request->query->getInt('page', 1),
-            15
+            25
         );
 
         return $this->render('admin/oldreservations/index.html.twig', [

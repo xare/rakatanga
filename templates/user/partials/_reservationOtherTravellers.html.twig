@@ -4,21 +4,12 @@
     {% set reservationTravellerRatio = ((reservationTravellerDataFields.filledFieldsCount /reservationTravellerDataFields.fieldsCount) * 100)|round(0) %}
     <li data-percent="{{ reservationTravellerRatio }}" class="list-group-item">
       {{ travellerItem.prenom}} {{travellerItem.nom}} ({{ reservationTravellerRatio }} %)
-      {% if travellerItem.isReservationUser == true %}
-        <a
-          href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
-          target="_blank"
-          title="{{'Editar datos del viaje y añadir documentación'|trans}}"
-          data-bs-toggle="tooltip"
-          >
-      {% else %}
         <a
           href="{{ path('frontend_user_reservation_data_traveller', { 'reservation': reservation.id,'traveller':travellerItem.id }) }}"
           target="_blank"
           title="{{'Editar datos del viaje y añadir documentación'|trans}}"
           data-bs-toggle="tooltip"
           >
-      {% endif %}
       <i class="fas fa-arrow-up-right-from-square "></i>
     </a>
   </li>

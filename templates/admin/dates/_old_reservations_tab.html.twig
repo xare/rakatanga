@@ -1,27 +1,61 @@
 <div class="col-12 col-xs-12">
   <h4>Reservas de la web anterior</h4>
-  <table class="table">
-      <tr>
-          <td>Inscrito</td>
-          <td>Nº Pilotos</td>
-          <td>Nº Acompañantes</td>
-          <td>Codepromo</td>
-          <td>Precio</td>
-          <td>Fecha Añadido</td>
-      </tr>
-      {% for oldreservation in date.oldreservations %}
-          <tr>
-              <td>
-                  {% if oldreservation.inscriptions != null %}
-                      {{ oldreservation.inscriptions.email }}
-                  {% endif %}
-              </td>
-              <td>{{ oldreservation.nbpilotes }}</td>
-              <td>{{ oldreservation.nbAccomp }}</td>
-              <td>{{ oldreservation.codepromo }}</td>
-              <td>{{ oldreservation.montant|format_currency('EUR', {fraction_digit: 0}) }}</td>
-              <td>{{ oldreservation.dateAjout|date('d/m/Y H:m') }}</td>
-          </tr>
-      {% endfor %}
-  </table>
+  <div class="oldreservation-holder" style="display:flex; gap:1rem; flex-wrap:wrap;justify-content:flex-start;">
+{% for oldreservation in date.oldreservations %}
+  <div class="card" style="width: 22rem;">
+    <div class="card-body">
+    <table class="table">
+        <tr>
+            <td>
+                <strong>Código:</strong>
+            </td>
+            <td>
+                <a href="{{ path('oldreservations_edit',{'id':oldreservation.id} ) }}">{{ oldreservation.code }}</a><br />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Viajeros:</strong> 
+            </td>
+            <td>
+                {{oldreservation.nbpilotes}} | {{oldreservation.nbAccomp}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Inscrito:</strong>
+            </td>
+            <td> 
+                <a href="{{ path('inscriptions_edit',{'id':oldreservation.inscriptions.id} ) }}">{{ oldreservation.inscriptions.prenom }} {{ oldreservation.inscriptions.nom }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <strong>Precio:</strong> 
+             </td>
+            <td>
+                {{ oldreservation.montant|format_currency('EUR', {fraction_digit: 0}) }}    
+            </td>
+        </tr>
+        <tr>
+            <td> 
+                <strong>Fecha reserva:</strong>
+            </td>
+            <td>
+                {{ oldreservation.dateAjout|date('d/m/Y H:m') }}
+            </td>
+        </tr>
+            {% if oldreservation.codepromo != '' %}
+             <tr>
+                <td>
+                    <strong>Codepromo:</strong>
+                </td>
+                <td>{{oldreservation.codepromo}}</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+  </div>
+{% endfor %}
+  </div>
 </div>

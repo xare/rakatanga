@@ -23,7 +23,7 @@ class travellersHelper {
       array $travellerData,
       Reservation $reservation,
       User $user):mixed {
-
+        dump($travellerData);
         //TRAVELLER ALREADY EXISTS IN DB
         if( $travellerData['id'] == null ||  $travellerData['id'] == '') {
           $traveller = new Travellers();
@@ -33,7 +33,7 @@ class travellersHelper {
             $traveller = new Travellers();
           }
         }
-
+        
         try {
           $traveller->setPrenom($travellerData['prenom']);
           $traveller->setNom($travellerData['nom']);
@@ -45,8 +45,10 @@ class travellersHelper {
           $traveller->setPosition($travellerData['position']);
           $traveller->setUser($user);
           $traveller->setReservation($reservation);
+          dump($traveller);
           $this->entityManager->persist($traveller);
           $this->entityManager->flush();
+          dump($reservation->getTravellers());
           return true;
         } catch(Exception $error) {
           return $error->getMessage();

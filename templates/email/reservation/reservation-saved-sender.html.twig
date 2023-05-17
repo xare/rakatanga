@@ -29,12 +29,11 @@
                 <li>
                     {{traveller.prenom}} {{traveller.nom}}
                     <button class="radius" href="{{ absolute_url( path('frontend_user_reservation_data_traveller',{'reservation':reservation.id , 'traveller': traveller.id})) }}">
-                        {{'Realizar el check-in'|trans}}
+                        {{'Añadir datos y documentación'|trans}}
                     </button>
                 </li>
             {% endfor %}
             </ul>
-            <button href="{{absolute_url(path('frontend_user_reservation_data',{'reservation':reservation.id,'_locale':app.request.getLocale()}))}}">{{ 'Añadir datos y documentación'|trans }}</button>
         </columns>
     </row>
     <spacer size="30"></spacer>

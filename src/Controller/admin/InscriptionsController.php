@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\InscriptionsType;
 use App\Repository\InscriptionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class InscriptionsController extends AbstractController
 {
     #[Route('/', name: 'inscriptions_index', methods: ['GET'])]
-    public function index(InscriptionsRepository $inscriptionsRepository): Response
+    public function index(
+        Request $request,
+        PaginatorInterface $paginator,
+        InscriptionsRepository $inscriptionsRepository): Response
     {
+        $inscriptions = $paginator->paginate(
+            $inscriptionsRepository->listIndex(),
+            $request->query->getInt('page', 1),
+            25
+        );
         return $this->render('admin/inscriptions/index.html.twig', [
-            'inscriptions' => $inscriptionsRepository->findAll(),
+            'inscriptions' => $inscriptions,
         ]);
     }
 

@@ -80,7 +80,8 @@ class travellersApp {
                         let waitingText = $('[data-container="calculator"]').data('waiting');
                         $('.card-logged-user')
                             .find('.card-body')
-                            .append(`<div><i class="fas fa-spinner fa-spin"></i> ${waitingText}`);
+                            .append(`<div><i class="fas fa-spinner fa-spin"></i> ${waitingText}`)
+                            .hide();
                     }
                 });
                 $('[data-container="js-travellers-form"]')
@@ -171,49 +172,88 @@ class travellersApp {
             }
         )();
     }
+    
     assignUserDataToTravellerForm(event) {
         event.preventDefault();
-        const $formContainer = $(event.currentTarget).closest('[data-container="js-travellers-form-container"]');
-        $formContainer.find('button').hide();
-        $formContainer
-            .siblings('.js-contains-button')
-            .find('[data-action="js-assign-to-user"]')
-            .remove();
-        console.info($formContainer);
-        (async() => {
-            try {
-                const response = await $.ajax({
-                    url: Routing.generate('ajax-assign-user'),
-                    type: "POST"
-                });
-                $('input[name^="traveller"][name$="[email]"]').each(function() {
-                    // Check if the value of the email input field matches the user's email address
-                    if ($(this).val() === response.user.email) {
-                        // Get the parent container element that contains all the form fields
-                        var parentContainer = $(this).closest('[data-container="js-travellers-form-container"]');
-                        let buttonElement = $(event.currentTarget.outerHTML);
-                        buttonElement.removeAttr('style');
-                        parentContainer.find('h5').after(buttonElement[0].outerHTML);
-                        // Loop through all the form fields contained within the parent container
-                        parentContainer.find('input, select, textarea').each(function() {
-                            // Remove the value attribute from each form field
-                            //$(this).removeAttr('value');
-                            this.value = '';
-                        });
-                    }
 
-                });
-                $formContainer.find('[name*="nom"]').val(response.user.nom);
-                $formContainer.find('[name*="prenom"]').val(response.user.prenom);
-                $formContainer.find('[name*="email"]').val(response.user.email);
-                $formContainer.find('[name*="telephone"]').val(response.user.telephone);
+        let sourceElement;
+        let targetElement;
 
-            } catch (jqXHR) {
-                console.error(jqXHR);
-                //this._notifyErrorToUser(jqXHR);
-            }
-        })();
+        // Get the form elements
+        let formElements = document.querySelectorAll('[data-container="js-travellers-form-container"]');
+
+        // Loop through the form elements
+        formElements.forEach((formElement) => {
+            console.info(formElement);
+            console.info(formElement.getAttribute('data-index'), formElement.getAttribute('data-position'));
+            if (formElement.getAttribute('data-position') === "pilote" 
+                && formElement.querySelector('[data-action="js-assign-to-user"]')) {
+                    console.info('1st condition');
+                    sourceElement = formElement;
+                    targetElement = this._getFirstFormElement(formElements, "passager");
+                    console.info(sourceElement);
+            } else if (formElement.getAttribute('data-position') === "passager" 
+                && formElement.querySelector('[data-action="js-assign-to-user"]')) {
+                    console.info('2nd condition');
+                sourceElement = formElement;
+                targetElement = this._getFirstFormElement(formElements, "pilote");
+                return;
+            }     
+        });
+
+        // Check if the button is already in the target element
+        let buttonInTarget = targetElement.querySelector('[data-action="js-assign-to-user"]');
+        if (buttonInTarget) {
+            [sourceElement, targetElement] = [targetElement, sourceElement];
+        }
+        // Get the button from the sourceElement and add click event
+        let button = event.currentTarget;
+        console.info(sourceElement);
+        console.info(targetElement);
+        if (sourceElement.getAttribute('data-position') === "pilote") {
+            this._swapValues(sourceElement, targetElement);
+        } else {
+            this._swapValues(sourceElement, this._getFirstPilote(formElements));
+        }
     }
-};
 
+    // Function to swap values between two form elements
+    _swapValues(source, target) {
+        let sourceInputs = Array.from(source.querySelectorAll('input')).filter(input => input.name.indexOf("position") === -1);
+        console.info(sourceInputs);
+        let targetInputs = Array.from(target.querySelectorAll('input')).filter(input => input.name.indexOf("position") === -1);
+        console.info(targetInputs);
+
+        let sourceButton = source.querySelector('button');
+        let targetButton = target.querySelector('button');
+
+        // Swap the input fields, excluding the position fields
+        for (let i = 0; i < sourceInputs.length; i++) {
+            let temp = sourceInputs[i].value;
+            sourceInputs[i].value = targetInputs[i].value;
+            targetInputs[i].value = temp;
+        }
+        console.info(source);
+        console.info(sourceButton);
+        console.info(target);
+        console.info(targetButton);
+        // Swap the button
+        if (sourceButton) {
+            source.removeChild(sourceButton);
+            target.appendChild(sourceButton);
+        } else if (targetButton) {
+            target.removeChild(targetButton);
+            source.appendChild(targetButton);
+        }
+    }
+    // Function to get the first pilote element
+    _getFirstFormElement(formElements,positon) {
+    for (let i = 0; i < formElements.length; i++) {
+        if (formElements[i].getAttribute('data-position') === "pilote") {
+            return formElements[i];
+        }
+    }
+    return null;
+}
+}
 export default travellersApp;

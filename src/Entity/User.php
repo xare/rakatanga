@@ -117,6 +117,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TransferDocument::class)]
     private Collection $transferDocuments;
 
+    #[ORM\Column]
+    private ?bool $isAgency = false;
+
     public function __construct()
     {
         $this->date_ajout = new \DateTimeImmutable();
@@ -619,6 +622,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $transferDocument->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsAgency(): ?bool
+    {
+        return $this->isAgency;
+    }
+
+    public function setIsAgency(bool $isAgency): self
+    {
+        $this->isAgency = $isAgency;
 
         return $this;
     }

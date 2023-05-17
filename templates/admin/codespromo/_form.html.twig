@@ -62,13 +62,17 @@
                     {{ form_row(form.statut) }}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-2">
-                    <button class="btn btn-success">
-                        <i class="fa fa-save"></i> {{ button_label|default('Save') }}
-                    </button>
-                </div>
-            </div>
+                <button class="btn btn-success">
+                <i class="fa fa-save"></i>
+                {% if form.vars.value.id == null %}
+                    {{ button_label|default('Guardar') }}
+                {% else %}
+                    {{ button_label|default('Actualizar') }}
+                {% endif %}
+            </button>
+            {% if form.vars.value.id != null %}
+                {{ include('admin/codespromo/_delete_form.html.twig') }}
+            {% endif %}
             {{ form_end(form) }}
         </div>
         <div class="col-8 col-xs-12">

@@ -1,57 +1,5 @@
 {% set documentsByUser =  listDocumentsByReservationByUser( reservation ) %}
 
-{% macro showUsersDocumentsLine(documents, reservation) %}
-  {% set doctypesArray = ['visa','drivers','passport'] %}
-  {% set reservationUserDataFields = getUserReservationDataFields(reservation, reservation.user) %}
-  {% set reservationUserRatio = ((reservationUserDataFields.filledFieldsCount/reservationUserDataFields.fieldsCount) * 100)|round(0) %}
-  <div class="tags has-addons">
-    <span class="tag is-light">
-      <i class="fas fa-motorcycle"></i>
-    </span>
-    <span class="tag tag-name">{{app.user.prenom}} {{app.user.nom}}</span>
-    <span class="tag{% if reservationUserRatio < 100 %} is-danger is-light{% endif %}"
-     title="{{'Nivel de compleción de datos de usuario'|trans }}" data-bs-toggle="tooltip"
-    >{{ reservationUserRatio }} %</span>
-    {% for doctype in doctypesArray %}
-      <span class="tag is-light">
-        <i class="fa fa-{% if doctype == "passport" %}passport{% endif %}{% if doctype == "drivers" %}id-card{% endif %}{% if doctype == "visa" %}book{% endif %}"></i>
-      </span>
-      {% for document in documents %}
-        {% if hasDoctype(document, doctype) == true %}
-          <span class="tag is-light">
-            <a href="{{ path("download_document",{
-                            'id': document.id}
-                              )}}"
-              title="{{document.doctype|trans}} {{document.filename}}"
-              data-bs-toggle="tooltip"
-              class="text-success">
-                <span class="fa fa-check-circle"></span>
-            </a>
-          </span>
-        {% endif %}
-      {% endfor %}
-      {% if notPresentDoctypeUser(reservation, app.user, doctype) == true %}
-        <span class="tag is-light text-danger">
-          <i class="fa fa-x"></i>
-        </span>
-      {% endif %}
-    {% endfor %}
-    <span class="tag is-info is-light">
-      <a
-        href="{{ path('frontend_user_reservation_data', { 'reservation': reservation.id }) }}"
-        title="{{'Editar datos del viaje y documentación'|trans}}"
-        data-bs-toggle="tooltip"
-      >
-        <i class="fa fa-edit "></i>
-      </a>
-    </span>
-    <span class="tag is-light">
-      <i class="fas fa-arrow-left" style="font-size:0.8rem"></i>
-      &nbsp;&nbsp;{{'Editar'|trans}}
-    </span>
-  </div>
-
-{% endmacro %}
 {% macro showTravellersDocumentsLine(documents, traveller,  reservation) %}
   {# {% if traveller.email != app.user.email %} #}
     {% set doctypesArray = ['passport','visa','drivers'] %}
@@ -151,10 +99,6 @@
         <h5>
           {{'Datos y documentación'|trans}}
         </h5>
-        {# <h6> #}
-          {# {{'Tus datos'|trans}} #}
-        {# </h6> #}
-          {# {{ _self.showUsersDocumentsLine(documentsByUser,reservation) }} #}
 
         {% if reservation.travellers|length > 0 %}
           <h6 class="mt-1">

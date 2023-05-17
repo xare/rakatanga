@@ -61,10 +61,10 @@
 											{% if index < 5 %}
 											{{ date.debut|date('d M Y')|format_datetime(pattern="dd MMMM yyyy",locale=locale) }}<br />
 											<a href="{{ path( 'destination' , {
-																			'travel' : renderLocalizedTravel(date.travel.id, app.request.locale)|slugify,
-																			'category': renderLocalizedCategory(date.travel.category.id, app.request.locale)|slugify,
+																			'travel' : renderLocalizedTravel(date.id, app.request.locale)|slugify,
+																			'category': renderLocalizedCategory(date.cid, app.request.locale)|slugify,
 																			'_locale' : app.request.locale }) }}">
-												{{ renderLocalizedCategory(date.travel.category.id, app.request.locale) }} -
+												{{ renderLocalizedCategory(date.cid, app.request.locale) }} -
 												{{ renderLocalizedTravel(date.id, app.request.locale) }}
 											</a><br />
 											{% if date.statut == "cerrado" or date.statut == "completo" %}

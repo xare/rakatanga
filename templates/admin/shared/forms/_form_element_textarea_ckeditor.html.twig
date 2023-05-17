@@ -1,4 +1,4 @@
-<textarea name="description" id="description" class="form-control">
+<textarea name="{{fieldname}}" id="{{fieldname}}" class="form-control">
 </textarea>
 
 <script type="text/javascript">
@@ -10,9 +10,9 @@
 </script>
 
 <script type="text/javascript">
-  if (CKEDITOR.instances['description']) {
-    CKEDITOR.instances['description'].destroy(true);
-    delete CKEDITOR.instances['description'];
+  if (CKEDITOR.instances['{{fieldname}}']) {
+    CKEDITOR.instances['{{fieldname}}'].destroy(true);
+    delete CKEDITOR.instances['{{fieldname}}'];
   }
-  CKEDITOR.replace("description", "ckeditor");
+  CKEDITOR.replace("{{fieldname}}", "ckeditor");
 </script>

@@ -56,8 +56,7 @@
 																	'reservation': reservation.id,
 																	'traveller': traveller.id}) }}
 														{% elseif app.request.get("_route") ==
-														"frontend_user_reservation" or
-														app.request.get("_route") == "frontend_user_reservation_data" %}
+														"frontend_user_reservation" %}
 														{{ path(app.request.get("_route"),{
 																	'_locale': lang.iso_code,
 																	'reservation': reservation.id}) }}

@@ -1,15 +1,24 @@
 {{ form_start(form) }}
     <div class="row">
-        <div class="col-3">
+        <div class="col-4 col-xs-12">
             {{ form_widget(form) }}
             <label for="description">Descripción</label>
-            {{ include('admin/shared/forms/_form_element_textarea_ckeditor.html.twig') }}
-            <button class="btn btn-info">
-                <i class="fa fa-save"></i>
-                {{ button_label|default('Save') }}
-            </button>
+            {{ include('admin/shared/forms/_form_element_textarea_ckeditor.html.twig',{'fieldname': 'description'}) }}
+            <div class="admin-buttons-container mt-4">
+                <button class="btn btn-success">
+                    <i class="fa fa-save"></i>
+                    {% if form.vars.value.id == null %}
+                        {{ button_label|default('Guardar') }}
+                    {% else %}
+                        {{ button_label|default('Actualizar') }}
+                    {% endif %}
+                </button>
+                {% if form.vars.value.id != null %}
+                    {{ include('admin/invoices/_delete_form.html.twig') }}
+                {% endif %}
+            </div>
         </div>
-        <div class="col-9">
+        <div class="col-8 col-xs-12">
             {% if invoice.id != null %}
                 {{ include( 'admin/invoices/_tabs_related.html.twig' )}}
             {% endif %}

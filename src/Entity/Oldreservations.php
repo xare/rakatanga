@@ -20,7 +20,7 @@ class Oldreservations
     private ?int $nbpilotes = null;
 
     #[ORM\Column()]
-    private ?int $nbAccomp = null;
+    private ?int $nb_accomp = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $commentaire = null;
@@ -67,6 +67,9 @@ class Oldreservations
     #[ORM\ManyToOne(targetEntity: Dates::class, inversedBy: 'oldreservations')]
     private ?Dates $dates = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $code = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,12 +101,12 @@ class Oldreservations
 
     public function getNbAccomp(): ?int
     {
-        return $this->nbAccomp;
+        return $this->nb_accomp;
     }
 
-    public function setNbAccomp(int $nbAccomp): self
+    public function setNbAccomp(int $nb_accomp): self
     {
-        $this->nbAccomp = $nbAccomp;
+        $this->nb_accomp = $nb_accomp;
 
         return $this;
     }
@@ -284,6 +287,18 @@ class Oldreservations
     public function setDates(?Dates $dates): self
     {
         $this->dates = $dates;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

@@ -112,7 +112,7 @@
     {{ form_widget(form._token) }}
    {#  <button class="btn btn-info">{{ button_label|default('Save') }}</button> #}
     <div class="row mt-4">
-        <div class="col-md-4 col-12">
+        <div class="col-2">
             <button class="btn btn-success">
                 <i class="fa fa-save"></i>
                     {% if form.vars.value.id == null %}
@@ -121,6 +121,9 @@
                         {{ button_label|default('Actualizar') }}
                     {% endif %}
             </button>
+        </div>
+        <div class="col-2">
+            {{ include('admin/articles/_delete_form.html.twig') }}
         </div>
 {{ form_end(form,{'render_rest': false}) }}
 </div>

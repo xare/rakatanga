@@ -18,6 +18,7 @@
                     {% endif %}"
                     data-validation-title="{{'El formulario no está completo'|trans}}"
                     data-validation-message="{{'Faltan campos por rellenar correctamente'|trans}}"
+                    data-position="{% if i < (nbpilotes+1) %}pilote{% else %}passager{% endif %}"
                     >
                     <div class="row{% if i > 1 %} mt-4{% endif %}">
                         <div class="col-12">

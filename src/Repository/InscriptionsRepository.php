@@ -47,4 +47,10 @@ class InscriptionsRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function listIndex()
+    {
+        return $this->createQueryBuilder('i')
+            ->orderBy('i.date_ajout', 'DESC')
+            ->getQuery();
+    }
 }

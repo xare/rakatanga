@@ -1,82 +1,65 @@
-{# <h4>Titular de la reserva</h4> #}
-{# <table class="table table-striped">
-{% for reservation in date.reservations %}
-  <tr>
-    <td>
-      <a
-        href="{{ path('reservation_edit',{'id': reservation.id})}}"
-        target="_blank"
-        title="Editar reserva en nueva pestaña"
-        data-bs-toggle="tooltip">
-          {{reservation.code}}
-      </a>
-        </td>
-    <td>{{reservation.user.prenom}} {{reservation.user.nom}} </td>
-    <td>{{reservation.user.telephone}}</td>
-    <td>{{reservation.user.email}}</td>
-  </tr>
-{% else %}
-  Todavía no se han realizado reservas para esta fecha.
-{% endfor %}
-</table> #}
 <h4> Viajeros </h4>
-<table class="table table-striped">
+<div class="table-data">
+	<div>
+    <table class="table table-striped">
 
-{% for reservation in date.reservations %}
-  {% for traveller in reservation.travellers %}
-    <tr{% if traveller.email == reservation.user.email %} class="alert alert-success font-weight-bold"{% endif %}>
-      <td>
-        <a
-        href="{{ path('reservation_edit',{'id': reservation.id})}}"
-        target="_blank"
-        title="Editar reserva en nueva pestaña"
-        data-bs-toggle="tooltip">
-        {{ reservation.code }}
-        </a>
-        </td>
-      <td>{{ traveller.prenom }} {{ traveller.nom }}</td>
-      <td>{{ traveller.telephone }}</td>
-      <td>{{ traveller.email }}</td>
-      <td><strong>{% if traveller.position =="pilote" %}<i class="fa fa-motorcycle"></i>{% endif %}</strong></td>
-      </tr>
-      {% if traveller.reservationData|length > 0 %}
-
-        <tr>
-          <td colspan="5" class="p-4">
-          {{ include( 'admin/dates/_reservation_data_icons.html.twig' , { 'reservationData':traveller.reservationData } ) }}
-          <a
-            class="btn btn-secondary js-show-reservation-data"
-            data-traveller-id="{{traveller.id}}">
-              Reservation Data
-          </a><br /><br />
+    {% for reservation in date.reservations %}
+      {% for traveller in reservation.travellers %}
+        <tr{% if traveller.email == reservation.user.email %} class="alert alert-success font-weight-bold"{% endif %}>
+          <td data-cell="Código Reserva">
+            <a
+            href="{{ path('reservation_edit',{'id': reservation.id})}}"
+            target="_blank"
+            title="Editar reserva en nueva pestaña"
+            data-bs-toggle="tooltip">
+            {{ reservation.code }}
+            </a>
+            </td>
+          <td data-cell="Nombre y apellidos">{{ traveller.prenom }} {{ traveller.nom }}</td>
+          <td data-cell="Teléfono">{{ traveller.telephone }}</td>
+          <td data-cell="Email">{{ traveller.email }}</td>
+          <td data-cell="Piloto?"><strong>{% if traveller.position =="pilote" %}<i class="fa fa-motorcycle"></i>{% endif %}</strong></td>
+          </tr>
           {% if traveller.reservationData|length > 0 %}
-          <ul class="list-group mb-4">
-          {% for reservationDatum in traveller.reservationData %}
-            {% for document in reservationDatum.documents %}
-              <li class="list-group-item">
-                <a href="{{ path("download_document",{
-                                'id': document.id}
-                                )}}">
-                {% if document.doctype == "passport" %}
-                  <i class="fas fa-passport"></i>
-                {% endif %}
-                {% if document.doctype == "visa" %}
-                  <i class="fas fa-book"></i>
-                {% endif %}
-                {% if document.doctype == "drivers" %}
-                  <i class="fas fa-id-card"></i>
-                {% endif %}
-                {{document.originalFilename}}
-                </a>
-              </li>
-            {% endfor %}
-        {% endfor %}
-        </ul>
-        {% endif %}
-        </td>
-        </tr>
 
-      {% endif %}
-  {% endfor %}
-{% endfor %}
-</table>
+            <tr>
+              <td colspan="5" class="p-4">
+              {{ include( 'admin/dates/_reservation_data_icons.html.twig' , { 'reservationData':traveller.reservationData } ) }}
+              <a
+                class="btn btn-secondary js-show-reservation-data"
+                data-traveller-id="{{traveller.id}}">
+                  Reservation Data
+              </a>
+              {% if traveller.reservationData|length > 0 %}
+              <ul class="list-group mb-4">
+              {% for reservationDatum in traveller.reservationData %}
+                {% for document in reservationDatum.documents %}
+                  <li class="list-group-item">
+                    <a href="{{ path("download_document",{
+                                    'id': document.id}
+                                    )}}">
+                    {% if document.doctype == "passport" %}
+                      <i class="fas fa-passport"></i>
+                    {% endif %}
+                    {% if document.doctype == "visa" %}
+                      <i class="fas fa-book"></i>
+                    {% endif %}
+                    {% if document.doctype == "drivers" %}
+                      <i class="fas fa-id-card"></i>
+                    {% endif %}
+                    {{document.originalFilename}}
+                    </a>
+                  </li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+            {% endif %}
+            </td>
+            </tr>
+
+          {% endif %}
+      {% endfor %}
+    {% endfor %}
+    </table>
+  </div>
+</div>

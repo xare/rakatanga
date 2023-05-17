@@ -1,4 +1,6 @@
-{{form_start(form, {
+{% form_theme form 'shared/form/fields.html.twig' %}
+
+{{ form_start(form, {
     'attr': {
         'class':'js-register-form',
         'data-action':'js-register-form',
@@ -22,10 +24,14 @@
         </div>
         <div class="row">
             <div class="col-12">
-                {{ form_row(form.agreeTerms,{
+                {{ form_row(form.isAgency,{
+                    'label': 'Somos una agencia'|trans
+                }) }}
+                {{ form_widget(form.agreeTerms,{
 					'label' : 'Acepto los términos'|trans
-	            })}}
-                <a href="{{path('main-content',{'slug':'aviso-legal'})}}">{{ 'Aviso legal'|trans }}</a>
+	                }) }}
+                <a href="{{path('main-content',{'slug':'aviso-legal'})}}">{{ 'Aviso legal'|trans }}</a><br />
+                
             </div>
         </div>
     </div>

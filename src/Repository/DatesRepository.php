@@ -118,13 +118,14 @@ class DatesRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('d');
         $q = $qb->select('
             t.id as id,
+            d.id as did,
             t.main_title as title,
-            t as travel,
+            c.id as cid,
             d.debut as debut,
             d.fin as fin,
             d.statut as statut
         ')
-            ->innerJoin(Travel::class, 't', Join::WITH, 't.id = d.travel')
+            ->leftJoin(Travel::class, 't', Join::WITH, 't.id = d.travel')
             ->innerJoin(Category::class, 'c', Join::WITH, 'c.id = t.category')
             /* ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id = ct.category') */
             ->andWhere('MONTHNAME(d.debut) = :month')
@@ -134,14 +135,13 @@ class DatesRepository extends ServiceEntityRepository
             ->andWhere('d.statut = :statut')
             ->setParameter('statut', 'abierto')
             ->andwhere(
-                $qb->expr()->gt('d.debut', 'NOW()')
+                $qb->expr()->gt('d.debut', 'CURRENT_DATE()')
             )
             ->orderBy('d.debut', 'ASC')
             ->getQuery();
-
+        
         return $q->getResult();
     }
-
     public function getDatesByYear(): array
     {
         $qb = $this->createQueryBuilder('d');

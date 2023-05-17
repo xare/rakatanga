@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class OldReservationsIndexerCommand extends Command
 {
     protected static $defaultName = 'app:oldreservation-indexer';
+    private const ID_OFFSET = 699;
 
     public function __construct(
         private OldreservationsRepository $oldreservationsRepository,
@@ -37,13 +38,14 @@ class OldReservationsIndexerCommand extends Command
     }
 
     public function execute(
-    InputInterface $inputInterface,
-    OutputInterface $outputInterface,
+        InputInterface $inputInterface,
+        OutputInterface $outputInterface,
     ): int {
         // Browse all of the OldReservationsRepository
-        $oldReservations = $this->oldreservationsRepository->findAll();
+        $oldReservations = $this->oldreservationsRepository->findWithIdGreaterOrEqual(self::ID_OFFSET);
         $i = 0;
         $data = [];
+        // we loop al the $oldReservations
         foreach ($oldReservations as $oldReservation) {
             echo 'Old Reservation ID: '.$oldReservation->getId();
             $data[$i]['status'] = 'To be processed';
@@ -58,7 +60,7 @@ class OldReservationsIndexerCommand extends Command
                         if (null !== $inscriptionsByOldreservation) {
                             foreach ($inscriptionsByOldreservation as $inscriptionByOldreservation) {
                                 $data[$i]['status'] = 'Inscription OK';
-                                $data[$i]['status']['isInscription'] = true;
+                                $data[$i]['isInscription'] = true;
 
                                 $oldReservation->setInscriptions($inscriptionByOldreservation);
                                 $this->entityManager->persist($oldReservation);
@@ -78,7 +80,7 @@ class OldReservationsIndexerCommand extends Command
                     if (!empty($matchesTravel)) {
                         $pregMatchResult = strrpos(trim($matchesTravel[0]), '.', -1) != 0 ? substr(trim($matchesTravel[0]), 0, -1) : trim($matchesTravel[0]);
 
-                        $data[$i]['travel']['match'] = $pattern;
+                        $data[$i]['travel']['match'] = $matchesTravel[0];
                         $data[$i]['travel']['preg_replace'] = preg_replace(
                             '/\s\s+/',
                             ' ',

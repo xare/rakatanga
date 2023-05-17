@@ -63,17 +63,19 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 col-sm-12">
-            <button class="btn btn-success">
-                <i class="fa fa-save"></i>
-                {% if form.vars.value.id == null %}
-                    {{ button_label|default('Guardar') }}
-                {% else %}
-                    {{ button_label|default('Actualizar') }}
-                {% endif %}
-            </button>
-        </div>
+    <div class="admin-buttons-container mt-4">
+        <button class="btn btn-success">
+            <i class="fa fa-save"></i>
+            {% if form.vars.value.id == null %}
+                {{ button_label|default('Guardar') }}
+            {% else %}
+                {{ button_label|default('Actualizar') }}
+            {% endif %}
+        </button>
+        {% if form.vars.value.id != null %}
+            {{ include('admin/pages/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
     {{ form_widget(form._token)}}
     {{ form_end(form,{'render_rest': false}) }}
     </div>

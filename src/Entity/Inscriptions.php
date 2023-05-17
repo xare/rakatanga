@@ -47,7 +47,7 @@ class Inscriptions
     #[ORM\Column(length: 15)]
     private ?string $statut = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable:true)]
     private ?string $remarque = null;
 
     #[ORM\Column(type: 'datetime')]
@@ -194,7 +194,7 @@ class Inscriptions
         return $this->remarque;
     }
 
-    public function setRemarque(string $remarque): self
+    public function setRemarque(?string $remarque): self
     {
         $this->remarque = $remarque;
 

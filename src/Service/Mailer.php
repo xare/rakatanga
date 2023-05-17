@@ -108,7 +108,7 @@ class Mailer
         /**
          * @var string $subject
          */
-        $subject = '['.\App\Service\Mailer::MAIL_TITLE.' - CONTACTO]'.$this->translator->trans('Tu mensaje a Rakatanga Tours', [], 'email');
+        $subject = '['.\App\Service\Mailer::MAIL_TITLE.' - '.$this->translator->trans('CONTACTO',[],'email').']'.$this->translator->trans('Tu mensaje a Rakatanga Tours', [], 'email');
         /**
          * @var TemplatedEmail $email
          */
@@ -403,7 +403,7 @@ class Mailer
             $user->getEmail(),
             $user->getPrenom().' '.$user->getNom()
         );
-        $subject = '['.\App\Service\Mailer::MAIL_TITLE." - RESERVA - FACTURA] Tu factura para el viaje {$reservation->getDate()->getTravel()->getMainTitle()} del { $reservation->getDate()->getDebut()->format('d/m/Y')}";
+        $subject = '['.\App\Service\Mailer::MAIL_TITLE." - ". $this->translator->trans('RESERVA',[],'email')." - ". $this->translator->trans('FACTURA',[],'email')."] ".$this->translator->trans('Tu factura para el viaje',[],'email')." {$reservation->getDate()->getTravel()->getMainTitle()} ".$this->translator->trans('del',[],'email')." { $reservation->getDate()->getDebut()->format('d/m/Y')}";
         $email->to($to)
             ->subject($subject)
             ->htmlTemplate('email/send_pdf.html.twig')

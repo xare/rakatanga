@@ -1,4 +1,39 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(form.subject) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.category) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <label for="description">Content</label>
+            {{ include('admin/shared/forms/_form_element_textarea_ckeditor.html.twig',{'fieldname': 'content'}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(form.ToAddresses) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.attachment) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="admin-buttons-container mt-4">
+        <button class="btn btn-success">
+            <i class="fa fa-save"></i>
+            {% if form.vars.value.id == null %}
+                {{ button_label|default('Guardar') }}
+            {% else %}
+                {{ button_label|default('Actualizar') }}
+            {% endif %}
+        </button>
+        {% if form.vars.value.id != null %}
+            {{ include('admin/mailings/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
+        {{ form_widget(form._token)}}
+{{ form_end(form,{'render_rest': false}) }}

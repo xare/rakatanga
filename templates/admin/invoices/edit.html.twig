@@ -11,16 +11,12 @@
 
 {% block body %}
 <div class="container">
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'invoices'})}}
         <div class="row">
-            <div class="col-md-12 col-sm-12" data-url="">
+            <div class="col-12 col-xs-12">
                 <h1>Edit Invoices</h1>
-
-                {{ include('admin/invoices/_form.html.twig', {'button_label': 'Update'}) }}
-
-                <a href="{{ path('invoices_index') }}" class="btn btn-light">
-                    <i class="fa fa-list"></i>
-                    Back to list
-                </a>
-
-            {{ include('admin/invoices/_delete_form.html.twig') }}
+                {{ include('admin/invoices/_form.html.twig', {'button_label': 'Actualizar'}) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

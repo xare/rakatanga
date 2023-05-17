@@ -39,7 +39,7 @@ class UserFrontendReservationDataController extends AbstractController
     {
     }
 
-    #[Route(
+    /* #[Route(
         path: [
             'en' => '{_locale}/user/reservation/data/{reservation}',
             'es' => '{_locale}/usuario/reserva/datos/{reservation}',
@@ -58,7 +58,7 @@ class UserFrontendReservationDataController extends AbstractController
         /**
         * @var User $user
         */
-        $user = $this->getUser();
+        /*$user = $this->getUser();
 
         $userTraveller = $this->travellersRepository->findOneBy([
             'user'=>$user,
@@ -130,7 +130,7 @@ class UserFrontendReservationDataController extends AbstractController
             'otherTravellers'=>$otherTravellers,
             'form' => $form->createView(),
         ]);
-    }
+    } */
 
     #[Route(
         path: 'user/reservationData/new/{reservation}/{traveller}/',

@@ -54,4 +54,22 @@ class OldreservationsRepository extends ServiceEntityRepository
             ->orderBy('o.date_ajout', 'DESC')
             ->getQuery();
     }
+
+    public function findCorruptedCharacters(string $find){
+        return $this->createQueryBuilder('r')
+        ->where('r.log LIKE :find OR r.commentaire LIKE :find')
+        ->setParameter('find', '%' . $find . '%')
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findWithIdGreaterOrEqual(int $value)
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.id >= :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -108,6 +108,9 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('isAgency', CheckboxType::class, [
+                'mapped' => false,
+            ] )
             ->add('Register', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-success',

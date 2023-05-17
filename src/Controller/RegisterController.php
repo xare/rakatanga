@@ -66,7 +66,7 @@ class RegisterController extends AbstractController
             $urlArray[$i]['lang_name'] = $otherLangArray->getName();
             ++$i;
         }
-        $user = new User(); // I GET THE LOGGED IN USER
+        $user = new User(); 
         if ($user->getEmail() !== null) { // WE NEED ANOTHER METHOD TO CHECK LOGGED IN STATUS.
       // IF USER IS LOGGED IN REDIRECT TO DASHBOARD.
             return $this->redirectToRoute('dashboard');

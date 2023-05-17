@@ -723,3 +723,11 @@ fieldset {
     background-color: var(--light) !Important;
     border: 1px solid var(--main-red);
 }
+
+.admin-buttons-container {
+    width:100%;
+    display:flex;
+    gap:1rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
