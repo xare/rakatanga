@@ -15,25 +15,56 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/codespromo')]
 class CodespromoController extends AbstractController
 {
+    public function __construct(
+        private PaginatorInterface $paginator,
+        private CodespromoRepository $codespromoRepository
+    ){
+
+    }
     #[Route('/', name: 'codespromo_index', methods: ['GET'])]
     public function index(
-        Request $request,
-        PaginatorInterface $paginator,
-        CodespromoRepository $codespromoRepository): Response
+        Request $request
+        ): Response
     {
-        $count = count($codespromoRepository->findAll());
-        $query = $codespromoRepository->listAll();
-        $codespromos = $paginator->paginate(
+        $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+        $query = $this->codespromoRepository->listAll();
+        $codespromos = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            15
+            $pagination_items
         );
 
         return $this->render('admin/codespromo/index.html.twig', [
-            'count' => $count,
+            'count' => count($this->codespromoRepository->findAll()),
+            'pagination_items' => $pagination_items,
             'codespromos' => $codespromos,
         ]);
     }
+
+    #[Route(
+        path: '/search/codespromo',
+        name: 'search_codespromo',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+            $codespromos = $this->paginator->paginate(
+                $this->codespromoRepository->listCodespromoByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/codespromo/index.html.twig', [
+                'codespromos' => $codespromos,
+                'count' => count($this->codespromoRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
 
     #[Route('/new', name: 'codespromo_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

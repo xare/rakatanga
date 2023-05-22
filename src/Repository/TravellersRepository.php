@@ -80,4 +80,15 @@ class TravellersRepository extends ServiceEntityRepository
         $result = $query->getSingleScalarResult();
         return $result ? (int) $result : 0;
     }
+
+    public function listTravellersByTerm($term) {
+        return $this->createQueryBuilder('t')
+            ->where('t.nom LIKE :term')
+            ->orWhere('t.prenom LIKE :term')
+            ->orwhere('t.email LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

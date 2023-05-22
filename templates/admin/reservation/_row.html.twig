@@ -29,22 +29,22 @@
                     data-bs-toggle="tooltip"
                     title="Editar esta reserva">
                     {{ reservation.code }}
-                </a>
+                {# </a>
                 <a href="{{ path('travel_edit', {
                         'id' : reservation.date.travel.id
                     }) }}"
                     data-bs-toggle="tooltip"
-                    title="Editar este viaje">
+                    title="Editar este viaje"> #}
                     {{ renderLocalizedCategory(reservation.date.travel.category.id,'es') }} -
                     {{ renderLocalizedTravel(reservation.date.travel.id, 'es') }}
-                </a>
+                {# </a>
                 <a
                     class="date"
                     data-bs-toggle="tooltip"
                     title="Editar esta fecha"
                     href="{{ path('dates_edit', {
                     'id' : reservation.date.id
-                }) }}">
+                }) }}"> #}
                     <div class="tags has-addons me-1">
                         {# <span class="tag is-dark"><i class="fas fa-calendar-day"></i></span> #}
                         <span class="tag is-danger is-light">{{reservation.date.debut|date('d/m/Y')}}</span>

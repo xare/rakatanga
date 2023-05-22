@@ -5,6 +5,7 @@
 {% block body %}
 <div class="container">
     {{ include ('admin/shared/_controlband.html.twig',{'entity':'articles'}) }}
+        {{ include ('admin/articles/partials/_filterband.html.twig') }}
     <div class="row mb-4 mt-2">
         <div class="col-12">
             <h1>Articles index</h1>

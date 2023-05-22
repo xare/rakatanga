@@ -1,0 +1,19 @@
+<fieldset class="filterband">
+  <div class="startwrapper">
+    <div class="total_items">
+        <strong>Total de códigos:</strong>
+        <span id="totalItemCount">{{ count }}</span>
+    </div>
+  </div>
+  <div class="endwrapper">
+    <div class="pagination_selector">
+        {{ include('admin/codespromo/partials/_select_pagination_ammount.html.twig') }}
+    </div>
+    <div class="searchbox">
+        {{ include('admin/codespromo/partials/_search_results.html.twig') }}
+    </div>
+    {# <div class="results_filter">
+        {{ include('admin/codespromo/partials/_filtrar_resultados.html.twig') }}
+    </div> #}
+  </div>
+</fieldset>

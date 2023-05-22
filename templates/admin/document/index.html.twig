@@ -6,14 +6,10 @@
 {% block body %}
 <div class="container">
     {{ include ('admin/shared/_controlband.html.twig',{'entity':'document'}) }}
+    {{ include ('admin/document/partials/_filterband.html.twig') }}
     <div class="row">
         <div class="col-12">
             <h1>Document index</h1>
-            <div class="count">
-                <strong>Documentos en total:</strong>
-                <span id="totalItemCount"> {{ count }}</span>
-            </div>
-            <br />
             <div class="navigation">
                 {{ knp_pagination_render(documents) }}
             </div>

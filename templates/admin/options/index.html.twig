@@ -4,13 +4,14 @@
 
 {% block body %}
 <div class="container">
-{{ include ('admin/shared/_controlband.html.twig',{'entity':'options'})}}
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'options'})}}
+    {{ include ('admin/options/partials/_filterband.html.twig')}}
     <div class="row">
         <div class="col-md-12 col-12">
             <h1>Lista de Opciones</h1>
         </div>
     </div>
-    <div class="row mb-4">
+    {# <div class="row mb-4">
         <div class="count col-md-3 col-xs-12">
             <strong>Opciones en total:</strong>
             <span id="totalItemCount">{{options|length}}</span>
@@ -18,7 +19,7 @@
         <div class="col-md-1 offset-md-7 col-xs-12">
             {{ include('admin/options/_filtrar_resultados.html.twig') }}
         </div>
-    </div>
+    </div> #}
     <div class="row">
             <div class="navigation col-md-2 col-xs-12">
                 {{ knp_pagination_render(options) }}

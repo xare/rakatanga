@@ -8,6 +8,9 @@ use App\Entity\Oldreservations;
 use App\Entity\Travel;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -24,18 +27,24 @@ class OldreservationsType extends AbstractType
         /* $travel = $oldReservation ? $oldReservation->getTravel() : null; */
 
         $builder
-            ->add('langue')
-            ->add('code')
-            ->add('nbpilotes')
-            ->add('nbAccomp')
-            ->add('commentaire')
-            ->add('log')
-            ->add('codepromo')
-            ->add('montant')
-            ->add('reduction')
-            ->add('totalttc')
+            ->add('langue', HiddenType::class)
+            ->add('code', HiddenType::class)
+            ->add('nbpilotes', HiddenType::class)
+            ->add('nbAccomp', HiddenType::class)
+            ->add('commentaire', HiddenType::class)
+            ->add('log', HiddenType::class)
+            ->add('codepromo', HiddenType::class)
+            ->add('montant', HiddenType::class)
+            ->add('reduction', HiddenType::class)
+            ->add('totalttc', HiddenType::class)
             ->add('notes')
-            ->add('statut')
+            ->add('statut', ChoiceType::class,[
+/*                 'placeholder' => 'Estatus', */
+                'choices' => [
+                    'Active' => 'yes',
+                    'Annulée' => 'no',
+                ],
+                ])
             ->add('origine_ajout')
             ->add('date_ajout', null, [
                 'widget' => 'single_text',
@@ -63,6 +72,9 @@ class OldreservationsType extends AbstractType
                 'placeholder' => 'Elige Viaje',
                 'multiple' => false,
                 'expanded' => false,
+            ])
+            ->add('Submit', SubmitType::class,[
+                'attr' => ['class' => 'btn btn-success'],
             ])
             /* ->add('Dates', EntityType::class,[
                 'class' => Dates::class,

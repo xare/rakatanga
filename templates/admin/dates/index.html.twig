@@ -6,20 +6,24 @@
 {% block body %}
 	<div class="container">
 		{{ include ('admin/shared/_controlband.html.twig',{'entity':'dates'})}}
+		{{ include ('admin/dates/partials/_filterband.html.twig')}}
 		<div class="row mb-4">
 			<div class="col-md-12 col-12">
 				<h1>Lista de Fechas</h1>
 			</div>
 		</div>
-		<div class="row mb-4">
+		{# <div class="row mb-4">
 			<div class="count col-md-3 col-xs-12">
 				<strong>Fechas en total:</strong>
 				<span id="totalItemCount">{{dates|length}}</span>
 			</div>
-			<div class="col-md-1 offset-md-7 col-xs-12">
+			<div class="col-md-4 offset-md-3 col-xs-12">
+            {{ include('admin/dates/_search_results.html.twig') }}
+        </div>
+			<div class="col-md-1 col-xs-12">
 				{{ include('admin/dates/_filter_results.html.twig') }}
 			</div>
-		</div>
+		</div> #}
 		<div class="row">
 			<div class="navigation">
 				{{ knp_pagination_render(dates) }}

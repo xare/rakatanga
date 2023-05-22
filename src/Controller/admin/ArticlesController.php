@@ -15,24 +15,55 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/articles')]
 class ArticlesController extends AbstractController
 {
+    public function __construct (
+        private ArticlesRepository $articlesRepository,
+        private PaginatorInterface $paginator
+    ) {}
+
     #[Route('/', name: 'articles_index', methods: ['GET'])]
     public function index(
-        Request $request,
-        ArticlesRepository $articlesRepository,
-        PaginatorInterface $paginator): Response
+        Request $request
+        ): Response
     {
-        $query = $articlesRepository->listAll();
-        $items = $paginator->paginate(
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
+
+        $query = $this->articlesRepository->listAll();
+        $items = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
 
         return $this->render('admin/articles/index.html.twig', [
             'articles' => $items,
+            'count' => count($this->articlesRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
+    #[Route(
+        path: '/search/articles',
+        name: 'search_articles',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
 
+            $term = $request->request->get('term');
+            $articles = $this->paginator->paginate(
+                $this->articlesRepository->listArticlesByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/articles/index.html.twig', [
+                'articles' => $articles,
+                'count' => count($this->articlesRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
     #[Route('/new', name: 'articles_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

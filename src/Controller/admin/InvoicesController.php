@@ -27,16 +27,43 @@ class InvoicesController extends AbstractController
     public function index(
         Request $request): Response
     {
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
         $query = $this->invoicesRepository->listAll();
         $invoices = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
         return $this->render('admin/invoices/index.html.twig', [
             'invoices' => $invoices,
+            'count' => count($this->invoicesRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
+    #[Route(
+        path: '/search/invoices',
+        name: 'search_invoices',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+            $invoices = $this->paginator->paginate(
+                $this->invoicesRepository->listInvoicesByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/invoices/index.html.twig', [
+                'invoices' => $invoices,
+                'count' => count($this->invoicesRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
 
     #[Route('/new', name: 'invoices_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

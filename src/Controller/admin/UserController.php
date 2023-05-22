@@ -11,6 +11,7 @@ use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use League\Csv\Reader;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -18,44 +19,81 @@ use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 #[Route(path: '/admin/user')]
-class UserController extends MainadminController
+class UserController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager)
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository,
+        private PaginatorInterface $paginator)
     {
-        $this->entityManager = $entityManager;
+
     }
 
-    #[Route(path: '/', name: 'user_index', methods: ['GET'])]
-    public function index(Request $request,
-    PaginatorInterface $paginator): Response
+    #[Route(
+        path: '/', 
+        name: 'user_index', 
+        methods: ['GET'])]
+    public function index(
+        Request $request): Response
     {
-        $this->redirectToLogin($request);
+
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
         if (!$pageNumber = $request->query->get('page')) {
             $pageNumber = 0;
         }
-        $userRepository = $this->entityManager->getRepository(User::class);
-        $query = $userRepository->listAll();
-        $users = $paginator->paginate(
+
+        $query = $this->userRepository->listAll();
+        $users = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
 
         return $this->render('admin/user/index.html.twig', [
             'users' => $users,
             'pageNumber' => $pageNumber,
+            'pagination_items' => $pagination_items,
+            'count' => count($this->userRepository->findAll())
         ]);
     }
 
-#[Route(path: '/user-items', methods: 'GET', name: 'user_items')]
-    public function getUserItems(Request $request, PaginatorInterface $paginator, UserRepository $userRepository)
+    #[Route(
+        path: '/search/users',
+        name: 'search_users',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+            $users = $this->paginator->paginate(
+                $this->userRepository->listUsersByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/user/index.html.twig', [
+                'users' => $users,
+                'count' => count($this->userRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
+
+#[Route(
+        path: '/user-items', 
+        methods: 'GET', 
+        name: 'user_items')]
+    public function getUserItems(
+            Request $request)
     {
         if (!$presentPage = $request->query->get('page')) {
             $presentPage = 1;
         }
 
-        $allItems = $userRepository->listIndex();
+        $allItems = $this->userRepository->listIndex();
         $properties = [
             'id',
             'email',

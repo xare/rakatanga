@@ -23,6 +23,11 @@ class adminTools {
             '[data-action="js-email-url"]',
             this.emailUrl.bind(this)
         )
+        this.$wrapper.on(
+            'change',
+            '[data-action="changePaginationItems"]',
+            this.changePaginationItems.bind(this)
+        )
     }
 
     copyContent(event) {
@@ -78,4 +83,20 @@ class adminTools {
             }
         });
     }
+    /* changePaginationItems(event){
+        event.preventDefault();
+        let paginationItems = event.currentTarget.value;
+        console.info(paginationItems);
+        let entity = event.currentTarget.data('entity');
+        console.info(entity);
+        (
+            async ()=>{
+                const response = await $.ajax({
+                    method: 'post',
+                    url: Routing.generate(`${entity}_index`),
+                    data: {paginationItems}
+                });
+            }
+        )();
+    } */
 }

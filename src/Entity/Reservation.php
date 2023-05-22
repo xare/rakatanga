@@ -29,7 +29,7 @@ class Reservation
     private ?string $comment = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $log = null;
+    private ?string $note = null;
 
     #[ORM\OneToMany(targetEntity: Travellers::class, mappedBy: 'reservation', cascade: ['persist', 'remove'])]
     private Collection $travellers;
@@ -131,14 +131,14 @@ class Reservation
         return $this;
     }
 
-    public function getLog(): ?string
+    public function getNote(): ?string
     {
-        return $this->log;
+        return $this->note;
     }
 
-    public function setLog(?string $log): self
+    public function setNote(?string $note): self
     {
-        $this->log = $log;
+        $this->note = $note;
 
         return $this;
     }

@@ -53,4 +53,11 @@ class CodespromoRepository extends ServiceEntityRepository
             ->orderBy('c.dateAjout', 'DESC')
             ->getQuery();
     }
+    public function listCodespromoByTerm($term) {
+        return $this->createQueryBuilder('c')
+        ->where('c.code LIKE :term')
+        ->setParameter('term','%'.$term.'%')
+        ->getQuery()
+        ->getResult();
+    }
 }

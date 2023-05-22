@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\CategoryTranslation;
 use App\Entity\Dates;
 use App\Entity\Lang;
 use App\Entity\Reservation;
 use App\Entity\Travel;
+use App\Entity\Travellers;
 use App\Entity\TravelTranslation;
 use App\Entity\User;
 use DateTime;
@@ -146,5 +148,44 @@ class ReservationRepository extends ServiceEntityRepository
                 ->getQuery();
         $result = $query->getSingleScalarResult();
         return $result ? (int) $result : 0;
+    }
+
+    public function listReservationsByTerm($term) {
+        $query = $this->createQueryBuilder('r');
+        $result = $query->innerJoin(Dates::class, 'd', Join::WITH, 'd.id = r.date')
+        ->innerJoin(Travel::class, 't', Join::WITH, 't.id = d.travel')
+        ->innerJoin(Category::class, 'c', Join::WITH, 'c.id= t.category')
+        ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id= ct.category')
+        ->innerJoin(TravelTranslation::class, 'tt', Join::WITH, 't.id= tt.travel')
+        ->leftJoin(User::class, 'u', Join::WITH, 'u.id = r.user')
+        ->leftJoin(Travellers::class, 'tr', Join::WITH, 'tr.reservation = r.id')
+        ->where(
+            $query->expr()->like('ct.title', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('tt.title', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('u.nom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('u.prenom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('u.email', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('tr.nom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('tr.prenom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('tr.email', ':term')
+        )
+        ->setParameter(':term', '%' . $term . '%')
+        ->getQuery()
+        ->getResult();
+        return $result;
     }
 }

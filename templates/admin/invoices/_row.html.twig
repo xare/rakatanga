@@ -1,8 +1,7 @@
 <tr>
     <td data-cell="Id">{{ invoice.id }}</td>
     <td data-cell="Número de factura">
-        <a href="{{ path('invoices_edit', {'id': invoice.id}) }}"
-            class="btn btn-info">{{ invoice.invoiceNumber }}</a>
+        <a href="{{ path('invoices_edit', {'id': invoice.id}) }}">{{ invoice.invoiceNumber }}</a>
     </td>
     <td data-cell="Nombre del cliente">{{ invoice.name }}</td>
     <td data-cell="Nif">{{ invoice.nif }}</td>

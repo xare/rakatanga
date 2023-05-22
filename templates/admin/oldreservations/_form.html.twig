@@ -1,189 +1,155 @@
 {{ form_start(form) }}
-<fieldset>
-    <div class="row">
-        <div class="col-6 col-xs-12">
-            <div class="row">
-                <div class="col-6">
-                    {{ form_row(form.langue) }}
-                </div>
-                <div class="col-6">
-                    {{ form_row(form.code) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 col-xs-12">
-                    {{ form_row(form.nbpilotes) }}
-                </div>
-                <div class="col-6 col-xs-12">
-                    {{ form_row(form.nbAccomp) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.commentaire) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.log) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.codepromo) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4 col-xs-12">
-                    {{ form_row(form.montant) }}
-                </div>
-                <div class="col-4 col-xs-12">
-                    {{ form_row(form.reduction) }}
-                </div>
-                <div class="col-4 col-xs-12">
-                    {{ form_row(form.totalttc) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.notes) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.statut) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-3 col-xs-12">
-                    {{ form_row(form.origine_ajout) }}
-                </div>
-                <div class="col-3 col-xs-12">
-                    {{ form_row(form.date_ajout) }}
-                </div>
-                <div class="col-3 col-xs-12">
-                    {{ form_row(form.date_paiement_1) }}
-                </div>
-                <div class="col-3 col-xs-12">
-                    {{ form_row(form.date_paiement_2) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4 col-xs-12">
-                    {{ form_row(form.Inscriptions) }}
-                </div>
-                <div class="col-4 col-xs-12">
-                    {{ form_row(form.Travel, {
-                        attr: {
-                            'data-ajax-url': path('ajax_oldreservation_location_select'),
-                            'data-action': 'js-form-parent-select'
-                        }
-                    }) }}
-                </div>
-                <div class="col-4 col-xs-12" data-container="js-form-select-child">
-                    {% if form.dates is defined %}
-                    {{ form_row(form.dates) }}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-xs-12">
-            <ul class="nav nav-tabs" role="tablist" id="myTab">
-            <li class="nav-item">
-                    <button class="nav-link active"
-                        id="log-tab" 
-                        data-bs-toggle="tab" 
-                        data-bs-target="#log" 
-                        type="button" 
-                        role="tab" 
-                        aria-controls="#log"
-                        aria-selected="false"
-                    >Log
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link"
-                        id="inscriptions-tab" 
-                        data-bs-toggle="tab" 
-                        data-bs-target="#inscriptions" 
-                        type="button" 
-                        role="tab" 
-                        aria-controls="#inscriptions"
-                        aria-selected="false"
-                    >Inscripciones
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link"
-                            id="travel-tab" 
-                            data-bs-toggle="tab" 
-                            data-bs-target="#travel" 
-                            type="button" 
-                            role="tab" 
-                            aria-controls="#travel"
-                            aria-selected="false"
-                    >Viaje
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link"
-                            id="date-tab" 
-                            data-bs-toggle="tab" 
-                            data-bs-target="#date" 
-                            type="button" 
-                            role="tab" 
-                            aria-controls="#date"
-                            aria-selected="false"
-                    >Fecha
-                    </button>
-                </li>
-            </ul>
-            <div class="tab-content"> 
-            <div 
-                    class="tab-pane fade show active" 
-                    id="log" 
-                    role="tabpanel" 
-                    aria-labelledby="log">
-                    {{ oldreservation.log|raw }}
-                </div> 
-                <div 
-                    class="tab-pane fade" 
-                    id="inscriptions" 
-                    role="tabpanel" 
-                    aria-labelledby="inscriptions-tab">
-                    {{ include( 'admin/oldreservations/_inscriptions_tab_content.html.twig' ,{ 'oldreservation' : oldreservation } ) }}
-                </div>
-                <div 
-                    class="tab-pane fade"
-                    id="travel"
-                    role="tabpanel"
-                    aria-labelledby="travel-tab">
-                    {{ include( 'admin/oldreservations/_travel_tab_content.html.twig' ,{'oldreservation' : oldreservation } ) }}
-                </div>
-                <div 
-                    class="tab-pane fade" 
-                    id="date" 
-                    role="tabpanel" 
-                    aria-labelledby="date-tab">
-                    {{ include( 'admin/oldreservations/_date_tab_content.html.twig' ,{ 'oldreservation' : oldreservation } ) }}
-                </div>
-            </div>
-        </div>
-    </div>
-</fieldset>
-<div class="row">
-        <div class="col-md-12 col-xs-12">
-            <br />
-            <button 
-                class="btn btn-success" 
-                title="{{ button_label|default('Guardar') }}"
-                data-bs-toggle="tooltip" 
-                data-bs-placement="top"
-                >
-                <i class="fa fa-save"></i>
-            </button>
-            <br />
-        </div>
-    </div>
-{{ form_end(form) }}
 
+  <div class="row">
+		<div class="col-8 col-xs-12">
+      <fieldset>
+        <h4>Résa n° {{ oldreservation.code }}</h4>
+        <hr>
+			    <table class="table">
+          <tr>
+			    <td><strong>Voyage :</strong></td><td> {{ oldreservation.travel }}</td></tr>
+			    <tr><td><strong>Période :</strong></td><td> del {{oldreservation.dates.debut|date('d')}}
+          {% if oldreservation.dates.debut|date('m') !=  oldreservation.dates.fin|date('m') %}
+            de {{ oldreservation.dates.debut|date()|format_datetime(pattern="MMMM",locale='es-ES') }} 
+          {% endif %}
+           al {{oldreservation.dates.fin|date()|format_datetime(pattern="d MMMM YYYY",locale='es-ES')}}</td>
+          {% if oldreservation.codepromo != '' %}
+          <tr>
+			    <td><strong>Code promo :</strong></td><td> {{ oldreservation.codepromo }}</td>
+          </tr>
+			    {% endif %}
+			    <tr>
+			    <td><strong>Date :</strong></td><td> {{oldreservation.dateAjout|date()|format_datetime(pattern="d MMMM YYYY HH:mm",locale='es-ES')}}</td>
+          </tr>
+			    <tr><td><strong>Nº pilotos :</strong></td><td> {{oldreservation.nbpilotes}}</td></tr>
+          {% if oldreservation.nbAccomp > 0 %}
+          <tr><td><strong>Nº Acompañantes :</strong></td><td> {{oldreservation.nbAccomp}}</td></tr>
+          {% endif %}
+          
+          <tr><td><strong>Commentaire :</strong></td><td> {{ oldreservation.commentaire|raw|escape }} </td></tr>
+          <tr>
+          <td></td><td>
+          <a 
+            class="btn btn-secondary ms-2" 
+            href="#"
+            data-action="read-more"
+            data-content="{{ oldreservation.log|raw|escape }}" 
+            data-bs-toggle="toggle"
+            title="Ver el email">Voir le mail</a></td></tr>
+        </table>
+      </fieldset>
+    </div>
+    <div class="col-4 col-xs-12">
+				<fieldset>
+					<table class="table table-condensed no-footer">
+						<tbody>
+							<tr>
+                <td>Coût du voyage</td>
+                <td class="text-right">{{oldreservation.montant|format_currency('EUR', {fraction_digit: 2}, 'es' )}}</td>
+              </tr>
+							<tr>
+                <td>Réduction</td>
+                <td class="text-right">-{{ oldreservation.reduction|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</td>
+              </tr>
+							<tr>
+                <td><strong>Montant à payer</strong></td>
+                <td class="text-right"><strong>{{ oldreservation.totalttc|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</strong></td>
+              </tr>
+              {% if oldreservation.datePaiement1|date() > "January 1, 1970 00:00" %}
+              <tr>
+                <td><strong>Date 1er paiement</strong></td>
+                <td>{{oldreservation.datePaiement1|date()|format_datetime(pattern="d MMMM YYYY HH:mm",locale='es-ES')}}</td>
+              </tr>
+              {% endif %}
+              {% if oldreservation.datePaiement2|date() > "January 1, 1970 00:00"
+              and oldreservation.datePaiement2 != null
+               %}
+              <tr>
+                <td><strong>Date 2ème paiement</strong></td>
+                <td>{{oldreservation.datePaiement2|date()|format_datetime(pattern="d MMMM YYYY HH:mm",locale='es-ES')}}</td>
+              </tr>
+              {% endif %}
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+  </div>
+  <fieldset>
+	  	
+			<div id="listcontacts">
+			
+			<table class="table table-condensed">
+        <thead>
+          <th width="27%">Client</th><th width="09%">Position</th><th width="27%">E-mail</th><th width="12%">Téléphone</th><th width="06%">Langue</th><th width="12%">Statut</th><th width="07%"></th>
+        </thead>
+        <tbody>
+          <tr class="">
+            <td>{{oldreservation.inscriptions.nom}} {{oldreservation.inscriptions.prenom}}</td>
+            <td>{{oldreservation.inscriptions.position}}</td>
+            <td>{{oldreservation.inscriptions.email}}</td>
+            <td>{{oldreservation.inscriptions.telephone}}</td>
+            <td>{{oldreservation.inscriptions.langue}}</td>
+            <td>
+            {% if oldreservation.inscriptions.arrhes %}
+              <span class="badge badge-secondary">RE</span>
+            {% endif %} 
+            {% if oldreservation.inscriptions.solde %}
+              <span class="badge badge-secondary">TO</span>
+            {% endif %} 
+            {% if oldreservation.inscriptions.assurance %}
+              <span class="badge badge-secondary">AS</span>
+            {% endif %}
+            {% if oldreservation.inscriptions.vols %}
+            <span class="badge badge-secondary">VL</span>
+            {% endif %}
+            </td>
+            <td class="text-right">
+              <a class="btn btn-secondary btn-xs" href="{{path('inscriptions_edit',{'id':oldreservation.inscriptions.id})}}" data-bs-toggle="toggle" title="modifier" target="_blank">Modifier</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+			</div>
+  	</fieldset>
+    <fieldset>
+      {{ form_row(form.notes) }}
+      {{ form_row(form.statut) }}
+    </fieldset>
+    <fieldset>
+      <div class="row">
+        <div class="col-4 col-xs-12">
+          {{ form_row(form.Inscriptions )}}
+        </div>
+        <div class="col-4 col-xs-12">
+          {{ form_row(form.Travel )}}
+        </div>
+        <div class="col-4 col-xs-12">
+          {{ form_row(form.dates )}}
+        </div>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div class="row">
+        <div class="col-3 col-xs-12">
+          {{ form_row(form.origine_ajout )}}
+        </div>
+        <div class="col-3 col-xs-12">
+          {{ form_row(form.date_ajout )}}
+        </div>
+        <div class="col-3 col-xs-12">
+          {{ form_row(form.date_paiement_1 )}}
+        </div>
+        <div class="col-3 col-xs-12">
+          {{ form_row(form.date_paiement_2 )}}  
+        </div>
+      </div>
+    </fieldset>
+    {# {{ form_row(form.langue )}}
+    {{ form_row(form.nbpilotes )}}
+    {{ form_row(form.nbAccomp )}}
+    {{ form_row(form.commentaire )}}
+    {{ form_row(form.log )}}
+    {{ form_row(form.codepromo )}}
+    {{ form_row(form.codepromo )}} #}
+  {# {{ form_row(form.Submit )}} #}
+{{ form_end(form) }}

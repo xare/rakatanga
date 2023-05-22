@@ -64,4 +64,12 @@ class InvoicesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->getQuery();
     }
+
+    public function listInvoicesByTerm($term) {
+        return $this->createQueryBuilder('i')
+        ->where('i.name LIKE :term')
+        ->setParameter('term','%'.$term.'%')
+        ->getQuery()
+        ->getResult();
+    }
 }

@@ -41,36 +41,67 @@ class TravelController extends MainadminController
     public function index(
         Request $request
     ): Response {
-        $count = count($this->travelRepository->findAll());
+        $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
         $query = $this->travelRepository->listAll();
         $travels = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
 
         return $this->render('admin/travel/index.html.twig', [
             'travels' => $travels,
-            'count' => $count,
+            'count' => count($this->travelRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
+    #[Route(
+        path: '/search/travels',
+        name: 'search_travels',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
 
-    #[Route(path: '/search/{categoryName}', name: 'travel_by_category', methods: ['GET', 'POST'])]
+            $term = $request->request->get('term');
+            $travels = $this->paginator->paginate(
+                $this->travelRepository->listTravelsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/travel/index.html.twig', [
+                'travels' => $travels,
+                'count' => count($this->travelRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
+
+    #[Route(
+        path: '/filter/{categoryName}', 
+        name: 'travel_by_category', 
+        methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
-        string $categoryName,
-        TravelRepository $travelRepository,
-        PaginatorInterface $paginator
+        string $categoryName
     ) {
-        $travels = $paginator->paginate(
-            $travelRepository->listTravelByCategory($categoryName),
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
+
+        $travels = $this->paginator->paginate(
+            $this->travelRepository->listTravelByCategory($categoryName),
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
 
         return $this->render('admin/travel/index.html.twig', [
             'travels' => $travels,
-            'count' => 10,
+            'count' => count($this->travelRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
 

@@ -5,9 +5,10 @@
 {% block body %}
 <div class="container">
     {{ include ('admin/shared/_controlband.html.twig',{'entity':'invoices'})}}
+    {{ include ('admin/invoices/partials/_filterband.html.twig') }}
         <div class="row">
             <div class="col-12">
-                <h1>Invoices index</h1>
+                <h1>Lista de facturas</h1>
                 <div class="navigation">
                     {{ knp_pagination_render(invoices) }}
                 </div>

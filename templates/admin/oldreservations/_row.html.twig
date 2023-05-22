@@ -55,9 +55,9 @@
         </td>
 
     <td>{{ oldreservation.codepromo }}</td>
-    <td>{{ oldreservation.montant }}</td>
-    <td>{{ oldreservation.reduction }}</td>
-    <td>{{ oldreservation.totalttc }}</td>
+    <td>{{ oldreservation.montant|format_currency('EUR', {fraction_digit: 2}, 'es' )}}</td>
+    <td>{{ oldreservation.reduction|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</td>
+    <td>{{ oldreservation.totalttc|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}</td>
     <td>{% if oldreservation.notes != '' %}
         <a
             href="#"

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\CategoryTranslation;
 use App\Entity\Lang;
 use App\Entity\Options;
 use App\Entity\OptionsTranslations;
@@ -87,5 +88,21 @@ class OptionsRepository extends ServiceEntityRepository
                 ->andWhere('c.name = :categoryName')
                 ->setParameter('categoryName', $categoryName)
                 ->getQuery();
+    }
+
+    public function listOptionsByTerm($term) {
+        return $this->createQueryBuilder('o')
+            ->innerJoin(OptionsTranslations::class, 'ot', Join::WITH, 'o.id = ot.option')
+            ->innerJoin(Travel::class, 't', Join::WITH, 't.id = o.travel')
+            ->innerJoin(TravelTranslation::class, 'tt', Join::WITH, 't.id = tt.travel')
+            ->innerJoin(Category::class, 'c', Join::WITH, 'c.id= t.category')
+            ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id = ct.category')
+            ->where('ct.title LIKE :term')
+            ->orWhere('tt.title LIKE :term')
+            ->orWhere('ot.title LIKE :term')
+            ->orWhere('ot.intro LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery();
+
     }
 }

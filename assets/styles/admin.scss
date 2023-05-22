@@ -2,10 +2,11 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-datepicker/dist/css/bootstrap-datepicker3";
 @import "~font-awesome/scss/font-awesome";
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;1,200;1,900&display=swap');
 :root {
     --poppins: 'Poppins', sans-serif;
     --lato: 'Lato', sans-serif;
+    --fira: 'Fira Sans', sans-serif;
     --light: #F9F9F9;
     --blue: #3C91E6;
     --light-blue: #CFE8FF;
@@ -74,7 +75,7 @@ header {
 }
 
 .container {
-    font-family: var(--poppins);
+    font-family: var(--fira);
 }
 
 
@@ -472,9 +473,9 @@ fieldset {
 }
 
 .reservations-dashboard-item {
-    grid-template-columns: repeat(auto-fill, minmax(4.2rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(4.1rem, 1fr));
     grid-template-rows: auto;
-    grid-template-areas: 'photo photo travel travel travel travel travel travel' 'reservation reservation reservation travellers travellers travellers travellers travellers' 'user user user user user user user user' 'comment comment comment comment comment comment comment comment';
+    grid-template-areas: 'photo photo travel travel travel travel travel travel' 'reservation reservation travellers travellers travellers travellers travellers travellers' 'invoice invoice user user user user user user' 'comment comment comment comment comment comment comment comment';
 }
 
 .payments-dashboard-item {
@@ -492,38 +493,43 @@ fieldset {
 .reservations-dashboard-item>div:nth-child(1) {
     grid-area: photo;
 }
-
-.payments-dashboard-item>div:nth-child(1) {
-    grid-area: left;
-}
-
 .reservations-dashboard-item>div:nth-child(2) {
     grid-area: travel;
     padding-inline-start: 0;
     font-size: 1.1rem;
 }
 
+.reservations-dashboard-item>div:nth-child(3) {
+    grid-area: reservation;
+    font-size: 1.1rem;
+}
+.reservations-dashboard-item>div:nth-child(4) {
+    grid-area: travellers;
+}
+.reservations-dashboard-item>div:nth-child(5) {
+    grid-area: invoice;
+}
+.reservations-dashboard-item>div:nth-child(6) {
+    grid-area: user;
+}
+
+.reservations-dashboard-item>div:nth-child(7) {
+    grid-area: comment;
+}
+.payments-dashboard-item>div:nth-child(1) {
+    grid-area: left;
+}
+
+
+
 .payments-dashboard-item>div:nth-child(2) {
     grid-area: right;
     padding-inline-start: 0;
 }
 
-.reservations-dashboard-item>div:nth-child(3) {
-    grid-area: reservation;
-    font-size: 1.1rem;
-}
 
-.reservations-dashboard-item>div:nth-child(4) {
-    grid-area: user;
-}
 
-.reservations-dashboard-item>div:nth-child(5) {
-    grid-area: travellers;
-}
 
-.reservations-dashboard-item>div:nth-child(6) {
-    grid-area: comment;
-}
 
 
 /* @media screen and (min-width: 12rem) {
@@ -730,4 +736,23 @@ fieldset {
     gap:1rem;
     flex-wrap: wrap;
     justify-content: flex-start;
+}
+
+.filterband {
+    display:flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filterband .endwrapper{
+    display:flex;
+    flex-wrap: wrap;
+    gap:1rem;
+    justify-content: flex-end;
+}
+
+.pagination_selector .form-select{
+    display: inline-block !important;
 }

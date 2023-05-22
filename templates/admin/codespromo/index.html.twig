@@ -4,7 +4,8 @@
 
 {% block body %}
 <div class="container">
-    {{ include ('admin/shared/_controlband.html.twig',{'entity':'codespromo'})}}
+    {{ include ('admin/shared/_controlband.html.twig',{'entity':'codespromo'}) }}
+    {{ include ('admin/codespromo/partials/_filterband.html.twig') }}
     <div class="row">
         <div class="col-12">
             <h1>Codespromo index</h1>

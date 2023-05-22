@@ -27,18 +27,46 @@ class TravellersController extends AbstractController
     #[Route('/', name: 'travellers_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $count = count($this->travellersRepository->findAll());
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
+
         $query = $this->travellersRepository->listAll();
         $travellers = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
         return $this->render('admin/travellers/index.html.twig', [
             'travellers' => $travellers,
-            'count' => $count,
+            'pagination_items' => $pagination_items,
+            'count' => count($this->travellersRepository->findAll()),
         ]);
     }
+
+    #[Route(
+        path: '/search/travellers',
+        name: 'search_travellers',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+           /*  dd($this->reservationRepository->listReservationsByTerm($term)); */
+            $travellers = $this->paginator->paginate(
+                $this->travellersRepository->listTravellersByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/travellers/index.html.twig', [
+                'travellers' => $travellers,
+                'count' => count($this->travellersRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
 
     #[Route('/new', name: 'travellers_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

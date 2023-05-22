@@ -7,6 +7,9 @@ use App\Entity\Reservation;
 use App\Entity\Travellers;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,11 +21,15 @@ class ReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nbpilotes')
-            ->add('nbAccomp')
-            ->add('comment')
-            ->add('log')
-            ->add('status')
+            ->add('nbpilotes', HiddenType::class)
+            ->add('nbAccomp', HiddenType::class)
+            ->add('comment', HiddenType::class)
+            ->add('note')
+            ->add('status', ChoiceType::class,[
+                                'choices' => [
+                                    'Initialized' => 'yes',
+                                    'paid' => 'no',
+                                ],])
 
             /* ->add('date_ajout', DateTimeType::class)
             ->add('date_paiement', DateTimeType::class) */

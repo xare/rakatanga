@@ -196,4 +196,17 @@ class TravelRepository extends ServiceEntityRepository
             ->setParameter('categoryName', $categoryName)
             ->getQuery();
     }
+
+    public function listTravelsByTerm($term) {
+        return $this->createQueryBuilder('t')
+            ->innerJoin(TravelTranslation::class, 'tt', Join::WITH, 't.id = tt.travel')
+            ->innerJoin(Category::class, 'c', Join::WITH, 'c.id= t.category')
+            ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id= ct.category')
+            ->where('c.name = :term')
+            ->orWhere('ct.title LIKE :term')
+            ->orWhere('tt.title LIKE :term')
+            ->orWhere('tt.content LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery();
+    }
 }

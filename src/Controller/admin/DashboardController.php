@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Repository\DocumentRepository;
 use App\Repository\InvoicesRepository;
 use App\Repository\LogsRepository;
+use App\Repository\OldreservationsRepository;
 use App\Repository\PaymentsRepository;
 use App\Repository\ReservationRepository;
 use App\Repository\TravellersRepository;
@@ -33,17 +34,22 @@ class DashboardController extends AbstractController
         InvoicesRepository $invoicesRepository,
         PaymentsRepository $paymentsRepository,
         TravellersRepository $travellersRepository,
-        DocumentRepository $documentRepository
+        DocumentRepository $documentRepository,
+        OldreservationsRepository $oldReservationsRepository
     ) {
+
+        $totalPayments = $paymentsRepository->getTotalAmountForCurrentYear() + $oldReservationsRepository->getTotalAmountForCurrentYear();
+        $totalReservations = $reservationRepository->getTotalReservationsForCurrentYear() + $oldReservationsRepository->getTotalReservationsForCurrentYear();
         return $this->render(
             'admin/dashboard/index.html.twig',
             [
-                'totalPayments' => $paymentsRepository->getTotalAmountForCurrentYear(),
-                'totalReservations' => $reservationRepository->getTotalReservationsForCurrentYear(),
+                'totalPayments' => $totalPayments,
+                'totalReservations' => $totalReservations,
                 'totalUsers' =>$userRepository->getTotalUsers(),
                 'totalTravellers'=> $travellersRepository->getTotalTravellers(),
                 'users' => $userRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'reservations' => $reservationRepository->findBy([], ['date_ajout' => 'DESC'], 10),
+                'oldreservations' => $oldReservationsRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'payments' => $paymentsRepository->findBy([], ['date_ajout' => 'DESC'], 10),
                 'invoices' => $invoicesRepository->findBy([], ['id' => 'DESC'], 10),
                 'travellers' => $travellersRepository->findBy([], ['date_ajout' => 'DESC'], 10),

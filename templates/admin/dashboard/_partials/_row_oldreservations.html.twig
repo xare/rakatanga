@@ -1,0 +1,106 @@
+{# {{ dump(oldreservation) }}
+{{ dump(oldreservation.Travel) }}
+{{oldreservation.Travel}}
+
+{{oldreservation.dates }} #}
+<div class="reservations-dashboard-item">
+  <div class="reservations-dashboard-grid-item">
+    {% if oldreservation.Travel != null %}
+      {% set MediaPath = '/media/' ~ oldreservation.Travel.mainPhoto.Path %}
+        <img class="img-fluid" src="{{ MediaPath|imagine_filter('index_thumbnail_small') }}">
+    {% endif %}
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    <a
+      href="{{path('oldreservations_edit',{'id':oldreservation.id})}}"
+      data-bs-toggle="tooltip"
+      title="Visualizar los datos de la reserva">
+        <strong>{{oldreservation.code}}</strong>
+        {% if oldreservation.Travel != null %}
+          {{ renderLocalizedCategory(oldreservation.Travel.category.id,'es') }}
+          <br />
+          {{ renderLocalizedTravel(oldreservation.Travel.id,'es') }}
+        {% endif %}
+          
+        <br />
+        {% if oldreservation.dates != null %}
+          {{ oldreservation.dates.debut|date('d/m/Y') }} - {{ oldreservation.dates.fin|date('d/m/Y') }}
+        <strong
+        data-bs-toggle="tooltip"
+        title="Número de reservas TOTAL para esta fecha">
+          <i class="fas fa-hashtag"></i> {{oldreservation.dates.reservations|length}}
+        </strong>
+      {% endif %}
+    </a>
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    {{oldreservation.montant|format_currency('EUR', {fraction_digit: 2}, 'es' )}}<br />
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    <div class="tags has-addons">
+      <span class="tag"><i class="fas fa-motorcycle"></i></span>
+      <span class="tag">{{oldreservation.nbpilotes}}</span>
+      <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
+    </div>
+    <div class="tags has-addons">
+      <span class="tag"><i class="fas fa-user"></i></span>
+      <span class="tag">{{oldreservation.nbaccomp}}</span>
+      <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
+    </div>
+  </div>
+  <div class="reservations-dashboard-grid-item">
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    <div class="tags has-addons">
+      <span class="tag"><i class="fas fa-eye"></i></span>
+      <span class="tag">
+        <a 
+          href="#"
+          data-bs-toggle="tooltip"
+          title="Ver mensaje asociado"
+          data-action="read-more"
+          data-content="{{oldreservation.log|raw|escape}}"
+          >
+          Ver el mensaje
+          </a>
+      </span>
+    </div>
+    {% if oldreservation.commentaire != '' %}
+      <div class="tags has-addons">
+        <span class="tag"><i class="fas fa-eye"></i></span>
+        <span class="tag is-light">
+          <a 
+            href="#"
+            data-bs-toggle="tooltip"
+            title="Ver mensaje asociado"
+            data-action="read-more"
+            data-content="{{oldreservation.commentaire|raw|escape}}"
+            >Ver el comentario
+          </a>
+        </span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    {# {{ renderReservationAmmount(oldreservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }} #}
+    {% if oldreservation.inscriptions is defined and oldreservation.inscriptions != null %}
+      <div class="tags has-addons">
+        <span class="tag"><i class="fas fa-user"></i></span>
+        <span class="tag is-light">
+          {{ oldreservation.inscriptions.prenom }} {{ oldreservation.inscriptions.nom }}
+        {# </a> #}
+        </span>
+        <span class="tag is-light">
+          <a
+            href="{{path('inscriptions_edit',{'id':oldreservation.inscriptions.id})}}"
+            data-bs-toggle="tooltip"
+            title="Visualizar los datos de inscripción">
+              [{{ oldreservation.inscriptions.email }}]
+          </a>
+        </span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="reservations-dashboard-grid-item">
+  </div>
+</div>

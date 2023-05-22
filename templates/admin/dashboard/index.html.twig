@@ -56,8 +56,8 @@
 						</span>
 					</li>
 				</ul>
-
 				</div>
+				
 				<div class="row mb-2">
 					<div class="col-7 col-xs-12">
 						<h3>Últimas Reservas</h3>
@@ -73,6 +73,22 @@
 				</div>
 				<div class="small reservations-dashboard">
 					{{ include('admin/dashboard/_partials/_block_reservations.html.twig') }}
+				</div>
+				<div class="row mb-2">
+					<div class="col-7 col-xs-12">
+						<h3>Últimas Reservas - WEB ANTERIOR</h3>
+					</div>
+					<div class="col-5 col-xs-12 text-end">
+						<a
+							class="btn btn-secondary float-right d-block"
+							href="{{ path('reservation_index') }}">
+							<i class="fa fa-eye"></i>
+							Ver todas las reservas [{{oldreservations|length}}]
+						</a>
+					</div>
+				</div>
+				<div class="small reservations-dashboard">
+					{{ include('admin/dashboard/_partials/_block_oldreservations.html.twig') }}
 				</div>
 			</div>
 		</div>

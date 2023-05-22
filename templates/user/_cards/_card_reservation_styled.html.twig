@@ -105,6 +105,7 @@
             {{'Datos de los viajeros'|trans}}
           </h6>
         {% endif %}
+        <p>{{ 'Por favor, añade tus datos relacionados con el viaje (documentación, seguro, contactos de emergencia, etc...)'|trans }}. {{'Para que podamos asistirte mejor en caso de cualquier necesidad'|trans}}.</p>
         {% for traveller in reservation.travellers %}
           {% set documentsByTraveller = listDocumentsByReservationByTraveller(reservation, traveller ) %}
           {{ _self.showTravellersDocumentsLine(documentsByTraveller, traveller, reservation) }}
@@ -112,29 +113,29 @@
         <h5 class="mt-1">{{'Mensajes enviados'|trans}}</h5>
 
         {% for mailing in reservation.mailings %}
-        <div class="tags has-addons">
-          <span class="tag is-light">
-            <i class="fas fa-envelope" style="margin:2px"></i>
-          </span>
-          <span class="tag">
-            {% if mailing.dateSent != null %}
-              {{ mailing.dateSent|date('d/m/Y') }}
-            {% endif %}
-          </span>
-          <span class="tag">
-            <a
-              href="#"
-              target="_blank"
-              title="{{mailing.subject}}"
-              data-action="read-more"
-              data-title="{{mailing.subject}}"
-              data-content="{{ mailing.content|raw|escape }}"
-              data-bs-toggle="tooltip">
+          <div class="tags has-addons">
+            <span class="tag is-light">
+              <i class="fas fa-envelope" style="margin:2px"></i>
+            </span>
+            <span class="tag">
+              {% if mailing.dateSent != null %}
+                {{ mailing.dateSent|date('d/m/Y') }}
+              {% endif %}
+            </span>
+            <span class="tag">
+              <a
+                href="#"
+                target="_blank"
+                title="{{mailing.subject}}"
+                data-action="read-more"
+                data-title="{{mailing.subject}}"
+                data-content="{{ mailing.content|raw|escape }}"
+                data-bs-toggle="tooltip">
               {# {{ mailing.subject|u.truncate(40,'...') }} #}
-              ... {{ mailing.subject|slice(17,20) }}...
-              </a>
-          </span>
-          <span class="tag is-link is-light">
+                ... {{ mailing.subject|slice(17,20) }}...
+                </a>
+            </span>
+            <span class="tag is-link is-light">
                 <i class="fas fa-arrow-left" style="font-size:0.8rem"></i> &nbsp;
                 <a
               href="#"
@@ -146,7 +147,7 @@
               data-bs-toggle="tooltip">
                 {{'Ver el mensaje'|trans }}
                 </a>
-              </span>
+            </span>
         </div>
         <br />
           {% else %}

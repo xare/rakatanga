@@ -5,11 +5,12 @@
 {% block body %}
     <div class="container">
     {{ include ('admin/shared/_controlband.html.twig',{'entity':'payments'})}}
-        <div class="row">
-            <div class="col-12">
-                <h1>Índice de Pagos</h1>
-            </div>
+    {{ include ('admin/payments/partials/_filterband.html.twig') }}
+    <div class="row">
+        <div class="col-12">
+            <h1>Índice de Pagos</h1>
         </div>
+    </div>
     <div class="row">
         <div class="navigation col-md-2 col-xs-12">
             {{ knp_pagination_render(payments) }}

@@ -28,6 +28,9 @@ class DatesController extends AbstractController
     public function index(
         Request $request,
     ): Response {
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
         $date = new Dates();
         if (!$pageNumber = $request->query->get('page')) {
             $pageNumber = 0;
@@ -51,22 +54,43 @@ class DatesController extends AbstractController
             return $this->redirectToRoute('media_index');
         }
 
-        $count = count($this->datesRepository->findAll());
         $query = $this->datesRepository->listIndex();
         $dates = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            15
+            $pagination_items
         );
 
         return $this->render('admin/dates/index.html.twig', [
             'dates' => $dates,
             'pageNumber' => $pageNumber,
-            'count' => $count,
+            'count' => count($this->datesRepository->findAll()),
+            'pagination_items' => $pagination_items,
             'form' => $form->createView(),
         ]);
     }
+    #[Route(
+        path: '/search/dates',
+        name: 'search_dates',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $term = $request->request->get('term');
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+            $dates = $this->paginator->paginate(
+                $this->datesRepository->listDatesByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
 
+            return $this->render('admin/dates/index.html.twig', [
+                'dates' => $dates,
+                'count' => count($this->datesRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
     #[Route(path: '/search/{categoryName}', name: 'dates_by_category', methods: ['GET', 'POST'])]
     public function searchByContinent(
         Request $request,

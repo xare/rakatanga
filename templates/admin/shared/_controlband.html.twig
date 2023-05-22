@@ -1,10 +1,38 @@
 {% set addRoute = entity ~'_new' %}
 {% set index = entity ~'_index' %}
+
+{% set entityMappings = {
+    'invoices': 'facturas',
+    'popups': 'Noticias emergentes',
+    'blogs': 'blogs',
+    'articles': 'artículos',
+    'options': 'opciones',
+    'category': 'paises',
+    'continents': 'continentes',
+    'media': 'media',
+    'pages': 'páginas',
+    'hotels': 'hoteles',
+    'travel': 'viajes',
+    'dates': 'fechas',
+    'codespromo': 'códigos promocionales',
+    'reservation': 'reserva',
+    'documents':'documentos',
+    'payments': 'pagos',
+    'mailings': 'emails',
+    'logs': 'registros',
+    'oldreservations': 'reservas anteriores',
+    'user': 'usuarios',
+    'travellers': 'viajeros',
+    'default': 'elementos'
+} %}
+
+{% set entityName = entityMappings[entity] ?? entityMappings['default'] %}
+
 <div class="row">
     <div class="col-12">
         <div class="controlband main-red rounded">
-            <i class="fa fa-plus"></i>&nbsp;&nbsp;<a href="{{path(addRoute)}}"> Crear {{entity}}</a>&nbsp;&nbsp;&nbsp;  
-            <i class="fa fa-list"></i>&nbsp;&nbsp;<a href="{{path(index)}}"> Lista {{entity}}</a>
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;<a href="{{path(addRoute)}}"> Crear {{entityName}}</a>&nbsp;&nbsp;&nbsp;  
+            <i class="fa fa-list"></i>&nbsp;&nbsp;<a href="{{path(index)}}"> Lista de {{entityName}}</a>
         </div>
     </div>
 </div>

@@ -82,6 +82,14 @@ class UserRepository extends ServiceEntityRepository
         $result = $query->getSingleScalarResult();
         return $result ? (int) $result : 0;
     }
-
+    public function listUsersByTerm($term) {
+        return $this->createQueryBuilder('u')
+            ->where('u.nom LIKE :term')
+            ->orWhere('u.prenom LIKE :term')
+            ->orwhere('u.email LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
 
 }

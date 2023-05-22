@@ -1,0 +1,19 @@
+<fieldset class="filterband">
+  <div class="startwrapper">
+    <div class="total_items">
+        <strong>Total de usuarios:</strong>
+        <span id="totalItemCount">{{ count }}</span>
+    </div>
+  </div>
+  <div class="endwrapper">
+    <div class="pagination_selector">
+        {{ include('admin/user/partials/_select_pagination_ammount.html.twig') }}
+    </div>
+    <div class="searchbox">
+        {{ include('admin/user/partials/_search_results.html.twig') }}
+    </div>
+    {# <div class="results_filter">
+        {{ include('admin/user/partials/_filtrar_resultados.html.twig') }}
+    </div> #}
+  </div>
+</fieldset>

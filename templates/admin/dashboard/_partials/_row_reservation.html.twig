@@ -16,9 +16,6 @@
         <br />
         {{ reservation.date.debut|date('d/m/Y') }} - {{ reservation.date.fin|date('d/m/Y') }}
       </a>
-
-
-
       <strong
       data-bs-toggle="tooltip"
       title="Número de reservas TOTAL para esta fecha">
@@ -28,46 +25,9 @@
   </div>
   <div class="reservations-dashboard-grid-item">
     {{ renderReservationAmmount(reservation)|format_currency('EUR', {fraction_digit: 2}, 'es' ) }}<br />
-    {% if reservation.invoice is defined and reservation.invoice != null %}
-    <div class="tags has-addons">
-      <span class="tag">
-        <i class="fas fa-receipt"></i>
-      </span>
-      <span class="tag">
-        {{ reservation.invoice.invoiceNumber}}
-      </span>
-      <span class="tag is-light">
-        <a
-          href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
-          title="{{ reservation.invoice.filename }}"
-          data-bs-toggle="tooltip">
-            <i class="fas fa-download"></i>
-        </a>
-      </span>
-    </div>
-    {% endif %}
   </div>
   <div class="reservations-dashboard-grid-item">
-  {% if reservation.user is defined and reservation.user != null %}
-    <div class="tags has-addons">
-      <span class="tag"><i class="fas fa-user"></i></span>
-      <span class="tag is-light">
-          {{ reservation.user.prenom }} {{ reservation.user.nom }}
-        </a>
-      </span>
-      <span class="tag is-light">
-        <a
-          href="{{path('user_edit',{'id':reservation.user.id})}}"
-          data-bs-toggle="tooltip"
-          title="Visualizar los datos del usuario">
-          [{{ reservation.user }}]
-        </a>
-      </span>
-    </div>
-    {% endif %}
-  </div>
-  <div class="reservations-dashboard-grid-item">
-    <div class="tags has-addons">
+  <div class="tags has-addons">
       <span class="tag"><i class="fas fa-motorcycle"></i></span>
       <span class="tag">{{reservation.nbpilotes}}</span>
       <span class="tag is-light">{{ 'Pilotos'|trans }}</span>
@@ -77,6 +37,47 @@
       <span class="tag">{{reservation.nbaccomp}}</span>
       <span class="tag is-light">{{ 'Acompañantes'|trans }}</span>
     </div>
+    
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    {% if reservation.invoice is defined and reservation.invoice != null %}
+      <div class="tags has-addons">
+        <span class="tag">
+          <i class="fas fa-receipt"></i>
+        </span>
+        <span class="tag">
+          {{ reservation.invoice.invoiceNumber}}
+        </span>
+        <span class="tag is-light">
+          <a
+            href="{{path('user-download-invoice',{'invoice': reservation.invoice.id})}}"
+            title="{{ reservation.invoice.filename }}"
+            data-bs-toggle="tooltip">
+              <i class="fas fa-download"></i>
+          </a>
+        </span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="reservations-dashboard-grid-item">
+    
+    {% if reservation.user is defined and reservation.user != null %}
+      <div class="tags has-addons">
+        <span class="tag"><i class="fas fa-user"></i></span>
+        <span class="tag is-light">
+            {{ reservation.user.prenom }} {{ reservation.user.nom }}
+          </a>
+        </span>
+        <span class="tag is-light">
+          <a
+            href="{{path('user_edit',{'id':reservation.user.id})}}"
+            data-bs-toggle="tooltip"
+            title="Visualizar los datos del usuario">
+            [{{ reservation.user }}]
+          </a>
+        </span>
+      </div>
+    {% endif %}
   </div>
   <div class="reservations-dashboard-grid-item">
     <p>{{reservation.comment}}</p>

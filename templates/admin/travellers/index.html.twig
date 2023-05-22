@@ -4,8 +4,12 @@
 
 {% block body %}
 <div class="container">
-    {{ include ('admin/shared/_controlband.html.twig',{'entity':'travellers'})}}
-
+    <div class="row">
+        <div class="col-12 mb-3">
+            {{ include ('admin/shared/_controlband.html.twig',{'entity':'travellers'})}}
+        </div>
+    </div>
+    {{ include ('admin/travellers/partials/_filterband.html.twig') }}
     <div class="row mb-4">
         <div class="col-12 col-md-12 ">
             <h1>Travellers index</h1>
@@ -21,16 +25,15 @@
                             <tr>
                                 <th class="main-red">Id</th>
                                 <th class="main-red">Langue</th>
-                                <th class="main-red">Reseration</th>
-                                <th class="main-red">Nom</th>
-                                <th class="main-red">Prenom</th>
-                                <th class="main-red">Telephone</th>
-                                <th class="main-red">Position</th>
+                                <th class="main-red">Viajero</th>
+                                <th class="main-red">Teléfono</th>
+                                <th class="main-red">Posición</th>
                                 {# <th class="main-red">Assurance</th>
                                 <th class="main-red">Vols</th> #}
-                                <th class="main-red">Date_ajout</th>
+                                <th class="main-red">Creado</th>
                                 <th class="main-red">Email</th>
-                                <th class="main-red"><i class="fa fa-edit"></i></th>
+                                <th class="main-red">Reserva</th>
+                                {# <th class="main-red"><i class="fa fa-edit"></i></th> #}
                                 <th class="main-red"><i class="fa fa-trash"></i></th>
                             </tr>
                         </thead>

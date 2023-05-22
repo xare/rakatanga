@@ -1,0 +1,23 @@
+<div class="row mt-3">
+  <div class="col-12">
+    <fieldset class="filterband">
+      <div class="startwrapper">
+        <div class="total_items">
+          <strong>Total de artículos:</strong>
+          <span id="totalItemCount">{{ count }}</span>
+        </div>
+      </div>
+      <div class="endwrapper">
+        <div class="pagination_selector">
+          {{ include('admin/travel/partials/_select_pagination_ammount.html.twig') }}
+        </div>
+        <div class="searchbox">
+          {{ include('admin/travel/partials/_search_results.html.twig') }}
+        </div>
+        <div class="results_filter">
+          {{ include('admin/travel/partials/_filtrar_resultados_copy.html.twig') }}
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>

@@ -16,32 +16,59 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/oldreservations')]
 class OldreservationsController extends AbstractController
 {
-    private $travelRepository;
 
-    public function __construct(TravelRepository $travelRepository)
+    public function __construct(
+        private OldreservationsRepository $oldreservationsRepository,
+        private TravelRepository $travelRepository, 
+        private PaginatorInterface $paginator)
     {
-        $this->travelRepository = $travelRepository;
+
     }
 
     #[Route('/', name: 'oldreservations_index', methods: ['GET'])]
     public function index(
         Request $request,
-        OldreservationsRepository $oldreservationsRepository,
         PaginatorInterface $paginator): Response
     {
-        $count = count($oldreservationsRepository->findAll());
-        $oldreservations = $paginator->paginate(
-            $oldreservationsRepository->listIndex(),
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
+
+        $oldreservations = $this->paginator->paginate(
+            $this->oldreservationsRepository->listIndex(),
             $request->query->getInt('page', 1),
-            25
+            $pagination_items
         );
 
         return $this->render('admin/oldreservations/index.html.twig', [
-            'count' => $count,
+            'count' => count($this->oldreservationsRepository->findAll()),
             'oldreservations' => $oldreservations,
+            'pagination_items' => $pagination_items
         ]);
     }
+    #[Route(
+        path: '/search/oldreservations',
+        name: 'search_oldreservations',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
 
+            $term = $request->request->get('term');
+           /*  dd($this->reservationRepository->listReservationsByTerm($term)); */
+            $oldreservations = $this->paginator->paginate(
+                $this->oldreservationsRepository->listReservationsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/oldreservations/index.html.twig', [
+                'oldreservations' => $oldreservations,
+                'count' => count($this->oldreservationsRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
     #[Route('/new', name: 'oldreservations_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -98,6 +125,8 @@ class OldreservationsController extends AbstractController
 
         return $this->redirectToRoute('oldreservations_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 
     #[Route(path: '/location-select', name: 'ajax_oldreservation_location_select', priority: 10)]
     public function getDatesByTravelSelect(Request $request)

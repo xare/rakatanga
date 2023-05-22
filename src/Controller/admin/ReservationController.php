@@ -31,24 +31,28 @@ class ReservationController extends AbstractController
     #[Route(
         path: '/',
         name: 'reservation_index',
-        methods: ['GET'])]
+        methods: ['GET','POST'])]
     public function index(
         Request $request
         ): Response {
-        /* if(!$pageNumber = $request->query->get('page')){
-            $pageNumber = 0;
-        } */
+        
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
 
         $query = $this->reservationRepository->listAll();
         $items = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
         $latestReservation = $this->reservationRepository->getLatestReservation();
-        $renderArray = [];
-        $renderArray['latestReservation'] = ($latestReservation!= null)?: '';
-        $renderArray['reservations'] = $items;
+        $renderArray = [
+            'latestReservation' => ($latestReservation!= null)?: '',
+            'reservations' => $items,
+            'count' => count($this->reservationRepository->findAll()),
+            'pagination_items' => $pagination_items
+        ];
         return $this->render('admin/reservation/index.html.twig', $renderArray);
     }
 
@@ -73,25 +77,53 @@ class ReservationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(
-        path: '/search/{categoryName}',
+        path: '/search/',
+        name: 'search_reservation',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+            
+            $term = $request->request->get('term');
+           /*  dd($this->reservationRepository->listReservationsByTerm($term)); */
+            $reservations = $this->paginator->paginate(
+                $this->reservationRepository->listReservationsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            $latestReservation = $this->reservationRepository->getLatestReservation();
+            return $this->render('admin/reservation/index.html.twig', [
+                'reservations' => $reservations,
+                'latestReservation' => $latestReservation,
+                'pagination_items' => $pagination_items,
+                'count' => count($this->reservationRepository->findAll()),
+            ]);
+        }
+    #[Route(
+        path: '/searchCategory/{categoryName}',
         name: 'reservation_by_category',
         methods: ['GET', 'POST'])]
     public function searchByCategoryName(
         Request $request,
         string $categoryName)
     {
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
         $reservations = $this->paginator->paginate(
             $this->reservationRepository->listReservationsByCategory($categoryName),
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
         $latestReservation = $this->reservationRepository->getLatestReservation();
         return $this->render('admin/reservation/index.html.twig', [
             'reservations' => $reservations,
             'latestReservation' => $latestReservation,
-            'count' => 10,
+            'count' => count($this->reservationRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
 

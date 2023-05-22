@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs" role="tablist" id="myTab">
-                <li class="nav-item">
+                {# <li class="nav-item">
                     <button class="nav-link active"
                             id="options-tab"
                             data-bs-toggle="tab"
@@ -10,9 +10,9 @@
                             aria-selected="true"
                                 >Resumen
                     </button>
-                </li>
+                </li> #}
                 <li class="nav-item">
-                    <button class="nav-link"
+                    <button class="nav-link active"
                             id="data-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#data"
@@ -35,7 +35,7 @@
                                 >Documentos
                                 </button>
                 </li>
-                <li class="nav-item">
+                {# <li class="nav-item">
                     <button class="nav-link"
                             id="travellers-tab"
                             data-bs-toggle="tab"
@@ -46,7 +46,7 @@
                             aria-selected="true"
                                 >Viajeros
                                 </button>
-                </li>
+                </li> #}
                 {% if reservation.invoice != null %}
                     <li class="nav-item">
                         <button class="nav-link"
@@ -77,15 +77,15 @@
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-                <div
-                    class="tab-pane fade show active"
+                {# <div
+                    class="tab-pane fade show"
                     id="options"
                     role="tabpanel"
                     aria-labelledby="options-tab">
                         {{ include('admin/reservation/_reservation_options.html.twig',{'reservation': reservation}) }}
-                </div>
+                </div> #}
                 <div
-                    class="tab-pane fade show"
+                    class="tab-pane fade show active"
                     id="data"
                     role="tabpanel"
                     aria-labelledby="data-tab">
@@ -98,13 +98,13 @@
                     aria-labelledby="documents-tab">
                         {{ include('admin/reservation/_reservation_documents.html.twig',{'reservation': reservation} )}}
                 </div>
-                <div
+                {# <div
                     class="tab-pane fade show"
                     id="travellers"
                     role="tabpanel"
                     aria-labelledby="travellers-tab">
                         {{ include('admin/reservation/_reservation_travellers.html.twig',{'reservation': reservation} )}}
-                </div>
+                </div> #}
                 {% if reservation.invoice != null %}
                     <div
                         class="tab-pane fade show"

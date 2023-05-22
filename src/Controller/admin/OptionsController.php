@@ -29,19 +29,47 @@ class OptionsController extends MainadminController
     public function index(
         Request $request): Response
     {
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
         $options = $this->paginator->paginate(
             $this->optionsRepository->listAll(),
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
 
 
         return $this->render('admin/options/index.html.twig', [
             'options' => $options,
+            'count' => count($this->optionsRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
 
-    #[Route(path: '/search/{categoryName}', name: 'options_by_category', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/search/options',
+        name: 'search_options',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+            $options = $this->paginator->paginate(
+                $this->optionsRepository->listOptionsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/options/index.html.twig', [
+                'options' => $options,
+                'count' => count($this->optionsRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
+
+    #[Route(path: '/filter/{categoryName}', name: 'options_by_category', methods: ['GET', 'POST'])]
     public function searchByContinent(
         Request $request,
         string $categoryName,

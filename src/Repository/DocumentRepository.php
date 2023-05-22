@@ -2,10 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Dates;
 use App\Entity\Document;
 use App\Entity\Reservation;
 use App\Entity\ReservationData;
+use App\Entity\Travel;
 use App\Entity\Travellers;
+use App\Entity\TravelTranslation;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -99,5 +102,27 @@ class DocumentRepository extends ServiceEntityRepository
         ->setParameter('traveller', $traveller)
         ->getQuery()
         ->getResult();
+    }
+
+    public function listDocumentsByTerm( $term ) {
+        return $this->createQueryBuilder('d')
+            ->innerJoin( Reservation::class, 'r', Join::WITH,'r.id = d.reservation' )
+            ->innerJoin( Dates::class, 'dt', Join::WITH, 'dt.id = r.date' )
+            ->innerJoin( Travel::class, 't', Join::WITH, 't.id = dt.travel' )
+            ->innerJoin( TravelTranslation::class, 'tt', Join::WITH, 't.id = tt.travel' )
+            ->leftJoin( User::class, 'u', Join::WITH, 'u.id = r.user' )
+            ->leftJoin( Travellers::class, 'tr', Join::WITH, 'tr.id = d.traveller')
+            ->where( 'tt.title LIKE :term' )
+            ->orWhere( 'tt.intro LIKE :term' )
+            ->orWhere( 'tt.content LIKE :term' )
+            ->orWhere( 'u.nom LIKE :term' )
+            ->orWhere( 'u.prenom LIKE :term' )
+            ->orWhere( 'u.email LIKE :term' )
+            ->orWhere( 'tr.nom LIKE :term' )
+            ->orWhere( 'tr.prenom LIKE :term' )
+            ->orWhere( 'tr.email LIKE :term' )
+            ->setParameter( 'term', '%'.$term.'%' )
+            ->getQuery()
+            ->getResult();
     }
 }

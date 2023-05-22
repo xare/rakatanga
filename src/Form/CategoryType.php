@@ -18,7 +18,7 @@ class CategoryType extends AbstractType
         $builder
             ->add('name')
             ->add('status', ChoiceType::class, [
-                'placeholder' => 'Qué pongo aquí??',
+                'placeholder' => 'Estatus',
                 'choices' => [
                     'Yes' => 'yes',
                     'No' => 'no',

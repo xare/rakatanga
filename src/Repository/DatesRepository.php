@@ -3,10 +3,14 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Reservation;
+use App\Entity\Oldreservations;
+use App\Entity\Inscriptions;
 use App\Entity\CategoryTranslation;
 use App\Entity\Dates;
 use App\Entity\Lang;
 use App\Entity\Travel;
+use App\Entity\User;
 use App\Entity\TravelTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -194,5 +198,45 @@ class DatesRepository extends ServiceEntityRepository
             ->andWhere('c.name = :categoryName')
             ->setParameter('categoryName', $categoryName)
             ->getQuery();
+    }
+
+    public function listDatesByTerm($term) {
+        $query = $this->createQueryBuilder('d');
+        $result = $query->leftJoin(Reservation::class, 'r', Join::WITH, 'd.id = r.date')
+        ->leftJoin(Oldreservations::class, 'ol', Join::WITH, 'd.id = ol.dates')
+        ->leftJoin(Inscriptions::class, 'i', Join::WITH, 'i.id = ol.inscriptions')
+        ->innerJoin(Travel::class, 't', Join::WITH, 't.id = d.travel')
+        ->innerJoin(Category::class, 'c', Join::WITH, 'c.id= t.category')
+        ->innerJoin(CategoryTranslation::class, 'ct', Join::WITH, 'c.id= ct.category')
+        ->innerJoin(TravelTranslation::class, 'tt', Join::WITH, 't.id= tt.travel')
+        ->leftJoin(User::class, 'u', Join::WITH, 'u.id = r.user')
+        ->where(
+            $query->expr()->like('ct.title', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('tt.title', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('u.nom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('u.prenom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('u.email', ':term')
+            )
+        ->orWhere(
+            $query->expr()->like('i.nom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('i.prenom', ':term')
+        )
+        ->orWhere(
+            $query->expr()->like('i.email', ':term')
+        )
+        ->setParameter(':term', '%' . $term . '%')
+        ->getQuery()
+        ->getResult();
+        return $result;
     }
 }

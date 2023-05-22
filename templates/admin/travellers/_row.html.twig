@@ -1,25 +1,22 @@
 <tr>
     <td data-cell="Id">{{ traveller.id }}</td>
     <td data-cell="Lengua">{{ traveller.langue }}</td>
-    <td data-cell="Editar">
-    {% if traveller.reservation is not empty %}
-        <a href="{{path('reservation_edit',{id: traveller.reservation.id})}}" target="_blank">
-            {{ traveller.reservation.code}}
-        </a>
-    {% endif %}
-    </td>
-    <td data-cell="Apellidos">{{ traveller.nom }}</td>
-    <td data-cell="Nombre">{{ traveller.prenom }}</td>
-    <td data-cell="Teléfono">{{ traveller.telephone }}</td>
-    <td data-cell="Posición">{{ traveller.position }}</td>
+    <td data-cell="Nombre y Apellidos"><a href="{{ path('travellers_edit', {'id': traveller.id}) }}">{{ traveller.prenom }} {{ traveller.nom }}</a></td>
+    <td data-cell="Teléfono"><a href="{{ path('travellers_edit', {'id': traveller.id}) }}">{{ traveller.telephone }}</a></td>
+    <td data-cell="Posición"><a href="{{ path('travellers_edit', {'id': traveller.id}) }}">{{ traveller.position }}</a></td>
     {# <td data-cell="Seguro">{{ traveller.assurance }}</td>
     <td data-cell="">{{ traveller.vols }}</td> #}
     <td data-cell="Fecha">{{ traveller.dateAjout ? traveller.dateAjout|date('Y-m-d H:i:s') : '' }}</td>
-    <td data-cell="Email">{{ traveller.email }}</td>
-    <td data-cell="Editar">
-        {# <a href="{{ path('travellers_show', {'id': traveller.id}) }}">show</a> #}
-        <a class="btn btn-primary" href="{{ path('travellers_edit', {'id': traveller.id}) }}"><i class="fa fa-edit"></i></a>
+    <td data-cell="Email"><a href="{{ path('travellers_edit', {'id': traveller.id}) }}">{{ traveller.email }}</a></td>
+    <td data-cell="Reserva">
+    {% if traveller.reservation is not empty %}   
+        {{ traveller.reservation.code}}
+    {% endif %}
     </td>
+    {# <td data-cell="Editar">
+        {# <a href="{{ path('travellers_show', {'id': traveller.id}) }}">show</a> #}
+        {# <a class="btn btn-primary" href="{{ path('travellers_edit', {'id': traveller.id}) }}"><i class="fa fa-edit"></i></a>
+    </td> #}
     <td data-cell="Borrar">
         {{ include('admin/travellers/_delete_form.html.twig') }}
     </td>

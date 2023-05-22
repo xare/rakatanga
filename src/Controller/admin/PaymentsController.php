@@ -14,6 +14,60 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/payments')]
 class PaymentsController extends MainadminController
 {
+
+    public function __construct(
+        private PaginatorInterface $paginator,
+        private PaymentsRepository $paymentsRepository,
+        private EntityManagerInterface $entityManager
+    ){
+
+    }
+
+    #[Route('/', name: 'payments_index', methods: ['GET'])]
+    public function index(
+        Request $request): Response
+    {
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
+        $payments = $this->paginator->paginate(
+            $this->paymentsRepository->listAll(),
+            $request->query->getInt('page', 1),
+            $pagination_items
+        );
+
+        return $this->render('admin/payments/index.html.twig', [
+            'payments' => $payments,
+            'count' => count($this->paymentsRepository->findAll()),
+            'pagination_items' => $pagination_items
+        ]);
+    }
+
+    #[Route(
+        path: '/search/payments',
+        name: 'search_payments',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+
+            $payments = $this->paginator->paginate(
+                $this->paymentsRepository->listPaymentsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/payments/index.html.twig', [
+                'payments' => $payments,
+                'count' => count($this->paymentsRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
+
+
     #[Route(
         path: '/{id}/edit/',
         name: 'payments_edit',
@@ -40,22 +94,7 @@ class PaymentsController extends MainadminController
         ]);
     }
 
-    #[Route('/', name: 'payments_index', methods: ['GET'])]
-    public function index(
-        Request $request,
-        PaymentsRepository $paymentsRepository,
-        PaginatorInterface $paginator): Response
-    {
-        $payments = $paginator->paginate(
-            $paymentsRepository->listAll(),
-            $request->query->getInt('page', 1),
-            10
-        );
-
-        return $this->render('admin/payments/index.html.twig', [
-            'payments' => $payments,
-        ]);
-    }
+    
 
     #[Route('/new', name: 'payments_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

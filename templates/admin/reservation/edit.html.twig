@@ -1,7 +1,10 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}Edit Reservation{% endblock %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('tags') }}
+{% endblock %}
 {% block body %}
 <div class="container">
 {{ include ('admin/shared/_controlband.html.twig',{'entity':'reservation'})}}
@@ -22,4 +25,5 @@
     {{ encore_entry_script_tags('admin-send-message') }}
     {{ encore_entry_script_tags('notifications') }}
     {{ encore_entry_script_tags('admin-reservation') }}
+
 {% endblock %}

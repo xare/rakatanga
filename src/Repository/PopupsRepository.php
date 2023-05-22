@@ -89,4 +89,20 @@ class PopupsRepository extends ServiceEntityRepository
 
         return $q->getOneOrNullResult();
     } */
+
+    public function listPopupsByTerm($term) {
+        return $this->createQueryBuilder('p')
+            ->innerJoin(PopupsTranslation::class, 'pt', Join::WITH, 'p.id = pt.popup')
+            ->where('pt.title LIKE :term')
+            ->orwhere('pt.content LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function listAll()
+    {
+        return $this->createQueryBuilder('p')
+            ->getQuery();
+    }
 }

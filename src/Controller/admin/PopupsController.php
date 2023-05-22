@@ -7,6 +7,7 @@ use App\Form\PopupsType;
 use App\Repository\LangRepository;
 use App\Repository\PopupsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +16,53 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/popups')]
 class PopupsController extends AbstractController
 {
+    public function __construct(
+        private PopupsRepository $popupsRepository,
+        private PaginatorInterface $paginator
+    ){
+
+    }
     #[Route('/', name: 'popups_index', methods: ['GET'])]
-    public function index(PopupsRepository $popupsRepository): Response
+    public function index(Request $request): Response
     {
+        $session = $request->getSession();
+        $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+        $session->set('pagination_items', $pagination_items);
+
+        $query = $this->popupsRepository->listAll();
+        $popups = $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $pagination_items
+        );
         return $this->render('admin/popups/index.html.twig', [
-            'popups' => $popupsRepository->findAll(),
+            'popups' => $popups,
+            'pagination_items' => $pagination_items,
+            'count' => count($this->popupsRepository->findAll())
         ]);
     }
+    #[Route(
+        path: '/search/popups',
+        name: 'search_popups',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+            $popups = $this->paginator->paginate(
+                $this->popupsRepository->listPopupsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/popups/index.html.twig', [
+                'popups' => $popups,
+                'count' => count($this->popupsRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
 
     #[Route('/new', name: 'popups_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, LangRepository $langRepository): Response

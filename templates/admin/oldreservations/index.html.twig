@@ -8,9 +8,18 @@
         <div class="row">
             <div class="col-12">
                 <h1>Oldreservations index</h1>
+            </div>
+        </div>
+        {{ include('admin/oldreservations/partials/_filterband.html.twig') }}
+        <div class="row">
+            <div class="col-12">
                 <div class="navigation">
 				    {{ knp_pagination_render(oldreservations) }}
 			    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div class="table-data mb-4">
                <div>
                 <table class="table table-sm table-hover table-striped" style="font-size: 0.8rem">

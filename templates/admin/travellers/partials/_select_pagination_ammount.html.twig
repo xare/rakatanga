@@ -1,0 +1,19 @@
+<form action="" method="get" class="form-inline">
+  <div class="form-group">
+    <label class="form-label" for="pagination_items">Elementos a mostrar</label>
+    <select 
+      name="pagination_items" 
+      id="pagination_items"
+      class="form-control form-select" 
+      data-action="changePaginationItems"
+      data-entity="reservations"
+      style="width:5rem;"
+      onchange="this.form.submit()"
+    >
+    {% for value in [10,20,25,50,100] %}
+      <option value="{{value}}" {% if pagination_items == value %} selected{% endif %}>{{value}}
+      </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>

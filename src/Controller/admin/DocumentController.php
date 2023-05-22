@@ -27,20 +27,47 @@ class DocumentController extends AbstractController
     public function index(
         Request $request
         ): Response {
-        $count = count($this->documentRepository->findAll());
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
         $query = $this->documentRepository->listAll();
         $documents = $this->paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            $pagination_items
         );
 
         return $this->render('admin/document/index.html.twig', [
             'documents' => $documents,
-            'count' => $count,
+            'count' => count($this->documentRepository->findAll()),
+            'pagination_items' => $pagination_items
         ]);
     }
 
+    #[Route(
+        path: '/search/documents',
+        name: 'search_documents',
+        methods: ['GET', 'POST'])]
+    public function searchByTerm(
+        Request $request){
+            $session = $request->getSession();
+            $pagination_items = (null !== $request->query->get('pagination_items')) ?$request->query->get('pagination_items') : $session->get('pagination_items') ;
+            $session->set('pagination_items', $pagination_items);
+
+            $term = $request->request->get('term');
+
+            $documents = $this->paginator->paginate(
+                $this->documentRepository->listDocumentsByTerm($term),
+                $request->query->getInt('page', 1),
+                $pagination_items
+            );
+            return $this->render('admin/document/index.html.twig', [
+                'documents' => $documents,
+                'count' => count($this->documentRepository->findAll()),
+                'pagination_items' => $pagination_items
+            ]);
+        }
     #[Route(
         path: '/new',
         name: 'document_new',

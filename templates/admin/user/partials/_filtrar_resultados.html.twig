@@ -1,0 +1,76 @@
+<div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filtrar resultados
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a 
+                            class="dropdown-item" 
+                            href="{{ path('reservation_by_category',{'categoryName':'India'}) }}">
+                            India
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{ path('reservation_by_category',{'categoryName':'Thailand'}) }}">
+                            Tailandia
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Nepal'})}}">
+                            Nepal
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Bhutan'})}}">
+                            Bhután
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Tibet'})}}">
+                            Tibet
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Mongolia'})}}">
+                            Mongolia
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Sri Lanka'})}}">
+                            Sri Lanka
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Turkey'})}}">
+                            Turquía
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_by_category',{'categoryName':'Tanzania'})}}">
+                            Tanzania
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="{{path('reservation_index')}}">
+                            Volver a la lista
+                        </a>
+                    </li>
+                </ul>
+            </div>

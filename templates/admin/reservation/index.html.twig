@@ -22,15 +22,8 @@
             <h1>Indice de reservas</h1>
         </div>
     </div>
-    <div class="row mb-4">
-        <div class="count col-md-3 col-xs-12">
-            <strong>Total de reservas:</strong>
-            <span id="totalItemCount">{{ reservations|length }}</span>
-        </div>
-         <div class="col-md-1 offset-md-7 col-xs-12">
-            {{ include('admin/reservation/_filtrar_resultados.html.twig') }}
-        </div>
-    </div>
+    {{ include('admin/reservation/partials/_filterband.html.twig') }}
+    
     <div class="row">
         <div class="navigation col-md-2 col-xs-12">
             {{ knp_pagination_render(reservations) }}

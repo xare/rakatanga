@@ -2,9 +2,15 @@
 
 namespace App\Repository;
 
+use App\Entity\Dates;
 use App\Entity\Payments;
+use App\Entity\Reservation;
+use App\Entity\Travel;
+use App\Entity\TravelTranslation;
+use App\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -70,5 +76,23 @@ class PaymentsRepository extends ServiceEntityRepository
 
         $result = $query->getSingleScalarResult();
         return $result ? (float) $result : 0;
+    }
+
+    public function listPaymentsByTerm($term) {
+        return $this->createQueryBuilder('p')
+            ->innerJoin( Reservation::class, 'r', Join::WITH,'r.id = p.reservation' )
+            ->innerJoin( Dates::class, 'd', Join::WITH, 'd.id = r.date' )
+            ->innerJoin( Travel::class, 't', Join::WITH, 't.id = d.travel' )
+            ->innerJoin( TravelTranslation::class, 'tt', Join::WITH, 't.id = tt.travel' )
+            ->leftJoin( User::class, 'u', Join::WITH, 'u.id = r.user' )
+            ->where( 'tt.title LIKE :term' )
+            ->orWhere( 'tt.intro LIKE :term' )
+            ->orWhere( 'tt.content LIKE :term' )
+            ->orWhere( 'u.nom LIKE :term' )
+            ->orWhere( 'u.prenom LIKE :term' )
+            ->orWhere( 'u.email LIKE :term' )
+            ->setParameter( 'term', '%'.$term.'%' )
+            ->getQuery()
+            ->getResult();
     }
 }

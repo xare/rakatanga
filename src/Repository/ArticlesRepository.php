@@ -89,4 +89,14 @@ class ArticlesRepository extends ServiceEntityRepository
             ->orderBy('a.publishedAt', 'DESC')
             ->getQuery();
     }
+
+    public function listArticlesByTerm($term) {
+        return $this->createQueryBuilder('a')
+            ->where('a.title LIKE :term')
+            ->orwhere('a.intro LIKE :term')
+            ->orwhere('a.body LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
 }
